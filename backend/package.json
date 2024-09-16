@@ -1,0 +1,17 @@
+{
+	"name": "backend",
+	"version": "1.0.0",
+	"description": "Telegram Mini App Bot",
+	"main": "index.js",
+	"scripts": {
+		"dev": "nodemon --env-file=.env server.js"
+	},
+	"author": "Muhammad Abdullah",
+	"license": "ISC",
+	"type": "module",
+	"dependencies": {
+		"dotenv": "^16.4.5",
+		"nodemon": "^3.1.4",
+		"telegraf": "^4.16.3"
+	}
+}
