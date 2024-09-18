@@ -13,16 +13,9 @@ import BackgroundImg from '../assets/background/bg.png';
 
 const Layout = () => {
     return (
-        <> 
-            {/* Background Layer */}
-            <div className='absolute inset-0 bg-gradient-to-t from-[#1B1B27] to-black z-10 overflow-hidden'>
-                <div className='absolute h-[70vh] bottom-[4vh] w-[54vh] flex justify-center'>
-                    <img src={BackgroundImg} alt="Custom Effect" className="max-w-full max-h-full transform scale-[1.1]" />
-                </div>
-            </div>
-
+        <>
             {/* Routes and Footer Layer */}
-            <div className='relative h-full w-screen overflow-hidden z-20'>
+            <div className='bg-gradient-to-t from-[#1B1B27] to-black relative h-full w-screen overflow-hidden'>
                 <div>
                     <Routes>
                         <Route path="/" element={<Home />} />

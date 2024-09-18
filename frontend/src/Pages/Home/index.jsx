@@ -1,6 +1,6 @@
 import React from "react";
 
-import CrossIcon from "../../assets/CrossIcon.svg";
+import BackgroundImg from '../../assets/background/bg.png';
 import ProfilePic from "../../assets/ProfilePicIcon.svg";
 import DailyGamePlay from "../../assets/dailyGamePlayIcon.png";
 import DailyReward from "../../assets/dailyRewardIcon.png";
@@ -38,7 +38,7 @@ const Home = () => {
 			id: 2,
 			img: DailyReward,
 			data1: "Daily",
-			data2: "reward",
+			data2: "Reward",
 			timer: "13:11:35",
 		},
 		{
@@ -85,35 +85,39 @@ const Home = () => {
 
 	return (
 		<>
-			<div className='overflow-hidden h-[86vh] w-screen'>
-				<div className='relative'>
-					<div className='absolute -inset-1 bg-[#23a7ff] min-h-[50%] rounded-[35px]'></div>
-					<div className='absolute -inset-2 bg-[#23a7ff] min-h-[50%] blur rounded-[50px]'></div>
-					<div className='bg-[#0C0C0C] min-h-[32vh] pt-5 px-2 relative rounded-br-3xl rounded-bl-3xl'>
+			{/* Background Image */}
+			<div className="absolute inset-0 z-0">
+				<img
+					src={BackgroundImg}
+					alt="Background"
+					className="w-full h-full object-cover scale-[0.79] fixed top-[9vh]"
+				/>
+			</div>
+
+			{/* Content */}
+			<div className="relative z-10 h-[86vh] w-screen">
+				<div className="relative h-[30vh]">
+					<div className="absolute -inset-1 bg-[#23a7ff] min-h-[50%] rounded-[35px]"></div>
+					<div className="absolute -inset-2 bg-[#23a7ff] min-h-[45%] blur rounded-[50px]"></div>
+					<div className="bg-[#0C0C0C] min-h-[30vh] pt-5 px-2 relative rounded-br-3xl rounded-bl-3xl">
 						{/* Header */}
-						<div className='px-2 flex justify-between'>
-							<div className='flex'>
-								<div className='rounded-full bg-gray-300 w-[42px] h-[42px]'>
-									<img
-										src={username.pic}
-										alt='Profile-Picture'
-									/>
+						<div className="px-2 flex justify-between">
+							<div className="flex">
+								<div className="rounded-full bg-gray-300 w-[42px] h-[42px]">
+									<img src={username.pic} alt="Profile-Picture" />
 								</div>
-								<div className='pl-2 text-[#FFF]'>
-									<p className='font-medium text-sm'>{username.name}</p>
-									<p className='flex font-normal text-sm -top-1'>(Founder)</p>
+								<div className="pl-2 text-[#FFF]">
+									<p className="font-medium text-sm">{username.name}</p>
+									<p className="flex font-normal text-sm -top-1">(Founder)</p>
 								</div>
 							</div>
-							<div className='rounded-full bg-[#252525] min-w-[40%] px-4 py-1'>
-								<div className='flex items-center gap-2'>
-									<div className='text-[#FFF] font-normal text-xs'>Silver</div>
+							<div className="rounded-full bg-[#252525] min-w-[40%] px-4 py-1">
+								<div className="flex items-center gap-2">
+									<div className="text-[#FFF] font-normal text-xs">Silver</div>
 									<div>
-										<img
-											src={AngleIcon}
-											alt='Angle-Icon'
-										/>
+										<img src={AngleIcon} alt="Angle-Icon" />
 									</div>
-									<div className='text-[#FFF] text-xs font-normal pl-11'>
+									<div className="text-[#FFF] text-xs font-normal pl-11">
 										{rank.current}/{rank.total}
 									</div>
 								</div>
@@ -123,8 +127,8 @@ const Home = () => {
 										<div
 											className={`h-4 transition-all duration-300 ease-in-out rounded`}
 											style={{
-											width: `${percentage}%`,
-											background: `linear-gradient(to right, rgb(48 43 251), rgb(54 197 244))`
+												width: `${percentage}%`,
+												background: `linear-gradient(to right, rgb(48 43 251), rgb(54 197 244))`,
 											}}
 										/>
 									</div>
@@ -133,32 +137,21 @@ const Home = () => {
 						</div>
 
 						{/* Cards */}
-						<div className='pt-6 flex justify-evenly items-center'>
+						<div className="pt-6 flex justify-evenly items-center">
 							{cards.map((data) => {
 								const { id, img, data1, data2 } = data;
 								return (
 									<div
 										key={id}
-										className={`border ${
-											id === 3 ? "border-[#0072ff]" : "border-[#666666]"
-										} rounded-[14px] min-w-[20%]`}>
+										className={`border ${id === 3 ? "border-[#0072ff]" : "border-[#666666]"
+											} rounded-[14px] min-w-[20%]`}>
 										<div
-											className={`flex flex-col justify-center items-center p-2 h-20
-                                ${
-																	id === 3 ? "bg-[#091e4b]" : "bg-[#1B1B27]"
-																} rounded-[14px] 
-                                    `}>
+											className={`flex flex-col justify-center items-center p-2 h-20 ${id === 3 ? "bg-[#091e4b]" : "bg-[#1B1B27]"} rounded-[14px]`}>
 											<div className="h-3">
-												<img
-													src={img}
-													alt='Logo'
-													width="25"
-												/>
+												<img src={img} alt="Logo" width="25" />
 											</div>
-											<div className='text-[#FFF] text-[10px] font-medium mt-3'>
-												<div
-													className={`pt-2
-												${id === 2 || id === 3 ? "pl-1" : "pl-3"}`}>
+											<div className="text-[#FFF] text-[10px] font-medium mt-3">
+												<div className={`pt-2 ${id === 2 || id === 3 ? "pl-1" : "pl-3"}`}>
 													<p>{data1}</p>
 												</div>
 												<p>{data2}</p>
@@ -168,9 +161,9 @@ const Home = () => {
 								);
 							})}
 						</div>
-						
-						{/* Timmers */}
-						<div className='flex text-[#FFF] text-[10px] font-normal items-center justify-around pt-[2px] mr-1'>
+
+						{/* Timers */}
+						<div className="flex text-[#FFF] text-[10px] font-normal items-center justify-around pt-[2px] mr-1">
 							{cards.map((time) => {
 								const { id, timer } = time;
 								return <div key={id}>{timer}</div>;
@@ -180,73 +173,53 @@ const Home = () => {
 				</div>
 
 				{/* Coins Details & Bot Image */}
-				<div className='min-h-[60vh] pt-8 -mt-2'>
-
-					{/* Coins per minute & balance  */}
-					<div className='flex gap-6 items-center'>
-						
+				<div className="min-h-[56vh] flex flex-col justify-center items-center">
+					{/* Coins per minute & balance */}
+					<div className="flex items-center justify-start w-screen px-5 pt-6 h-[10vh]">
 						{/* Coins Per Minute */}
-						<div className='min-w-[30%] flex flex-col items-center justify-center gap-1'>
-							<div className='flex justify-center items-center gap-1'>
-								<div className=''>
-									<img
-										className='pl-3'
-										src={LittleCoin}
-										alt='Coin-Icon'
-									/>
+						<div className="flex flex-col items-start gap-1">
+							<div className="flex justify-center items-center gap-1">
+								<div className="">
+									<img className="pl-3" src={LittleCoin} alt="Coin-Icon" />
 								</div>
-								<div className='text-[#FFF] text-[11.655px] font-medium'>
+								<div className="text-[#FFF] text-[11.655px] font-medium">
 									<p>+ 2.56M</p>
 								</div>
 							</div>
-							<div className='flex justify-center items-center gap-1 pl-1'>
-								<div className=''>
-									<img
-										src={InfoIcon}
-										alt='Info-Icons'
-									/>
+							<div className="flex justify-center items-center gap-1 pl-1">
+								<div className="">
+									<img src={InfoIcon} alt="Info-Icons" />
 								</div>
-								<div className='text-[#A4A4A4] text-[10.595px] font-medium'>
-									Coin Per Mine
-								</div>
+								<div className="text-[#A4A4A4] text-[10.595px] font-medium">Coin Per Mine</div>
 							</div>
 						</div>
 
-						{/* Balance  */}
-						<div className='min-w-[30%] flex justify-center items-center gap-2 '>
+						{/* Balance */}
+						<div className="mx-10 flex justify-center items-center gap-1">
 							<div>
-								<img
-									src={BigCoin}
-									alt='Coin-Icon'
-									width="24"
-								/>
+								<img src={BigCoin} alt="Coin-Icon" width="24" />
 							</div>
-							<div className='text-[#FFF] text-[24px] font-medium'>
-								{value.value}
-							</div>
+							<div className="text-[#FFF] text-[24px] font-medium">{value.value}</div>
 						</div>
 					</div>
 
-					{/* Bot Icons */}
-					<div className='flex justify-end mt-2'>
-						<div className='flex justify-center items-center'>
-							<div className='relative'>
-								<img
-									src={PandaCircleIcon}
-									alt='Outer-Circle'
-									width='230'
-								/>
-								<div className='absolute top-[21%] left-[22%]'>
-									<img
-										src={BigPanda}
-										alt='Panda-Icon'
-									/>
+					{/* Bot & Options */}
+					<div className="flex justify-center items-center w-screen h-[41vh] mt-auto">
+						{/* Bot Image Tap to earn */}
+						<div className="relative flex justify-end items-center">
+							<div className="relative">
+								<img src={PandaCircleIcon} alt="Outer-Circle" width="230" />
+								<div className="absolute top-[21%] left-[22%]">
+									<img src={BigPanda} alt="Panda-Icon" />
+								</div>
+								<div className="absolute top-[60%] left-[37%]">
+									<img src={TouchIcon} alt="Touch-Icon" />
 								</div>
 							</div>
 						</div>
 
 						{/* Side Booster Options */}
-						<div className='flex flex-col justify-center items-center gap-4 pr-5'>
+						<div className='absolute right-5 flex flex-col justify-center items-center gap-4'>
 							<div className='text-[#FFF] text-[10px] font-medium pl-7 -mb-3'>
 								{jetLimit.obtained}/{jetLimit.total}
 							</div>
@@ -277,8 +250,8 @@ const Home = () => {
 						</div>
 					</div>
 
-					{/* Energy Tab */}
-					<div className='flex'>
+					{/* Energy Section */}
+					<div className='flex w-screen mx-auto h-[5vh]'>
 						<div className='flex mx-auto'>
 							<div className='px-2'>
 								<img
