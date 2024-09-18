@@ -13,9 +13,17 @@ import BackgroundImg from '../assets/background/bg.png';
 
 const Layout = () => {
     return (
-        <>
-            {/* Routes and Footer Layer */}
-            <div className='bg-gradient-to-t from-[#1B1B27] to-black relative h-full w-screen overflow-hidden -z-30'>
+        <>  
+            {/* Background Image */}
+			<div className="absolute inset-0 z-10 border-2 border-red-600">
+				<img
+					src={BackgroundImg}
+					alt="Background"
+					className="w-full h-full object-cover scale-[0.79] fixed top-[9vh]"
+				/>
+			</div>
+
+            <div className='relative h-full w-screen overflow-hidden z-20'>
                 <div>
                     <Routes>
                         <Route path="/" element={<Home />} />

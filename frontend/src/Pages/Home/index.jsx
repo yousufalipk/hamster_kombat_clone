@@ -25,13 +25,9 @@ const Home = () => {
 
 	useEffect(() => {
 		tele.BackButton.hide();
-
 		tele.expand();
-
 		tele.ready();
-
 		window.Telegram.WebApp.setHeaderColor("#000000"); 
-
 		if (tele.HapticFeedback) {
 			tele.HapticFeedback.impactOccurred("medium");
 		}
@@ -104,17 +100,8 @@ const Home = () => {
 
 	return (
 		<>
-			{/* Background Image */}
-			<div className="absolute inset-0 -z-10">
-				<img
-					src={BackgroundImg}
-					alt="Background"
-					className="w-full h-full object-cover scale-[0.79] fixed top-[9vh]"
-				/>
-			</div>
-
 			{/* Content */}
-			<div className="relative z-10 h-[86vh] w-screen">
+			<div className="relative h-[86vh] w-screen">
 				<div className="relative h-[30vh]">
 					<div className="absolute -inset-1 bg-[#23a7ff] min-h-[50%] rounded-[35px]"></div>
 					<div className="absolute -inset-2 bg-[#23a7ff] min-h-[45%] blur rounded-[50px]"></div>
