@@ -229,6 +229,7 @@ const Home = () => {
 								</div>
 							</div>
 						</div>
+						{/* Side Booster Options */}
 						<div className='flex flex-col justify-center items-center gap-4 pr-5'>
 							<div className='text-[#FFF] text-[10px] font-medium pl-7 -mb-3'>
 								{jetLimit.obtained}/{jetLimit.total}
@@ -259,6 +260,7 @@ const Home = () => {
 							</div>
 						</div>
 					</div>
+					{/* Energy Tab */}
 					<div className='flex'>
 						<div className='flex mx-auto'>
 							<div className='px-2'>
@@ -274,6 +276,7 @@ const Home = () => {
 					</div>
 					<div className='pt-7 px-5'>
 						<div className='mx-auto'>
+							{/* Bottom Menu */}
 							<Footer />
 						</div>
 					</div>
