@@ -5,7 +5,6 @@ import PandaPic from "../../assets/pandaPic.png";
 import Twitter from "../../assets/twitterIcon.png";
 import Telegram from "../../assets/telegramIcon.png";
 import Youtube from "../../assets/youtubeIcon.png";
-import Footer from "../Footer";
 
 const BottleCap = () => {
 	const balance = {
@@ -35,7 +34,7 @@ const BottleCap = () => {
 
 	return (
 		<>
-			<div className='bg-[#060611] p-4'>
+			<div className='p-4'>
 				<div className='flex items-center gap-4'>
 					<div className=''>
 						<img
@@ -136,9 +135,6 @@ const BottleCap = () => {
 							);
 						})}
 					</div>
-				</div>
-				<div className=''>
-					<Footer />
 				</div>
 			</div>
 		</>

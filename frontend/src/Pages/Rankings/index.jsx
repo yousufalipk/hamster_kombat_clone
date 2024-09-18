@@ -11,7 +11,6 @@ import Panda from "../../assets/PandaPicture.png";
 import Top1 from "../../assets/Top1.svg";
 import Top2 from "../../assets/Top2.svg";
 import Top3 from "../../assets/Top3.svg";
-import Footer from "../Footer";
 
 const Rankings = () => {
 	const friendsData = [
@@ -225,9 +224,6 @@ const Rankings = () => {
 							})}
 						</div>
 					</div>
-				</div>
-				<div className=''>
-					<Footer />
 				</div>
 			</div>
 		</>

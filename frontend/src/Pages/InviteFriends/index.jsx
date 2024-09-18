@@ -7,7 +7,6 @@ import Friend1 from "../../assets/Friend1.svg";
 import Friend2 from "../../assets/Friend2.svg";
 import Invite from "../../assets/InviteIcon.svg";
 import Copy from "../../assets/CopyIcon.svg";
-import Footer from "../Footer";
 
 const InviteFriends = () => {
 	const data = [
@@ -185,10 +184,6 @@ const InviteFriends = () => {
 						</div>
 					</div>
 				</div>
-			</div>
-
-			<div className=''>
-				<Footer />
 			</div>
 		</>
 	);

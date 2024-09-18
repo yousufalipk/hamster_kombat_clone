@@ -1,4 +1,5 @@
 import React from "react";
+
 import CrossIcon from "../../assets/CrossIcon.svg";
 import ProfilePic from "../../assets/ProfilePicIcon.svg";
 import DailyGamePlay from "../../assets/dailyGamePlayIcon.png";
@@ -16,7 +17,6 @@ import TouchIcon from "../../assets/touchIcon.png";
 import FlashIcon from "../../assets/lighteningIcon.png";
 import InfoIcon from "../../assets/InfoIcon.svg";
 import AngleIcon from "../../assets/AngleIcon.svg";
-import Footer from "../Footer";
 
 const Home = () => {
 	const username = {
@@ -174,7 +174,7 @@ const Home = () => {
 						</div>
 					</div>
 				</div>
-				<div className='bg-[#1B1B27] min-h-[60vh] pt-10 -mt-4'>
+				<div className='min-h-[60vh] pt-10 -mt-4'>
 					<div className='flex gap-6 items-center'>
 						<div className='min-w-[30%] flex flex-col items-center justify-center gap-1'>
 							<div className='flex justify-center items-center gap-1'>
@@ -272,12 +272,6 @@ const Home = () => {
 							<div className='text-[#FFF] text-base font-medium'>
 								{bonus.remaining}/{bonus.total}
 							</div>
-						</div>
-					</div>
-					<div className='pt-7 px-5'>
-						<div className='mx-auto'>
-							{/* Bottom Menu */}
-							<Footer />
 						</div>
 					</div>
 				</div>

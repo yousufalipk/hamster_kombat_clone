@@ -5,11 +5,11 @@ import QuestionMark from "../../assets/questionMark.png";
 import BackGround from "../../assets/BackGround.svg";
 import TimerIcon from "../../assets/TimerIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
-import LaunchPad from "../LaunchPad";
-import KOLS from "../KOLS";
-import Partners from "../Partners";
-import VCs from "../VC's";
-import Footer from "../Footer";
+
+import LaunchPad from "../../Components/LaunchPad/index";
+import KOLS from "../../Components/KOLS/index";
+import Partners from "../../Components/Partners/index";
+import VCs from "../../Components/VC's/index";
 
 const Hammer = () => {
 	const [activeItem, setActiveItem] = useState(null);
@@ -169,9 +169,6 @@ const Hammer = () => {
 						{activeItem === "VC's" && <VCs />}
 					</div>
 				</div>
-			</div>
-			<div className='bg-[#1B1B27] '>
-				<Footer />
 			</div>
 		</>
 	);
