@@ -90,17 +90,8 @@ const Home = () => {
 					<div className='absolute -inset-1 bg-[#23a7ff] min-h-[50%] rounded-[35px]'></div>
 					<div className='absolute -inset-2 bg-[#23a7ff] min-h-[50%] blur rounded-[50px]'></div>
 					<div className='bg-[#0C0C0C] min-h-[32vh] pt-5 px-2 relative rounded-br-3xl rounded-bl-3xl'>
-						{/* <div className='flex justify-center items-center'>
-							<div className='min-w-[40%]'>
-								<img
-									className='text-white'
-									src={CrossIcon}
-									alt='Cross-Icon'
-								/>
-							</div>
-							<div className='min-w-[55%] text-white'>PandaTap</div>
-						</div> */}
-						<div className='pt-3 px-2 flex justify-between'>
+						{/* Header */}
+						<div className='px-2 flex justify-between'>
 							<div className='flex'>
 								<div className='rounded-full bg-gray-300 w-[42px] h-[42px]'>
 									<img
@@ -140,7 +131,9 @@ const Home = () => {
 								</div>
 							</div>
 						</div>
-						<div className='pt-8 flex justify-evenly items-center'>
+
+						{/* Cards */}
+						<div className='pt-6 flex justify-evenly items-center'>
 							{cards.map((data) => {
 								const { id, img, data1, data2 } = data;
 								return (
@@ -175,6 +168,8 @@ const Home = () => {
 								);
 							})}
 						</div>
+						
+						{/* Timmers */}
 						<div className='flex text-[#FFF] text-[10px] font-normal items-center justify-around pt-[2px] mr-1'>
 							{cards.map((time) => {
 								const { id, timer } = time;
@@ -183,8 +178,14 @@ const Home = () => {
 						</div>
 					</div>
 				</div>
-				<div className='min-h-[60vh] pt-10 -mt-2'>
+
+				{/* Coins Details & Bot Image */}
+				<div className='min-h-[60vh] pt-8 -mt-2'>
+
+					{/* Coins per minute & balance  */}
 					<div className='flex gap-6 items-center'>
+						
+						{/* Coins Per Minute */}
 						<div className='min-w-[30%] flex flex-col items-center justify-center gap-1'>
 							<div className='flex justify-center items-center gap-1'>
 								<div className=''>
@@ -196,7 +197,6 @@ const Home = () => {
 								</div>
 								<div className='text-[#FFF] text-[11.655px] font-medium'>
 									<p>+ 2.56M</p>
-									{/* {value.postFix} */}
 								</div>
 							</div>
 							<div className='flex justify-center items-center gap-1 pl-1'>
@@ -211,25 +211,30 @@ const Home = () => {
 								</div>
 							</div>
 						</div>
-						<div className='min-w-[30%] flex justify-center items-center gap-2'>
-							<div className=''>
+
+						{/* Balance  */}
+						<div className='min-w-[30%] flex justify-center items-center gap-2 '>
+							<div>
 								<img
 									src={BigCoin}
 									alt='Coin-Icon'
+									width="24"
 								/>
 							</div>
-							<div className='text-[#FFF] text-[23px] font-medium'>
+							<div className='text-[#FFF] text-[24px] font-medium'>
 								{value.value}
 							</div>
 						</div>
 					</div>
-					<div className='flex justify-end mt-10'>
+
+					{/* Bot Icons */}
+					<div className='flex justify-end mt-2'>
 						<div className='flex justify-center items-center'>
 							<div className='relative'>
 								<img
 									src={PandaCircleIcon}
 									alt='Outer-Circle'
-									width='240'
+									width='230'
 								/>
 								<div className='absolute top-[21%] left-[22%]'>
 									<img
@@ -239,6 +244,7 @@ const Home = () => {
 								</div>
 							</div>
 						</div>
+
 						{/* Side Booster Options */}
 						<div className='flex flex-col justify-center items-center gap-4 pr-5'>
 							<div className='text-[#FFF] text-[10px] font-medium pl-7 -mb-3'>
@@ -270,9 +276,10 @@ const Home = () => {
 							</div>
 						</div>
 					</div>
+
 					{/* Energy Tab */}
 					<div className='flex'>
-						<div className='flex mx-auto mt-3'>
+						<div className='flex mx-auto'>
 							<div className='px-2'>
 								<img
 									src={FlashIcon}
