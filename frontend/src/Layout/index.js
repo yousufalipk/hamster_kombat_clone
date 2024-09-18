@@ -15,7 +15,7 @@ const Layout = () => {
     return (
         <>
             {/* Routes and Footer Layer */}
-            <div className='bg-gradient-to-t from-[#1B1B27] to-black relative h-full w-screen overflow-hidden'>
+            <div className='bg-gradient-to-t from-[#1B1B27] to-black relative h-full w-screen overflow-hidden -z-30'>
                 <div>
                     <Routes>
                         <Route path="/" element={<Home />} />

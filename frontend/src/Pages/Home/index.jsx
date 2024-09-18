@@ -86,7 +86,7 @@ const Home = () => {
 	return (
 		<>
 			{/* Background Image */}
-			<div className="absolute inset-0 z-0">
+			<div className="absolute inset-0 -z-10">
 				<img
 					src={BackgroundImg}
 					alt="Background"
