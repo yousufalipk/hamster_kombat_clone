@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import BackgroundImg from '../../assets/background/bg.png';
 import ProfilePic from "../../assets/ProfilePicIcon.svg";
@@ -18,7 +18,26 @@ import FlashIcon from "../../assets/lighteningIcon.png";
 import InfoIcon from "../../assets/InfoIcon.svg";
 import AngleIcon from "../../assets/AngleIcon.svg";
 
+const tele = window.Telegram.WebApp;
+tele.disableVerticalSwipes();
+
 const Home = () => {
+
+	useEffect(() => {
+		tele.BackButton.hide();
+
+		tele.expand();
+
+		tele.ready();
+
+		window.Telegram.WebApp.setHeaderColor("#000000"); 
+
+		if (tele.HapticFeedback) {
+			tele.HapticFeedback.impactOccurred("medium");
+		}
+	}, []);
+
+
 	const username = {
 		name: "Virat Kohli",
 		pic: ProfilePic,
