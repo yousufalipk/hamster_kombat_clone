@@ -27,7 +27,7 @@ const Home = () => {
 		tele.BackButton.hide();
 		tele.expand();
 		tele.ready();
-		window.Telegram.WebApp.setHeaderColor("#000000"); 
+		window.Telegram.WebApp.setHeaderColor("#000000");
 		if (tele.HapticFeedback) {
 			tele.HapticFeedback.impactOccurred("medium");
 		}
@@ -48,6 +48,7 @@ const Home = () => {
 			data1: "Daily",
 			data2: "Game play",
 			timer: "13:11:35",
+			isDone: false
 		},
 		{
 			id: 2,
@@ -55,6 +56,7 @@ const Home = () => {
 			data1: "Daily",
 			data2: "Reward",
 			timer: "13:11:35",
+			isDone: false
 		},
 		{
 			id: 3,
@@ -62,6 +64,7 @@ const Home = () => {
 			data1: "Daily",
 			data2: "Combo",
 			timer: "02:33:48",
+			isDone: true
 		},
 		{
 			id: 4,
@@ -69,6 +72,7 @@ const Home = () => {
 			data1: "Daily",
 			data2: "Secret Code",
 			timer: "23:18:33",
+			isDone: false
 		},
 	];
 
@@ -79,11 +83,6 @@ const Home = () => {
 	};
 
 	const jetLimit = {
-		obtained: 0,
-		total: 5,
-	};
-
-	const boostLimit = {
 		obtained: 0,
 		total: 5,
 	};
@@ -131,7 +130,7 @@ const Home = () => {
 									{/* Progress bar */}
 									<div className="w-full rounded-lg bg-gray-600 h-2 mt-1 overflow-hidden">
 										<div
-											className={`h-4 transition-all duration-300 ease-in-out rounded`}
+											className={`h-2 transition-all duration-300 ease-in-out rounded`}
 											style={{
 												width: `${percentage}%`,
 												background: `linear-gradient(to right, rgb(48 43 251), rgb(54 197 244))`,
@@ -145,28 +144,53 @@ const Home = () => {
 						{/* Cards */}
 						<div className="pt-6 flex justify-evenly items-center">
 							{cards.map((data) => {
-								const { id, img, data1, data2 } = data;
+								const { id, img, data1, data2, isDone } = data;
+
 								return (
-									<div
-										key={id}
-										className={`border ${id === 3 ? "border-[#0072ff]" : "border-[#666666]"
-											} rounded-[14px] min-w-[20%]`}>
-										<div
-											className={`flex flex-col justify-center items-center p-2 h-20 ${id === 3 ? "bg-[#091e4b]" : "bg-[#1B1B27]"} rounded-[14px]`}>
-											<div className="h-3">
-												<img src={img} alt="Logo" width="25" />
-											</div>
-											<div className="text-[#FFF] text-[10px] font-medium mt-3">
-												<div className={`pt-2 ${id === 2 || id === 3 ? "pl-1" : "pl-3"}`}>
-													<p>{data1}</p>
+									<div key={id} className="min-w-[20%]">
+										{isDone ? (
+											<div className="relative border border-[#0072ff] rounded-[14px] overflow-hidden">
+												{/* Done sticker */}
+												<div className="absolute top-0 left-0 bg-[#0072ff] text-white font-bold text-[9px] py-1 px-3 transform -rotate-45 origin-top-left"
+													style={{ top: '37px', left: '-15px', width: '70px', height: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+													Done
 												</div>
-												<p>{data2}</p>
+
+												{/* Main content */}
+												<div className="flex flex-col justify-center items-center p-2 h-20 bg-[#091e4b] rounded-[14px]">
+													<div className="h-3">
+														<img src={img} alt="Logo" width="25" />
+													</div>
+													<div className="text-[#FFF] text-[10px] font-medium pt-4">
+														<div className="flex justify-center items-center">
+															<p>{data1}</p>
+														</div>
+														<p>{data2}</p>
+													</div>
+												</div>
 											</div>
-										</div>
+										) : (
+											<div className="relative py-[1px] px-[0.5px] rounded-[14px] overflow-hidden">
+												<div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-300 rounded-[14px]"></div>
+												<div className="flex flex-col justify-center items-center p-2 h-20 bg-[#1B1B27] rounded-[14px] relative z-10">
+													<div className="h-3">
+														<img src={img} alt="Logo" width="25" />
+													</div>
+													<div className="text-[#FFF] text-[10px] font-medium pt-4">
+														<div className="flex justify-center items-center">
+															<p>{data1}</p>
+														</div>
+														<p>{data2}</p>
+													</div>
+												</div>
+											</div>
+
+										)}
 									</div>
 								);
 							})}
 						</div>
+
 
 						{/* Timers */}
 						<div className="flex text-[#FFF] text-[10px] font-normal items-center justify-around pt-[2px] mr-1">
