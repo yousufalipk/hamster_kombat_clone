@@ -24,6 +24,8 @@ const Home = () => {
 		pic: ProfilePic,
 	};
 
+	const percentage = (6 / 10) * 100;
+
 	const cards = [
 		{
 			id: 1,
@@ -83,11 +85,12 @@ const Home = () => {
 
 	return (
 		<>
-			<div className='overflow-hidden'>
+			<div className='overflow-hidden h-[86vh] w-screen'>
 				<div className='relative'>
-					<div className='absolute -inset-3 bg-[#23a7ff] min-h-[50%] blur rounded-[50px]'></div>
-					<div className='bg-[#0C0C0C] min-h-[37vh] pt-5 px-2 relative rounded-br-3xl rounded-bl-3xl'>
-						<div className='flex justify-center items-center'>
+					<div className='absolute -inset-1 bg-[#23a7ff] min-h-[50%] rounded-[35px]'></div>
+					<div className='absolute -inset-2 bg-[#23a7ff] min-h-[50%] blur rounded-[50px]'></div>
+					<div className='bg-[#0C0C0C] min-h-[32vh] pt-5 px-2 relative rounded-br-3xl rounded-bl-3xl'>
+						{/* <div className='flex justify-center items-center'>
 							<div className='min-w-[40%]'>
 								<img
 									className='text-white'
@@ -96,8 +99,8 @@ const Home = () => {
 								/>
 							</div>
 							<div className='min-w-[55%] text-white'>PandaTap</div>
-						</div>
-						<div className='pt-10 px-2 flex justify-between'>
+						</div> */}
+						<div className='pt-3 px-2 flex justify-between'>
 							<div className='flex'>
 								<div className='rounded-full bg-gray-300 w-[42px] h-[42px]'>
 									<img
@@ -106,11 +109,11 @@ const Home = () => {
 									/>
 								</div>
 								<div className='pl-2 text-[#FFF]'>
-									<p className='font-medium text-base'>{username.name}</p>
+									<p className='font-medium text-sm'>{username.name}</p>
 									<p className='flex font-normal text-sm -top-1'>(Founder)</p>
 								</div>
 							</div>
-							<div className='rounded-full bg-[#252525] min-w-[40%] px-3 py-2'>
+							<div className='rounded-full bg-[#252525] min-w-[40%] px-4 py-1'>
 								<div className='flex items-center gap-2'>
 									<div className='text-[#FFF] font-normal text-xs'>Silver</div>
 									<div>
@@ -123,37 +126,43 @@ const Home = () => {
 										{rank.current}/{rank.total}
 									</div>
 								</div>
-								<div className=''>
-									<input
-										type='range'
-										name=''
-										id=''
-									/>
+								<div>
+									{/* Progress bar */}
+									<div className="w-full rounded-lg bg-gray-600 h-2 mt-1 overflow-hidden">
+										<div
+											className={`h-4 transition-all duration-300 ease-in-out rounded`}
+											style={{
+											width: `${percentage}%`,
+											background: `linear-gradient(to right, rgb(48 43 251), rgb(54 197 244))`
+											}}
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div className='pt-7 px-2 flex justify-between items-center'>
+						<div className='pt-8 flex justify-evenly items-center'>
 							{cards.map((data) => {
 								const { id, img, data1, data2 } = data;
 								return (
 									<div
 										key={id}
-										className={`p-[1px] border ${
+										className={`border ${
 											id === 3 ? "border-[#0072ff]" : "border-[#666666]"
 										} rounded-[14px] min-w-[20%]`}>
 										<div
-											className={`flex flex-col justify-center items-center p-2
+											className={`flex flex-col justify-center items-center p-2 h-20
                                 ${
 																	id === 3 ? "bg-[#091e4b]" : "bg-[#1B1B27]"
 																} rounded-[14px] 
                                     `}>
-											<div className=''>
+											<div className="h-3">
 												<img
 													src={img}
 													alt='Logo'
+													width="25"
 												/>
 											</div>
-											<div className='text-[#FFF] text-[11px] font-medium'>
+											<div className='text-[#FFF] text-[10px] font-medium mt-3'>
 												<div
 													className={`pt-2
 												${id === 2 || id === 3 ? "pl-1" : "pl-3"}`}>
@@ -166,7 +175,7 @@ const Home = () => {
 								);
 							})}
 						</div>
-						<div className='flex text-[#FFF] text-[10px] font-normal items-center justify-around pt-[2px]'>
+						<div className='flex text-[#FFF] text-[10px] font-normal items-center justify-around pt-[2px] mr-1'>
 							{cards.map((time) => {
 								const { id, timer } = time;
 								return <div key={id}>{timer}</div>;
@@ -174,7 +183,7 @@ const Home = () => {
 						</div>
 					</div>
 				</div>
-				<div className='min-h-[60vh] pt-10 -mt-4'>
+				<div className='min-h-[60vh] pt-10 -mt-2'>
 					<div className='flex gap-6 items-center'>
 						<div className='min-w-[30%] flex flex-col items-center justify-center gap-1'>
 							<div className='flex justify-center items-center gap-1'>
@@ -209,19 +218,20 @@ const Home = () => {
 									alt='Coin-Icon'
 								/>
 							</div>
-							<div className='text-[#FFF] text-[24.405] font-medium'>
+							<div className='text-[#FFF] text-[23px] font-medium'>
 								{value.value}
 							</div>
 						</div>
 					</div>
-					<div className='flex justify-end'>
+					<div className='flex justify-end mt-10'>
 						<div className='flex justify-center items-center'>
 							<div className='relative'>
 								<img
 									src={PandaCircleIcon}
 									alt='Outer-Circle'
+									width='240'
 								/>
-								<div className='absolute top-[25%] left-[25%]'>
+								<div className='absolute top-[21%] left-[22%]'>
 									<img
 										src={BigPanda}
 										alt='Panda-Icon'
@@ -234,25 +244,25 @@ const Home = () => {
 							<div className='text-[#FFF] text-[10px] font-medium pl-7 -mb-3'>
 								{jetLimit.obtained}/{jetLimit.total}
 							</div>
-							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center'>
+							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center shadow-inner'>
 								<img
 									src={JetPack}
 									alt='JetPack-Icon'
 								/>
 							</div>
-							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center'>
+							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center shadow-inner'>
 								<img
 									src={BatteryBooster1}
 									alt='Battery-Booster-Icon'
 								/>
 							</div>
-							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center'>
+							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center shadow-inner'>
 								<img
 									src={TouchIcon}
 									alt='Touch-Icon'
 								/>
 							</div>
-							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center'>
+							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center shadow-inner'>
 								<img
 									src={BatteryBooster2}
 									alt='Battery-Booster-Icon'
@@ -262,7 +272,7 @@ const Home = () => {
 					</div>
 					{/* Energy Tab */}
 					<div className='flex'>
-						<div className='flex mx-auto'>
+						<div className='flex mx-auto mt-3'>
 							<div className='px-2'>
 								<img
 									src={FlashIcon}
