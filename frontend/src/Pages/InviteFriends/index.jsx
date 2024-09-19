@@ -51,12 +51,12 @@ const InviteFriends = () => {
 	];
 	return (
 		<>
-			<div className='relative h-[86vh] w-screen'>
+			<div className='relative h-[86vh] w-screen bg-black'>
 				<div className='relative h-[30vh]'>
-					<div className="absolute -inset-1 bg-[#23a7ff] rounded-[35px] w-[50vh]"></div>
-					<div className="absolute -inset-1 bg-[#23a7ff] blur rounded-[35px] w-[50vh]"></div>
+					<div className="absolute -inset-1 bg-[#23a7ff] rounded-[35px]"></div>
+					<div className="absolute -inset-1 bg-[#23a7ff] blur rounded-[35px]"></div>
 					{/* header */}
-					<div className='bg-[#060611] h-[30vh] p-4 relative rounded-b-[26px] w-[49vh]'>
+					<div className='bg-[#060611] h-[30vh] p-4 relative rounded-b-[26px]'>
 						<div className='pt-7'>
 							<div className='flex flex-col items-center'>
 								<div className='bg-[#222222] w-fit px-5 pt-4 -mt-1 rounded-[15px] mx-auto'>
@@ -122,7 +122,7 @@ const InviteFriends = () => {
 					</div>
 
 					{/* List of Friends */}
-					<div className='bg-[#1B1B27] p-4 text-[#FFF] text-lg font-semibold rounded-[14px] h-[30vh] overflow-scroll'>
+					<div className='bg-[#1B1B27] p-4 text-[#FFF] text-lg font-semibold rounded-[14px] h-[25vh] overflow-scroll'>
 						{/* Title */}
 						<div className='text-[15px]'>
 							<p>Friends</p>
@@ -171,10 +171,10 @@ const InviteFriends = () => {
 					</div>
 
 					{/* Invite a Friend */}
-					<div className="absolute -bottom-4">
-						<div className='flex gap-2 justify-between text-[#FFF] text-base font-semibold w-[44vh]'>
+					<div className="absolute -bottom-3 w-[50vh]">
+						<div className='flex gap-2 justify-between items-center text-[#FFF] text-base font-semibold w-[51vh]'>
 							{/* Invite a friend */}
-							<div className='w-[28vh] rounded-[10px] text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
+							<div className='w-[33vh] rounded-[10px] text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
 								<div className='flex items-center gap-3 p-2 justify-center'>
 									<div className=''>
 										<img
@@ -186,7 +186,7 @@ const InviteFriends = () => {
 								</div>
 							</div>
 							{/* Copy Link */}
-							<div className='w-[16vh] rounded-[14px] text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
+							<div className='w-[18vh] rounded-[14px] text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
 								<div className='flex items-center gap-1 p-2 justify-center'>
 									<img
 										src={Copy}

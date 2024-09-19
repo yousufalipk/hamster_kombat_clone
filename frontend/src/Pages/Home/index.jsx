@@ -28,6 +28,19 @@ const Home = () => {
 		tele.expand();
 		tele.ready();
 		window.Telegram.WebApp.setHeaderColor("#000000");
+
+		// Disable zoom on double-tap
+		document.addEventListener('dblclick', (e) => {
+			e.preventDefault();
+		});
+	
+		// Disable pinch-zoom
+		document.addEventListener('touchstart', function (event) {
+			if (event.touches.length > 1) {
+				event.preventDefault();
+			}
+		}, { passive: false });
+		
 		if (tele.HapticFeedback) {
 			tele.HapticFeedback.impactOccurred("medium");
 		}
