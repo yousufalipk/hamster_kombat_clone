@@ -122,7 +122,7 @@ const InviteFriends = () => {
 					</div>
 
 					{/* List of Friends */}
-					<div className='h-[31vh] bg-[#1B1B27] p-4 text-[#FFF] text-lg font-semibold rounded-[14px] overflow-scroll'>
+					<div className='h-[31vh] bg-[#1B1B27] p-4 text-[#FFF] text-lg font-semibold rounded-[14px] overflow-scroll mt-2'>
 						{/* Title */}
 						<div className='text-[15px]'>
 							<p>Friends</p>
