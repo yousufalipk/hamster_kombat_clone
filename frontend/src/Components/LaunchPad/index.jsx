@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Current from "./Current";
 import TGE from "./TGE";
 import MissedProjects from "./MissedProjects";
@@ -10,9 +10,16 @@ const LaunchPad = () => {
 		setActiveSubItem(subItem);
 	};
 
+	// Selects Current by default
+	useEffect(()=> {
+		setActiveSubItem("Current");
+	},[])
+
+
 	return (
 		<>
 			<div className='flex justify-evenly items-center px-3'>
+				{/* Current Button */}
 				<div
 					className={`w-fit px-3 py-1 text-base font-medium cursor-pointer ${
 						activeSubItem === "Current"
@@ -22,6 +29,7 @@ const LaunchPad = () => {
 					onClick={() => handleSubClick("Current")}>
 					<p>Current</p>
 				</div>
+				{/* TGE Button */}
 				<div
 					className={`w-fit px-3 py-1 text-base font-medium cursor-pointer ${
 						activeSubItem === "TGE"
@@ -31,6 +39,7 @@ const LaunchPad = () => {
 					onClick={() => handleSubClick("TGE")}>
 					<p>TGE</p>
 				</div>
+				{/* Missed Projects */}
 				<div
 					className={`w-fit px-3 py-1 text-base font-medium cursor-pointer ${
 						activeSubItem === "Missed Projects"

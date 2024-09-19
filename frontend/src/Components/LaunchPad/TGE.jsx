@@ -31,10 +31,28 @@ const cards = [
 		level: 19,
 		bgColor: "gamefi1-bg",
 	},
+	{
+		id: 3,
+		name: "Gamefi",
+		logo1: Gamefi,
+		logo2: Coin,
+		balance: 96584123,
+		level: 19,
+		bgColor: "gamefi1-bg",
+	},
+	{
+		id: 3,
+		name: "Gamefi",
+		logo1: Gamefi,
+		logo2: Coin,
+		balance: 96584123,
+		level: 19,
+		bgColor: "gamefi1-bg",
+	},
 ];
 
 const Card = ({ name, logo1, logo2, balance, level, bgColor }) => (
-	<div className={`w-[45%] px-5 py-3 rounded-[20px] text-[#FFF] ${bgColor}`}>
+	<div className={`h-[16vh] px-5 py-3 rounded-[20px] text-[#FFF] ${bgColor}`}>
 		<div className='flex justify-between items-center pb-3'>
 			<div className='text-base font-medium'>
 				<p>{name}</p>
@@ -56,17 +74,16 @@ const Card = ({ name, logo1, logo2, balance, level, bgColor }) => (
 			<div className=''>{balance.toLocaleString()}</div>
 		</div>
 		<div
-			className={`text-xs font-medium ${
-				name === "MemeFi"
+			className={`text-xs font-medium ${name === "MemeFi"
 					? "bg-[#e08121]"
 					: name === "Tonfish"
-					? "bg-[#005cc1]"
-					: name === "Gamefi" && bgColor === "gamefi1-bg"
-					? "bg-[#151515]"
-					: name === "Gamefi" && bgColor === "gamefi2-bg"
-					? "bg-[#049c4c]"
-					: "bg-white"
-			} w-fit p-1 rounded-[5px]`}>
+						? "bg-[#005cc1]"
+						: name === "Gamefi" && bgColor === "gamefi1-bg"
+							? "bg-[#151515]"
+							: name === "Gamefi" && bgColor === "gamefi2-bg"
+								? "bg-[#049c4c]"
+								: "bg-white"
+				} w-fit p-1 rounded-[5px]`}>
 			<p>lvl {level}</p>
 		</div>
 	</div>
@@ -75,7 +92,7 @@ const Card = ({ name, logo1, logo2, balance, level, bgColor }) => (
 const TGE = () => {
 	return (
 		<>
-			<div className='flex flex-wrap gap-8'>
+			<div className='grid grid-cols-2 gap-4 p-2 h-[40vh] overflow-scroll'>
 				{cards.map((card) => (
 					<Card
 						key={card.id}

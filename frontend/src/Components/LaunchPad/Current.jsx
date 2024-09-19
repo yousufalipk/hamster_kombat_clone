@@ -41,11 +41,29 @@ const cards = [
 		level: 19,
 		bgColor: "gamefi2-bg",
 	},
+	{
+		id: 4,
+		name: "Gamefi",
+		logo1: Gamefi,
+		logo2: Coin,
+		balance: 96584123,
+		level: 19,
+		bgColor: "gamefi2-bg",
+	},
+	{
+		id: 4,
+		name: "Gamefi",
+		logo1: Gamefi,
+		logo2: Coin,
+		balance: 96584123,
+		level: 19,
+		bgColor: "gamefi2-bg",
+	},
 ];
 
 const Card = ({ name, logo1, logo2, balance, level, bgColor }) => (
-	<div className={`w-[45%] px-5 py-3 rounded-[20px] text-[#FFF] ${bgColor}`}>
-		<div className='flex justify-between items-center pb-3'>
+	<div className={`h-[16vh] px-5 py-3 rounded-[20px] text-[#FFF] ${bgColor}`}>
+		<div className='flex justify-between items-center pb-2'>
 			<div className='text-base font-medium'>
 				<p>{name}</p>
 			</div>
@@ -85,7 +103,7 @@ const Card = ({ name, logo1, logo2, balance, level, bgColor }) => (
 const Current = () => {
 	return (
 		<>
-			<div className='flex flex-wrap gap-8'>
+			<div className='grid grid-cols-2 gap-4 p-2 h-[40vh] overflow-scroll'>
 				{cards.map((card) => (
 					<Card
 						key={card.id}

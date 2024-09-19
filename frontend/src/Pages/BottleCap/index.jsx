@@ -34,7 +34,7 @@ const BottleCap = () => {
 
 	return (
 		<>
-			<div className='h-[83vh] bg-gradient-to-t from-[#1B1B27] to-black'>
+			<div className='h-[83.5vh] bg-gradient-to-t from-[#1B1B27] to-black'>
 				{/* Upper Yellow Card */}
 				<div className='relative pt-10 mt-5 h-[28vh]'>
 					<div className='absolute back-color h-[30vh] -inset-2 blur-[20px]'></div>
