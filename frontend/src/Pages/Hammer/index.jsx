@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import './index.css'
-
-import BackIcon from "../../assets/BackIcon.svg";
-import BigCoin from "../../assets/BigCoinIcon.svg";
 import QuestionMark from "../../assets/questionMark.png";
 import BackGround from "../../assets/BackGround.svg";
 import TimerIcon from "../../assets/TimerIcon.svg";
@@ -22,9 +18,9 @@ const Hammer = () => {
 	};
 
 	//Chooses Launch Pad by default
-	useEffect(()=> {
+	useEffect(() => {
 		setActiveItem("Launch Pad");
-	},[])
+	}, [])
 
 	const bonus = {
 		total: 25951748,
@@ -121,7 +117,8 @@ const Hammer = () => {
 						</div>
 					</div>
 				</div>
-				
+
+				{/* Filter Launch Pad / KOLS / Partners / VC's */}
 				{/* Filter Launch Pad / KOLS / Partners / VC's */}
 				<div className='overflow-y-scroll pt-6'>
 					<div className='px-4'>
@@ -130,37 +127,37 @@ const Hammer = () => {
 							<div
 								className={`rounded-[16.5px] w-fit px-3 py-1 text-base font-medium cursor-pointer ${activeItem === "Launch Pad"
 									? "bg-[#FFF] text-[#0C0C0C]"
-									: "bg-transparent text-[#FFF]"
+									: "bg-transparent text-[#FFF] truncate"
 									}`}
 								onClick={() => handleClick("Launch Pad")}>
-								<p>Launch Pad</p>
+								<p className='truncate text-xs md:text-base'>Launch Pad</p>
 							</div>
 							{/* KOLS Button */}
 							<div
 								className={`rounded-[16.5px] w-fit px-3 py-1 text-base font-medium cursor-pointer ${activeItem === "KOLS"
 									? "bg-[#FFF] text-[#0C0C0C]"
-									: "bg-transparent text-[#FFF]"
+									: "bg-transparent text-[#FFF] truncate"
 									}`}
 								onClick={() => handleClick("KOLS")}>
-								<p>KOLS</p>
+								<p className='truncate text-xs md:text-base'>KOLS</p>
 							</div>
 							{/* Partners Button */}
 							<div
 								className={`rounded-[16.5px] w-fit px-3 py-1 text-base font-medium cursor-pointer ${activeItem === "Partners"
 									? "bg-[#FFF] text-[#0C0C0C]"
-									: "bg-transparent text-[#FFF]"
+									: "bg-transparent text-[#FFF] truncate"
 									}`}
 								onClick={() => handleClick("Partners")}>
-								<p>Partners</p>
+								<p className='truncate text-xs md:text-base'>Partners</p>
 							</div>
 							{/* VC's Button */}
 							<div
 								className={`rounded-[16.5px] w-fit px-3 py-1 text-base font-medium cursor-pointer ${activeItem === "VC's"
 									? "bg-[#FFF] text-[#0C0C0C]"
-									: "bg-transparent text-[#FFF]"
+									: "bg-transparent text-[#FFF] truncate"
 									}`}
 								onClick={() => handleClick("VC's")}>
-								<p>VC's</p>
+								<p className='truncate text-xs md:text-base'>VC's</p>
 							</div>
 						</div>
 					</div>

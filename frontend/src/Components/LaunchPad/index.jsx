@@ -27,7 +27,7 @@ const LaunchPad = () => {
 							: "text-[#BDBDBD]"
 					}`}
 					onClick={() => handleSubClick("Current")}>
-					<p>Current</p>
+					<p className="text-xs">Current</p>
 				</div>
 				{/* TGE Button */}
 				<div
@@ -37,7 +37,7 @@ const LaunchPad = () => {
 							: "text-[#BDBDBD]"
 					}`}
 					onClick={() => handleSubClick("TGE")}>
-					<p>TGE</p>
+					<p className="text-xs">TGE</p>
 				</div>
 				{/* Missed Projects */}
 				<div
@@ -47,10 +47,10 @@ const LaunchPad = () => {
 							: "text-[#BDBDBD]"
 					}`}
 					onClick={() => handleSubClick("Missed Projects")}>
-					<p>Missed Projects</p>
+					<p className="text-xs">Missed Projects</p>
 				</div>
 			</div>
-			<div className='mt-6'>
+			<div className='mt-3'>
 				{activeSubItem === "Current" && <Current />}
 				{activeSubItem === "TGE" && <TGE />}
 				{activeSubItem === "Missed Projects" && <MissedProjects />}
