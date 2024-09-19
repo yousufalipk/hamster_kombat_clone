@@ -27,7 +27,7 @@ const Footer = () => {
 
     return (
         <div className="w-screen h-[14vh] flex justify-center items-center">
-            <div className='bg-custom-image1 bg-cover px-5 h-[6vh] w-[90%] flex items-center rounded-[27px]'>
+            <div className='bg-custom-image1 bg-cover px-3 h-[7vh] w-[90%] flex items-center rounded-[27px]'>
                 {/* Left Icons */}
                 <div className='flex-1 flex justify-center gap-5'>
                     {iconData.slice(0, 2).map(({ name, icon, route }) => (
