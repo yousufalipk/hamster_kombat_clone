@@ -51,11 +51,11 @@ const InviteFriends = () => {
 	];
 	return (
 		<>
-			<div className='relative h-[86vh] w-screen bg-black'>
+			<div className='relative h-[86vh] w-screen'>
 				<div className='relative h-[30vh]'>
 					<div className="absolute -inset-1 bg-[#23a7ff] rounded-[35px]"></div>
 					<div className="absolute -inset-1 bg-[#23a7ff] blur rounded-[35px]"></div>
-					{/* header */}
+					{/* header invite Friends */}
 					<div className='bg-[#060611] h-[30vh] p-4 relative rounded-b-[26px]'>
 						<div className='pt-7'>
 							<div className='flex flex-col items-center'>
@@ -82,16 +82,16 @@ const InviteFriends = () => {
 				</div>
 
 				{/* Content */}
-				<div className='px-4 pt-4'>
+				<div className='h-[56vh] px-4 pt-4 flex flex-col mt-2'>
 					{/* Invite Friends */}
-					<div>
-						<div>
+					<div className="h-[25vh]">
+						<div className="flex flex-col gap-2">
 							{data.map((values) => {
 								const { id, img1, img2, text, description } = values;
 								return (
 									<div
 										key={id}
-										className='bg-[#272A2F] text-[#FFF] text-base font-medium flex justify-between items-center rounded-[14px] gap-4 p-2 px-3 my-3'>
+										className='bg-[#272A2F] text-[#FFF] text-base font-medium flex justify-between items-center rounded-[14px] gap-4 p-2 px-3'>
 										<div>
 											{/* Heading */}
 											<div className='flex flex-shrink-0'>{text}</div>
@@ -122,7 +122,7 @@ const InviteFriends = () => {
 					</div>
 
 					{/* List of Friends */}
-					<div className='bg-[#1B1B27] p-4 text-[#FFF] text-lg font-semibold rounded-[14px] h-[25vh] overflow-scroll'>
+					<div className='h-[31vh] bg-[#1B1B27] p-4 text-[#FFF] text-lg font-semibold rounded-[14px] overflow-scroll'>
 						{/* Title */}
 						<div className='text-[15px]'>
 							<p>Friends</p>
@@ -171,10 +171,10 @@ const InviteFriends = () => {
 					</div>
 
 					{/* Invite a Friend */}
-					<div className="absolute -bottom-3 w-[50vh]">
-						<div className='flex gap-2 justify-between items-center text-[#FFF] text-base font-semibold w-[51vh]'>
+					<div className="absolute -bottom-3 w-screen">
+						<div className='flex gap-2 justify-start items-center text-[#FFF] text-base font-semibold'>
 							{/* Invite a friend */}
-							<div className='w-[33vh] rounded-[10px] text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
+							<div className='w-[57%] rounded-[10px] text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
 								<div className='flex items-center gap-3 p-2 justify-center'>
 									<div className=''>
 										<img
@@ -186,7 +186,7 @@ const InviteFriends = () => {
 								</div>
 							</div>
 							{/* Copy Link */}
-							<div className='w-[18vh] rounded-[14px] text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
+							<div className='w-[32%] rounded-[14px] text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
 								<div className='flex items-center gap-1 p-2 justify-center'>
 									<img
 										src={Copy}
