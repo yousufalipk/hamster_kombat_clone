@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+	box-sizing: border-box;
+	margin: 0px;
+	padding: 0px;
+}
+
 .back-color {
 	background: rgba(255, 176, 0, 0.35);
 }
@@ -56,4 +62,16 @@
 	color: white;
 	font-size: 2rem;
 	font-weight: bold;
+}
+
+/* For Webkit Browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+	display: none;
+	/* Hide scrollbar */
+}
+
+/* For Firefox */
+html {
+	scrollbar-width: none;
+	/* Hide scrollbar */
 }
