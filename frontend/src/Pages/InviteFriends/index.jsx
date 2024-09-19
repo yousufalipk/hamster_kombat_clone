@@ -41,70 +41,74 @@ const InviteFriends = () => {
 			name: "Esther Howard",
 			coins: "+5,000",
 		},
+		{
+			id: 3,
+			img1: Friend2,
+			img2: Coin,
+			name: "Esther Howard",
+			coins: "+5,000",
+		},
 	];
 	return (
 		<>
-			<div className='overflow-hidden'>
-				<div className='relative'>
-					<div className='absolute -inset-3 bg-[#23a7ff] min-h-[40%] blur rounded-[50px]'></div>
-					<div className='bg-[#0C0C0C] min-h-[33vh] pt-5 px-5 relative rounded-br-3xl rounded-bl-3xl'>
-						<div className='bg-[#060611] p-4 relative'>
-							<div className='flex items-center gap-4'>
-								<div className=''>
-									<img
-										src={BackIcon}
-										alt='Back-Icon'
-									/>
-								</div>
-								<div className='text-[#FFF] text-[18px] font-semibold'>
-									PandaTap
-								</div>
-							</div>
-							<div className='pt-10'>
-								<div className='flex flex-col items-center'>
-									<div className='bg-[#222222] w-fit px-5 pt-4 -mt-1 rounded-[15px] mx-auto'>
-										<div className='flex items-center gap-2'>
-											<div className=''>
-												<img
-													src={FriendsPic}
-													alt='BigCoin-Icon'
-												/>
-											</div>
+			<div className='relative h-[86vh] w-screen'>
+				<div className='relative h-[30vh]'>
+					<div className="absolute -inset-1 bg-[#23a7ff] rounded-[35px] w-[50vh]"></div>
+					<div className="absolute -inset-1 bg-[#23a7ff] blur rounded-[35px] w-[50vh]"></div>
+					{/* header */}
+					<div className='bg-[#060611] h-[30vh] p-4 relative rounded-b-[26px] w-[49vh]'>
+						<div className='pt-7'>
+							<div className='flex flex-col items-center'>
+								<div className='bg-[#222222] w-fit px-5 pt-4 -mt-1 rounded-[15px] mx-auto'>
+									<div className='flex items-center gap-2'>
+										<div className=''>
+											<img
+												src={FriendsPic}
+												alt='BigCoin-Icon'
+												width="95"
+											/>
 										</div>
 									</div>
-									<div className='text-[#FFF] text-[28px] font-semibold'>
-										<p>Invite Friends</p>
-									</div>
-									<div className='text-[#FFF] text-sm font-normal'>
-										<p>You and your friend will receive bonuses</p>
-									</div>
+								</div>
+								<div className='text-[#FFF] text-[25px] font-semibold pt-2'>
+									<p>Invite Friends</p>
+								</div>
+								<div className='text-[#FFF] text-sm font-normal'>
+									<p>You and your friend will receive bonuses</p>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div className='bg-[#1B1B27] px-4 pt-12 -mt-4'>
-					<div className=''>
-						<div className=''>
+
+				{/* Content */}
+				<div className='px-4 pt-4'>
+					{/* Invite Friends */}
+					<div>
+						<div>
 							{data.map((values) => {
 								const { id, img1, img2, text, description } = values;
 								return (
 									<div
 										key={id}
-										className='bg-[#272a2f] text-[#FFF] text-base font-medium flex justify-between items-center rounded-[14px] gap-4 p-4 my-3'>
-										<div className=''>
+										className='bg-[#272A2F] text-[#FFF] text-base font-medium flex justify-between items-center rounded-[14px] gap-4 p-2 px-3 my-3'>
+										<div>
+											{/* Heading */}
 											<div className='flex flex-shrink-0'>{text}</div>
-											<div className='flex items-center gap-1 py-2'>
-												<div className=''>
+											{/* Img with description */}
+											<div className='flex items-center gap-1 py-1'>
+												<div>
 													<img
-														className='w-[17px]'
+														width="15"
 														src={img1}
 														alt='Coin-Icon'
 													/>
 												</div>
-												<div className='-mt-1'>{description}</div>
+												<div className='text-[10px]'>{description}</div>
 											</div>
+
 										</div>
+										{/* Gift Box Img */}
 										<div className='flex flex-shrink-0'>
 											<img
 												src={img2}
@@ -116,70 +120,81 @@ const InviteFriends = () => {
 							})}
 						</div>
 					</div>
-					<div className='bg-[#272a2f] p-4 text-[#FFF] text-lg font-semibold'>
-						<div className=''>
+
+					{/* List of Friends */}
+					<div className='bg-[#1B1B27] p-4 text-[#FFF] text-lg font-semibold rounded-[14px] h-[30vh] overflow-scroll'>
+						{/* Title */}
+						<div className='text-[15px]'>
 							<p>Friends</p>
 						</div>
-						<div className=''>
-							{friendsData.map((values) => {
-								const { id, img1, img2, name, coins } = values;
-								return (
-									<div
-										key={id}
-										className='bg-[#1B1B27] text-[#FFF] text-base font-medium flex justify-between items-center rounded-[14px] gap-4 p-4 my-3'>
+
+						{/* Friends List Cards */}
+						{friendsData.map((values) => {
+							const { id, img1, img2, name, coins } = values;
+							return (
+								<div
+									key={id}
+									className='bg-[#12121C] text-white text-base font-medium flex justify-between items-center rounded-[14px] gap-4 py-1 px-3 my-2'
+								>
+									<div className='flex items-center gap-4 py-1'>
+										{/* Sr.No */}
+										<div className='w-[18px] text-xs rounded-full border border-[#21212D] flex items-center justify-center'>
+											<p>{id}</p>
+										</div>
+
+										{/* Display Picture */}
+										<div>
+											<img
+												width="40"
+												src={img1}
+												alt='Coin-Icon'
+											/>
+										</div>
+										{/* Name & Reward */}
 										<div className=''>
-											<div className='flex items-center gap-4 py-2'>
-												<div className='w-[18px] text-xs rounded-full border flex items-center pl-[4px] '>
-													<p>{id}</p>
-												</div>
+											<div className='text-[15px]'>{name}</div>
+											<div className='-mt-1 flex items-center gap-1'>
 												<div className=''>
 													<img
-														className='w-[50px]'
-														src={img1}
+														width="13"
+														src={img2}
 														alt='Coin-Icon'
 													/>
 												</div>
-												<div className=''>
-													<div className=''>{name}</div>
-													<div className='-mt-1 flex items-center gap-1'>
-														<div className=''>
-															<img
-																className='w-[15px]'
-																src={img2}
-																alt='Coin-Icon'
-															/>
-														</div>
-														<div className=''>{coins}</div>
-													</div>
-												</div>
+												<div className='text-[12px]'>{coins}</div>
 											</div>
 										</div>
 									</div>
-								);
-							})}
-						</div>
-					</div>
-					<div className='flex justify-between text-[#FFF] text-base font-semibold py-4'>
-						<div className='w-[50%] rounded-[14px] text-center button-grad'>
-							<div className='flex items-center gap-3 p-6'>
-								<div className=''>
-									<img
-										src={Invite}
-										alt=''
-									/>
 								</div>
-								<div className=''>Invite a Friend</div>
+							);
+						})}
+					</div>
+
+					{/* Invite a Friend */}
+					<div className="absolute -bottom-4">
+						<div className='flex gap-2 justify-between text-[#FFF] text-base font-semibold w-[44vh]'>
+							{/* Invite a friend */}
+							<div className='w-[28vh] rounded-[10px] text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
+								<div className='flex items-center gap-3 p-2 justify-center'>
+									<div className=''>
+										<img
+											src={Invite}
+											alt=''
+										/>
+									</div>
+									<div className='text-md font-semibold'>Invite a Friend</div>
+								</div>
 							</div>
-						</div>
-						<div className='w-[45%] rounded-[14px] text-center button-grad'>
-							<div className='flex items-center gap-3 p-6'>
-								<div className=''>
+							{/* Copy Link */}
+							<div className='w-[16vh] rounded-[14px] text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
+								<div className='flex items-center gap-1 p-2 justify-center'>
 									<img
 										src={Copy}
 										alt=''
+										width="16"
 									/>
+									<div className='text-md font-semibold'>Copy Link</div>
 								</div>
-								<div className=''>Copy Link</div>
 							</div>
 						</div>
 					</div>
