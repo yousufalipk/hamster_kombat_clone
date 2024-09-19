@@ -111,7 +111,17 @@ const Home = () => {
 	};
 
 	return (
-		<>
+		<>	
+
+			{/* Background Image */}
+			<div className="absolute inset-0 -z-10">
+				<img
+					src={BackgroundImg}
+					alt="Background"
+					className="w-full h-full object-cover scale-[0.79] fixed top-[9vh]"
+				/>
+			</div>
+
 			{/* Content */}
 			<div className="relative h-[86vh] w-screen">
 				<div className="relative h-[30vh]">

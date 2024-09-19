@@ -14,15 +14,6 @@ import BackgroundImg from '../assets/background/bg.png';
 const Layout = () => {
     return (
         <>  
-            {/* Background Image */}
-			<div className="absolute inset-0 z-10">
-				<img
-					src={BackgroundImg}
-					alt="Background"
-					className="w-full h-full object-cover scale-[0.79] fixed top-[9vh]"
-				/>
-			</div>
-
             <div className='relative h-full w-screen overflow-hidden z-20'>
                 <div>
                     <Routes>
