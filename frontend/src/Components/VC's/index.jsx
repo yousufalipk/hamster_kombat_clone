@@ -54,7 +54,7 @@ const data = [
 const KOLS = () => {
 	return (
 		<>
-			<div className=''>
+			<div className='h-[45vh] overflow-scroll'>
 				{data.map((values) => {
 					const {
 						id,
@@ -72,81 +72,75 @@ const KOLS = () => {
 					return (
 						<div
 							key={id}
-							className={`text-[#FFF] text-base font-medium flex items-center border border-[#666666] rounded-[14px] p-3 my-4
+							className={`text-[#FFF] text-base font-medium flex justify-center items-center rounded-[14px] pt-3 mt-3
 								${id === 1 ? "blue-grad" : ""}
-								${id === 2 ? "yellow-grad" : ""}
+								${id === 2 ? "red-grad" : ""}
 								${id === 3 ? "purple-grad" : ""}
 							`}>
-							<div className='w-full'>
-								<div className='flex justify-between items-center'>
-									<div className='flex items-center gap-16'>
-										<div className=''>
-											<p>{name}</p>
+							<div className="w-[50vh]">
+								{/* Card Body */}
+								<div className="flex">
+									{/* left section */}
+									<div className="left w-1/2">
+										{/* head */}
+										<div className="flex gap-2">
+											<div className="text-sm">{name}</div>
+											<div
+												className={`px-1 py-0.5 rounded-[20px] text-xs
+												${id === 1 ? "bg-[#3a8cea]" : ""}
+												${id === 2 ? "bg-[#c41313]" : ""}
+												${id === 3 ? "bg-[#854bf2]" : ""}
+											}`}>
+												lvl {level}
+											</div>
 										</div>
-										<div
-											className={`px-3 py-1 rounded-[20px]
-											${id === 1 ? "bg-[#3a8cea]" : ""}
-											${id === 2 ? "bg-[#cc8137]" : ""}
-											${id === 3 ? "bg-[#854bf2]" : ""}
-										}`}>
-											lvl {level}
-										</div>
-									</div>
-									<div className='flex items-center gap-1'>
-										<div className='left'>
-											<img
-												src={img1}
-												alt='Coin-Icon'
-											/>
-										</div>
-										<div className=''>
-											<p>{amount}</p>
-										</div>
-									</div>
-								</div>
-								<div className='flex justify-between items-center'>
-									<div className=''>
-										<div className='flex items-center py-3'>
-											<div className='img'>
+										{/* body */}
+										<div className="flex">
 												<img
 													src={img2}
 													alt='Coin-Icon'
 												/>
-											</div>
-											<div className='flex items-center'>
-												<div className='pr-2'>
-													<p> + {coin}</p>
-												</div>
-												<div> Coin Per Minute</div>
+											<div className="text-xs font-thin text-gray-300">
+												<span className="mr-2 font-semibold text-sm">+{coin}</span>
+												Coin Per Minute
 											</div>
 										</div>
-										<div className='flex items-center gap-2 rounded-[18px] w-fit px-4 py-1 bg-[#FFF] text-[#000] mb-1'>
-											<div className=''>
-												<img
-													src={img3}
-													alt='Angle-icon'
-												/>
-											</div>
-											<div className=''>
-												<p>{button}</p>
-											</div>
+										{/* upgrade button */}
+										<div className="mt-2 flex items-center justify-center gap-2 rounded-[18px] w-fit px-3 py-1 bg-[#FFF] text-black">
+											<img
+												src={img3}
+												alt='Angle-icon'
+												width='5'
+											/>
+											<p className="text-xs font-thin">{button}</p>
 										</div>
 									</div>
-									<div className='flex -mb-2'>
-										<div className=''>
+
+									{/* right section */}
+									<div className="right w-1/2">
+										<div className="flex justify-end gap-1">
 											<img
-												src={img4}
-												alt=''
+												src={img1}
+												alt='Coin-Icon'
+												width="15"
 											/>
+											<div className="text-sm">{amount}</div>
 										</div>
-										<div
-											className={`${
-												id === 2 ? "mt-7" : id === 3 ? "mt-6" : ""
-											}`}>
-											<img
-												src={img5}
-												alt=''
-											/>
+										<div className="flex">
+											<div className="w-3/5 flex justify-end items-end h-[10vh]">
+												<img
+													src={img4}
+													alt=''
+													width='85'
+												/>
+											</div>
+											<div className="w-2/5 flex justify-end items-end h-[10vh]">
+												<img
+													src={img5}
+													alt=''
+													width='85'
+												/>
+											</div>
 										</div>
 									</div>
 								</div>

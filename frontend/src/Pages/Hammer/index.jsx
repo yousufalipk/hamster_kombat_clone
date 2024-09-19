@@ -119,8 +119,7 @@ const Hammer = () => {
 				</div>
 
 				{/* Filter Launch Pad / KOLS / Partners / VC's */}
-				{/* Filter Launch Pad / KOLS / Partners / VC's */}
-				<div className='overflow-y-scroll pt-6'>
+				<div className='pt-6'>
 					<div className='px-4'>
 						<div className='flex justify-between items-center bg-[#252525] border border-[#FFF] rounded-[29.5px] p-2'>
 							{/* LaunchPad button */}
