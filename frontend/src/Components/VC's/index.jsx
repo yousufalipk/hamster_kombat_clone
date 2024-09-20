@@ -48,10 +48,10 @@ const data = [
 		coin: 60,
 		level: 10,
 		button: "Upgrade",
-	},
+	}
 ];
 
-const KOLS = () => {
+const VCS = () => {
 	return (
 		<>
 			<div className='h-[45vh] overflow-scroll'>
@@ -72,7 +72,7 @@ const KOLS = () => {
 					return (
 						<div
 							key={id}
-							className={`text-[#FFF] text-base font-medium flex justify-center items-center rounded-[14px] pt-3 mt-3
+							className={`text-[#FFF] text-base font-medium flex justify-center items-center rounded-[14px] pt-3 mt-3 px-3
 								${id === 1 ? "blue-grad" : ""}
 								${id === 2 ? "red-grad" : ""}
 								${id === 3 ? "purple-grad" : ""}
@@ -84,9 +84,9 @@ const KOLS = () => {
 									<div className="left w-1/2">
 										{/* head */}
 										<div className="flex gap-2">
-											<div className="text-sm">{name}</div>
+											<div className="text-[12px]">{name}</div>
 											<div
-												className={`px-1 py-0.5 rounded-[20px] text-xs
+												className={`px-2 rounded-xl text-[8px]
 												${id === 1 ? "bg-[#3a8cea]" : ""}
 												${id === 2 ? "bg-[#c41313]" : ""}
 												${id === 3 ? "bg-[#854bf2]" : ""}
@@ -101,7 +101,7 @@ const KOLS = () => {
 													alt='Coin-Icon'
 												/>
 											<div className="text-xs font-thin text-gray-300">
-												<span className="mr-2 font-semibold text-sm">+{coin}</span>
+												<span className="mr-2 font-semibold text-xs">+{coin}</span>
 												Coin Per Minute
 											</div>
 										</div>
@@ -153,4 +153,4 @@ const KOLS = () => {
 	);
 };
 
-export default KOLS;
+export default VCS;
