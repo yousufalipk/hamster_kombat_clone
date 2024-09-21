@@ -1,4 +1,7 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../context/index';
+
 import MIcon from "../../assets/MIcon.png";
 import Coin from "../../assets/BigCoinIcon.svg";
 import Tonfish from "../../assets/TonfishIcon.png";
@@ -93,20 +96,36 @@ const Card = ({ name, logo1, logo2, balance, level, bgColor }) => (
 );
 
 const Current = () => {
+
+	const { setSendTokenData } = useUser();
+
+	const navigate = useNavigate();
+
+	const handleCardClick = (card) => {
+		setSendTokenData(card);
+		navigate('/token');
+	}
+
 	return (
 		<>
 			<div className='grid grid-cols-2 gap-3 h-[37vh] overflow-scroll'>
-				{cards.map((card) => (
-					<Card
-						key={card.id}
-						name={card.name}
-						logo1={card.logo1}
-						logo2={card.logo2}
-						balance={card.balance}
-						level={card.level}
-						bgColor={card.bgColor}
-					/>
-				))}
+				{cards.map((card) => {
+					return (
+						<div 
+							onClick={()=>handleCardClick(card)}	
+						> 
+							<Card
+								key={card.id}
+								name={card.name}
+								logo1={card.logo1}
+								logo2={card.logo2}
+								balance={card.balance}
+								level={card.level}
+								bgColor={card.bgColor}
+							/>
+						</div>
+					)
+				})}
 			</div>
 		</>
 	);
