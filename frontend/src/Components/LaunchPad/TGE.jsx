@@ -4,23 +4,25 @@ import Coin from "../../assets/BigCoinIcon.svg";
 import Gamefi from "../../assets/GamefiIcon.png";
 import { useUser } from '../../context/index';
 
+import PopUp from '../PopUp/index';
+
 const initialCards = [
 	{
 		id: 1,
 		name: "MemeFi",
 		logo1: MIcon,
 		logo2: Coin,
-		balance: 203659461,
+		balance: 5000,
 		level: 10,
 		bgColor: "memefi-bg",
-		tgeToggle: 'launchpad' 
+		tgeToggle: 'launchpad'
 	},
 	{
 		id: 2,
 		name: "Gamefi",
 		logo1: Gamefi,
 		logo2: Coin,
-		balance: 96584123,
+		balance: 5000,
 		level: 19,
 		bgColor: "gamefi2-bg",
 		tgeToggle: 'launchpad'
@@ -30,7 +32,7 @@ const initialCards = [
 		name: "Gamefi",
 		logo1: Gamefi,
 		logo2: Coin,
-		balance: 96584123,
+		balance: 5000,
 		level: 19,
 		bgColor: "gamefi1-bg",
 		tgeToggle: 'launchpad'
@@ -40,11 +42,16 @@ const initialCards = [
 const TGE = () => {
 	const [cards, setCards] = useState(initialCards);
 
+	const { isModalOpen, setModalOpen, setSendData } = useUser();
+
 	const handleToggleChange = (id, toggleValue) => {
-		const updatedCards = cards.map((card) =>
-			card.id === id ? { ...card, tgeToggle: toggleValue } : card
-		);
-		setCards(updatedCards);
+		setModalOpen(true);
+		cards?.forEach((card) => {
+			if (card.id === id) {
+				card.tgeToggle = toggleValue; 
+				setSendData(card);
+			}
+		});
 	};
 
 	// Card Component
@@ -81,7 +88,7 @@ const TGE = () => {
 				{/* Toggler */}
 				<div className="w-[16vh]">
 					<div className="bg-white rounded-2xl text-black font-bold text-[7px] flex gap-1 p-0.5">
-						<span 
+						<span
 							onClick={() => handleToggleChange(id, 'launchpad')}
 							className={`p-1 rounded-xl flex gap-1 ${tgeToggle === 'launchpad' && 'border-[1px] border-[#209734] text-green-600'}`}
 						>
@@ -96,7 +103,7 @@ const TGE = () => {
 							)}
 							Launch Pad
 						</span>
-						<span 
+						<span
 							onClick={() => handleToggleChange(id, 'airtap')}
 							className={`p-1 rounded-xl flex gap-1 ${tgeToggle === 'airtap' && 'border-[1px] border-[#209734] text-green-600'}`}
 						>
@@ -118,14 +125,19 @@ const TGE = () => {
 	);
 
 	return (
-		<div className='grid grid-cols-2 gap-3 h-[37vh] overflow-scroll'>
-			{cards.map((card) => (
-				<Card
-					key={card.id}
-					{...card}
-				/>
-			))}
-		</div>
+		<>
+			{isModalOpen && (
+				<PopUp />
+			)}
+			<div className='grid grid-cols-2 gap-3 h-[37vh] overflow-scroll'>
+				{cards.map((card) => (
+					<Card
+						key={card.id}
+						{...card}
+					/>
+				))}
+			</div>
+		</>
 	);
 };
 
