@@ -79,7 +79,7 @@ const TGE = () => {
 				</div>
 				<div className='text-[16px]'>{balance.toLocaleString()}</div>
 			</div>
-			<div className="flex items-center justify-between w-[22vh] border-2 mt-2 gap-1">
+			<div className="flex items-center justify-between w-[22vh] mt-2 gap-1">
 				{/* level */}
 				<div
 					className="w-[17%] text-[5px] font-medium bg-[rgba(0,0,0,0.3)] text-center py-1 rounded-[5px]">
