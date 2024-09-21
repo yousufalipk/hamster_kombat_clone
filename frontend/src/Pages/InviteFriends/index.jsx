@@ -48,6 +48,13 @@ const InviteFriends = () => {
 			name: "Esther Howard",
 			coins: "+5,000",
 		},
+		{
+			id: 4,
+			img1: Friend2,
+			img2: Coin,
+			name: "Esther Howard",
+			coins: "+5,000",
+		},
 	];
 	return (
 		<>
@@ -83,91 +90,95 @@ const InviteFriends = () => {
 
 				{/* Content */}
 				<div className='h-[56vh] px-4 pt-4 flex flex-col mt-2'>
-					{/* Invite Friends */}
-					<div className="h-[25vh]">
-						<div className="flex flex-col gap-2">
-							{data.map((values) => {
-								const { id, img1, img2, text, description } = values;
+
+					<div className="overflow-scroll">
+
+						{/* Invite Friends */}
+						<div className="h-[25vh]">
+							<div className="flex flex-col gap-2">
+								{data.map((values) => {
+									const { id, img1, img2, text, description } = values;
+									return (
+										<div
+											key={id}
+											className='bg-[#272A2F] text-[#FFF] text-base font-medium flex justify-between items-center rounded-[14px] gap-4 p-2 px-3'>
+											<div>
+												{/* Heading */}
+												<div className='flex flex-shrink-0'>{text}</div>
+												{/* Img with description */}
+												<div className='flex items-center gap-1 py-1'>
+													<div>
+														<img
+															width="15"
+															src={img1}
+															alt='Coin-Icon'
+														/>
+													</div>
+													<div className='text-[10px]'>{description}</div>
+												</div>
+
+											</div>
+											{/* Gift Box Img */}
+											<div className='flex flex-shrink-0'>
+												<img
+													src={img2}
+													alt='Gift-Icons'
+												/>
+											</div>
+										</div>
+									);
+								})}
+							</div>
+						</div>
+
+						{/* List of Friends */}
+						<div className='bg-[#1B1B27] p-4 text-[#FFF] text-lg font-semibold rounded-[14px] mt-4'>
+							{/* Title */}
+							<div className='text-[15px]'>
+								<p>Friends</p>
+							</div>
+
+							{/* Friends List Cards */}
+							{friendsData.map((values) => {
+								const { id, img1, img2, name, coins } = values;
 								return (
 									<div
 										key={id}
-										className='bg-[#272A2F] text-[#FFF] text-base font-medium flex justify-between items-center rounded-[14px] gap-4 p-2 px-3'>
-										<div>
-											{/* Heading */}
-											<div className='flex flex-shrink-0'>{text}</div>
-											{/* Img with description */}
-											<div className='flex items-center gap-1 py-1'>
-												<div>
-													<img
-														width="15"
-														src={img1}
-														alt='Coin-Icon'
-													/>
-												</div>
-												<div className='text-[10px]'>{description}</div>
+										className='bg-[#12121C] text-white text-base font-medium flex justify-between items-center rounded-[14px] gap-4 py-1 px-3 my-2'
+									>
+										<div className='flex items-center gap-4 py-1'>
+											{/* Sr.No */}
+											<div className='w-[18px] text-xs rounded-full border border-[#21212D] flex items-center justify-center'>
+												<p>{id}</p>
 											</div>
 
-										</div>
-										{/* Gift Box Img */}
-										<div className='flex flex-shrink-0'>
-											<img
-												src={img2}
-												alt='Gift-Icons'
-											/>
+											{/* Display Picture */}
+											<div>
+												<img
+													width="40"
+													src={img1}
+													alt='Coin-Icon'
+												/>
+											</div>
+											{/* Name & Reward */}
+											<div className=''>
+												<div className='text-[15px]'>{name}</div>
+												<div className='-mt-1 flex items-center gap-1'>
+													<div className=''>
+														<img
+															width="13"
+															src={img2}
+															alt='Coin-Icon'
+														/>
+													</div>
+													<div className='text-[12px]'>{coins}</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								);
 							})}
 						</div>
-					</div>
-
-					{/* List of Friends */}
-					<div className='h-[31vh] bg-[#1B1B27] p-4 text-[#FFF] text-lg font-semibold rounded-[14px] overflow-scroll mt-2'>
-						{/* Title */}
-						<div className='text-[15px]'>
-							<p>Friends</p>
-						</div>
-
-						{/* Friends List Cards */}
-						{friendsData.map((values) => {
-							const { id, img1, img2, name, coins } = values;
-							return (
-								<div
-									key={id}
-									className='bg-[#12121C] text-white text-base font-medium flex justify-between items-center rounded-[14px] gap-4 py-1 px-3 my-2'
-								>
-									<div className='flex items-center gap-4 py-1'>
-										{/* Sr.No */}
-										<div className='w-[18px] text-xs rounded-full border border-[#21212D] flex items-center justify-center'>
-											<p>{id}</p>
-										</div>
-
-										{/* Display Picture */}
-										<div>
-											<img
-												width="40"
-												src={img1}
-												alt='Coin-Icon'
-											/>
-										</div>
-										{/* Name & Reward */}
-										<div className=''>
-											<div className='text-[15px]'>{name}</div>
-											<div className='-mt-1 flex items-center gap-1'>
-												<div className=''>
-													<img
-														width="13"
-														src={img2}
-														alt='Coin-Icon'
-													/>
-												</div>
-												<div className='text-[12px]'>{coins}</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							);
-						})}
 					</div>
 
 					{/* Invite a Friend */}

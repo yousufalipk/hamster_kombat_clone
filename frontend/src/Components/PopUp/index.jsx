@@ -73,7 +73,7 @@ const PopUp = () => {
                         {/* action buttons */}
                         <div className='flex gap-4 mt-3'>
                             <button 
-                                className='w-1/2 p-2 #242434 rounded-lg text-sm'
+                                className='w-1/2 p-2 bg-[#242434] rounded-lg text-sm'
                                 onClick={()=>(handleConfirm())}
                             >
                                 Cancel
