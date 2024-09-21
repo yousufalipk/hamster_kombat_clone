@@ -82,11 +82,11 @@ const TGE = () => {
 			<div className="flex items-center w-[20vh] mt-2 gap-1">
 				{/* level */}
 				<div
-					className="w-[4vh] text-[6px] font-medium bg-[rgba(0,0,0,0.3)] p-1 rounded-[5px]">
+					className="w-[17%] text-[5px] font-medium bg-[rgba(0,0,0,0.3)] p-1 rounded-[5px]">
 					<p className="opacity-100">lvl {level}</p>
 				</div>
 				{/* Toggler */}
-				<div className="w-[15vh]">
+				<div className="w-[83%]">
 					<div className="bg-white rounded-2xl text-black font-bold text-[6px] flex gap-1 p-0.5">
 						<span
 							onClick={() => handleToggleChange(id, 'launchpad')}
