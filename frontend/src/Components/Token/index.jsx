@@ -12,7 +12,7 @@ import Telegram from "../../assets/telegramIcon.png";
 import Youtube from "../../assets/youtubeIcon.png";
 
 const Token = () => {
-	const { sendTokenData, userData } = useUser(); 
+	const { sendTokenData, userData } = useUser();
 
 	const navigate = useNavigate();
 
@@ -49,13 +49,13 @@ const Token = () => {
 	];
 
 	return (
-		<>	
+		<>
 			{sendTokenData && (
 				<>
-					<div className='bg-[#060611] p-4'>
+					<div className='bg-[#060611] p-4 h-[100vh] overflow-hidden'>
 						<div className='flex items-center gap-4'>
 							<div
-								onClick={()=>handleBack()}
+								onClick={() => handleBack()}
 							>
 								<img
 									src={BackIcon}
@@ -64,6 +64,7 @@ const Token = () => {
 							</div>
 							<div className='text-[#FFF] text-[18px] font-semibold'>{sendTokenData.name}</div>
 						</div>
+						{/* Upper Portion */}
 						<div className='pt-10'>
 							<div className='flex py-3'>
 								<div className='mx-auto flex items-center gap-2 px-4 py-2 rounded-[25.93px] bg-[#191922]'>
@@ -78,9 +79,10 @@ const Token = () => {
 									</div>
 								</div>
 							</div>
-							<div className='bg-[#f69001] rounded-[14px]'>
+							{/* Card */}
+							<div className={`${sendTokenData.bgColor} rounded-[14px]`}>
 								<div className=''>
-									<div className='flex justify-between border px-4 py-5 border-b-white border-t-0 border-r-0 border-l-0'>
+									<div className='flex justify-between border px-4 py-3 border-b-white border-t-0 border-r-0 border-l-0'>
 										<div className='flex items-center gap-4'>
 											<div className=''>
 												<img
@@ -144,67 +146,77 @@ const Token = () => {
 								</div>
 							</div>
 						</div>
-						<div className='pt-14'>
-							<div className=''>
+
+						{/* Tasks Section */}
+						<div className='h-[60vh] px-1 pt-4 overflow-scroll'>
+							{/* Heading 1 */}
+							<div>
 								<p className='text-[#9595A9] text-[15px] font-medium'>
 									Pandatop News
 								</p>
 							</div>
-							<div className=''>
+
+							{/* Pandatop News Cards */}
+							<div>
 								{data.map((values) => {
 									const { id, img, name, amount } = values;
 									return (
 										<div
 											key={id}
-											className='bg-[#1b1b27] text-[#FFF] text-base font-medium flex items-center border border-[#666666] rounded-[14px] gap-4 p-4 my-3'>
-											<div className='flex flex-shrink-0'>
-												<img
-													src={img}
-													alt='Icons'
-												/>
+											className='bg-[#1b1b27] text-[#FFF] text-base font-medium flex justify-between items-center border border-[#666666] rounded-[14px] gap-4 py-1 px-3 my-3'>
+
+											<div className="flex gap-3 justify-center items-center py-1">
+												{/* Icon */}
+												<div className='flex flex-shrink-0'>
+													<img
+														src={img}
+														alt='Icons'
+														width="40"
+													/>
+												</div>
+												{/* Name */}
+												<div className='flex flex-shrink-0 text-[14px]'>{name}</div>
 											</div>
-											<div className='flex flex-shrink-0'>{name}</div>
-											<div
-												className={`bg-[#FFF] text-[#000] font-semibold rounded-lg p-3 flex flex-shrink-0
-													${id === 1 ? "ml-16" : ""}
-													${id === 2 ? "ml-[59px]" : ""}
-													${id === 3 ? "ml-8" : ""}
-												`}>
+
+											{/* White Box */}
+											<div className="bg-white text-black py-1 px-2 rounded-md text-[15px]">
 												{amount}
 											</div>
 										</div>
 									);
 								})}
 							</div>
-						</div>
-						<div className='pt-2'>
-							<div className=''>
+
+							{/* Heading 2 */}
+							<div className='pt-3'>
 								<p className='text-[#9595A9] text-[15px] font-medium'>
 									Social Media
 								</p>
 							</div>
-							<div className=''>
+							{/* Social Media Cards */}
+							<div>
 								{data.map((values) => {
 									const { id, img, name, amount } = values;
-									if (id === 3) {
-										return null;
-									}
 									return (
 										<div
 											key={id}
-											className='bg-[#1b1b27] text-[#FFF] text-base font-medium flex items-center border border-[#666666] rounded-[14px] gap-4 p-4 my-3'>
-											<div className='flex flex-shrink-0'>
-												<img
-													src={img}
-													alt='Icons'
-												/>
+											className='bg-[#1b1b27] text-[#FFF] text-base font-medium flex justify-between items-center border border-[#666666] rounded-[14px] gap-4 py-1 px-3 my-3'>
+
+											<div className="flex gap-3 justify-center items-center py-1">
+												{/* Icon */}
+												<div className='flex flex-shrink-0'>
+													<img
+														src={img}
+														alt='Icons'
+														width="40"
+													/>
+												</div>
+												{/* Name */}
+												<div className='flex flex-shrink-0 text-[14px]'>{name}</div>
 											</div>
-											<div className='flex flex-shrink-0'>{name}</div>
-											<div
-												className={`bg-[#FFF] text-[#000] font-semibold rounded-lg p-3 flex flex-shrink-0
-													${id === 1 ? "ml-16" : ""}
-													${id === 2 ? "ml-[59px]" : ""}
-												`}>
+
+											{/* White Box */}
+											<div className="bg-white text-black py-1 px-2 rounded-md text-[15px]">
 												{amount}
 											</div>
 										</div>
