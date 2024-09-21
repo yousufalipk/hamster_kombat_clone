@@ -4,7 +4,7 @@ import Coin from "../../assets/BigCoinIcon.svg";
 import Gamefi from "../../assets/GamefiIcon.png";
 import { useUser } from '../../context/index';
 
-import PopUp from '../PopUp/index';
+import PopUp from '../PopUp/popup1';
 
 const initialCards = [
 	{

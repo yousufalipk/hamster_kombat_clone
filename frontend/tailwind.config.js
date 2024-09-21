@@ -6,6 +6,7 @@ module.exports = {
 			backgroundImage: {
 				'custom-image1': "url('./assets/Footer/footer.png')", // Changed path to be relative
 				'custom-image2': "url('./assets/background/bg.png')", // Fixed typo in 'background'
+				'custom-image3': "url('./assets/game/game_bg.png')", // Fixed typo in 'background'
 			},
 			boxShadow: {
 				'panda': 'rgba(0, 0, 0, 0.56) 0px 22px 70px 4px',
