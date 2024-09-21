@@ -49,7 +49,7 @@ const TGE = () => {
 
 	// Card Component
 	const Card = ({ id, name, logo1, logo2, balance, level, bgColor, tgeToggle }) => (
-		<div className={`h-[17vh] px-4 py-2 rounded-[20px] text-[#FFF] overflow-hidden ${bgColor}`}>
+		<div className={`h-[17vh] px-4 py-1 rounded-[20px] text-[#FFF] overflow-hidden ${bgColor}`}>
 			<div className='flex justify-between items-center mt-2'>
 				<div className='text-sm font-semibold'>
 					<p>{name}</p>
@@ -62,7 +62,7 @@ const TGE = () => {
 					/>
 				</div>
 			</div>
-			<div className='mt-2 flex items-center gap-2 text-[18.519px] font-normal'>
+			<div className='mt-1 flex items-center gap-2 text-[18.519px] font-normal'>
 				<div className=''>
 					<img
 						src={logo2}
@@ -72,14 +72,14 @@ const TGE = () => {
 				</div>
 				<div className='text-[16px]'>{balance.toLocaleString()}</div>
 			</div>
-			<div className="flex items-center w-[18vh] mt-2 gap-1">
+			<div className="flex items-center w-[20vh] mt-2 gap-1">
 				{/* level */}
 				<div
-					className="w-[4vh] text-[8px] font-medium bg-[rgba(0,0,0,0.3)] p-1 rounded-[5px]">
+					className="w-[4vh] text-[6px] font-medium bg-[rgba(0,0,0,0.3)] p-1 rounded-[5px]">
 					<p className="opacity-100">lvl {level}</p>
 				</div>
 				{/* Toggler */}
-				<div className="w-[15vh]">
+				<div className="w-[16vh]">
 					<div className="bg-white rounded-2xl text-black font-bold text-[7px] flex gap-1 p-0.5">
 						<span 
 							onClick={() => handleToggleChange(id, 'launchpad')}
