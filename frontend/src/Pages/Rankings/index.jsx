@@ -1,6 +1,7 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom'; 
+
 import BackIcon from "../../assets/BackIcon.svg";
-import SilverBadge from "../../assets/SilverBadge.png";
 import Friend1 from "../../assets/Friend1.svg";
 import Friend2 from "../../assets/Friend2.svg";
 import Coin from "../../assets/BigCoinIcon.svg";
@@ -13,6 +14,12 @@ import Top2 from "../../assets/Top2.svg";
 import Top3 from "../../assets/Top3.svg";
 
 const Rankings = () => {
+	const navigate = useNavigate();
+
+	const handleBack = () => {
+		navigate('/');
+	}
+
 	const friendsData = [
 		{
 			id: 1,
@@ -53,35 +60,23 @@ const Rankings = () => {
 		name3: "Misbah",
 		points: 25951,
 	};
+
 	return (
 		<>
-			<div className='overflow-hidden'>
-				<div className=''>
+			<div className='overflow-hidden h-[100vh]'>
 					<div className='bg-[#080813] min-h-[37vh] pb-3 pt-5 px-5 rounded-br-3xl rounded-bl-3xl'>
-						<div className='flex justify-between'>
-							<div className='flex items-center gap-4'>
-								<div className=''>
-									<img
-										src={BackIcon}
-										alt='Back-Icon'
-									/>
-								</div>
-								<div className='text-[#FFF] text-[18px] font-semibold'>
-									PandaTap
-								</div>
-							</div>
-							<div className='text-[#FFF] text-[18.542px] font-medium flex gap-2'>
-								<div className=''>
-									<img
-										src={SilverBadge}
-										alt='Coin-Icon'
-									/>
-								</div>
-								<div className=''>Silver</div>
-							</div>
+						<div 
+							onClick={()=> handleBack()}
+							className="absolute top-0 left-0 p-5">
+							<img 
+								src={BackIcon}
+								width='15'
+							/>
 						</div>
-						<div className='flex mt-7 text-[#FFF]'>
-							<div className='flex mx-auto'>
+						{/* top 3 stage */}
+						<div className='h-[40vh] flex mt-5 text-[#FFF] overflow-hidden'>
+							<div className='flex mx-auto mt-4'>
+								{/* right col */}
 								<div className='mt-7 text-center'>
 									<div className='mb-2'>
 										<img
@@ -113,6 +108,7 @@ const Rankings = () => {
 										<div className='rank-number pt-4'>2</div>
 									</div>
 								</div>
+								{/* mid col */}
 								<div className='text-center'>
 									<div className='mb-2'>
 										<img
@@ -149,6 +145,7 @@ const Rankings = () => {
 										</div>
 									</div>
 								</div>
+								{/* right col */}
 								<div className='mt-12 text-center'>
 									<div className='mb-2'>
 										<img
@@ -182,8 +179,8 @@ const Rankings = () => {
 								</div>
 							</div>
 						</div>
-
-						<div className='bg-[#272a2f] pb-3 pt-5 px-5 rounded-tl-[14px] rounded-tr-[14px]'>
+						{/* List of competitors */}
+						<div className='bg-[#272a2f] pb-3 pt-5 px-5 rounded-tl-[14px] rounded-tr-[14px] overflow-scroll h-[60vh]'>
 							{friendsData.map((values) => {
 								const { id, img1, img2, name, coins } = values;
 								return (
@@ -224,7 +221,6 @@ const Rankings = () => {
 							})}
 						</div>
 					</div>
-				</div>
 			</div>
 		</>
 	);
