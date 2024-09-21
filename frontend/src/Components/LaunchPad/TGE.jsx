@@ -86,8 +86,8 @@ const TGE = () => {
 					<p className="opacity-100">lvl {level}</p>
 				</div>
 				{/* Toggler */}
-				<div className="w-[16vh]">
-					<div className="bg-white rounded-2xl text-black font-bold text-[7px] flex gap-1 p-0.5">
+				<div className="w-[15vh]">
+					<div className="bg-white rounded-2xl text-black font-bold text-[6px] flex gap-1 p-0.5">
 						<span
 							onClick={() => handleToggleChange(id, 'launchpad')}
 							className={`p-1 rounded-xl flex gap-1 ${tgeToggle === 'launchpad' && 'border-[1px] border-[#209734] text-green-600'}`}

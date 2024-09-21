@@ -275,28 +275,28 @@ const Home = () => {
 								{jetLimit.obtained}/{jetLimit.total}
 							</div>
 							{/* b-1 */}
-							<div className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[1px]'>
+							<div className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[0.5px]'>
 								<img
 									src={JetPack}
 									alt='JetPack-Icon'
 								/>
 							</div>
 							{/* b-3 */}
-							<div className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[1px]'>
+							<div className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[0.5px]'>
 								<img
 									src={BatteryBooster1}
 									alt='Battery-Booster-Icon'
 								/>
 							</div>
 							{/* b-4 */}
-							<div className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[1px]'>
+							<div className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[0.5px]'>
 								<img
 									src={TouchIcon}
 									alt='Touch-Icon'
 								/>
 							</div>
 							{/* b-5 */}
-							<div className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[1px]'>
+							<div className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[0.5px]'>
 								<img
 									src={BatteryBooster2}
 									alt='Battery-Booster-Icon'
