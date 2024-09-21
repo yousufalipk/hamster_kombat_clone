@@ -180,30 +180,29 @@ const Home = () => {
 												</div>
 
 												{/* Main content */}
-												<div className="flex flex-col justify-center items-center p-2 h-20 bg-[#091e4b] rounded-[14px]">
+												<div className="flex flex-col justify-center items-center p-2 h-20 bg-[#091e4b] rounded-[14px] gap-2">
 													<div className="h-3">
-														<img src={img} alt="Logo" width="25" />
+														<img src={img} alt="Logo" width="30" />
 													</div>
 													<div className="text-[#FFF] text-[10px] font-medium pt-4">
 														<div className="flex justify-center items-center">
-															<p>{data1}</p>
+															<p className="text-[8px]">{data1}</p>
 														</div>
-														<p>{data2}</p>
+														<p className="text-[8px]">{data2}</p>
 													</div>
 												</div>
 											</div>
 										) : (
 											<div className="relative py-[1px] px-[0.5px] rounded-[14px] overflow-hidden">
-												<div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-300 rounded-[14px]"></div>
-												<div className="flex flex-col justify-center items-center p-2 h-20 bg-[#1B1B27] rounded-[14px] relative z-10">
-													<div className="h-3">
-														<img src={img} alt="Logo" width="25" />
+												<div className="flex flex-col justify-center items-center p-2 h-20 bg-[#1B1B27] rounded-[14px] gap-2 border-gradient">
+													<div>
+														<img src={img} alt="Logo" width="30" />
 													</div>
-													<div className="text-[#FFF] text-[10px] font-medium pt-4">
+													<div className="text-[#FFF] text-[10px] font-medium">
 														<div className="flex justify-center items-center">
-															<p>{data1}</p>
+															<p className="text-[8px]">{data1}</p>
 														</div>
-														<p>{data2}</p>
+														<p className='text-[8px]'>{data2}</p>
 													</div>
 												</div>
 											</div>
