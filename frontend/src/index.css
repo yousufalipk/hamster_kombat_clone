@@ -64,6 +64,25 @@
 	font-weight: bold;
 }
 
+
+/* Border Gradient  */
+.border-gradient {
+	position: relative;
+}
+
+.border-gradient::before {
+	position: absolute;
+	content: "";
+	inset: 0;
+	border-radius: 0.75rem;
+	pointer-events: none;
+	padding: 1px;
+	background: linear-gradient(135deg, #232323, #808080);
+	-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+}
+
 /* For Webkit Browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
 	display: none;

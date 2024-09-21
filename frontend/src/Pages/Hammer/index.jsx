@@ -44,42 +44,29 @@ const Hammer = () => {
 					{/* Header Cards */}
 					<div className='bg-[#0C0C0C] h-[30vh] relative rounded-b-[26px]'>
 						{/* Two Cards */}
-						<div className='h-[20vh] flex gap-5 justify-center items-center'>
+						<div className='h-[20vh] flex gap-5 justify-center items-center pt-5'>
 							{/* Card 1 */}
-							<div className='p-4 bg-[#1b1b27] border border-[#6c6c6c] rounded-[14px]'>
-								<div className='relative'>
+							<div className="bg-[#1b1b27] px-3 py-4 rounded-xl border-gradient">
+								{/* gray circle */}
+								<div className="bg-[#444444] rounded-full flex justify-center items-center px-4 py-2">
 									<img
-										src={BackGround}
-										alt='Back-Ground'
-										width="60"
+										style={{ width: '30px', height: '45px' }}
+										src={QuestionMark}
+										alt='QuestionMark-Icon'
 									/>
-									<div className='absolute top-[21%] left-[33%]'>
-										<img
-											width="20"
-											src={QuestionMark}
-											alt='QuestionMark-Icon'
-										/>
-									</div>
 								</div>
 							</div>
 							{/* Card 2 */}
-							<div className='p-4 bg-[#1b1b27] border border-[#6c6c6c] rounded-[14px]'>
-								<div className='relative'>
+							<div className="bg-[#1b1b27] px-3 py-4 rounded-xl border-gradient">
+								{/* gray circle */}
+								<div className="bg-[#444444] rounded-full flex justify-center items-center px-4 py-2">
 									<img
-										src={BackGround}
-										alt='Back-Ground'
-										width="60"
+										style={{ width: '30px', height: '45px' }}
+										src={QuestionMark}
+										alt='QuestionMark-Icon'
 									/>
-									<div className='absolute top-[21%] left-[33%]'>
-										<img
-											width="20"
-											src={QuestionMark}
-											alt='QuestionMark-Icon'
-										/>
-									</div>
 								</div>
 							</div>
-
 						</div>
 
 						{/* Daily Combo Reward */}
