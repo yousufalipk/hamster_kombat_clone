@@ -7,7 +7,7 @@ import Twitter from "../../assets/twitterIcon.png";
 import Telegram from "../../assets/telegramIcon.png";
 import Youtube from "../../assets/youtubeIcon.png";
 
-const MemeFi = () => {
+const Token = () => {
 	const user = {
 		level: 10,
 		balance: 500,
@@ -201,4 +201,4 @@ const MemeFi = () => {
 	);
 };
 
-export default MemeFi;
+export default Token;

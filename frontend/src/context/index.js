@@ -11,6 +11,8 @@ export const UserProvider = (props) => {
 
     const [sendData, setSendData] = useState(false);
 
+    const [sendTokenData, setSendTokenData] = useState(false);
+
     const [userData, setUserData] = useState(null);
 
     const [tgeToggle, setTgeToggle] = useState('launchpad');
@@ -62,7 +64,9 @@ export const UserProvider = (props) => {
             tgeToggle,
             setTgeToggle,
             userData,
-            setUserData
+            setUserData,
+            sendTokenData,
+            setSendTokenData
         }}>
             {props.children}
         </UserContext.Provider>

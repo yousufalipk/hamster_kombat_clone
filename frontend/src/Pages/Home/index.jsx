@@ -100,6 +100,21 @@ const Home = () => {
 		navigate('/rankings');
 	}
 
+	const handleCardClick = (id) => {
+		if(id===1){
+			navigate('/gameplay');
+		}
+		else if (id===2){
+			navigate('/');
+		}
+		else if (id===3){
+			navigate('/');
+		}
+		else if (id===4){
+			navigate('/');
+		}
+	}
+
 	return (
 		<>
 			{userData && (
@@ -165,9 +180,14 @@ const Home = () => {
 										const { id, img, data1, data2, isDone } = data;
 
 										return (
-											<div key={id} className="min-w-[20%]">
+											<div
+												onClick={()=>handleCardClick(id)}
+												key={id} 
+												className="min-w-[20%]"
+											>
 												{isDone ? (
-													<div className="relative border border-[#0072ff] rounded-[14px] overflow-hidden">
+													<div
+														className="relative border border-[#0072ff] rounded-[14px] overflow-hidden">
 														{/* Done sticker */}
 														<div className="absolute top-0 left-0 bg-[#0072ff] text-white font-bold text-[9px] py-1 px-3 transform -rotate-45 origin-top-left"
 															style={{ top: '37px', left: '-15px', width: '70px', height: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

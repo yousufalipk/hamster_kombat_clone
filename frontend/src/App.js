@@ -1,7 +1,9 @@
 import React from "react";
 import { Routes , Route } from 'react-router-dom';
 
-import Rankings from './Pages/Rankings/index';
+import Rankings from './Components/Rankings/index';
+import Token from './Components/Token/index';
+import GamePage from './Pages/Game/Game';
 
 import Layout from './Layout/index';
 
@@ -15,6 +17,8 @@ const App = () => {
 
 					{/* Other Routes */}
 					<Route path="/rankings" element={<Rankings />} /> 
+					<Route path="/gameplay" element={<GamePage />} /> 
+					<Route path="/token" element={<Token />} /> 
 				</Routes> 
 			</div>
 		</>
