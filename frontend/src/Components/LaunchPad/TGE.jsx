@@ -56,7 +56,7 @@ const TGE = () => {
 
 	// Card Component
 	const Card = ({ id, name, logo1, logo2, balance, level, bgColor, tgeToggle }) => (
-		<div className={`h-[17vh] px-4 py-1 rounded-[20px] text-[#FFF] overflow-hidden ${bgColor}`}>
+		<div className={`h-[17vh] px-3 py-2 rounded-[20px] text-[#FFF] overflow-hidden ${bgColor}`}>
 			<div className='flex justify-between items-center mt-2'>
 				<div className='text-sm font-semibold'>
 					<p>{name}</p>
@@ -129,7 +129,7 @@ const TGE = () => {
 			{isModalOpen && (
 				<PopUp />
 			)}
-			<div className='grid grid-cols-2 gap-3 h-[37vh] overflow-scroll'>
+			<div className='grid grid-cols-2 gap-2 h-[37vh] overflow-scroll'>
 				{cards.map((card) => (
 					<Card
 						key={card.id}

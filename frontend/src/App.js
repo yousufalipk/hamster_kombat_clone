@@ -1,6 +1,8 @@
 import React from "react";
 import { Routes , Route } from 'react-router-dom';
 
+import Rankings from './Pages/Rankings/index';
+
 import Layout from './Layout/index';
 
 const App = () => {
@@ -10,6 +12,9 @@ const App = () => {
 				<Routes>
 					<Route path="/" element={<Layout />} /> 
 					<Route path="*" element={<Layout />} /> 
+
+					{/* Other Routes */}
+					<Route path="/rankings" element={<Rankings />} /> 
 				</Routes> 
 			</div>
 		</>
