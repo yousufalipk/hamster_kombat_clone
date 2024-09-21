@@ -206,7 +206,6 @@ const Home = () => {
 													</div>
 												</div>
 											</div>
-
 										)}
 									</div>
 								);
@@ -275,25 +274,25 @@ const Home = () => {
 							<div className='text-[#FFF] text-[10px] font-medium pl-7 -mb-3'>
 								{jetLimit.obtained}/{jetLimit.total}
 							</div>
-							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center shadow-inner'>
+							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center border-2 border-[#316cff]'>
 								<img
 									src={JetPack}
 									alt='JetPack-Icon'
 								/>
 							</div>
-							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center shadow-inner'>
+							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center border-2 border-[#316cff]'>
 								<img
 									src={BatteryBooster1}
 									alt='Battery-Booster-Icon'
 								/>
 							</div>
-							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center shadow-inner'>
+							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center border-2 border-[#316cff]'>
 								<img
 									src={TouchIcon}
 									alt='Touch-Icon'
 								/>
 							</div>
-							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center shadow-inner'>
+							<div className='rounded-full min-w-[46px] min-h-[46px] bg-[#1344C2] flex justify-center items-center border-2 border-[#316cff]'>
 								<img
 									src={BatteryBooster2}
 									alt='Battery-Booster-Icon'
