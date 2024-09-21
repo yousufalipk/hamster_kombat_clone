@@ -79,14 +79,14 @@ const TGE = () => {
 				</div>
 				<div className='text-[16px]'>{balance.toLocaleString()}</div>
 			</div>
-			<div className="flex items-center w-[20vh] mt-2 gap-1">
+			<div className="flex items-center justify-between w-[22vh] border-2 mt-2 gap-1">
 				{/* level */}
 				<div
 					className="w-[17%] text-[5px] font-medium bg-[rgba(0,0,0,0.3)] text-center py-1 rounded-[5px]">
 					<p className="opacity-100">lvl {level}</p>
 				</div>
 				{/* Toggler */}
-				<div className="w-[83%]">
+				<div>
 					<div className="bg-white rounded-2xl text-black font-bold text-[6px] flex gap-1 p-0.5">
 						<span
 							onClick={() => handleToggleChange(id, 'launchpad')}
