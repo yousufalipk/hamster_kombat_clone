@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from 'react-router-dom'; 
 
 import BackIcon from "../../assets/BackIcon.svg";
@@ -19,6 +19,20 @@ const Rankings = () => {
 	const handleBack = () => {
 		navigate('/');
 	}
+
+	useEffect(() => {
+		const tg = window.Telegram.WebApp;
+
+		tg.BackButton.show();
+		tg.BackButton.onClick(() => {
+			navigate("/");
+		});
+
+		return () => {
+			tg.BackButton.hide();
+			tg.BackButton.offClick();
+		};
+	}, [navigate]);
 
 	const friendsData = [
 		{
