@@ -290,33 +290,37 @@ const Home = () => {
 										{jetLimit.obtained}/{jetLimit.total}
 									</div>
 									{/* b-1 */}
-									<div
-										className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[2px] shadow-2xl'
-										style={{
-											boxShadow: '0 6px 12px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 173, 255, 0.6)', 
-										}}
-									>
-										<img
-											src={JetPack}
-											alt='JetPack-Icon'
-											className='p-1'
-										/>
+									<div className='relative flex justify-center items-center'>
+										<div
+											className='absolute top-0 left-0 w-full h-full rounded-full blur-lg bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] opacity-65'
+											style={{
+												boxShadow: '0 0 100px rgba(0, 173, 255, 0.5)',
+											}}
+										></div>
+										<div
+											className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[1px]'
+											style={{
+												boxShadow: '0 12px 20px rgba(0, 0, 0, 0.9), 0 4px 20px rgba(0, 173, 255, 0.6)',
+											}}
+										>
+											<img src={JetPack} alt='JetPack-Icon' className='p-1' />
+										</div>
 									</div>
-									{/* b-3 */}
+									{/* b-2 */}
 									<div className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[0.5px]'>
 										<img
 											src={BatteryBooster1}
 											alt='Battery-Booster-Icon'
 										/>
 									</div>
-									{/* b-4 */}
+									{/* b-3 */}
 									<div className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[0.5px]'>
 										<img
 											src={TouchIcon}
 											alt='Touch-Icon'
 										/>
 									</div>
-									{/* b-5 */}
+									{/* b-4 */}
 									<div className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[0.5px]'>
 										<img
 											src={BatteryBooster2}
