@@ -292,15 +292,9 @@ const Home = () => {
 									{/* b-1 a */}
 									<div className='relative flex justify-center items-center'>
 										<div
-											className='absolute top-0 left-0 w-full h-full rounded-full blur-lg bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] opacity-65'
-											style={{
-												boxShadow: '0 0 100px rgba(0, 173, 255, 0.5)',
-											}}
-										></div>
-										<div
 											className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
 											style={{
-												boxShadow: '0 12px 20px rgba(0, 0, 0, 0.9), 0 4px 20px rgba(0, 173, 255, 0.6)',
+												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 20px rgba(0, 173, 255, 0.6)',
 											}}
 										>
 											<img src={JetPack} alt='JetPack-Icon' className='p-1' />
@@ -309,15 +303,9 @@ const Home = () => {
 									{/* b-1 b */}
 									<div className='relative flex justify-center items-center'>
 										<div
-											className='absolute top-0 left-0 w-full h-full rounded-full blur-lg bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] opacity-65'
-											style={{
-												boxShadow: '0 0 100px rgba(0, 173, 255, 0.5)',
-											}}
-										></div>
-										<div
 											className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
 											style={{
-												boxShadow: '0 12px 20px rgba(0, 0, 0, 0.9), 0 4px 20px rgba(0, 173, 255, 0.6)',
+												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 20px rgba(0, 173, 255, 0.6)',
 											}}
 										>
 											<img src={BatteryBooster1} alt='BatteryBooster-Icon' className='p-1' />
@@ -326,15 +314,9 @@ const Home = () => {
 									{/* b-1 c */}
 									<div className='relative flex justify-center items-center'>
 										<div
-											className='absolute top-0 left-0 w-full h-full rounded-full blur-lg bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] opacity-65'
-											style={{
-												boxShadow: '0 0 100px rgba(0, 173, 255, 0.5)',
-											}}
-										></div>
-										<div
 											className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
 											style={{
-												boxShadow: '0 12px 20px rgba(0, 0, 0, 0.9), 0 4px 20px rgba(0, 173, 255, 0.6)',
+												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 20px rgba(0, 173, 255, 0.6)',
 											}}
 										>
 											<img src={TouchIcon} alt='TouchIcon-Icon' className='p-1' />
@@ -343,15 +325,9 @@ const Home = () => {
 									{/* b-1 d */}
 									<div className='relative flex justify-center items-center'>
 										<div
-											className='absolute top-0 left-0 w-full h-full rounded-full blur-lg bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] opacity-65'
-											style={{
-												boxShadow: '0 0 100px rgba(0, 173, 255, 0.5)',
-											}}
-										></div>
-										<div
 											className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
 											style={{
-												boxShadow: '0 12px 20px rgba(0, 0, 0, 0.9), 0 4px 20px rgba(0, 173, 255, 0.6)',
+												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 20px rgba(0, 173, 255, 0.6)',
 											}}
 										>
 											<img src={BatteryBooster2} alt='BatteryBooster2-Icon' className='p-1' />
