@@ -36,7 +36,7 @@ const Hammer = () => {
 
 	return (
 		<>
-			<div className='relative h-[86vh] w-screen'>
+			<div className='relative h-[86vh] w-[100vw] overflow-y-scroll overflow-x-hidden'>
 				<div className='relative h-[30vh]'>
 					<div className="absolute -inset-1 bg-[#23a7ff] rounded-[35px]"></div>
 					<div className="absolute -inset-1 bg-[#23a7ff] blur rounded-[35px]"></div>

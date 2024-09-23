@@ -34,7 +34,7 @@ const BottleCap = () => {
 
 	return (
 		<>
-			<div className='h-[83vh] bg-gradient-to-t from-[#1B1B27] to-black'>
+			<div className='h-[86vh] w-[100vw] bg-gradient-to-t from-[#1B1B27] to-black overflow-y-scroll overflow-x-hidden'>
 				{/* Upper Yellow Card */}
 				<div className='relative pt-10 mt-5 h-[28vh]'>
 					<div className='absolute back-color h-[30vh] -inset-2 blur-[20px]'></div>
@@ -62,7 +62,7 @@ const BottleCap = () => {
 				</div>
 
 				{/* Tasks Section */}
-				<div className='h-[60vh] px-4 overflow-scroll'>
+				<div className='h-[60vh] px-4'>
 					{/* Heading 1 */}
 					<div>
 						<p className='text-[#9595A9] text-[15px] font-medium'>

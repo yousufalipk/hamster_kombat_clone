@@ -58,7 +58,7 @@ const InviteFriends = () => {
 	];
 	return (
 		<>
-			<div className='relative h-[86vh] w-screen'>
+			<div className='relative h-[86vh] w-[100vw] overflow-y-scroll overflow-x-hidden'>
 				<div className='relative h-[30vh]'>
 					<div className="absolute -inset-1 bg-[#23a7ff] rounded-[35px]"></div>
 					<div className="absolute -inset-1 bg-[#23a7ff] blur rounded-[35px]"></div>
@@ -91,7 +91,7 @@ const InviteFriends = () => {
 				{/* Content */}
 				<div className='h-[56vh] px-4 pt-4 flex flex-col mt-2'>
 
-					<div className="overflow-scroll">
+					<div>
 
 						{/* Invite Friends */}
 						<div className="h-[25vh]">
@@ -182,7 +182,7 @@ const InviteFriends = () => {
 					</div>
 
 					{/* Invite a Friend */}
-					<div className="absolute -bottom-3 w-screen">
+					<div className="sticky bottom-0 w-screen">
 						<div className='flex gap-2 justify-start items-center text-[#FFF] text-base font-semibold'>
 							{/* Invite a friend */}
 							<div className='w-[57%] rounded-[10px] text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>

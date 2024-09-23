@@ -13,7 +13,34 @@ const cards =	[
 		bgColor: "tonfish-bg",
 	},
 	{
-		id: 1,
+		id: 2,
+		name: "Tonfish",
+		logo1: Tonfish,
+		logo2: Coin,
+		balance: "0.00",
+		level: 0,
+		bgColor: "tonfish-bg",
+	},
+	{
+		id: 3,
+		name: "Tonfish",
+		logo1: Tonfish,
+		logo2: Coin,
+		balance: "0.00",
+		level: 0,
+		bgColor: "tonfish-bg",
+	},
+	{
+		id: 4,
+		name: "Tonfish",
+		logo1: Tonfish,
+		logo2: Coin,
+		balance: "0.00",
+		level: 0,
+		bgColor: "tonfish-bg",
+	},
+	{
+		id: 5,
 		name: "Tonfish",
 		logo1: Tonfish,
 		logo2: Coin,
@@ -58,7 +85,7 @@ const Card = ({ name, logo1, logo2, balance, level, bgColor }) => (
 const MissedProjects = () => {
 	return (
 		<>
-			<div className='grid grid-cols-2 gap-3 h-[37vh] overflow-scroll'>
+			<div className='grid grid-cols-2 gap-3 h-[37vh]'>
 				{cards.map((card) => (
 					<Card
 						key={card.id}

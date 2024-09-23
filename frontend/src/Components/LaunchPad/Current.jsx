@@ -108,7 +108,7 @@ const Current = () => {
 
 	return (
 		<>
-			<div className='grid grid-cols-2 gap-3 h-[37vh] overflow-scroll'>
+			<div className='grid grid-cols-2 gap-3 h-[37vh]'>
 				{cards.map((card) => {
 					return (
 						<div 
