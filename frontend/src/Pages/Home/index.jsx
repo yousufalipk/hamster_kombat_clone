@@ -25,7 +25,7 @@ tele.disableVerticalSwipes();
 const Home = () => {
 
 	const { userData } = useUser();
-	
+
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -101,16 +101,16 @@ const Home = () => {
 	}
 
 	const handleCardClick = (id) => {
-		if(id===1){
+		if (id === 1) {
 			navigate('/gameplay');
 		}
-		else if (id===2){
+		else if (id === 2) {
 			navigate('/');
 		}
-		else if (id===3){
+		else if (id === 3) {
 			navigate('/');
 		}
-		else if (id===4){
+		else if (id === 4) {
 			navigate('/');
 		}
 	}
@@ -147,8 +147,8 @@ const Home = () => {
 									</div>
 
 									{/* level & rank bar  */}
-									<div 
-										onClick={()=>handleRankings()}
+									<div
+										onClick={() => handleRankings()}
 										className="rounded-full bg-[#252525] min-w-[40%] px-4 py-1">
 										<div className="flex items-center gap-2">
 											<div className="text-[#FFF] font-normal text-xs">{userData.level}</div>
@@ -181,8 +181,8 @@ const Home = () => {
 
 										return (
 											<div
-												onClick={()=>handleCardClick(id)}
-												key={id} 
+												onClick={() => handleCardClick(id)}
+												key={id}
 												className="min-w-[20%]"
 											>
 												{isDone ? (
@@ -290,10 +290,16 @@ const Home = () => {
 										{jetLimit.obtained}/{jetLimit.total}
 									</div>
 									{/* b-1 */}
-									<div className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[0.5px]'>
+									<div
+										className='rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#00adff] border-[2px] shadow-2xl'
+										style={{
+											boxShadow: '0 6px 12px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 173, 255, 0.6)', 
+										}}
+									>
 										<img
 											src={JetPack}
 											alt='JetPack-Icon'
+											className='p-1'
 										/>
 									</div>
 									{/* b-3 */}
