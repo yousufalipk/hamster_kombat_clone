@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useUser } from '../../context/index';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import PopUp from '../../Components/PopUp/popup2';
 
 import BackIcon from "../../assets/BackIcon.svg";
-import MIcon from "../../assets/MIcon.png";
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import Twitter from "../../assets/twitterIcon.png";
@@ -14,13 +13,23 @@ import Telegram from "../../assets/telegramIcon.png";
 import Youtube from "../../assets/youtubeIcon.png";
 
 const Token = () => {
-	const { sendTokenData, userData, isModalOpen, setModalOpen, setSendData } = useUser();
+	const { sendTokenData, userData, isModalOpen, setModalOpen } = useUser();
 
 	const navigate = useNavigate();
 
-	const handleBack = () => {
-		navigate('/hammer')
-	}
+	useEffect(() => {
+		const tg = window.Telegram.WebApp;
+
+		tg.BackButton.show();
+		tg.BackButton.onClick(() => {
+			navigate("/hammer");
+		});
+
+		return () => {
+			tg.BackButton.hide();
+			tg.BackButton.offClick();
+		};
+	}, [navigate]);
 
 	const handleTokenBuy = () => {
 		setModalOpen(true);
@@ -64,14 +73,6 @@ const Token = () => {
 						)}
 						<div className='bg-[#060611] p-4 h-[100vh] overflow-hidden'>
 							<div className='flex items-center gap-4'>
-								<div
-									onClick={() => handleBack()}
-								>
-									<img
-										src={BackIcon}
-										alt='Back-Icon'
-									/>
-								</div>
 								<div className='text-[#FFF] text-[18px] font-semibold'>{sendTokenData.name}</div>
 							</div>
 							{/* Upper Portion */}

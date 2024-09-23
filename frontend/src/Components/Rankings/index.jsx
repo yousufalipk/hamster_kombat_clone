@@ -16,10 +16,6 @@ import Top3 from "../../assets/Top3.svg";
 const Rankings = () => {
 	const navigate = useNavigate();
 
-	const handleBack = () => {
-		navigate('/');
-	}
-
 	useEffect(() => {
 		const tg = window.Telegram.WebApp;
 
@@ -79,14 +75,6 @@ const Rankings = () => {
 		<>
 			<div className='overflow-hidden h-[100vh]'>
 					<div className='bg-[#080813] min-h-[37vh] pb-3 pt-5 px-5 rounded-br-3xl rounded-bl-3xl'>
-						<div 
-							onClick={()=> handleBack()}
-							className="absolute top-0 left-0 p-5">
-							<img 
-								src={BackIcon}
-								width='15'
-							/>
-						</div>
 						{/* top 3 stage */}
 						<div className='h-[40vh] flex mt-5 text-[#FFF] overflow-hidden'>
 							<div className='flex mx-auto mt-4'>
