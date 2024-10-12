@@ -141,7 +141,7 @@ const Home = () => {
 											<img src={userData.pic} alt="Profile-Picture" />
 										</div>
 										<div className="pl-2 text-[#FFF]">
-											<p className="font-medium text-sm">{userData.name}</p>
+											<p className="font-medium text-sm">{userData.username}</p>
 											<p className="flex font-normal text-sm -top-1">(Founder)</p>
 										</div>
 									</div>
