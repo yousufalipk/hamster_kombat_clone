@@ -9,6 +9,7 @@ const app = express();
 connectToDb();
 
 app.use(express.json());
+
 // CORS configuration
 app.use(cors({
     origin: FRONTEND_APP_PATH,
