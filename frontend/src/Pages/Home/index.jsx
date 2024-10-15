@@ -79,7 +79,7 @@ const Home = () => {
 					console.error("Error updating balance:", error);
 				}
 			}
-		}, 500);
+		}, 1000);
 
 		return () => clearInterval(intervalId);
 	}, [tapBalance]);
