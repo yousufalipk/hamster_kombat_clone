@@ -10,18 +10,23 @@ connectToDb();
 
 app.use(express.json());
 
-// CORS configuration
-app.use(cors({
-    origin: FRONTEND_APP_PATH,
-    credentials: true
-}));
+
+const corsOptions = {
+    origin: FRONTEND_ORIGIN,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 
 app.get('/', (req, res) => {
-    return res.json({ message: `Backend is running correctly! PORT: ${PORT}` });
+    res.send("Panda Tap backend is running correctly!");
 });
 
-app.listen(PORT || 8080, () => {
-    console.log(`Backend is running on port: ${PORT || 8080}`);
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+
 });
 
 
