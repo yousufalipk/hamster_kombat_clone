@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../../context/index';
 
@@ -19,17 +20,26 @@ import FlashIcon from "../../assets/lighteningIcon.png";
 import InfoIcon from "../../assets/InfoIcon.svg";
 import AngleIcon from "../../assets/AngleIcon.svg";
 
+import ProfilePic from "../../assets/ProfilePicIcon.svg";
+
 const tele = window.Telegram.WebApp;
 tele.disableVerticalSwipes();
 
 const Home = () => {
 
-	const { userData } = useUser();
+	const apiUrl = process.env.REACT_APP_URL;
+
+	const { userDataInitilized, username, level, currentRank, levelPercentage, setBalance, balance, energy, setEnergy, energyLimit, profilePic, userId, addCoins } = useUser();
+
+	const [tapBalance, setTapBalance] = useState(0);
+	const [clicks, setClicks] = useState([]);
+	const tapRef = useRef(null);
 
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		tele.BackButton.hide();
+		tele.disableVerticalSwipes();
 		tele.expand();
 		tele.ready();
 		window.Telegram.WebApp.setHeaderColor("#000000");
@@ -50,6 +60,119 @@ const Home = () => {
 			tele.HapticFeedback.impactOccurred("medium");
 		}
 	}, []);
+
+	// Update balance every 2 seconds
+	useEffect(() => {
+		const intervalId = setInterval(async () => {
+			if (tapBalance > 0) {
+				try {
+					const response = await axios.post(`${apiUrl}/user/update-balance`, {
+						userId: userId,
+						tapBalance: tapBalance
+					});
+					console.log('response', response);
+					if (response.data.status === 'success') {
+						setBalance((prevTapBalance) => prevTapBalance + tapBalance);
+						setTapBalance(0);
+					}
+				} catch (error) {
+					console.error("Error updating balance:", error);
+				}
+			}
+		}, 500);
+
+		return () => clearInterval(intervalId);
+	}, [tapBalance]);
+
+	// Handle Haptic Feedback (Vibrate)
+	const triggerHapticFeedback = () => {
+		const isAndroid = /Android/i.test(navigator.userAgent);
+		const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+		if (
+			isIOS &&
+			window.Telegram &&
+			window.Telegram.WebApp &&
+			window.Telegram.WebApp.HapticFeedback
+		) {
+			window.Telegram.WebApp.HapticFeedback.impactOccurred("medium");
+		} else if (isAndroid && "vibrate" in navigator) {
+			navigator.vibrate(50);
+		}
+	};
+
+	// Handle animation end
+	const handleAnimationEnd = (id) => {
+		setClicks(prevClicks => prevClicks.filter(click => click.id !== id));
+	};
+
+	// Refill energy over time
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setEnergy(prevEnergy => Math.min(prevEnergy + 1, energyLimit));
+		}, 1000);
+
+		return () => clearInterval(interval);
+	}, [energyLimit, setEnergy]);
+
+	const handleRankings = () => {
+		navigate('/rankings');
+	}
+
+	const handleCardClick = (id) => {
+		if (id === 1) {
+			navigate('/gameplay');
+		}
+		else if (id === 2) {
+			navigate('/');
+		}
+		else if (id === 3) {
+			navigate('/');
+		}
+		else if (id === 4) {
+			navigate('/');
+		}
+	}
+
+	// Handle Multiple Taps
+	const handleBotClick = (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		triggerHapticFeedback();
+
+		if (energy <= 0) return;
+
+		const targetElement = tapRef.current;
+
+		if (targetElement) {
+			const rect = targetElement.getBoundingClientRect();
+
+			if (rect && rect.width > 0 && rect.height > 0) {
+				const touchPoints = e.changedTouches || [e];
+
+				for (let i = 0; i < touchPoints.length; i++) {
+					const touch = touchPoints[i];
+					const newClick = {
+						id: Date.now() + i,
+						x: touch.clientX - rect.left,
+						y: touch.clientY - rect.top,
+					};
+
+					setClicks((prevClicks) => [...prevClicks, newClick]);
+
+					// Reduce Energy - 1 per tap
+					setEnergy((prevEnergy) => Math.max(prevEnergy - 1, 0));
+
+					// Increment tap balance per tap
+					setTapBalance((prevTapBalance) => prevTapBalance + addCoins);
+
+					setTimeout(() => {
+						setClicks((prevClicks) => prevClicks.filter((click) => click.id !== newClick.id));
+					}, 800);
+				}
+			}
+		}
+	};
 
 	const cards = [
 		{
@@ -91,33 +214,9 @@ const Home = () => {
 		total: 5,
 	};
 
-	const bonus = {
-		remaining: 1500,
-		total: 1500,
-	};
-
-	const handleRankings = () => {
-		navigate('/rankings');
-	}
-
-	const handleCardClick = (id) => {
-		if (id === 1) {
-			navigate('/gameplay');
-		}
-		else if (id === 2) {
-			navigate('/');
-		}
-		else if (id === 3) {
-			navigate('/');
-		}
-		else if (id === 4) {
-			navigate('/');
-		}
-	}
-
 	return (
 		<>
-			{userData && (
+			{userDataInitilized && (
 				<>
 					{/* Background Image */}
 					<div className="absolute inset-0 -z-10">
@@ -138,10 +237,10 @@ const Home = () => {
 								<div className="px-2 flex justify-between">
 									<div className="flex">
 										<div className="rounded-full bg-gray-300 w-[42px] h-[42px]">
-											<img src={userData.pic} alt="Profile-Picture" />
+											<img src={profilePic || ProfilePic} alt="Profile-Picture" />
 										</div>
 										<div className="pl-2 text-[#FFF]">
-											<p className="font-medium text-sm">{userData.username}</p>
+											<p className="font-medium text-sm">{username}</p>
 											<p className="flex font-normal text-sm -top-1">(Founder)</p>
 										</div>
 									</div>
@@ -151,12 +250,12 @@ const Home = () => {
 										onClick={() => handleRankings()}
 										className="rounded-full bg-[#252525] min-w-[40%] px-4 py-1">
 										<div className="flex items-center gap-2">
-											<div className="text-[#FFF] font-normal text-xs">{userData.level}</div>
+											<div className="text-[#FFF] font-normal text-xs">{level}</div>
 											<div>
 												<img src={AngleIcon} alt="Angle-Icon" />
 											</div>
 											<div className="text-[#FFF] text-xs font-normal pl-11">
-												{userData.currentRank}/10
+												{currentRank}/10
 											</div>
 										</div>
 										<div>
@@ -165,7 +264,7 @@ const Home = () => {
 												<div
 													className={`h-2 transition-all duration-300 ease-in-out rounded`}
 													style={{
-														width: `${userData.percentage}%`,
+														width: `${levelPercentage}%`,
 														background: `linear-gradient(to right, rgb(48 43 251), rgb(54 197 244))`,
 													}}
 												/>
@@ -265,23 +364,46 @@ const Home = () => {
 									<div>
 										<img src={BigCoin} alt="Coin-Icon" width="24" />
 									</div>
-									<div className="text-[#FFF] text-[24px] font-medium">{userData.balance}</div>
+									<div className="text-[#FFF] text-[24px] font-medium">{balance + tapBalance}</div>
 								</div>
 							</div>
 
 							{/* Bot & Options */}
 							<div className="flex justify-center items-center w-screen h-[41vh] mt-auto">
 								{/* Bot Image Tap to earn */}
-								<div className="relative flex justify-end items-center">
-									<div className="relative">
-										<img src={PandaCircleIcon} alt="Outer-Circle" width="230" />
-										<div className="absolute top-[21%] left-[22%]">
-											<img src={BigPanda} alt="Panda-Icon" />
-										</div>
-										<div className="absolute top-[60%] left-[37%]">
-											<img src={TouchIcon} alt="Touch-Icon" />
+								<div
+									onPointerDown={handleBotClick}
+									ref={tapRef}
+									className="relative flex justify-end items-center rounded-full"
+								>
+
+									<div className="relative select-none rounded-full">
+										{/* Clicks Abination +1 */}
+										{clicks.map((click) => (
+											<div
+												className='absolute text-2xl font-bold opacity-0 text-[#0072ff] z-50'
+												style={{
+													top: `${click.y - 42}px`,
+													left: `${click.x - 28}px`,
+													animation: `float 1s ease-out`,
+												}}
+												onAnimationEnd={() => handleAnimationEnd(click.id)}
+												key={click.id}
+											>
+												+{addCoins}
+											</div>
+										))}
+										<div className="rounded-full overflow-hidden">
+											<img src={PandaCircleIcon} alt="Outer-Circle" width="230" />
+											<div className="absolute top-[21%] left-[22%]">
+												<img src={BigPanda} alt="Panda-Icon" />
+											</div>
+											<div className="absolute top-[60%] left-[37%]">
+												<img src={TouchIcon} alt="Touch-Icon" />
+											</div>
 										</div>
 									</div>
+
 								</div>
 
 								{/* Side Booster Options */}
@@ -346,7 +468,7 @@ const Home = () => {
 										/>
 									</div>
 									<div className='text-[#FFF] text-base font-medium'>
-										{bonus.remaining}/{bonus.total}
+										{energy}/{energyLimit}
 									</div>
 								</div>
 							</div>

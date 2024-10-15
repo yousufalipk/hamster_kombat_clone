@@ -1,20 +1,27 @@
 const express = require('express');
-const { PORT } = require('./config/env');
+const cors = require('cors');
+const { PORT, FRONTEND_APP_PATH } = require('./config/env');
 const connectToDb = require('./config/db');
-
+const user = require('./routes/userRoutes');
 
 const app = express();
 
-
 connectToDb();
 
+app.use(express.json());
+// CORS configuration
+app.use(cors({
+    origin: FRONTEND_APP_PATH,
+    credentials: true
+}));
 
-app.use(express.json);
+app.get('/', (req, res) => {
+    return res.json({ message: `Backend is running correctly! PORT: ${PORT}` });
+});
 
-app.get(`/`, ()=> {
-    return res.json("Server is running correctly!")
-})
+app.listen(PORT || 8080, () => {
+    console.log(`Backend is running on port: ${PORT || 8080}`);
+});
 
-app.listen(PORT || 8080 , ()=> {
-    console.log(`Server is running on port: ${PORT}`)
-})
+
+app.use('/user', user);
