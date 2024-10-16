@@ -32,6 +32,8 @@ export const UserProvider = (props) => {
     const [levelPercentage, setLevelPercentage] = useState();
 
     // Others 
+    const [loader, setLoader] = useState(false);
+
     const [isModalOpen, setModalOpen] = useState(false);
 
     const [sendData, setSendData] = useState(false);
@@ -60,6 +62,7 @@ export const UserProvider = (props) => {
 
     // Initilize User
     const initializeUser = async () => {
+        setLoader(true);
         try {
             let telegramUser;
             if (staticUser === 'true') {
@@ -106,6 +109,7 @@ export const UserProvider = (props) => {
             console.log("Error fetching User", error);
         } finally {
             setUserDataInitlized(true);
+            setLoader(false);
         }
     }
 
@@ -137,6 +141,7 @@ export const UserProvider = (props) => {
             userDataInitilized,
             setAddCoins,
             addCoins,
+            loader
         }}>
             {props.children}
         </UserContext.Provider>
