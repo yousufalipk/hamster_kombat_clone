@@ -372,7 +372,7 @@ const Home = () => {
 							<div className="flex justify-center items-center w-screen h-[41vh] mt-auto">
 								{/* Bot Image Tap to earn */}
 								<div
-									onPointerDown={handleBotClick}
+									onPointerDown={(event) => handleBotClick(event)}
 									ref={tapRef}
 									className="relative flex justify-end items-center rounded-full"
 								>
