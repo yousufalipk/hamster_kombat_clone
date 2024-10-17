@@ -60,31 +60,34 @@ const Home = () => {
 			tele.HapticFeedback.impactOccurred("medium");
 		}
 	}, []);
+
 	// Update balance every 2 seconds
+
 	useEffect(() => {
-		if (tapBalance > 0) {
-			const intervalId = setInterval(async () => {
+		console.log("I am updating balance!");
+		const intervalId = setInterval(async () => {
+			if (tapBalance > 0) {
+				console.log("tab balance was greater than zero!", tapBalance);
 				try {
 					const response = await axios.post(`${apiUrl}/user/update-balance`, {
 						userId: userId,
 						tapBalance: tapBalance
 					});
 					console.log("Balance Updated Successfully!", response.data);
+					console.log("Balance Updated Successfully!", response.data.status);
 					if (response.data.status === 'success') {
 						setTapBalance(0);
 						setBalance(response.data.user.balance);
+					} else {
+						console.log("Error updating balance!", response.data.message);
 					}
 				} catch (error) {
 					console.error("Error updating balance:", error);
 				}
-			}, 1000);
-
-			return () => clearInterval(intervalId);
-		} else {
-			console.log("Tap Balance is zero", tapBalance);
-		}
-	}, [tapBalance, apiUrl, userId, setBalance]);
-
+			}
+		}, 1000);
+		return () => clearInterval(intervalId);
+	}, [tapBalance])
 
 	// Handle Haptic Feedback (Vibrate)
 	const triggerHapticFeedback = () => {
