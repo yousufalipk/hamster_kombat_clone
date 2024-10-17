@@ -34,6 +34,8 @@ export const UserProvider = (props) => {
     // Others 
     const [loader, setLoader] = useState(false);
 
+    const [loaderErrorMes, setLoaderErrorMes] = useState(null);
+
     const [isModalOpen, setModalOpen] = useState(false);
 
     const [sendData, setSendData] = useState(false);
@@ -46,6 +48,10 @@ export const UserProvider = (props) => {
     useEffect(() => {
         initializeUser();
     }, [])
+
+    useEffect(() => {
+        console.log("Value of error loader mess", loaderErrorMes);
+    }, [loaderErrorMes])
 
 
     /* 
@@ -87,6 +93,7 @@ export const UserProvider = (props) => {
 
             if (res.data.status === 'failed') {
                 console.log("Error Initilizing User!");
+                setLoaderErrorMes("Error Initilizing User!");
                 return;
             } else {
                 const percentage = (res.data.user.currentRank / 10) * 100;
@@ -141,7 +148,8 @@ export const UserProvider = (props) => {
             userDataInitilized,
             setAddCoins,
             addCoins,
-            loader
+            loader,
+            loaderErrorMes
         }}>
             {props.children}
         </UserContext.Provider>
