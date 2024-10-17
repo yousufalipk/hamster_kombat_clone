@@ -83,7 +83,7 @@ const Home = () => {
 		}, 1000);
 
 		return () => clearInterval(intervalId);
-	}, [energy]);
+	}, [tapBalance]);
 
 	// Handle Haptic Feedback (Vibrate)
 	const triggerHapticFeedback = () => {
@@ -137,7 +137,7 @@ const Home = () => {
 
 	// Handle Multiple Taps
 	const handleBotClick = (e) => {
-		e.preventDefault();
+		// e.preventDefault();
 		e.stopPropagation();
 		triggerHapticFeedback();
 
@@ -162,7 +162,8 @@ const Home = () => {
 					setClicks((prevClicks) => [...prevClicks, newClick]);
 
 					// Reduce Energy - 1 per tap
-					setEnergy((prevEnergy) => Math.max(prevEnergy - 1, 0));
+					setEnergy(
+						(prevEnergy) => Math.max(prevEnergy - 1, 0));
 
 					// Increment tap balance per tap
 					setTapBalance((prevTapBalance) => prevTapBalance + addCoins);
@@ -373,7 +374,7 @@ const Home = () => {
 							<div className="flex justify-center items-center w-screen h-[41vh] mt-auto">
 								{/* Bot Image Tap to earn */}
 								<div
-									onPointerDown={(event) => handleBotClick(event)}
+									onTouchStart={(event) => handleBotClick(event)}
 									ref={tapRef}
 									className="relative flex justify-end items-center rounded-full"
 								>
