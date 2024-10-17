@@ -141,6 +141,7 @@ const Home = () => {
 
 	// Handle Multiple Taps
 	const handleBotClick = (e) => {
+		console.log("=== > Handle Bot click is executed!");
 		// e.preventDefault();
 		e.stopPropagation();
 		triggerHapticFeedback();
@@ -378,7 +379,7 @@ const Home = () => {
 							<div className="flex justify-center items-center w-screen h-[41vh] mt-auto">
 								{/* Bot Image Tap to earn */}
 								<div
-									onTouchStart={(event) => handleBotClick(event)}
+									onPointerDown={handleBotClick}
 									ref={tapRef}
 									className="relative flex justify-end items-center rounded-full"
 								>
