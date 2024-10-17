@@ -39,28 +39,42 @@ exports.updateBalance = async (req, res) => {
     try {
         const { tapBalance, userId } = req.body;
 
+        if (!userId || tapBalance == null) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'User ID and tapBalance are required!'
+            });
+        }
+
+        if (typeof tapBalance !== 'number') {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'tapBalance must be a number!'
+            });
+        }
+
         const isUser = await UserModel.findById(userId);
 
         if (!isUser) {
-            return res.status(200).json({
+            return res.status(404).json({
                 status: 'failed',
                 message: 'User not found!'
-            })
+            });
         }
 
-        isUser.balance = isUser.balance + tapBalance;
-
+        isUser.balance += tapBalance;
         await isUser.save();
 
         return res.status(200).json({
+            user: isUser,
             status: 'success',
-            message: 'Balance updated succesfuly!'
-        })
+            message: 'Balance updated successfully!'
+        });
     } catch (error) {
-        console.log("Internal Server Error!", error);
+        console.error("Internal Server Error!", error);
         return res.status(500).json({
             status: 'failed',
             message: 'Internal Server Error!'
-        })
+        });
     }
 };

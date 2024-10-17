@@ -69,10 +69,10 @@ const Home = () => {
 						userId: userId,
 						tapBalance: tapBalance
 					});
-					console.log("Balance Updated Successfully!");
+					console.log("Balance Updated Successfully!", response.data);
 					if (response.data.status === 'success') {
-						setBalance((prevBalance) => prevBalance + tapBalance);
 						setTapBalance(0);
+						setBalance(response.data.user.balance);
 					}
 				} catch (error) {
 					console.error("Error updating balance:", error);
