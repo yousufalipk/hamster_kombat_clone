@@ -70,6 +70,7 @@ const Home = () => {
 						userId: userId,
 						tapBalance: tapBalance
 					});
+					console.log("Balance Updated Succesfuly!");
 					console.log('response', response);
 					if (response.data.status === 'success') {
 						setBalance((prevTapBalance) => prevTapBalance + tapBalance);
@@ -82,7 +83,7 @@ const Home = () => {
 		}, 1000);
 
 		return () => clearInterval(intervalId);
-	}, [tapBalance]);
+	}, [energy]);
 
 	// Handle Haptic Feedback (Vibrate)
 	const triggerHapticFeedback = () => {
