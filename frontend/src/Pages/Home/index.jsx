@@ -80,6 +80,8 @@ const Home = () => {
 			}, 1000);
 
 			return () => clearInterval(intervalId);
+		} else {
+			console.log("Tap Balance is zero", tapBalance);
 		}
 	}, [tapBalance, apiUrl, userId, setBalance]);
 
