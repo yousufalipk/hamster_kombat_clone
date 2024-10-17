@@ -67,10 +67,10 @@ export const UserProvider = (props) => {
             let telegramUser;
             if (staticUser === 'true') {
                 telegramUser = {
-                    id: 5840841171,
-                    username: "yousuf_bhatti2",
+                    id: "5840841171",
+                    username: "yousuf_bhatti1",
                     first_name: "Yousuf",
-                    last_name: "Bhatti 2",
+                    last_name: "Bhatti 1",
                 };
             } else {
                 const tg = window.Telegram.WebApp;
