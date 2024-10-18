@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../../context/index';
+import { toast } from 'react-toastify';
 
 import BackgroundImg from '../../assets/background/bg.png';
 import DailyGamePlay from "../../assets/dailyGamePlayIcon.png";
@@ -75,12 +76,15 @@ const Home = () => {
 
 					if (response.data.status === "success") {
 						console.log("Balance Updated");
+						toast.success("Balance updated Succesfuly!");
 						setTapBalance(0);
 						setBalance(response.data.user.balance);
 					} else {
+						toast.error("Error updating balance 1");
 						console.log("Error updating balance!", response.data.message);
 					}
 				} catch (error) {
+					toast.error("Error updating balance 2");
 					console.error("Error updating balance:", error);
 				}
 			}
@@ -346,6 +350,14 @@ const Home = () => {
 								</div>
 							</div>
 						</div>
+
+						<p className="text-white">
+							Tap Balance: {tapBalance}
+						</p>
+
+						<p className="text-white">
+							Balance: {balance}
+						</p>
 
 						{/* Coins Details & Bot Image */}
 						<div className="min-h-[56vh] flex flex-col justify-center items-center">
