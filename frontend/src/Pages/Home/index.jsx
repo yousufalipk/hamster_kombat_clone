@@ -65,18 +65,14 @@ const Home = () => {
 	// Update balance every 2 seconds
 	useEffect(() => {
 		const updateBalance = async () => {
-			console.log("Balance useEffect!");
 			if (tapBalance > 0) {
 				try {
-					console.log("Before Updating balance!");
 					const response = await axios.post(`${apiUrl}/user/update-balance`, {
 						userId: userId,
 						tapBalance: tapBalance,
 					});
 
 					if (response.data.status === "success") {
-						console.log("Balance Updated");
-						toast.success("Balance updated Succesfuly!");
 						setTapBalance(0);
 						setBalance(response.data.user.balance);
 					} else {
@@ -84,7 +80,6 @@ const Home = () => {
 						console.log("Error updating balance!", response.data.message);
 					}
 				} catch (error) {
-					toast.error("Error updating balance 2");
 					console.error("Error updating balance:", error);
 				}
 			}
@@ -92,7 +87,7 @@ const Home = () => {
 
 		const intervalId = setInterval(() => {
 			updateBalance();
-		}, 2000); // Throttle balance update to every 2 seconds to avoid multiple updates
+		}, 1000);
 
 		return () => clearInterval(intervalId);
 	}, [tapBalance, apiUrl, setBalance, userId]);
