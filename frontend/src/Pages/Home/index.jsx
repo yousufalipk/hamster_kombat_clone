@@ -95,7 +95,7 @@ const Home = () => {
 
 		const intervalId = setInterval(() => {
 			updateBalance();
-		}, 1000);
+		}, 800);
 
 		return () => clearInterval(intervalId);
 	}, [tapBalance]);
