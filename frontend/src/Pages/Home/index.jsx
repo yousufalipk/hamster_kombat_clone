@@ -62,14 +62,10 @@ const Home = () => {
 		}
 	}, []);
 
-	// Update balance every 2 seconds
+	// Update balance every 1 seconds
 	useEffect(() => {
-		console.log("Update Balance Use Effect!");
 		const updateBalance = async () => {
-			if (tapBalance === 0) {
-
-			} else {
-				console.log("Tap balance is greater than 0");
+			if (tapBalance > 0) {
 				try {
 					const response = await axios.post(`${apiUrl}/user/update-balance`, {
 						userId: userId,
@@ -353,6 +349,7 @@ const Home = () => {
 							</div>
 						</div>
 
+						{/*
 						<p className="text-white">
 							Tap Balance: {tapBalance}
 						</p>
@@ -360,6 +357,7 @@ const Home = () => {
 						<p className="text-white">
 							Balance: {balance}
 						</p>
+						*/}
 
 						{/* Coins Details & Bot Image */}
 						<div className="min-h-[56vh] flex flex-col justify-center items-center">
