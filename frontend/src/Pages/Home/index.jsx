@@ -87,7 +87,7 @@ const Home = () => {
 
 		const intervalId = setInterval(() => {
 			updateBalance();
-		}, 1000);
+		}, 2000);
 
 		return () => clearInterval(intervalId);
 	}, [tapBalance, apiUrl, setBalance, userId]);

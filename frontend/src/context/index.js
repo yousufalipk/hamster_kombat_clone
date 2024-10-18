@@ -11,6 +11,9 @@ export const UserProvider = (props) => {
 
     const apiUrl = process.env.REACT_APP_URL;
 
+    const tg = window.Telegram.WebApp;
+
+    tg.ready();
 
     // User States
 
@@ -49,10 +52,6 @@ export const UserProvider = (props) => {
         initializeUser();
     }, [])
 
-    useEffect(() => {
-        console.log("Value of error loader mess", loaderErrorMes);
-    }, [loaderErrorMes])
-
 
     /* 
     levels
@@ -79,8 +78,6 @@ export const UserProvider = (props) => {
                     last_name: "Bhatti 1",
                 };
             } else {
-                const tg = window.Telegram.WebApp;
-                tg.ready();
                 telegramUser = tg.initDataUnsafe?.user;
             }
 
