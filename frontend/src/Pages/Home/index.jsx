@@ -176,6 +176,7 @@ const Home = () => {
 					setEnergy((prevEnergy) => Math.max(prevEnergy - 1, 0));
 
 					// Increment tap balance per tap
+					console.log("Addcoins", addCoins);
 					setTapBalance((prevTapBalance) => prevTapBalance + addCoins);
 
 					setTimeout(() => {
@@ -395,7 +396,6 @@ const Home = () => {
 								{/* Bot Image Tap to earn */}
 								<div
 									onTouchStart={handleBotClick}
-									onClick={handleBotClick}
 									ref={tapRef}
 									className="relative flex justify-end items-center rounded-full"
 								>
