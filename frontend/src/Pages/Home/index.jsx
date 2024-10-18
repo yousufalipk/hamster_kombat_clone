@@ -64,8 +64,12 @@ const Home = () => {
 
 	// Update balance every 2 seconds
 	useEffect(() => {
+		console.log("Update Balance Use Effect!");
 		const updateBalance = async () => {
-			if (tapBalance > 0) {
+			if (tapBalance === 0) {
+
+			} else {
+				console.log("Tap balance is greater than 0");
 				try {
 					const response = await axios.post(`${apiUrl}/user/update-balance`, {
 						userId: userId,
@@ -81,16 +85,20 @@ const Home = () => {
 					}
 				} catch (error) {
 					console.error("Error updating balance:", error);
+				} finally {
+					setTimeout(() => {
+						console.log("2 mini second dealy added!");
+					}, 200)
 				}
 			}
 		};
 
 		const intervalId = setInterval(() => {
 			updateBalance();
-		}, 2000);
+		}, 1000);
 
 		return () => clearInterval(intervalId);
-	}, [tapBalance, apiUrl, setBalance, userId]);
+	}, [tapBalance]);
 
 
 	// Handle Haptic Feedback (Vibrate)
@@ -171,7 +179,6 @@ const Home = () => {
 					setEnergy((prevEnergy) => Math.max(prevEnergy - 1, 0));
 
 					// Increment tap balance per tap
-					console.log("Addcoins", addCoins);
 					setTapBalance((prevTapBalance) => prevTapBalance + addCoins);
 
 					setTimeout(() => {

@@ -11,10 +11,6 @@ export const UserProvider = (props) => {
 
     const apiUrl = process.env.REACT_APP_URL;
 
-    const tg = window.Telegram.WebApp;
-
-    tg.ready();
-
     // User States
 
     const [userDataInitilized, setUserDataInitlized] = useState(false);
@@ -68,6 +64,8 @@ export const UserProvider = (props) => {
     // Initilize User
     const initializeUser = async () => {
         setLoader(true);
+        const tg = window.Telegram.WebApp;
+        tg.ready();
         try {
             let telegramUser;
             if (staticUser === 'true') {
