@@ -92,7 +92,6 @@ export const UserProvider = (props) => {
                 return;
             } else {
                 const percentage = (res.data.user.currentRank / 10) * 100;
-
                 setUserId(res.data.user._id);
                 setTelegramId(res.data.user.telegramId);
                 setFirstName(res.data.user.firstName);
@@ -105,10 +104,10 @@ export const UserProvider = (props) => {
                 setEnergy(res.data.user.energy || 1500);
                 setEnergyLimit(res.data.user.energyLimit || 1500);
                 setLevelPercentage(percentage);
-
             }
         } catch (error) {
             console.log("Error fetching User", error);
+            setLoaderErrorMes("Error Initilizing User! {try-catch}");
         } finally {
             setUserDataInitlized(true);
             setLoader(false);

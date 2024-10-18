@@ -80,14 +80,13 @@ const Home = () => {
 						setTapBalance(0);
 						setBalance(response.data.user.balance);
 					} else {
-						toast.error("Error updating balance 1");
 						console.log("Error updating balance!", response.data.message);
 					}
 				} catch (error) {
 					console.error("Error updating balance:", error);
 				} finally {
 					setTimeout(() => {
-						console.log("2 mini second dealy added!");
+						// 2 miliseconds timeout for states to update
 					}, 200)
 				}
 			}

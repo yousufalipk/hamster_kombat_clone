@@ -1,6 +1,5 @@
 const UserModel = require('../models/userModel.js');
 
-
 exports.fetchUser = async (req, res) => {
     try {
         const { telegramId, firstName, lastName, username } = req.body;
