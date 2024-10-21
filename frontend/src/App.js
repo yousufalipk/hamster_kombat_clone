@@ -31,7 +31,7 @@ const App = () => {
 				<div className="h-[100vh] w-[100vw] bg-black flex justify-center items-center">
 					<div className="flex gap-3 justify-center items-center flex-col border-2 h-[90vh] w-[90vw] rounded-3xl">
 						<span className="text-2xl text-red-700 text-center font-bold">
-							{loaderErrorMes}
+							{loaderErrorMes.mess}
 						</span>
 						<p className="text-xl text-white text-center">
 							Try reloading!

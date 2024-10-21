@@ -88,7 +88,10 @@ export const UserProvider = (props) => {
 
             if (res.data.status === 'failed') {
                 console.log("Error Initilizing User!");
-                setLoaderErrorMes("Error Initilizing User!");
+                setLoaderErrorMes({
+                    mess: "Error Initilizing User!",
+                    error: 'null'
+                });
                 return;
             } else {
                 const percentage = (res.data.user.currentRank / 10) * 100;
@@ -107,7 +110,10 @@ export const UserProvider = (props) => {
             }
         } catch (error) {
             console.log("Error fetching User", error);
-            setLoaderErrorMes("Error Initilizing User! {try-catch}");
+            setLoaderErrorMes({
+                mess: "Error Initilizing User! {try-catch}",
+                error: error
+            });
         } finally {
             setUserDataInitlized(true);
             setLoader(false);

@@ -23,12 +23,11 @@ import AngleIcon from "../../assets/AngleIcon.svg";
 
 import ProfilePic from "../../assets/ProfilePicIcon.svg";
 
-const tele = window.Telegram.WebApp;
-tele.disableVerticalSwipes();
-
 const Home = () => {
 
 	const apiUrl = process.env.REACT_APP_URL;
+
+	const staticUser = process.env.REACT_APP_STATIC_USER;
 
 	const { userDataInitilized, username, level, currentRank, levelPercentage, setBalance, balance, energy, setEnergy, energyLimit, profilePic, userId, addCoins } = useUser();
 
@@ -39,26 +38,30 @@ const Home = () => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		tele.BackButton.hide();
-		tele.disableVerticalSwipes();
-		tele.expand();
-		tele.ready();
-		window.Telegram.WebApp.setHeaderColor("#000000");
+		if (staticUser !== 'true') {
+			const tele = window.Telegram.WebApp;
+			tele.disableVerticalSwipes();
+			tele.BackButton.hide();
+			tele.disableVerticalSwipes();
+			tele.expand();
+			tele.ready();
+			window.Telegram.WebApp.setHeaderColor("#000000");
 
-		// Disable zoom on double-tap
-		document.addEventListener('dblclick', (e) => {
-			e.preventDefault();
-		});
+			// Disable zoom on double-tap
+			document.addEventListener('dblclick', (e) => {
+				e.preventDefault();
+			});
 
-		// Disable pinch-zoom
-		document.addEventListener('touchstart', function (event) {
-			if (event.touches.length > 1) {
-				event.preventDefault();
+			// Disable pinch-zoom
+			document.addEventListener('touchstart', function (event) {
+				if (event.touches.length > 1) {
+					event.preventDefault();
+				}
+			}, { passive: false });
+
+			if (tele.HapticFeedback) {
+				tele.HapticFeedback.impactOccurred("medium");
 			}
-		}, { passive: false });
-
-		if (tele.HapticFeedback) {
-			tele.HapticFeedback.impactOccurred("medium");
 		}
 	}, []);
 
@@ -147,6 +150,7 @@ const Home = () => {
 	}
 
 	// Handle Multiple Taps
+	/*
 	const handleBotClick = (e) => {
 		triggerHapticFeedback();
 
@@ -185,6 +189,46 @@ const Home = () => {
 			}
 		}
 	};
+	*/
+
+	const handleBotClick = (e) => {
+		triggerHapticFeedback();
+
+		if (energy <= 0) return;
+
+		const targetElement = tapRef.current;
+
+		if (targetElement) {
+			const rect = targetElement.getBoundingClientRect();
+
+			if (rect && rect.width > 0 && rect.height > 0) {
+				const touchPoints = e.changedTouches || [e];
+
+				for (let i = 0; i < touchPoints.length; i++) {
+					const touch = touchPoints[i];
+
+					const newClick = {
+						id: Date.now() + i,
+						x: touch.clientX - rect.left,
+						y: touch.clientY - rect.top,
+					};
+
+					setClicks((prevClicks) => [...prevClicks, newClick]);
+
+					setEnergy((prevEnergy) => Math.max(prevEnergy - 1, 0));
+
+					setTapBalance((prevTapBalance) => prevTapBalance + addCoins);
+
+					setTimeout(() => {
+						setClicks((prevClicks) =>
+							prevClicks.filter((click) => click.id !== newClick.id)
+						);
+					}, 800);
+				}
+			}
+		}
+	};
+
 
 	const cards = [
 		{
@@ -396,10 +440,10 @@ const Home = () => {
 								<div
 									onTouchStart={handleBotClick}
 									ref={tapRef}
-									className="relative flex justify-end items-center rounded-full"
+									className="relative flex justify-end items-center rounded-full h-[40vh] w-[60vw]"
 								>
 
-									<div className="relative select-none rounded-full">
+									<div className="relative select-none rounded-full w-full h-full z-10">
 										{/* Clicks Abination +1 */}
 										{clicks.map((click) => (
 											<div
@@ -407,7 +451,7 @@ const Home = () => {
 												style={{
 													top: `${click.y - 42}px`,
 													left: `${click.x - 28}px`,
-													animation: `float 1s ease-out`,
+													animation: `textAnimation 1s ease-out`,
 												}}
 												onAnimationEnd={() => handleAnimationEnd(click.id)}
 												key={click.id}
@@ -415,17 +459,18 @@ const Home = () => {
 												+{addCoins}
 											</div>
 										))}
-										<div className="rounded-full overflow-hidden">
-											<img src={PandaCircleIcon} alt="Outer-Circle" width="230" />
-											<div className="absolute top-[21%] left-[22%]">
-												<img src={BigPanda} alt="Panda-Icon" />
+										<div className="absoulte h-full w-full rounded-full overflow-hidden flex items-center justify-center">
+											<div className="absolute">
+												<img src={PandaCircleIcon} alt="Panda-circle" />
+											</div>
+											<div className="absolute">
+												<img src={BigPanda} alt="Panda-Icon" className="bot-tap" />
 											</div>
 											<div className="absolute top-[60%] left-[37%]">
 												<img src={TouchIcon} alt="Touch-Icon" />
 											</div>
 										</div>
 									</div>
-
 								</div>
 
 								{/* Side Booster Options */}
@@ -438,7 +483,7 @@ const Home = () => {
 										<div
 											className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
 											style={{
-												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 20px rgba(0, 173, 255, 0.6)',
+												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
 											}}
 										>
 											<img src={JetPack} alt='JetPack-Icon' className='p-1' />
@@ -449,7 +494,7 @@ const Home = () => {
 										<div
 											className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
 											style={{
-												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 20px rgba(0, 173, 255, 0.6)',
+												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
 											}}
 										>
 											<img src={BatteryBooster1} alt='BatteryBooster-Icon' className='p-1' />
@@ -460,7 +505,7 @@ const Home = () => {
 										<div
 											className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
 											style={{
-												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 20px rgba(0, 173, 255, 0.6)',
+												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
 											}}
 										>
 											<img src={TouchIcon} alt='TouchIcon-Icon' className='p-1' />
@@ -471,7 +516,7 @@ const Home = () => {
 										<div
 											className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
 											style={{
-												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 20px rgba(0, 173, 255, 0.6)',
+												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
 											}}
 										>
 											<img src={BatteryBooster2} alt='BatteryBooster2-Icon' className='p-1' />

@@ -95,27 +95,23 @@ html {
 	/* Hide scrollbar */
 }
 
-@keyframes float {
+@keyframes textAnimation {
 	0% {
 		opacity: 1;
-		transform: translateY(0) scale(1);
-	}
-
-	50% {
-		opacity: 1;
-		transform: translateY(-25px) scale(1.1);
+		transform: translateY(0);
 	}
 
 	100% {
 		opacity: 0;
-		transform: translateY(-70px) scale(1.2);
+		transform: translateY(-50px);
 	}
 }
 
-/* Apply the animation easing to smooth the transitions */
-.tap-effect {
-	animation: float 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+.bot-tap:active {
+	width: 125px;
 }
+
+
 
 /* Optional: Adjust the styling of the tap-image class */
 .tap-image {
