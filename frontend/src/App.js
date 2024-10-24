@@ -13,23 +13,6 @@ import { useUser } from './context/index';
 const App = () => {
 	const { loader, loaderErrorMes } = useUser();
 
-	// Load the Telegram script based on the environment variable
-	useEffect(() => {
-		const isStaticUser = process.env.REACT_APP_STATIC_USER;
-
-		if (!isStaticUser) {
-			const script = document.createElement("script");
-			script.src = "https://telegram.org/js/telegram-web-app.js";
-			script.async = true;
-			document.body.appendChild(script);
-
-			// Cleanup: Remove the script when the component unmounts
-			return () => {
-				document.body.removeChild(script);
-			};
-		}
-	}, []); // Empty dependency array ensures this runs once when the component mounts
-
 	if (loader) {
 		return (
 			<>
