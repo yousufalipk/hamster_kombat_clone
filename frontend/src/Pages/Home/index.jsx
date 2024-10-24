@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../../context/index';
 import { toast } from 'react-toastify';
@@ -25,15 +24,13 @@ import ProfilePic from "../../assets/ProfilePicIcon.svg";
 
 const Home = () => {
 
-	const apiUrl = process.env.REACT_APP_URL;
-
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 
-	const { userDataInitilized, username, level, currentRank, levelPercentage, setBalance, balance, energy, setEnergy, energyLimit, profilePic, userId, addCoins } = useUser();
+	const { userDataInitilized, username, level, currentRank, levelPercentage, setBalance, balance, energy, setEnergy, energyLimit, profilePic, userId, addCoins, socket } = useUser();
 
 	const [tapBalance, setTapBalance] = useState(0);
 	const [clicks, setClicks] = useState([]);
-	const tapRef = useRef(null);
+	const tapBalanceRef = useRef(null);
 
 	const navigate = useNavigate();
 
@@ -65,39 +62,21 @@ const Home = () => {
 		}
 	}, []);
 
-	// Update balance every 1 seconds
 	useEffect(() => {
-		const updateBalance = async () => {
-			if (tapBalance > 0) {
+		const intervalId = setInterval(async () => {
+			if (tapBalance !== 0) {
+				console.log("Requesting Update!", tapBalance);
 				try {
-					const response = await axios.post(`${apiUrl}/user/update-balance`, {
-						userId: userId,
-						tapBalance: tapBalance,
-					});
-
-					if (response.data.status === "success") {
-						setTapBalance(0);
-						setBalance(response.data.user.balance);
-					} else {
-						console.log("Error updating balance!", response.data.message);
-					}
+					await socket.emit('updateBalance', { userId, tapBalance });
+					setTapBalance(0);
 				} catch (error) {
 					console.error("Error updating balance:", error);
-				} finally {
-					setTimeout(() => {
-						// 2 miliseconds timeout for states to update
-					}, 200)
 				}
 			}
-		};
-
-		const intervalId = setInterval(() => {
-			updateBalance();
-		}, 800);
+		}, 1000); // Every 1 sec
 
 		return () => clearInterval(intervalId);
 	}, [tapBalance]);
-
 
 	// Handle Haptic Feedback (Vibrate)
 	const triggerHapticFeedback = () => {
@@ -149,37 +128,69 @@ const Home = () => {
 		}
 	}
 
-	// Handle Multiple Taps
+	// Handle multiple taps
+	const handleBotTap = (e) => {
+		// Skip if no energy left
+		if (energy <= 0) return;
+
+		// Increment the count 
+		const rect = e.target.getBoundingClientRect();
+		const newClick = {
+			id: Date.now(),
+			x: e.clientX - rect.left,
+			y: e.clientY - rect.top,
+		};
+		setClicks(prevClicks => [...prevClicks, newClick]);
+
+		// Reduce Energy - 1
+		setEnergy(prevEnergy => Math.max(prevEnergy - 1, 0));
+
+		const newBalance = tapBalance + addCoins;
+		tapBalanceRef.current = newBalance;
+
+		setTapBalance(newBalance);
+
+		setBalance((prevBalance) => prevBalance + addCoins);
+
+		setTimeout(() => {
+			console.log("Tap Balance", tapBalance);
+		}, 1000)
+
+		setTimeout(() => {
+			setClicks(prevClicks => prevClicks.filter(click => click.id !== newClick.id));
+		}, 800);
+	}
+
+
 	/*
 	const handleBotClick = (e) => {
 		triggerHapticFeedback();
-
+	
 		if (energy <= 0) return;
-
+	
 		const targetElement = tapRef.current;
-
+	
 		if (targetElement) {
 			const rect = targetElement.getBoundingClientRect();
-
+	
 			if (rect && rect.width > 0 && rect.height > 0) {
 				const touchPoints = e.changedTouches || [e];
-
+	
 				for (let i = 0; i < touchPoints.length; i++) {
 					const touch = touchPoints[i];
+	
 					const newClick = {
 						id: Date.now() + i,
 						x: touch.clientX - rect.left,
 						y: touch.clientY - rect.top,
 					};
-
+	
 					setClicks((prevClicks) => [...prevClicks, newClick]);
-
-					// Reduce Energy - 1 per tap
+	
 					setEnergy((prevEnergy) => Math.max(prevEnergy - 1, 0));
-
-					// Increment tap balance per tap
-					setTapBalance((prevTapBalance) => prevTapBalance + addCoins);
-
+	
+					tapBalance += addCoins;
+	
 					setTimeout(() => {
 						setClicks((prevClicks) =>
 							prevClicks.filter((click) => click.id !== newClick.id)
@@ -189,45 +200,8 @@ const Home = () => {
 			}
 		}
 	};
+	
 	*/
-
-	const handleBotClick = (e) => {
-		triggerHapticFeedback();
-
-		if (energy <= 0) return;
-
-		const targetElement = tapRef.current;
-
-		if (targetElement) {
-			const rect = targetElement.getBoundingClientRect();
-
-			if (rect && rect.width > 0 && rect.height > 0) {
-				const touchPoints = e.changedTouches || [e];
-
-				for (let i = 0; i < touchPoints.length; i++) {
-					const touch = touchPoints[i];
-
-					const newClick = {
-						id: Date.now() + i,
-						x: touch.clientX - rect.left,
-						y: touch.clientY - rect.top,
-					};
-
-					setClicks((prevClicks) => [...prevClicks, newClick]);
-
-					setEnergy((prevEnergy) => Math.max(prevEnergy - 1, 0));
-
-					setTapBalance((prevTapBalance) => prevTapBalance + addCoins);
-
-					setTimeout(() => {
-						setClicks((prevClicks) =>
-							prevClicks.filter((click) => click.id !== newClick.id)
-						);
-					}, 800);
-				}
-			}
-		}
-	};
 
 
 	const cards = [
@@ -430,7 +404,7 @@ const Home = () => {
 									<div>
 										<img src={BigCoin} alt="Coin-Icon" width="24" />
 									</div>
-									<div className="text-[#FFF] text-[24px] font-medium">{balance + tapBalance}</div>
+									<div className="text-[#FFF] text-[24px] font-medium">{balance}</div>
 								</div>
 							</div>
 
@@ -438,8 +412,7 @@ const Home = () => {
 							<div className="flex justify-center items-center w-screen h-[41vh] mt-auto">
 								{/* Bot Image Tap to earn */}
 								<div
-									onTouchStart={handleBotClick}
-									ref={tapRef}
+									onPointerDown={handleBotTap}
 									className="relative flex justify-end items-center rounded-full h-[40vh] w-[60vw]"
 								>
 

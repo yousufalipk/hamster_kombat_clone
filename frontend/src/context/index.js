@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { io } from "socket.io-client";
 
 const UserContext = createContext(null);
 
@@ -14,6 +15,8 @@ export const UserProvider = (props) => {
     // User States
 
     const [userDataInitilized, setUserDataInitlized] = useState(false);
+
+    const [socket, setSocket] = useState(null);
 
     const [userId, setUserId] = useState(null);
     const [telegramId, setTelegramId] = useState(null);
@@ -43,11 +46,18 @@ export const UserProvider = (props) => {
 
     const [tgeToggle, setTgeToggle] = useState('launchpad');
 
-
     useEffect(() => {
         initializeUser();
     }, [])
 
+
+    useEffect(() => {
+        const newSocket = io(apiUrl);
+        setSocket(newSocket);
+        return () => {
+            newSocket.disconnect();
+        };
+    }, [apiUrl]);
 
     /* 
     levels
@@ -60,12 +70,9 @@ export const UserProvider = (props) => {
     7 - Grand Master 
     8 - Epic  */
 
-
     // Initilize User
     const initializeUser = async () => {
         setLoader(true);
-        const tg = window.Telegram.WebApp;
-        tg.ready();
         try {
             let telegramUser;
             if (staticUser === 'true') {
@@ -76,43 +83,44 @@ export const UserProvider = (props) => {
                     last_name: "Bhatti 1",
                 };
             } else {
+                const tg = window.Telegram.WebApp;
+                tg.ready();
                 telegramUser = tg.initDataUnsafe?.user;
             }
 
-            const res = await axios.post(`${apiUrl}/user/fetch-user`, {
-                telegramId: telegramUser.id,
-                firstName: telegramUser.first_name,
-                lastName: telegramUser.last_name,
-                username: telegramUser.username || `${telegramUser.first_name} ${telegramUser.last_name}`
-            });
-
-            if (res.data.status === 'failed') {
-                console.log("Error Initilizing User!");
-                setLoaderErrorMes({
-                    mess: "Error Initilizing User!",
-                    error: 'null'
+            if (telegramUser) {
+                const res = await axios.post(`${apiUrl}/fetch-user`, {
+                    telegramId: telegramUser.id,
+                    firstName: telegramUser.first_name,
+                    lastName: telegramUser.last_name,
+                    username: telegramUser.username || `${telegramUser.first_name || ''} ${telegramUser.last_name || ''}`.trim()
                 });
-                return;
+
+                if (res.data.status === 'success') {
+                    const percentage = (res.data.user.currentRank / 10) * 100;
+                    setUserId(res.data.user._id);
+                    setTelegramId(res.data.user.telegramId);
+                    setFirstName(res.data.user.firstName);
+                    setLastName(res.data.user.lastName);
+                    setUsername(res.data.user.username);
+                    setProfilePic(res.data.user.pic);
+                    setLevel(res.data.user.level);
+                    setCurrentRank(res.data.currentRank);
+                    setBalance(res.data.user.balance);
+                    setEnergy(res.data.user.energy || 1500);
+                    setEnergyLimit(res.data.user.energyLimit || 1500);
+                    setLevelPercentage(percentage);
+                }
             } else {
-                const percentage = (res.data.user.currentRank / 10) * 100;
-                setUserId(res.data.user._id);
-                setTelegramId(res.data.user.telegramId);
-                setFirstName(res.data.user.firstName);
-                setLastName(res.data.user.lastName);
-                setUsername(res.data.user.username);
-                setProfilePic(res.data.user.pic);
-                setLevel(res.data.user.level);
-                setCurrentRank(res.data.currentRank);
-                setBalance(res.data.user.balance);
-                setEnergy(res.data.user.energy || 1500);
-                setEnergyLimit(res.data.user.energyLimit || 1500);
-                setLevelPercentage(percentage);
+                setLoaderErrorMes({
+                    mess: "Error getting data from telegram!",
+                    error: ""
+                });
             }
         } catch (error) {
-            console.log("Error fetching User", error);
             setLoaderErrorMes({
-                mess: "Error Initilizing User! {try-catch}",
-                error: error
+                mess: "Error Initilizing User!",
+                error: ""
             });
         } finally {
             setUserDataInitlized(true);
@@ -149,7 +157,8 @@ export const UserProvider = (props) => {
             setAddCoins,
             addCoins,
             loader,
-            loaderErrorMes
+            loaderErrorMes,
+            socket
         }}>
             {props.children}
         </UserContext.Provider>
