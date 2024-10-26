@@ -49,6 +49,7 @@ exports.initializeUser = async (req, res) => {
                     value: 1
                 },
                 unlimitedTaps: {
+                    status: false,
                     avaliable: 5,
                 },
                 energyRefill: {
@@ -60,6 +61,16 @@ exports.initializeUser = async (req, res) => {
             const res = resetBoosters(isUser); // If 1 day passed (only for ex-users)
             await res.save();
             isUser = res;
+
+            if (isUser.unlimitedTaps.status === true) {
+                const lastClaimed = isUser.unlimitedTaps.lastClaimed;
+                const is2mins = check2min(lastClaimed);
+
+                if (!is2mins) {
+                    isUser.unlimitedTaps.status = false;
+                    await isUser.save();
+                }
+            }
         }
 
         return res.status(200).json({
@@ -208,6 +219,7 @@ exports.unlimitedTaps = async (req, res) => {
 
         user.unlimitedTaps.available -= 1;
         user.unlimitedTaps.lastClaimed = currentDate;
+        user.unlimitedTaps.status = true;
         await user.save();
 
         return res.status(200).json({
@@ -243,6 +255,7 @@ exports.refillEnergy = async (req, res) => {
             })
         }
 
+        /*
         if (user.energyRefill.lastClaimed !== null) {
             const lastClaimed = user.energyRefill.lastClaimed;
 
@@ -255,7 +268,7 @@ exports.refillEnergy = async (req, res) => {
                     lastClaimed: user.energyRefill.lastClaimed
                 })
             }
-        }
+        } */
 
         const currentDate = new Date()
 
@@ -273,6 +286,38 @@ exports.refillEnergy = async (req, res) => {
         return res.status(200).json({
             status: 'failed',
             message: 'Internal Server Error'
+        })
+    }
+}
+
+exports.toggleUnlimitedTapsStatus = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const isUser = await UserModel.findById(userId);
+
+        if (!isUser) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            })
+        }
+
+        if (isUser.unlimitedTaps.status = true) {
+            isUser.unlimitedTaps.status = false;
+            await isUser.save();
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Status Updated succesfuly!',
+        })
+
+    } catch (error) {
+        console.log("Error Toggeling Status!");
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
         })
     }
 }

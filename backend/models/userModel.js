@@ -46,6 +46,10 @@ const userSchema = new mongoose.Schema({
         }
     },
     unlimitedTaps: {
+        status: {
+            type: Boolean,
+            default: false
+        },
         available: {
             type: Number,
             default: 5

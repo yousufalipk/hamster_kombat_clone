@@ -29,6 +29,8 @@ export const UserProvider = (props) => {
     const [balance, setBalance] = useState(0);
 
     // 4 Boosters 
+    const [disableEnergy, setDisableEnergy] = useState(false);
+
     const [avaliableUnlimitedTaps, setAvaliableUnlimitedTaps] = useState(0);
     const [avaliableEnergyRefill, setAvaliableEnergyRefill] = useState(0);
 
@@ -118,6 +120,43 @@ export const UserProvider = (props) => {
                     setBalance(res.data.user.balance);
 
                     // 4 boosters
+                    if (res.data.user.unlimitedTaps.status = true) {
+                        if (res.data.user.unlimitedTaps.lastClaimed) {
+                            const lastClaimed = new Date("2024-10-26T11:16:55.480Z");
+                            const currentDate = new Date();
+
+                            // Calculate the difference in milliseconds
+                            const timeDifferenceInMilliseconds = currentDate.getTime() - lastClaimed.getTime();
+
+                            if (timeDifferenceInMilliseconds >= 120000) {
+                                setDisableEnergy(false);
+                                const response = await axios.post(`${apiUrl}/user/toggle-unlimited-taps-status`, {
+                                    userId: res.data.user._id
+                                });
+                                if (response.data.status === 'success') {
+                                    console.log("Status updated succesfuly!");
+                                } else {
+                                    console.log("Error updating state!");
+                                }
+                            } else {
+                                setTimeout(async () => {
+                                    setDisableEnergy(false);
+                                    const response = await axios.post(`${apiUrl}/user/toggle-unlimited-taps-status`, {
+                                        userId: res.data.user._id
+                                    });
+                                    if (response.data.status === 'success') {
+                                        console.log("Status updated succesfuly!");
+                                    } else {
+                                        console.log("Error updating state!");
+                                    }
+                                }, timeDifferenceInMilliseconds)
+                            }
+                            console.log("Difference in milliseconds:", timeDifferenceInMilliseconds);
+                        }
+                    } else {
+                        setDisableEnergy(res.data.user.unlimitedTaps.status);
+                    }
+
                     setAvaliableUnlimitedTaps(res.data.user.unlimitedTaps.available);
 
                     setAvaliableEnergyRefill(res.data.user.energyRefill.available);
@@ -139,6 +178,7 @@ export const UserProvider = (props) => {
                 });
             }
         } catch (error) {
+            console.log("Error initlitializing user", error);
             setLoaderErrorMes({
                 mess: "Error Initilizing User!",
                 error: ""
@@ -168,6 +208,7 @@ export const UserProvider = (props) => {
             return ({ success: false, mess: 'Internal Server Error!' });
         }
     }
+
     const multitapUpgrade = async () => {
         try {
             if (multitapLevel === 9) {
@@ -184,6 +225,69 @@ export const UserProvider = (props) => {
             }
         } catch (error) {
             console.log("Error upgrading multitaps!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const energyRefillUpgrade = async () => {
+        try {
+            if (energy === energyLimit) {
+                return { success: false, mess: 'Energy already maxed!' }
+            }
+            if (avaliableEnergyRefill === 0) {
+                return { success: false, mess: 'Refill Limit Reached!' }
+            } else {
+                const res = await axios.post(`${apiUrl}/user/refill-energy`, {
+                    userId: userId
+                });
+
+                if (res.data.status === 'success') {
+                    setAvaliableEnergyRefill((prevRefill) => prevRefill - 1);
+                    setEnergy(energyLimit);
+                    return { success: true, mess: res.data.message };
+                } else {
+                    return { success: false, mess: res.data.message };
+                }
+            }
+        } catch (error) {
+            console.log("Error upgrading multitaps!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const unlimitedTapsUpgrade = async () => {
+        try {
+            if (avaliableUnlimitedTaps === 0) {
+                return {
+                    success: false, mess: 'Unlimited Taps Limit Reached!'
+                }
+            } else {
+                const res = await axios.post(`${apiUrl}/user/claim-unlimited-taps`, {
+                    userId: userId
+                });
+
+                if (res.data.status === 'success') {
+                    setDisableEnergy(true);
+                    setAvaliableUnlimitedTaps((prevTaps) => prevTaps - 1);
+                    setTimeout(async () => {
+                        console.log("Reseting status after 2 minutes!");
+                        setDisableEnergy(false);
+                        const res = await axios.post(`${apiUrl}/user/toggle-unlimited-taps-status`, {
+                            userId: userId
+                        });
+                        if (res.data.status === 'success') {
+                            console.log("Status updated succesfuly!");
+                        } else {
+                            console.log("Error updating state!");
+                        }
+                    }, 120000)
+                    return { success: true, mess: res.data.message };
+                } else {
+                    return { success: false, mess: res.data.message };
+                }
+            }
+        } catch (error) {
+            console.log("Error upgrading unlimited taps!", error);
             return ({ success: false, mess: 'Internal Server Error!' });
         }
     }
@@ -226,7 +330,10 @@ export const UserProvider = (props) => {
             multitapUpgrade,
             multitapLevel,
             avaliableUnlimitedTaps,
-            avaliableEnergyRefill
+            avaliableEnergyRefill,
+            energyRefillUpgrade,
+            unlimitedTapsUpgrade,
+            disableEnergy
         }}>
             {props.children}
         </UserContext.Provider>

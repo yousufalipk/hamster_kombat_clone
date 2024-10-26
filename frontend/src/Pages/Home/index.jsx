@@ -50,7 +50,10 @@ const Home = () => {
 		multitapUpgrade,
 		multitapLevel,
 		avaliableUnlimitedTaps,
-		avaliableEnergyRefill
+		avaliableEnergyRefill,
+		energyRefillUpgrade,
+		unlimitedTapsUpgrade,
+		disableEnergy
 	} = useUser();
 
 	const [tapBalance, setTapBalance] = useState(0);
@@ -184,7 +187,11 @@ const Home = () => {
 					setClicks((prevClicks) => [...prevClicks, newClick]);
 
 					// Reduce Energy - 1 per tap
-					setEnergy(prevEnergy => Math.max(prevEnergy - 1, 0));
+					if (!disableEnergy) {
+						setEnergy(prevEnergy => Math.max(prevEnergy - 1, 0));
+					} else {
+						console.log("Energy is disabled!");
+					}
 
 					// Increment tap balance per tap
 					const newBalance = tapBalance + addCoins;
@@ -246,11 +253,39 @@ const Home = () => {
 		},
 	];
 
-	const jetLimit = {
-		obtained: 0,
-		total: 5,
-	};
+	const handleUnlimitedTaps = async () => {
+		try {
+			const res = await unlimitedTapsUpgrade();
 
+			if (res.success) {
+				console.log("Unlimited tap's Enabled for 2 minutes!", res.mess);
+				toast.success(res.mess);
+			} else {
+				toast.error(res.mess);
+			}
+
+		} catch (error) {
+			console.log("Error upgrading unlimited taps!", error);
+			toast.error("Internal Server Error!");
+		}
+	}
+
+	const handleEnergyRefill = async () => {
+		try {
+			const res = await energyRefillUpgrade();
+
+			if (res.success) {
+				console.log("Energy Refilled succesfuly!", res.mess);
+				toast.success(res.mess);
+			} else {
+				toast.error(res.mess);
+			}
+
+		} catch (error) {
+			console.log("Error Refilling Energy!", error);
+			toast.error("Internal Server Error!");
+		}
+	}
 
 	const handleEnergyUpgrade = async () => {
 		const res = await energyUpgrade();
@@ -570,7 +605,7 @@ const Home = () => {
 											<div className="flex flex-col gap-3">
 												<div className="flex justify-end">
 													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
-														{energyLevel >= 9 ? ('Max') : (`Level ${energyLevel + 1}`)}
+														{`Avalibale ${avaliableUnlimitedTaps}`}
 													</span>
 												</div>
 												<div className="flex justify-center flex-col items-center gap-2">
@@ -596,13 +631,13 @@ const Home = () => {
 													<button
 														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
 														onClick={() => {
-															// Upgrade energy limit
+															// Upgrade Unlimited Taps
 															setUnlimitedTapsPopup(false);
-															handleEnergyUpgrade()
+															handleUnlimitedTaps();
 														}}
-														disabled={energyLevel >= 9}
+														disabled={avaliableUnlimitedTaps === 0}
 													>
-														{energyLevel >= 9 ? ("Max") : ('Confirm')}
+														{avaliableUnlimitedTaps === 0 ? ("Limit Reached!") : ('Confirm')}
 													</button>
 												</div>
 											</div>
@@ -623,7 +658,7 @@ const Home = () => {
 											<div className="flex flex-col gap-3">
 												<div className="flex justify-end">
 													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
-														{energyLevel >= 9 ? ('Max') : (`Level ${energyLevel + 1}`)}
+														{`Avalibale ${avaliableEnergyRefill}`}
 													</span>
 												</div>
 												<div className="flex justify-center flex-col items-center gap-2">
@@ -634,7 +669,7 @@ const Home = () => {
 												</div>
 												<div className="text-center text-xs flex flex-col gap-4">
 													<p>Each boost will give you max energy</p>
-													<p>{energyLimit} Energy per refill</p>
+													<p>{energyLimit} energy per refill</p>
 												</div>
 												{/* action buttons */}
 												<div className='flex gap-4 justify-center mt-4'>
@@ -651,11 +686,11 @@ const Home = () => {
 														onClick={() => {
 															// Upgrade energy limit
 															setEnergyRefillPopup(false);
-															handleEnergyUpgrade()
+															handleEnergyRefill()
 														}}
-														disabled={energyLevel >= 9}
+														disabled={avaliableEnergyRefill === 0}
 													>
-														{energyLevel >= 9 ? ("Max") : ('Confirm')}
+														{avaliableEnergyRefill === 0 ? ("Limit Reached!") : ('Confirm')}
 													</button>
 												</div>
 											</div>
