@@ -27,8 +27,13 @@ export const UserProvider = (props) => {
     const [level, setLevel] = useState(null);
     const [currentRank, setCurrentRank] = useState(null);
     const [balance, setBalance] = useState(0);
-    const [energy, setEnergy] = useState(0);
-    const [energyLimit, setEnergyLimit] = useState(0);
+
+    // 4 Boosters 
+    const [energy, setEnergy] = useState(1500);
+    const [energyLevel, setEnergyLevel] = useState(0);
+    const [energyLimit, setEnergyLimit] = useState(1500);
+
+    const [multitapLevel, setMultitapLevel] = useState(0);
     const [addCoins, setAddCoins] = useState(1);
 
     const [levelPercentage, setLevelPercentage] = useState();
@@ -89,7 +94,7 @@ export const UserProvider = (props) => {
             }
 
             if (telegramUser) {
-                const res = await axios.post(`${apiUrl}/fetch-user`, {
+                const res = await axios.post(`${apiUrl}/user/fetch-user`, {
                     telegramId: telegramUser.id,
                     firstName: telegramUser.first_name,
                     lastName: telegramUser.last_name,
@@ -97,6 +102,7 @@ export const UserProvider = (props) => {
                 });
 
                 if (res.data.status === 'success') {
+                    console.log("I am User Data =======> ", res.data.user);
                     const percentage = (res.data.user.currentRank / 10) * 100;
                     setUserId(res.data.user._id);
                     setTelegramId(res.data.user.telegramId);
@@ -107,8 +113,16 @@ export const UserProvider = (props) => {
                     setLevel(res.data.user.level);
                     setCurrentRank(res.data.currentRank);
                     setBalance(res.data.user.balance);
-                    setEnergy(res.data.user.energy || 1500);
-                    setEnergyLimit(res.data.user.energyLimit || 1500);
+
+                    // 4 boosters
+                    setEnergy(res.data.user.energy.limit);
+                    setEnergyLevel(res.data.user.energy.level);
+                    setEnergyLimit(res.data.user.energy.limit);
+
+
+                    setMultitapLevel(res.data.user.multitaps.level);
+                    setAddCoins(res.data.user.multitaps.value);
+
                     setLevelPercentage(percentage);
                 }
             } else {
@@ -128,8 +142,48 @@ export const UserProvider = (props) => {
         }
     }
 
+    const energyUpgrade = async () => {
+        try {
+            if (energyLevel === 9) {
+                console.log('Max level reached!');
+                return;
+            }
+            const res = await axios.post(`${apiUrl}/user/energy-level-upgrade`, {
+                userId: userId
+            });
+            if (res.data.status === 'success') {
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Error upgrading energy!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+    const multitapUpgrade = async () => {
+        try {
+            if (multitapLevel === 9) {
+                console.log('Max level reached!');
+                return;
+            }
+            const res = await axios.post(`${apiUrl}/user/multitap-level-upgrade`, {
+                userId: userId
+            });
+            if (res.data.status === 'success') {
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Error upgrading multitaps!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
     return (
         <UserContext.Provider value={{
+            initializeUser,
             isModalOpen,
             setModalOpen,
             sendData,
@@ -149,16 +203,21 @@ export const UserProvider = (props) => {
             levelPercentage,
             setBalance,
             balance,
-            setEnergy,
-            energy,
-            setEnergyLimit,
+            energyLevel,
+            setEnergyLevel,
             energyLimit,
+            setEnergyLimit,
+            energy,
+            setEnergy,
             userDataInitilized,
             setAddCoins,
             addCoins,
             loader,
             loaderErrorMes,
-            socket
+            socket,
+            energyUpgrade,
+            multitapUpgrade,
+            multitapLevel
         }}>
             {props.children}
         </UserContext.Provider>

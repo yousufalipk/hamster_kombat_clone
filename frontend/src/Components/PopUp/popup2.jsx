@@ -61,17 +61,17 @@ const PopUpToken = () => {
                             </p>
                         </div>
                         <div className='flex justify-center gap-2'>
-                            <img 
-                                src={LittleCoin} 
-                                alt="Little coin" 
+                            <img
+                                src={LittleCoin}
+                                alt="Little coin"
                             />
                             <span className='text-xs'>+60 name</span>
                         </div>
                         {/* action buttons */}
                         <div className='flex gap-4 mt-3 justify-center p-2'>
-                            <button 
-                                className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm' 
-                                onClick={()=>(handleCancel())}
+                            <button
+                                className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+                                onClick={() => (handleCancel())}
                             >
                                 Confirm
                             </button>

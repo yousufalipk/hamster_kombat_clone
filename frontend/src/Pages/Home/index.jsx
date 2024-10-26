@@ -24,13 +24,23 @@ import ProfilePic from "../../assets/ProfilePicIcon.svg";
 
 const Home = () => {
 
+	const energyUpgradeCost = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
+	const multitapUpgradeCost = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000];
+
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 
-	const { userDataInitilized, username, level, currentRank, levelPercentage, setBalance, balance, energy, setEnergy, energyLimit, profilePic, userId, addCoins, socket } = useUser();
+	const { initializeUser, userDataInitilized, username, level, currentRank, levelPercentage, setBalance, balance, energyLevel, energy, energyLimit, setEnergy, profilePic, userId, addCoins, socket, energyUpgrade, multitapUpgrade, multitapLevel } = useUser();
 
 	const [tapBalance, setTapBalance] = useState(0);
 	const [clicks, setClicks] = useState([]);
 	const tapBalanceRef = useRef(null);
+
+	// 4 Boosters Popup States 
+
+	const [energyPopup, setEnergyPopup] = useState(false);
+	const [multitapsPopup, setMultitapsPopup] = useState(false);
+	const [unlimitedTapsPopup, setUnlimitedTapsPopup] = useState(false);
+	const [energyRefillPopup, setEnergyRefillPopup] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -65,7 +75,6 @@ const Home = () => {
 	useEffect(() => {
 		const intervalId = setInterval(async () => {
 			if (tapBalance !== 0) {
-				console.log("Requesting Update!", tapBalance);
 				try {
 					await socket.emit('updateBalance', { userId, tapBalance });
 					setTapBalance(0);
@@ -107,7 +116,7 @@ const Home = () => {
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [energyLimit, setEnergy]);
+	}, [energy, setEnergy]);
 
 	const handleRankings = () => {
 		navigate('/rankings');
@@ -244,130 +253,152 @@ const Home = () => {
 		total: 5,
 	};
 
+
+	const handleEnergyUpgrade = async () => {
+		const res = await energyUpgrade();
+		if (res.success) {
+			toast.success("Energy Limit Upgraded!");
+			initializeUser();
+		} else {
+			toast.error(res.mess);
+		}
+	}
+
+	const handleMultitapUpgrade = async () => {
+		const res = await multitapUpgrade();
+		if (res.success) {
+			toast.success("Multitap Level Upgraded!");
+			initializeUser();
+		} else {
+			toast.error(res.mess);
+		}
+	}
+
 	return (
 		<>
 			{userDataInitilized && (
 				<>
-					{/* Background Image */}
-					<div className="absolute inset-0 -z-10">
-						<img
-							src={BackgroundImg}
-							alt="Background"
-							className="w-full h-full object-cover scale-[0.79] fixed top-[9vh]"
-						/>
-					</div>
-
-					{/* Content */}
-					<div className="relative h-[86vh] w-screen">
-						<div className="relative h-[30vh]">
-							<div className="absolute -inset-1 bg-[#23a7ff] min-h-[50%] rounded-[35px]"></div>
-							<div className="absolute -inset-2 bg-[#23a7ff] min-h-[45%] blur rounded-[50px]"></div>
-							<div className="bg-[#0C0C0C] min-h-[30vh] pt-5 px-2 relative rounded-br-3xl rounded-bl-3xl">
-								{/* Header */}
-								<div className="px-2 flex justify-between">
-									<div className="flex">
-										<div className="rounded-full bg-gray-300 w-[42px] h-[42px]">
-											<img src={profilePic || ProfilePic} alt="Profile-Picture" />
-										</div>
-										<div className="pl-2 text-[#FFF]">
-											<p className="font-medium text-sm">{username}</p>
-											<p className="flex font-normal text-sm -top-1">(Founder)</p>
-										</div>
-									</div>
-
-									{/* level & rank bar  */}
-									<div
-										onClick={() => handleRankings()}
-										className="rounded-full bg-[#252525] min-w-[40%] px-4 py-1">
-										<div className="flex items-center gap-2">
-											<div className="text-[#FFF] font-normal text-xs">{level}</div>
-											<div>
-												<img src={AngleIcon} alt="Angle-Icon" />
-											</div>
-											<div className="text-[#FFF] text-xs font-normal pl-11">
-												{currentRank}/10
-											</div>
-										</div>
-										<div>
-											{/* Progress bar */}
-											<div className="w-full rounded-lg bg-gray-600 h-2 mt-1 overflow-hidden">
-												<div
-													className={`h-2 transition-all duration-300 ease-in-out rounded`}
-													style={{
-														width: `${levelPercentage}%`,
-														background: `linear-gradient(to right, rgb(48 43 251), rgb(54 197 244))`,
-													}}
-												/>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								{/* Cards */}
-								<div className="pt-6 flex justify-evenly items-center">
-									{cards.map((data) => {
-										const { id, img, data1, data2, isDone } = data;
-
-										return (
-											<div
-												onClick={() => handleCardClick(id)}
-												key={id}
-												className="min-w-[20%]"
-											>
-												{isDone ? (
-													<div
-														className="relative border border-[#0072ff] rounded-[14px] overflow-hidden">
-														{/* Done sticker */}
-														<div className="absolute top-0 left-0 bg-[#0072ff] text-white font-bold text-[9px] py-1 px-3 transform -rotate-45 origin-top-left"
-															style={{ top: '37px', left: '-15px', width: '70px', height: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-															Done
-														</div>
-
-														{/* Main content */}
-														<div className="flex flex-col justify-center items-center p-2 h-20 bg-[#091e4b] rounded-[14px] gap-2">
-															<div className="h-3">
-																<img src={img} alt="Logo" width="30" />
-															</div>
-															<div className="text-[#FFF] text-[10px] font-medium pt-4">
-																<div className="flex justify-center items-center">
-																	<p className="text-[8px]">{data1}</p>
-																</div>
-																<p className="text-[8px]">{data2}</p>
-															</div>
-														</div>
-													</div>
-												) : (
-													<div className="relative py-[1px] px-[0.5px] rounded-[14px] overflow-hidden">
-														<div className="flex flex-col justify-center items-center p-2 h-20 bg-[#1B1B27] rounded-[14px] gap-2 border-gradient">
-															<div>
-																<img src={img} alt="Logo" width="30" />
-															</div>
-															<div className="text-[#FFF] text-[10px] font-medium">
-																<div className="flex justify-center items-center">
-																	<p className="text-[8px]">{data1}</p>
-																</div>
-																<p className='text-[8px]'>{data2}</p>
-															</div>
-														</div>
-													</div>
-												)}
-											</div>
-										);
-									})}
-								</div>
-
-
-								{/* Timers */}
-								<div className="flex text-[#FFF] text-[10px] font-normal items-center justify-around pt-[2px] mr-1">
-									{cards.map((time) => {
-										const { id, timer } = time;
-										return <div key={id}>{timer}</div>;
-									})}
-								</div>
-							</div>
+					<div className="h-[86vh] w-[100vw]">
+						{/* Background Image */}
+						<div className="absolute inset-0 -z-10">
+							<img
+								src={BackgroundImg}
+								alt="Background"
+								className="w-full h-full object-cover scale-[0.79] fixed top-[9vh]"
+							/>
 						</div>
 
-						{/*
+						{/* Content */}
+						<div className="relative h-[86vh] w-[100vw]">
+							<div className="relative h-[30vh]">
+								<div className="absolute -inset-1 bg-[#23a7ff] min-h-[50%] rounded-[35px]"></div>
+								<div className="absolute -inset-2 bg-[#23a7ff] min-h-[45%] blur rounded-[50px]"></div>
+								<div className="bg-[#0C0C0C] min-h-[30vh] pt-5 px-2 relative rounded-br-3xl rounded-bl-3xl">
+									{/* Header */}
+									<div className="px-2 flex justify-between">
+										<div className="flex">
+											<div className="rounded-full bg-gray-300 w-[42px] h-[42px]">
+												<img src={profilePic || ProfilePic} alt="Profile-Picture" />
+											</div>
+											<div className="pl-2 text-[#FFF]">
+												<p className="font-medium text-sm">{username}</p>
+												<p className="flex font-normal text-sm -top-1">(Founder)</p>
+											</div>
+										</div>
+
+										{/* level & rank bar  */}
+										<div
+											onClick={() => handleRankings()}
+											className="rounded-full bg-[#252525] min-w-[40%] px-4 py-1">
+											<div className="flex items-center gap-2">
+												<div className="text-[#FFF] font-normal text-xs">{level}</div>
+												<div>
+													<img src={AngleIcon} alt="Angle-Icon" />
+												</div>
+												<div className="text-[#FFF] text-xs font-normal pl-11">
+													{currentRank}/10
+												</div>
+											</div>
+											<div>
+												{/* Progress bar */}
+												<div className="w-full rounded-lg bg-gray-600 h-2 mt-1 overflow-hidden">
+													<div
+														className={`h-2 transition-all duration-300 ease-in-out rounded`}
+														style={{
+															width: `${levelPercentage}%`,
+															background: `linear-gradient(to right, rgb(48 43 251), rgb(54 197 244))`,
+														}}
+													/>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									{/* Cards */}
+									<div className="pt-6 flex justify-evenly items-center">
+										{cards.map((data) => {
+											const { id, img, data1, data2, isDone } = data;
+
+											return (
+												<div
+													onClick={() => handleCardClick(id)}
+													key={id}
+													className="min-w-[20%]"
+												>
+													{isDone ? (
+														<div
+															className="relative border border-[#0072ff] rounded-[14px] overflow-hidden">
+															{/* Done sticker */}
+															<div className="absolute top-0 left-0 bg-[#0072ff] text-white font-bold text-[9px] py-1 px-3 transform -rotate-45 origin-top-left"
+																style={{ top: '37px', left: '-15px', width: '70px', height: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+																Done
+															</div>
+
+															{/* Main content */}
+															<div className="flex flex-col justify-center items-center p-2 h-20 bg-[#091e4b] rounded-[14px] gap-2">
+																<div className="h-3">
+																	<img src={img} alt="Logo" width="30" />
+																</div>
+																<div className="text-[#FFF] text-[10px] font-medium pt-4">
+																	<div className="flex justify-center items-center">
+																		<p className="text-[8px]">{data1}</p>
+																	</div>
+																	<p className="text-[8px]">{data2}</p>
+																</div>
+															</div>
+														</div>
+													) : (
+														<div className="relative py-[1px] px-[0.5px] rounded-[14px] overflow-hidden">
+															<div className="flex flex-col justify-center items-center p-2 h-20 bg-[#1B1B27] rounded-[14px] gap-2 border-gradient">
+																<div>
+																	<img src={img} alt="Logo" width="30" />
+																</div>
+																<div className="text-[#FFF] text-[10px] font-medium">
+																	<div className="flex justify-center items-center">
+																		<p className="text-[8px]">{data1}</p>
+																	</div>
+																	<p className='text-[8px]'>{data2}</p>
+																</div>
+															</div>
+														</div>
+													)}
+												</div>
+											);
+										})}
+									</div>
+
+
+									{/* Timers */}
+									<div className="flex text-[#FFF] text-[10px] font-normal items-center justify-around pt-[2px] mr-1">
+										{cards.map((time) => {
+											const { id, timer } = time;
+											return <div key={id}>{timer}</div>;
+										})}
+									</div>
+								</div>
+							</div>
+
+							{/*
 						<p className="text-white">
 							Tap Balance: {tapBalance}
 						</p>
@@ -377,145 +408,274 @@ const Home = () => {
 						</p>
 						*/}
 
-						{/* Coins Details & Bot Image */}
-						<div className="min-h-[56vh] flex flex-col justify-center items-center">
-							{/* Coins per minute & balance */}
-							<div className="flex items-center justify-start w-screen px-5 pt-6 h-[10vh]">
-								{/* Coins Per Minute */}
-								<div className="flex flex-col items-start gap-1">
-									<div className="flex justify-center items-center gap-1">
-										<div className="">
-											<img className="pl-3" src={LittleCoin} alt="Coin-Icon" />
+							{/* Coins Details & Bot Image */}
+							<div className="min-h-[56vh] flex flex-col justify-center items-center">
+								{/* Coins per minute & balance */}
+								<div className="flex items-center justify-start w-screen px-5 pt-6 h-[10vh]">
+									{/* Coins Per Minute */}
+									<div className="flex flex-col items-start gap-1">
+										<div className="flex justify-center items-center gap-1">
+											<div className="">
+												<img className="pl-3" src={LittleCoin} alt="Coin-Icon" />
+											</div>
+											<div className="text-[#FFF] text-[11.655px] font-medium">
+												<p>+ 2.56M</p>
+											</div>
 										</div>
-										<div className="text-[#FFF] text-[11.655px] font-medium">
-											<p>+ 2.56M</p>
+										<div className="flex justify-center items-center gap-1 pl-1">
+											<div className="">
+												<img src={InfoIcon} alt="Info-Icons" />
+											</div>
+											<div className="text-[#A4A4A4] text-[10.595px] font-medium">Coin Per Mine</div>
 										</div>
 									</div>
-									<div className="flex justify-center items-center gap-1 pl-1">
-										<div className="">
-											<img src={InfoIcon} alt="Info-Icons" />
+
+									{/* Balance */}
+									<div className="mx-10 flex justify-center items-center gap-1">
+										<div>
+											<img src={BigCoin} alt="Coin-Icon" width="24" />
 										</div>
-										<div className="text-[#A4A4A4] text-[10.595px] font-medium">Coin Per Mine</div>
+										<div className="text-[#FFF] text-[24px] font-medium">{balance}</div>
 									</div>
 								</div>
 
-								{/* Balance */}
-								<div className="mx-10 flex justify-center items-center gap-1">
-									<div>
-										<img src={BigCoin} alt="Coin-Icon" width="24" />
+								{/* Bot & Options */}
+								<div className="flex justify-center items-center w-screen h-[41vh] mt-auto">
+									{/* Bot Image Tap to earn */}
+									<div
+										onPointerDown={handleBotTap}
+										className="relative flex justify-end items-center rounded-full h-[40vh] w-[60vw]"
+									>
+
+										<div className="relative select-none rounded-full w-full h-full z-10">
+											{/* Clicks Abination +1 */}
+											{clicks.map((click) => (
+												<div
+													className='absolute text-2xl font-bold opacity-0 text-[#0072ff] z-50'
+													style={{
+														top: `${click.y - 42}px`,
+														left: `${click.x - 28}px`,
+														animation: `textAnimation 1s ease-out`,
+													}}
+													onAnimationEnd={() => handleAnimationEnd(click.id)}
+													key={click.id}
+												>
+													+{addCoins}
+												</div>
+											))}
+											<div className="absoulte h-full w-full rounded-full overflow-hidden flex items-center justify-center">
+												<div className="absolute">
+													<img src={PandaCircleIcon} alt="Panda-circle" />
+												</div>
+												<div className="absolute">
+													<img src={BigPanda} alt="Panda-Icon" className="bot-tap" />
+												</div>
+												<div className="absolute top-[60%] left-[37%]">
+													<img src={TouchIcon} alt="Touch-Icon" />
+												</div>
+											</div>
+										</div>
 									</div>
-									<div className="text-[#FFF] text-[24px] font-medium">{balance}</div>
-								</div>
-							</div>
 
-							{/* Bot & Options */}
-							<div className="flex justify-center items-center w-screen h-[41vh] mt-auto">
-								{/* Bot Image Tap to earn */}
-								<div
-									onPointerDown={handleBotTap}
-									className="relative flex justify-end items-center rounded-full h-[40vh] w-[60vw]"
-								>
-
-									<div className="relative select-none rounded-full w-full h-full z-10">
-										{/* Clicks Abination +1 */}
-										{clicks.map((click) => (
+									{/* Side Booster Options */}
+									<div className='absolute right-5 flex flex-col justify-center items-center gap-4'>
+										<div className='text-[#FFF] text-[10px] font-medium pl-7 -mb-3'>
+											{jetLimit.obtained}/{jetLimit.total}
+										</div>
+										{/* b-1 a */}
+										<div className='relative flex justify-center items-center'>
 											<div
-												className='absolute text-2xl font-bold opacity-0 text-[#0072ff] z-50'
+												className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
 												style={{
-													top: `${click.y - 42}px`,
-													left: `${click.x - 28}px`,
-													animation: `textAnimation 1s ease-out`,
+													boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
 												}}
-												onAnimationEnd={() => handleAnimationEnd(click.id)}
-												key={click.id}
 											>
-												+{addCoins}
+												<img src={JetPack} alt='JetPack-Icon' className='p-1' />
 											</div>
-										))}
-										<div className="absoulte h-full w-full rounded-full overflow-hidden flex items-center justify-center">
-											<div className="absolute">
-												<img src={PandaCircleIcon} alt="Panda-circle" />
+										</div>
+										{/* b-1 b */}
+										<div className='relative flex justify-center items-center'>
+											<div
+												onClick={() => {
+													setEnergyPopup(true);
+												}}
+												className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
+												style={{
+													boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
+												}}
+											>
+												<img src={BatteryBooster1} alt='BatteryBooster-Icon' className='p-1' />
 											</div>
-											<div className="absolute">
-												<img src={BigPanda} alt="Panda-Icon" className="bot-tap" />
+										</div>
+										{/* b-1 c */}
+										<div className='relative flex justify-center items-center'>
+											<div
+												onClick={() => {
+													setMultitapsPopup(true);
+												}}
+												className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
+												style={{
+													boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
+												}}
+											>
+												<img src={TouchIcon} alt='TouchIcon-Icon' className='p-1' />
 											</div>
-											<div className="absolute top-[60%] left-[37%]">
-												<img src={TouchIcon} alt="Touch-Icon" />
+										</div>
+										{/* b-1 d */}
+										<div className='relative flex justify-center items-center'>
+											<div
+												className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
+												style={{
+													boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
+												}}
+											>
+												<img src={BatteryBooster2} alt='BatteryBooster2-Icon' className='p-1' />
 											</div>
 										</div>
 									</div>
 								</div>
 
-								{/* Side Booster Options */}
-								<div className='absolute right-5 flex flex-col justify-center items-center gap-4'>
-									<div className='text-[#FFF] text-[10px] font-medium pl-7 -mb-3'>
-										{jetLimit.obtained}/{jetLimit.total}
-									</div>
-									{/* b-1 a */}
-									<div className='relative flex justify-center items-center'>
-										<div
-											className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
-											style={{
-												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
-											}}
-										>
-											<img src={JetPack} alt='JetPack-Icon' className='p-1' />
+								{/* Energy Section */}
+								<div className='flex w-screen mx-auto h-[5vh]'>
+									<div className='flex mx-auto'>
+										<div className='px-2'>
+											<img
+												src={FlashIcon}
+												alt='Flash-Icon'
+											/>
 										</div>
-									</div>
-									{/* b-1 b */}
-									<div className='relative flex justify-center items-center'>
-										<div
-											className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
-											style={{
-												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
-											}}
-										>
-											<img src={BatteryBooster1} alt='BatteryBooster-Icon' className='p-1' />
+										<div className='text-[#FFF] text-base font-medium'>
+											{energy}/{energyLimit}
 										</div>
-									</div>
-									{/* b-1 c */}
-									<div className='relative flex justify-center items-center'>
-										<div
-											className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
-											style={{
-												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
-											}}
-										>
-											<img src={TouchIcon} alt='TouchIcon-Icon' className='p-1' />
-										</div>
-									</div>
-									{/* b-1 d */}
-									<div className='relative flex justify-center items-center'>
-										<div
-											className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
-											style={{
-												boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
-											}}
-										>
-											<img src={BatteryBooster2} alt='BatteryBooster2-Icon' className='p-1' />
-										</div>
-									</div>
-								</div>
-							</div>
-
-							{/* Energy Section */}
-							<div className='flex w-screen mx-auto h-[5vh]'>
-								<div className='flex mx-auto'>
-									<div className='px-2'>
-										<img
-											src={FlashIcon}
-											alt='Flash-Icon'
-										/>
-									</div>
-									<div className='text-[#FFF] text-base font-medium'>
-										{energy}/{energyLimit}
 									</div>
 								</div>
 							</div>
 						</div>
+
+						{/* Energy Upgrade Popup */}
+						{energyPopup && (
+							<>
+								<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-50 flex items-end">
+									<div>
+										<div className="bg-[#1B1B27] w-[100vw] rounded-t-3xl p-6 text-white">
+											<div className="flex flex-col gap-3">
+												<div className="flex justify-end">
+													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
+														{energyLevel >= 9 ? ('Max') : (`Level ${energyLevel + 1}`)}
+													</span>
+												</div>
+												<div className="flex justify-center flex-col items-center gap-2">
+													<img src={BatteryBooster1} alt="battery" width={25} />
+													<h1 className="text-lg font-bold text-center">
+														Energy Limit
+													</h1>
+												</div>
+												<div className="text-center text-xs flex flex-col gap-4">
+													<p>Increased energy limit by 1500</p>
+													<p>+1500 per level</p>
+													<span className="flex gap-4 justify-center items-center">
+														Cost of level up
+														<div className="flex justify-center items-center">
+															<img src={BigCoin} alt="coin" width={20} />
+															<p className="w-10">{energyUpgradeCost[energyLevel + 1]}</p>
+														</div>
+													</span>
+												</div>
+												{/* action buttons */}
+												<div className='flex gap-4 justify-center mt-2'>
+													<button
+														className='w-1/2 p-2 bg-[#242434] rounded-lg text-sm'
+														onClick={() => {
+															setEnergyPopup(false);
+														}}
+													>
+														Cancel
+													</button>
+													<button
+														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+														onClick={() => {
+															// Upgrade energy limit
+															setEnergyPopup(false);
+															handleEnergyUpgrade()
+														}}
+														disabled={energyLevel >= 9}
+													>
+														{energyLevel >= 9 ? ("Max") : ('Confirm')}
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</>
+						)}
+
+						{/* Multita Upgrade Popup */}
+						{multitapsPopup && (
+							<>
+								<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-50 flex items-end">
+									<div>
+										<div className="bg-[#1B1B27] w-[100vw] rounded-t-3xl p-6 text-white">
+											<div className="flex flex-col gap-3">
+												<div className="flex justify-end">
+													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
+														{multitapLevel >= 9 ? ('Max') : (`Level ${multitapLevel + 1}`)}
+													</span>
+												</div>
+												<div className="flex justify-center flex-col items-center gap-2">
+													<img src={TouchIcon} alt="battery" width={25} />
+													<h1 className="text-lg font-bold text-center">
+														Multitap's
+													</h1>
+												</div>
+												<div className="text-center text-xs flex flex-col gap-4">
+													<p>Increased tap value by 1</p>
+													<p>+1 per level</p>
+													{multitapLevel < 9 && (
+														<span className="flex gap-4 justify-center items-center">
+															Cost of level up
+															<div className="flex justify-center items-center">
+																<img src={BigCoin} alt="coin" width={20} />
+																<p className="w-10">{multitapUpgradeCost[multitapLevel + 1]}</p>
+															</div>
+														</span>
+													)}
+												</div>
+												{/* action buttons */}
+												<div className='flex gap-4 justify-center mt-2'>
+													<button
+														className='w-1/2 p-2 bg-[#242434] rounded-lg text-sm'
+														onClick={() => {
+															setMultitapsPopup(false);
+														}}
+													>
+														Cancel
+													</button>
+													<button
+														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+														onClick={() => {
+															// Upgrade multitap limit
+															setMultitapsPopup(false);
+															handleMultitapUpgrade()
+														}}
+														disabled={multitapLevel >= 9}
+													>
+														{multitapLevel >= 9 ? ("Max") : ('Confirm')}
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</>
+						)}
+
+
 					</div>
+
 				</>
-			)}
+			)
+			}
 		</>
 	);
 };

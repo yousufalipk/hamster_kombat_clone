@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
     telegramId: {
@@ -6,37 +6,67 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    firstName: {
-        type: String,
-        required: true,
-    },
-    lastName: {
-        type: String,
-        required: true
-    },
-    username: {
-        type: String,
-        required: true,
-        required: true
-    },
+    firstName: String,
+    lastName: String,
+    username: String,
     pic: {
         type: String,
-        default: null,
+        default: null
     },
     level: {
         type: String,
-        default: 'silver',
+        default: 'silver'
     },
     currentRank: {
-        type: Number,
-        default: 0,
+        type: String,
+        default: '0'
     },
     balance: {
         type: Number,
-        required: true,
+        default: 0
     },
-});
+    energy: {
+        level: {
+            type: Number,
+            default: 0
+        },
+        limit: {
+            type: Number,
+            default: 1500
+        }
+    },
+    multitaps: {
+        level: {
+            type: Number,
+            default: 0
+        },
+        value: {
+            type: Number,
+            default: 1
+        }
+    },
+    unlimitedTaps: {
+        available: {
+            type: Number,
+            default: 5
+        },
+        lastClaimed: {
+            type: Date,
+            default: Date.now
+        }
+    },
+    energyRefill: {
+        available: {
+            type: Number,
+            default: 3
+        },
+        lastClaimed: {
+            type: Date,
+            default: Date.now
+        }
+    }
+}, { timestamps: true });
 
-const User = mongoose.model("User", userSchema);
+const UserModel = mongoose.model('User', userSchema);
 
-module.exports = User;
+module.exports = UserModel;
