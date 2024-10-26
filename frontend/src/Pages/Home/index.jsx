@@ -34,6 +34,7 @@ const Home = () => {
 	const [tapBalance, setTapBalance] = useState(0);
 	const [clicks, setClicks] = useState([]);
 	const tapBalanceRef = useRef(null);
+	const tapRef = useRef(null);
 
 	// 4 Boosters Popup States 
 
@@ -104,11 +105,6 @@ const Home = () => {
 		}
 	};
 
-	// Handle animation end
-	const handleAnimationEnd = (id) => {
-		setClicks(prevClicks => prevClicks.filter(click => click.id !== id));
-	};
-
 	// Refill energy over time
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -139,79 +135,59 @@ const Home = () => {
 
 	// Handle multiple taps
 	const handleBotTap = (e) => {
+
+		e.preventDefault();
+		e.stopPropagation();
+
 		// Skip if no energy left
 		if (energy <= 0) return;
 
-		// Increment the count 
-		const rect = e.target.getBoundingClientRect();
-		const newClick = {
-			id: Date.now(),
-			x: e.clientX - rect.left,
-			y: e.clientY - rect.top,
-		};
-		setClicks(prevClicks => [...prevClicks, newClick]);
-
-		// Reduce Energy - 1
-		setEnergy(prevEnergy => Math.max(prevEnergy - 1, 0));
-
-		const newBalance = tapBalance + addCoins;
-		tapBalanceRef.current = newBalance;
-
-		setTapBalance(newBalance);
-
-		setBalance((prevBalance) => prevBalance + addCoins);
-
-		setTimeout(() => {
-			console.log("Tap Balance", tapBalance);
-		}, 1000)
-
-		setTimeout(() => {
-			setClicks(prevClicks => prevClicks.filter(click => click.id !== newClick.id));
-		}, 800);
-	}
-
-
-	/*
-	const handleBotClick = (e) => {
 		triggerHapticFeedback();
-	
-		if (energy <= 0) return;
-	
+
 		const targetElement = tapRef.current;
-	
 		if (targetElement) {
 			const rect = targetElement.getBoundingClientRect();
-	
+
 			if (rect && rect.width > 0 && rect.height > 0) {
 				const touchPoints = e.changedTouches || [e];
-	
+
 				for (let i = 0; i < touchPoints.length; i++) {
 					const touch = touchPoints[i];
-	
 					const newClick = {
 						id: Date.now() + i,
 						x: touch.clientX - rect.left,
 						y: touch.clientY - rect.top,
 					};
-	
+
 					setClicks((prevClicks) => [...prevClicks, newClick]);
-	
-					setEnergy((prevEnergy) => Math.max(prevEnergy - 1, 0));
-	
-					tapBalance += addCoins;
-	
+
+					// Reduce Energy - 1 per tap
+					setEnergy(prevEnergy => Math.max(prevEnergy - 1, 0));
+
+					// Increment tap balance per tap
+					const newBalance = tapBalance + addCoins;
+					tapBalanceRef.current = newBalance;
+
+					setTapBalance(newBalance);
+
+					setBalance((prevBalance) => prevBalance + addCoins);
+
 					setTimeout(() => {
-						setClicks((prevClicks) =>
-							prevClicks.filter((click) => click.id !== newClick.id)
-						);
+						console.log("Tap Balance", tapBalance);
+					}, 1000)
+
+					setTimeout(() => {
+						setClicks((prevClicks) => prevClicks.filter((click) => click.id !== newClick.id));
 					}, 800);
 				}
 			}
 		}
-	};
-	
-	*/
+	}
 
+	// Handle animation end
+	const handleAnimationEnd = (id) => {
+		setClicks(prevClicks => prevClicks.filter(click => click.id !== id));
+	};
 
 	const cards = [
 		{
@@ -444,11 +420,11 @@ const Home = () => {
 									{/* Bot Image Tap to earn */}
 									<div
 										onPointerDown={handleBotTap}
+										ref={tapRef}
 										className="relative flex justify-end items-center rounded-full h-[40vh] w-[60vw]"
 									>
 
 										<div className="relative select-none rounded-full w-full h-full z-10">
-											{/* Clicks Abination +1 */}
 											{clicks.map((click) => (
 												<div
 													className='absolute text-2xl font-bold opacity-0 text-[#0072ff] z-50'
@@ -555,9 +531,11 @@ const Home = () => {
 						{/* Energy Upgrade Popup */}
 						{energyPopup && (
 							<>
-								<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-50 flex items-end">
+								<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end">
 									<div>
-										<div className="bg-[#1B1B27] w-[100vw] rounded-t-3xl p-6 text-white">
+										<div className="relative bg-[#1B1B27] w-[100vw] rounded-t-3xl p-6 text-white">
+											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
 												<div className="flex justify-end">
 													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
@@ -573,16 +551,18 @@ const Home = () => {
 												<div className="text-center text-xs flex flex-col gap-4">
 													<p>Increased energy limit by 1500</p>
 													<p>+1500 per level</p>
-													<span className="flex gap-4 justify-center items-center">
-														Cost of level up
-														<div className="flex justify-center items-center">
-															<img src={BigCoin} alt="coin" width={20} />
-															<p className="w-10">{energyUpgradeCost[energyLevel + 1]}</p>
-														</div>
-													</span>
+													{energyLevel < 9 && (
+														<span className="flex gap-4 justify-center items-center">
+															Cost of level up
+															<div className="flex justify-center items-center">
+																<img src={BigCoin} alt="coin" width={20} />
+																<p className="w-10">{energyUpgradeCost[energyLevel + 1]}</p>
+															</div>
+														</span>
+													)}
 												</div>
 												{/* action buttons */}
-												<div className='flex gap-4 justify-center mt-2'>
+												<div className='flex gap-4 justify-center mt-4'>
 													<button
 														className='w-1/2 p-2 bg-[#242434] rounded-lg text-sm'
 														onClick={() => {
@@ -613,9 +593,11 @@ const Home = () => {
 						{/* Multita Upgrade Popup */}
 						{multitapsPopup && (
 							<>
-								<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-50 flex items-end">
+								<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end">
 									<div>
-										<div className="bg-[#1B1B27] w-[100vw] rounded-t-3xl p-6 text-white">
+										<div className="relative bg-[#1B1B27] w-[100vw] rounded-t-3xl p-6 text-white">
+											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
 												<div className="flex justify-end">
 													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
@@ -642,7 +624,7 @@ const Home = () => {
 													)}
 												</div>
 												{/* action buttons */}
-												<div className='flex gap-4 justify-center mt-2'>
+												<div className='flex gap-4 justify-center mt-4'>
 													<button
 														className='w-1/2 p-2 bg-[#242434] rounded-lg text-sm'
 														onClick={() => {

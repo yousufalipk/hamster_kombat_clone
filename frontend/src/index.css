@@ -98,20 +98,23 @@ html {
 @keyframes textAnimation {
 	0% {
 		opacity: 1;
-		transform: translateY(0);
+		transform: translateY(0) scale(1);
+	}
+
+	50% {
+		opacity: 1;
+		transform: translateY(-25px) scale(1.1);
 	}
 
 	100% {
 		opacity: 0;
-		transform: translateY(-50px);
+		transform: translateY(-70px) scale(1.2);
 	}
 }
 
 .bot-tap:active {
 	width: 125px;
 }
-
-
 
 /* Optional: Adjust the styling of the tap-image class */
 .tap-image {
