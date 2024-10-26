@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema({
         },
         lastClaimed: {
             type: Date,
-            default: Date.now
+            default: null
         }
     },
     energyRefill: {
@@ -62,7 +62,7 @@ const userSchema = new mongoose.Schema({
         },
         lastClaimed: {
             type: Date,
-            default: Date.now
+            default: null
         }
     }
 }, { timestamps: true });

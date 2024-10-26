@@ -29,6 +29,9 @@ export const UserProvider = (props) => {
     const [balance, setBalance] = useState(0);
 
     // 4 Boosters 
+    const [avaliableUnlimitedTaps, setAvaliableUnlimitedTaps] = useState(0);
+    const [avaliableEnergyRefill, setAvaliableEnergyRefill] = useState(0);
+
     const [energy, setEnergy] = useState(1500);
     const [energyLevel, setEnergyLevel] = useState(0);
     const [energyLimit, setEnergyLimit] = useState(1500);
@@ -115,6 +118,10 @@ export const UserProvider = (props) => {
                     setBalance(res.data.user.balance);
 
                     // 4 boosters
+                    setAvaliableUnlimitedTaps(res.data.user.unlimitedTaps.available);
+
+                    setAvaliableEnergyRefill(res.data.user.energyRefill.available);
+
                     setEnergy(res.data.user.energy.limit);
                     setEnergyLevel(res.data.user.energy.level);
                     setEnergyLimit(res.data.user.energy.limit);
@@ -217,7 +224,9 @@ export const UserProvider = (props) => {
             socket,
             energyUpgrade,
             multitapUpgrade,
-            multitapLevel
+            multitapLevel,
+            avaliableUnlimitedTaps,
+            avaliableEnergyRefill
         }}>
             {props.children}
         </UserContext.Provider>

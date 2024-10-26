@@ -1,10 +1,27 @@
 const UserModel = require('../models/userModel');
+const {
+    check1min,
+    check2min,
+    check1hour,
+    check1day,
+    check2days,
+    check1week
+} = require('../utils/index');
+const {
+    resetBoosters
+} = require('../utils/reset');
 
 const energyUpgradeCost = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
 const energyLimits = [1500, 3000, 4500, 6000, 7500, 9000, 10500, 12000, 13500, 15000];
 
 const multitapUpgradeCost = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000];
 const multitapValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+
+/* Notes ---------
+    Saving current date ===   const currentDate = new Date();
+    date format === const date = '2024-10-26T06:16:10.638Z';
+*/
 
 // Initialize User
 exports.initializeUser = async (req, res) => {
@@ -39,6 +56,10 @@ exports.initializeUser = async (req, res) => {
                 }
             });
             isUser = await isUser.save();
+        } else {
+            const res = resetBoosters(isUser); // If 1 day passed (only for ex-users)
+            await res.save();
+            isUser = res;
         }
 
         return res.status(200).json({
@@ -55,7 +76,6 @@ exports.initializeUser = async (req, res) => {
         });
     }
 }
-
 
 exports.energyLevelUpgrade = async (req, res) => {
     try {
@@ -148,5 +168,134 @@ exports.multiTapLevelUpgrade = async (req, res) => {
             status: 'failed',
             message: 'Internal Server Error!'
         })
+    }
+}
+
+exports.unlimitedTaps = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            })
+        }
+
+        if (user.unlimitedTaps.available === 0) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Unlimited taps limit reached!'
+            })
+        }
+
+        if (user.unlimitedTaps.lastClaimed !== null) {
+            const lastClaimed = user.unlimitedTaps.lastClaimed;
+
+            const alreadyBoosterEnabled = check2min(lastClaimed);
+
+            if (alreadyBoosterEnabled) {
+                return res.status(200).json({
+                    status: 'failed',
+                    message: 'Booster is already enabled!',
+                    lastClaimed: user.unlimitedTaps.lastClaimed
+                })
+            }
+        }
+
+        const currentDate = new Date()
+
+        user.unlimitedTaps.available -= 1;
+        user.unlimitedTaps.lastClaimed = currentDate;
+        await user.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Unlimited taps for 2 minutes!',
+            remaining: user.unlimitedTaps.available
+        })
+    } catch (error) {
+        console.log("Error upgrading unlimited taps!");
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        })
+    }
+}
+
+exports.refillEnergy = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            })
+        }
+
+        if (user.energyRefill.available === 0) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Energy Refill limit reached!'
+            })
+        }
+
+        if (user.energyRefill.lastClaimed !== null) {
+            const lastClaimed = user.energyRefill.lastClaimed;
+
+            const alreadyBoosterEnabled = check1hour(lastClaimed);
+
+            if (alreadyBoosterEnabled) {
+                return res.status(200).json({
+                    status: 'failed',
+                    message: 'Claim Refill after 1 hour!',
+                    lastClaimed: user.energyRefill.lastClaimed
+                })
+            }
+        }
+
+        const currentDate = new Date()
+
+        user.energyRefill.available -= 1;
+        user.energyRefill.lastClaimed = currentDate;
+        await user.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Energy Refilled Succesfully!',
+            remaining: user.energyRefill.available
+        })
+    } catch (error) {
+        console.log("Error refilling energy!");
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        })
+    }
+}
+
+exports.test = async (req, res) => {
+    try {
+
+
+        // Date format
+        const date = '2024-10-26T06:16:10.638Z';
+        check1min(date);
+
+
+        //check2min();
+        //check1day();
+        //check2days();
+        //check1week();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Testing Success!'
+        })
+    } catch (error) {
+        console.log("Error testing: ", error);
     }
 }

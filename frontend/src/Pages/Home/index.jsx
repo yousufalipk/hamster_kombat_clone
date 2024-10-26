@@ -29,7 +29,29 @@ const Home = () => {
 
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 
-	const { initializeUser, userDataInitilized, username, level, currentRank, levelPercentage, setBalance, balance, energyLevel, energy, energyLimit, setEnergy, profilePic, userId, addCoins, socket, energyUpgrade, multitapUpgrade, multitapLevel } = useUser();
+	const {
+		initializeUser,
+		userDataInitilized,
+		username,
+		level,
+		currentRank,
+		levelPercentage,
+		setBalance,
+		balance,
+		energyLevel,
+		energy,
+		energyLimit,
+		setEnergy,
+		profilePic,
+		userId,
+		addCoins,
+		socket,
+		energyUpgrade,
+		multitapUpgrade,
+		multitapLevel,
+		avaliableUnlimitedTaps,
+		avaliableEnergyRefill
+	} = useUser();
 
 	const [tapBalance, setTapBalance] = useState(0);
 	const [clicks, setClicks] = useState([]);
@@ -454,13 +476,16 @@ const Home = () => {
 									</div>
 
 									{/* Side Booster Options */}
-									<div className='absolute right-5 flex flex-col justify-center items-center gap-4'>
-										<div className='text-[#FFF] text-[10px] font-medium pl-7 -mb-3'>
-											{jetLimit.obtained}/{jetLimit.total}
-										</div>
+									<div className='absolute right-5 flex flex-col justify-center items-center gap-6'>
 										{/* b-1 a */}
 										<div className='relative flex justify-center items-center'>
+											<div className='text-[#FFF] text-[10px] font-medium absolute -top-4 -right-1'>
+												{avaliableUnlimitedTaps}/{5}
+											</div>
 											<div
+												onClick={() => {
+													setUnlimitedTapsPopup(true);
+												}}
 												className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
 												style={{
 													boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
@@ -471,9 +496,12 @@ const Home = () => {
 										</div>
 										{/* b-1 b */}
 										<div className='relative flex justify-center items-center'>
+											<div className='text-[#FFF] text-[10px] font-medium absolute -top-4 -right-1'>
+												{avaliableEnergyRefill}/{3}
+											</div>
 											<div
 												onClick={() => {
-													setEnergyPopup(true);
+													setEnergyRefillPopup(true);
 												}}
 												className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
 												style={{
@@ -500,6 +528,9 @@ const Home = () => {
 										{/* b-1 d */}
 										<div className='relative flex justify-center items-center'>
 											<div
+												onClick={() => {
+													setEnergyPopup(true);
+												}}
 												className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
 												style={{
 													boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
@@ -528,7 +559,113 @@ const Home = () => {
 							</div>
 						</div>
 
-						{/* Energy Upgrade Popup */}
+						{/* 1 Unlimited Taps Popup */}
+						{unlimitedTapsPopup && (
+							<>
+								<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end">
+									<div>
+										<div className="relative bg-[#1B1B27] w-[100vw] rounded-t-3xl p-6 text-white">
+											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
+											<div className="flex flex-col gap-3">
+												<div className="flex justify-end">
+													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
+														{energyLevel >= 9 ? ('Max') : (`Level ${energyLevel + 1}`)}
+													</span>
+												</div>
+												<div className="flex justify-center flex-col items-center gap-2">
+													<img src={JetPack} alt="battery" width={25} />
+													<h1 className="text-lg font-bold text-center">
+														Unlimited Taps
+													</h1>
+												</div>
+												<div className="text-center text-xs flex flex-col gap-4">
+													<p>For each boost you will get unlimited taps, energy will not be deduced.</p>
+													<p>∞ Taps per Boost</p>
+												</div>
+												{/* action buttons */}
+												<div className='flex gap-4 justify-center mt-4'>
+													<button
+														className='w-1/2 p-2 bg-[#242434] rounded-lg text-sm'
+														onClick={() => {
+															setUnlimitedTapsPopup(false);
+														}}
+													>
+														Cancel
+													</button>
+													<button
+														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+														onClick={() => {
+															// Upgrade energy limit
+															setUnlimitedTapsPopup(false);
+															handleEnergyUpgrade()
+														}}
+														disabled={energyLevel >= 9}
+													>
+														{energyLevel >= 9 ? ("Max") : ('Confirm')}
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</>
+						)}
+
+						{/* 2 Energy Upgrade Popup */}
+						{energyRefillPopup && (
+							<>
+								<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end">
+									<div>
+										<div className="relative bg-[#1B1B27] w-[100vw] rounded-t-3xl p-6 text-white">
+											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
+											<div className="flex flex-col gap-3">
+												<div className="flex justify-end">
+													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
+														{energyLevel >= 9 ? ('Max') : (`Level ${energyLevel + 1}`)}
+													</span>
+												</div>
+												<div className="flex justify-center flex-col items-center gap-2">
+													<img src={BatteryBooster1} alt="battery" width={25} />
+													<h1 className="text-lg font-bold text-center">
+														Energy Refill
+													</h1>
+												</div>
+												<div className="text-center text-xs flex flex-col gap-4">
+													<p>Each boost will give you max energy</p>
+													<p>{energyLimit} Energy per refill</p>
+												</div>
+												{/* action buttons */}
+												<div className='flex gap-4 justify-center mt-4'>
+													<button
+														className='w-1/2 p-2 bg-[#242434] rounded-lg text-sm'
+														onClick={() => {
+															setEnergyRefillPopup(false);
+														}}
+													>
+														Cancel
+													</button>
+													<button
+														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+														onClick={() => {
+															// Upgrade energy limit
+															setEnergyRefillPopup(false);
+															handleEnergyUpgrade()
+														}}
+														disabled={energyLevel >= 9}
+													>
+														{energyLevel >= 9 ? ("Max") : ('Confirm')}
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</>
+						)}
+
+						{/* 3 Energy Upgrade Popup */}
 						{energyPopup && (
 							<>
 								<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end">
@@ -590,7 +727,7 @@ const Home = () => {
 							</>
 						)}
 
-						{/* Multita Upgrade Popup */}
+						{/* 4 - Multitap Upgrade Popup */}
 						{multitapsPopup && (
 							<>
 								<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end">
