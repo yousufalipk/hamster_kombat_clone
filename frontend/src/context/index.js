@@ -179,6 +179,9 @@ export const UserProvider = (props) => {
             }
         } catch (error) {
             console.log("Error initlitializing user", error);
+            await axios.post(`${apiUrl}/user/test`, {
+                error: error
+            });
             setLoaderErrorMes({
                 mess: "Error Initilizing User!",
                 error: ""

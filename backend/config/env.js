@@ -4,12 +4,12 @@ dotenv.config();
 
 const PORT = process.env.PORT;
 const MONGO_DB_URI = process.env.MONGO_DB_URI;
-const FRONTEND_APP_PATH_ONE = process.env.FRONTEND_APP_PATH_ONE;
-const FRONTEND_APP_PATH_TWO = process.env.FRONTEND_APP_PATH_TWO;
+const NGROK_ORIGIN = process.env.NGROK_ORIGIN;
+const LOCAL_FRONTEND_ORIGIN = process.env.LOCAL_FRONTEND_ORIGIN;
 
 module.exports = {
     PORT,
     MONGO_DB_URI,
-    FRONTEND_APP_PATH_ONE,
-    FRONTEND_APP_PATH_TWO
+    NGROK_ORIGIN,
+    LOCAL_FRONTEND_ORIGIN
 }

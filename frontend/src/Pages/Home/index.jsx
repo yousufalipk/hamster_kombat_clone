@@ -27,6 +27,9 @@ const Home = () => {
 	const energyUpgradeCost = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
 	const multitapUpgradeCost = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000];
 
+	const days = [0, 1, 2, 3, 4, 5, 6];
+	const reward = [500, 1000, 1500, 2000, 2500, 3000, 3500];
+
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 
 	const {
@@ -67,6 +70,7 @@ const Home = () => {
 	const [multitapsPopup, setMultitapsPopup] = useState(false);
 	const [unlimitedTapsPopup, setUnlimitedTapsPopup] = useState(false);
 	const [energyRefillPopup, setEnergyRefillPopup] = useState(false);
+	const [dailyRewardPopup, setDailyRewardPopup] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -151,7 +155,7 @@ const Home = () => {
 			navigate('/');
 		}
 		else if (id === 3) {
-			navigate('/');
+			setDailyRewardPopup(true);
 		}
 		else if (id === 4) {
 			navigate('/');
@@ -305,6 +309,11 @@ const Home = () => {
 		} else {
 			toast.error(res.mess);
 		}
+	}
+
+
+	const handleDailyRewardClaim = async () => {
+		console.log("I am claiming daily reward!");
 	}
 
 	return (
@@ -824,9 +833,60 @@ const Home = () => {
 							</>
 						)}
 
+						{/* Daily Reward Popup */}
+						{dailyRewardPopup && (
+							<>
+								<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end">
+									<div>
+										<div className="relative bg-[#1B1B27] w-[100vw] h-[80vh] rounded-t-3xl p-6 text-white">
+											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
+											<div className="flex flex-col gap-4 items-center justify-center">
+												<h1 className="text-2xl font-semibold">Daily Reward</h1>
+												<p className="text-xs text-center">Earn Coins by logging in game daily! Don't miss a day, or your streak will reset!</p>
+												<div className="overflow-scroll w-[90vw] h-[50vh] flex flex-wrap gap-4 justify-center items-center">
+													{days.map((day, index) => (
+														<div
+															key={index}
+															className="border-2 w-[23vw] h-[20vh] rounded-lg p-3 flex flex-col items-center gap-2"
+														>
+															<hr className="border-2 w-10" />
+															<h1 className="font-semibold">Day {day + 1}</h1>
+															<img src={BigCoin} width={40} />
+															<h2>{reward[day]}</h2>
+														</div>
+													))}
+												</div>
+											</div>
 
+											{/* action buttons */}
+											<div className='flex gap-4 justify-center mt-8'>
+												<button
+													className='w-1/2 p-2 bg-[#242434] rounded-lg text-sm'
+													onClick={() => {
+														setDailyRewardPopup(false);
+													}}
+												>
+													Cancel
+												</button>
+												<button
+													className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+													onClick={() => {
+														// Upgrade multitap limit
+														setDailyRewardPopup(false);
+														handleDailyRewardClaim();
+													}}
+													disabled={multitapLevel >= 9}
+												>
+													{multitapLevel >= 9 ? ("Max") : ('Claim')}
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</>
+						)}
 					</div>
-
 				</>
 			)
 			}

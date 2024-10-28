@@ -8,42 +8,28 @@ const UserModel = require('./models/userModel');
 
 const user = require('./Routes/userRoute');
 
-// CORS Configuration
-const allowedOrigins = [FRONTEND_APP_PATH_ONE, FRONTEND_APP_PATH_TWO];
+console.log("Frontend path 1", FRONTEND_APP_PATH_ONE);
+console.log("Frontend path 2", FRONTEND_APP_PATH_TWO);
 
 const app = express();
 const server = http.createServer(app);
 
-// Cors Configuration
-const corsOptions = {
-    origin: function (origin, callback) {
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
-            return callback(null, true);
-        }
-        return callback(new Error('Not allowed by CORS'));
-    },
-    methods: ['GET', 'POST'],
-    credentials: true
-};
 
 // Apply CORS to Express
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: '*', // Allow all origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true
+}));
 
-// Setup Socket.io with CORS
 const io = new Server(server, {
     cors: {
-        origin: function (origin, callback) {
-            if (!origin) return callback(null, true);
-            if (allowedOrigins.includes(origin)) {
-                return callback(null, true);
-            }
-            return callback(new Error('Not allowed by CORS'));
-        },
-        methods: ['GET', 'POST'],
+        origin: '*',
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         credentials: true
     }
 });
+
 
 // Connect to the database
 connectToDb();

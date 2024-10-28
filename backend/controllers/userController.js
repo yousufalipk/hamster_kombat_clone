@@ -1,14 +1,12 @@
 const UserModel = require('../models/userModel');
 const {
-    check1min,
     check2min,
-    check1hour,
     check1day,
     check2days,
-    check1week
 } = require('../utils/index');
 const {
-    resetBoosters
+    resetBoosters,
+    resetDailyRewards
 } = require('../utils/reset');
 
 const energyUpgradeCost = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
@@ -16,6 +14,9 @@ const energyLimits = [1500, 3000, 4500, 6000, 7500, 9000, 10500, 12000, 13500, 1
 
 const multitapUpgradeCost = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000];
 const multitapValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+const day = [0, 1, 2, 3, 4, 5, 6];
+const reward = [500, 1000, 1500, 2000, 2500, 3000, 3500];
 
 
 /* Notes ---------
@@ -54,13 +55,19 @@ exports.initializeUser = async (req, res) => {
                 },
                 energyRefill: {
                     avaliable: 3,
+                },
+                dailyReward: {
+                    claimed: [],
+                    day: 0,
+                    reward: 500
                 }
             });
             isUser = await isUser.save();
         } else {
-            const res = resetBoosters(isUser); // If 1 day passed (only for ex-users)
-            await res.save();
-            isUser = res;
+            const res1 = resetBoosters(isUser); // If 1 day passed (only for ex-users)
+            const res2 = resetDailyRewards(res1);
+            await res2.save();
+            isUser = res2;
 
             if (isUser.unlimitedTaps.status === true) {
                 const lastClaimed = isUser.unlimitedTaps.lastClaimed;
@@ -322,19 +329,112 @@ exports.toggleUnlimitedTapsStatus = async (req, res) => {
     }
 }
 
+exports.claimDailyRewards = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            })
+        }
+
+        const claimed = user.dailyReward.claimed;
+
+        if (claimed.length <= 0) {
+            const toClaimReward = user.dailyReward.reward;
+            const currentDate = new Date();
+
+            user.dailyReward.claimed.push(0);
+            user.dailyReward.date = currentDate;
+            user.dailyReward.day++;
+            user.dailyReward.reward = reward[user.dailyReward.day];
+            user.balance += toClaimReward;
+            await user.save();
+            return res.status(200).json({
+                status: 'success',
+                message: 'Daily Reward Claimed Succesfuly!',
+                claimed: claimed,
+                user: user
+            });
+        } else {
+            const lastDateClaimed = user.dailyReward.date;
+            const lastDayClaimed = claimed[claimed.length - 1];
+            if (lastDayClaimed === 6) {
+                const lastDateClaimed = user.dailyReward.date;
+                const is1day = check1day(lastDateClaimed);
+                if (!is1day) {
+                    user.dailyReward.claimed = [];
+                    user.dailyReward.date = null;
+                    user.dailyReward.day = 0;
+                    user.dailyReward.reward = 500;
+                    await user.save();
+                    return res.status(200).json({
+                        status: 'failed',
+                        message: '1 Week Passed, Resetting data, try again!'
+                    })
+                } else {
+                    return res.status(200).json({
+                        stauts: 'failed',
+                        message: 'You have already claimed todays reward!'
+                    })
+                }
+            }
+            // check 24 hours if the day is continuing
+            const is24hrs = check1day(lastDateClaimed);
+            if (is24hrs) {
+                return res.status(200).json({
+                    status: 'failed',
+                    message: 'You have already claimed todays reward'
+                })
+            } else {
+                const is48hrs = check2days(lastDateClaimed);
+                console.log(is48hrs);
+                if (!is48hrs) {
+                    user.dailyReward.claimed = [];
+                    user.dailyReward.date = null;
+                    user.dailyReward.day = 0;
+                    user.dailyReward.reward = 500;
+                    await user.save();
+                    return res.status(200).json({
+                        status: 'failed',
+                        message: 'Daily Streak Break resetting data, Try again!',
+                        user: user
+                    })
+                } else {
+                    const toClaimReward = user.dailyReward.reward;
+                    const currentDate = new Date();
+
+                    user.dailyReward.claimed.push(user.dailyReward.day);
+                    user.dailyReward.date = currentDate;
+                    user.dailyReward.day++;
+                    user.dailyReward.reward = reward[user.dailyReward.day];
+                    user.balance += toClaimReward;
+                    await user.save();
+                    return res.status(200).json({
+                        status: 'success',
+                        message: 'Daily Reward Claimed Succesfuly!',
+                        claimed: claimed,
+                        user: user
+                    });
+                }
+            }
+        }
+    } catch (error) {
+        console.log("Error claiming daily reward");
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
+
 exports.test = async (req, res) => {
     try {
+        const { error } = req.body;
 
-
-        // Date format
-        const date = '2024-10-26T06:16:10.638Z';
-        check1min(date);
-
-
-        //check2min();
-        //check1day();
-        //check2days();
-        //check1week();
+        console.log("Test Api Error", error);
 
         return res.status(200).json({
             status: 'success',

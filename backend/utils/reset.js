@@ -1,10 +1,11 @@
 const {
-    check1day
+    check1day,
+    check2days,
+
 } = require('./index');
 
 
 exports.resetBoosters = (user) => {
-    console.log("Resetting Boosters for User ID", user._id);
 
     if (user.unlimitedTaps.lastClaimed !== null) {
         // Reset Unlimited Taps 
@@ -27,6 +28,35 @@ exports.resetBoosters = (user) => {
         if (!oneDayPassedEnergyRefill) {
             user.energyRefill.available = 3;
             user.energyRefill.lastClaimed = null;
+        }
+    }
+
+    return user;
+}
+
+exports.resetDailyRewards = (user) => {
+    const lastDateClaimed = user.dailyReward.date;
+    const lastDayClaimed = user.dailyReward.claimed[user.dailyReward.claimed.length - 1];
+
+    if (lastDayClaimed === 6) {
+        const is1day = check1day(lastDateClaimed);
+        if (!is1day) {
+            // 1 week passed
+            user.dailyReward.claimed = [];
+            user.dailyReward.day = 0;
+            user.dailyReward.reward = 500;
+            user.dailyReward.date = null
+            console.log("1 week passed, resetting daily rewards!");
+        }
+    } else {
+        // Daily Streak breaks
+        const is2day = check2days(lastDateClaimed);
+        if (!is2day) {
+            user.dailyReward.claimed = [];
+            user.dailyReward.day = 0;
+            user.dailyReward.reward = 500;
+            user.dailyReward.date = null
+            console.log("Streak Breaked Resetting daily rewards!", lastDateClaimed);
         }
     }
 

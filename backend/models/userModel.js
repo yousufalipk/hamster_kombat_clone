@@ -68,6 +68,24 @@ const userSchema = new mongoose.Schema({
             type: Date,
             default: null
         }
+    },
+    dailyReward: {
+        claimed: {
+            type: Array,
+            defauly: []
+        },
+        date: {
+            type: Date,
+            default: null
+        },
+        day: {
+            type: Number,
+            default: 0
+        },
+        reward: {
+            type: Number,
+            default: 500
+        }
     }
 }, { timestamps: true });
 

@@ -7,6 +7,7 @@ const {
     unlimitedTaps,
     refillEnergy,
     toggleUnlimitedTapsStatus,
+    claimDailyRewards,
 
     test
 } = require('../controllers/userController');
@@ -20,6 +21,7 @@ router.route('/multitap-level-upgrade').post(multiTapLevelUpgrade);
 router.route('/claim-unlimited-taps').post(unlimitedTaps);
 router.route('/toggle-unlimited-taps-status').post(toggleUnlimitedTapsStatus);
 router.route('/refill-energy').post(refillEnergy);
+router.route('/claim-daily-reward').post(claimDailyRewards);
 
 
 
