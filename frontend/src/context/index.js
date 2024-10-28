@@ -43,6 +43,10 @@ export const UserProvider = (props) => {
 
     const [levelPercentage, setLevelPercentage] = useState();
 
+    // Daily Reward
+    const [claimed, setClaimed] = useState([]);
+    const [currentDay, setCurrentDay] = useState(null);
+
     // Others 
     const [loader, setLoader] = useState(false);
 
@@ -68,6 +72,21 @@ export const UserProvider = (props) => {
             newSocket.disconnect();
         };
     }, [apiUrl]);
+
+    const check1day = (inputDate) => {
+        const currentDate = new Date();
+        const oneDay = 24 * 60 * 60 * 1000;
+        const input = new Date(inputDate);
+        const diff = currentDate - input;
+
+        if (diff <= oneDay) {
+            console.log("The date is within 1 day!");
+            return true;
+        } else {
+            console.log("The date is outside 1 day.");
+            return false;
+        }
+    };
 
     /* 
     levels
@@ -118,6 +137,20 @@ export const UserProvider = (props) => {
                     setLevel(res.data.user.level);
                     setCurrentRank(res.data.currentRank);
                     setBalance(res.data.user.balance);
+
+                    // Daily Reward 
+                    setClaimed(res.data.user.dailyReward.claimed);
+
+                    if (res.data.user.dailyReward.lastClaimed) {
+                        const is1Day = check1day(res.data.user.dailyReward.lastClaimed);
+                        if (is1Day) {
+                            setCurrentDay(res.data.user.dailyReward.day - 1);
+                        } else {
+                            setCurrentDay(res.data.user.dailyReward.day);
+                        }
+                    } else {
+                        setCurrentDay(res.data.user.dailyReward.day);
+                    }
 
                     // 4 boosters
                     if (res.data.user.unlimitedTaps.status = true) {
@@ -295,6 +328,25 @@ export const UserProvider = (props) => {
         }
     }
 
+    const claimDailyReward = async () => {
+        try {
+            const res = await axios.post(`${apiUrl}/user/claim-daily-reward`, {
+                userId: userId
+            });
+
+            if (res.data.status === 'success') {
+                return { success: true, mess: res.data.message };
+            } else {
+                return { success: false, mess: res.data.message };
+            }
+        } catch (error) {
+            console.log("Error claiming daily reward", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            initializeUser();
+        }
+    }
+
     return (
         <UserContext.Provider value={{
             initializeUser,
@@ -336,7 +388,10 @@ export const UserProvider = (props) => {
             avaliableEnergyRefill,
             energyRefillUpgrade,
             unlimitedTapsUpgrade,
-            disableEnergy
+            disableEnergy,
+            claimed,
+            currentDay,
+            claimDailyReward
         }}>
             {props.children}
         </UserContext.Provider>

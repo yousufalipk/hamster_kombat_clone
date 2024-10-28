@@ -56,8 +56,17 @@ const Home = () => {
 		avaliableEnergyRefill,
 		energyRefillUpgrade,
 		unlimitedTapsUpgrade,
-		disableEnergy
+		disableEnergy,
+		claimDailyReward,
+		claimed,
+		currentDay
 	} = useUser();
+
+	useEffect(() => {
+		console.log("claimed", claimed);
+		console.log("claimed", typeof claimed);
+		console.log("Current day", currentDay);
+	}, [])
 
 	const [tapBalance, setTapBalance] = useState(0);
 	const [clicks, setClicks] = useState([]);
@@ -313,7 +322,12 @@ const Home = () => {
 
 
 	const handleDailyRewardClaim = async () => {
-		console.log("I am claiming daily reward!");
+		const res = await claimDailyReward();
+		if (res.success) {
+			toast.success('Daily Reward Claimed Succesfuly!');
+		} else {
+			toast.error(res.mess);
+		}
 	}
 
 	return (
@@ -848,11 +862,17 @@ const Home = () => {
 													{days.map((day, index) => (
 														<div
 															key={index}
-															className="border-2 w-[23vw] h-[20vh] rounded-lg p-3 flex flex-col items-center gap-2"
+															className={`border-2 w-[23vw] h-[20vh] rounded-lg p-3 flex flex-col items-center gap-2 ${currentDay >= day && `border-blue-500`}`}
 														>
 															<hr className="border-2 w-10" />
 															<h1 className="font-semibold">Day {day + 1}</h1>
-															<img src={BigCoin} width={40} />
+
+															<img
+																src={BigCoin}
+																width={40}
+																className={claimed.includes(day) ? `grayscale-0` : `grayscale`}
+																alt="Big Coin"
+															/>
 															<h2>{reward[day]}</h2>
 														</div>
 													))}
