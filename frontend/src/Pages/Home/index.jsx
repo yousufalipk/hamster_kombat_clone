@@ -46,7 +46,6 @@ const Home = () => {
 		energyLimit,
 		setEnergy,
 		profilePic,
-		userId,
 		addCoins,
 		socket,
 		energyUpgrade,
@@ -60,18 +59,12 @@ const Home = () => {
 		claimDailyReward,
 		claimed,
 		currentDay,
-		updateBalance
+		updateBalance,
+		tapBalance,
+		setTapBalance
 	} = useUser();
 
-	useEffect(() => {
-		console.log("claimed", claimed);
-		console.log("claimed", typeof claimed);
-		console.log("Current day", currentDay);
-	}, [])
-
-	const [tapBalance, setTapBalance] = useState(0);
 	const [clicks, setClicks] = useState([]);
-	const tapBalanceRef = useRef(null);
 	const tapRef = useRef(null);
 
 	// 4 Boosters Popup States 
@@ -112,16 +105,19 @@ const Home = () => {
 		}
 	}, []);
 
-
 	// Update Balance Interval
 
 	useEffect(() => {
 		const intervalId = setInterval(async () => {
+			console.log('Tap Balance before upgrade!', tapBalance);
 			if (tapBalance !== 0) {
+				console.log("Tap balance was greater than zero!");
 				try {
+					console.log("============ Requesting Update =============", tapBalance);
 					const res = await updateBalance(tapBalance);
 					if (res.success) {
-						await setTapBalance(0);
+						console.log("Blance Updated =========>")
+						setTapBalance(0);
 					} else {
 						console.log("Error updating balance", res.mess);
 					}
@@ -129,7 +125,7 @@ const Home = () => {
 					console.error("Error updating balance:", error);
 				}
 			}
-		}, 800); // Every 1 sec
+		}, 1000); // Every 1 sec
 
 		return () => clearInterval(intervalId);
 	}, [tapBalance]);
@@ -232,16 +228,9 @@ const Home = () => {
 					}
 
 					// Increment tap balance per tap
-					const newBalance = tapBalance + addCoins;
-					tapBalanceRef.current = newBalance;
 
-					setTapBalance(newBalance);
-
+					setTapBalance((prevTapBalance) => prevTapBalance + addCoins);
 					setBalance((prevBalance) => prevBalance + addCoins);
-
-					setTimeout(() => {
-						console.log("Tap Balance", tapBalance);
-					}, 1000)
 
 					setTimeout(() => {
 						setClicks((prevClicks) => prevClicks.filter((click) => click.id !== newClick.id));

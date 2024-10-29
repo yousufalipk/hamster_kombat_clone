@@ -27,6 +27,7 @@ export const UserProvider = (props) => {
     const [level, setLevel] = useState(null);
     const [currentRank, setCurrentRank] = useState(null);
     const [balance, setBalance] = useState(0);
+    const [tapBalance, setTapBalance] = useState(0);
 
     // 4 Boosters 
     const [disableEnergy, setDisableEnergy] = useState(false);
@@ -414,7 +415,9 @@ export const UserProvider = (props) => {
             claimed,
             currentDay,
             claimDailyReward,
-            updateBalance
+            updateBalance,
+            tapBalance,
+            setTapBalance
         }}>
             {props.children}
         </UserContext.Provider>
