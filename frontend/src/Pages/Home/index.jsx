@@ -66,6 +66,7 @@ const Home = () => {
 
 	const [clicks, setClicks] = useState([]);
 	const tapRef = useRef(null);
+	const isUpdating = useRef(false);
 
 	// 4 Boosters Popup States 
 
@@ -109,20 +110,19 @@ const Home = () => {
 
 	useEffect(() => {
 		const intervalId = setInterval(async () => {
-			console.log('Tap Balance before upgrade!', tapBalance);
-			if (tapBalance !== 0) {
-				console.log("Tap balance was greater than zero!");
+			if (tapBalance !== 0 && !isUpdating.current) {
+				isUpdating.current = true;
 				try {
-					console.log("============ Requesting Update =============", tapBalance);
 					const res = await updateBalance(tapBalance);
 					if (res.success) {
-						console.log("Blance Updated =========>")
 						setTapBalance(0);
 					} else {
 						console.log("Error updating balance", res.mess);
 					}
 				} catch (error) {
 					console.error("Error updating balance:", error);
+				} finally {
+					isUpdating.current = false;
 				}
 			}
 		}, 1000); // Every 1 sec
