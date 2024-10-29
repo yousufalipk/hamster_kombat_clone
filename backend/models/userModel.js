@@ -18,8 +18,8 @@ const userSchema = new mongoose.Schema({
         default: 'silver'
     },
     currentRank: {
-        type: String,
-        default: '0'
+        type: Number,
+        default: 0
     },
     balance: {
         type: Number,

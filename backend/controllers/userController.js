@@ -39,7 +39,7 @@ exports.initializeUser = async (req, res) => {
                 username,
                 pic: null,
                 level: 'silver',
-                currentRank: '0',
+                currentRank: 0,
                 balance: 0,
                 energy: {
                     level: 0,

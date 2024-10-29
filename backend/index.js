@@ -3,16 +3,15 @@ const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
 const connectToDb = require('./config/db');
-const { PORT, FRONTEND_APP_PATH_ONE, FRONTEND_APP_PATH_TWO } = require('./config/env');
+const { PORT } = require('./config/env');
 const UserModel = require('./models/userModel');
 
 const user = require('./Routes/userRoute');
 
-console.log("Frontend path 1", FRONTEND_APP_PATH_ONE);
-console.log("Frontend path 2", FRONTEND_APP_PATH_TWO);
-
 const app = express();
+/*
 const server = http.createServer(app);
+*/
 
 
 // Apply CORS to Express
@@ -22,6 +21,7 @@ app.use(cors({
     credentials: true
 }));
 
+/*
 const io = new Server(server, {
     cors: {
         origin: '*',
@@ -29,6 +29,7 @@ const io = new Server(server, {
         credentials: true
     }
 });
+*/
 
 
 // Connect to the database
@@ -37,6 +38,39 @@ connectToDb();
 // Middlewares
 app.use(express.json());
 
+
+app.post('/update-balance', async (req, res) => {
+    try {
+        const { userId, tapBalance } = req.body;
+
+        const isUser = await UserModel.findById(userId);
+
+        if (!isUser) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            })
+        }
+
+        isUser.balance += tapBalance;
+
+        await isUser.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Balance updated succesfuly!'
+        })
+
+    } catch (error) {
+        console.log("Error Updating Balance!");
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+})
+
+/*
 // Socket.io Connection
 io.on('connection', (socket) => {
     console.log("A new user has connected!", socket.id);
@@ -68,8 +102,10 @@ io.on('connection', (socket) => {
     });
 });
 
-// Start Server
-server.listen(PORT, () => {
+*/
+
+// Start Server   ---- server.listen incase of websockets
+app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 

@@ -65,6 +65,9 @@ export const UserProvider = (props) => {
     }, [])
 
 
+
+    // Socket connection
+    /*
     useEffect(() => {
         const newSocket = io(apiUrl);
         setSocket(newSocket);
@@ -72,6 +75,7 @@ export const UserProvider = (props) => {
             newSocket.disconnect();
         };
     }, [apiUrl]);
+    */
 
     const check1day = (inputDate) => {
         const currentDate = new Date();
@@ -135,17 +139,21 @@ export const UserProvider = (props) => {
                     setUsername(res.data.user.username);
                     setProfilePic(res.data.user.pic);
                     setLevel(res.data.user.level);
-                    setCurrentRank(res.data.currentRank);
+                    setCurrentRank(res.data.user.currentRank);
                     setBalance(res.data.user.balance);
 
                     // Daily Reward 
                     setClaimed(res.data.user.dailyReward.claimed);
 
-                    if (res.data.user.dailyReward.lastClaimed) {
-                        const is1Day = check1day(res.data.user.dailyReward.lastClaimed);
+                    console.log(res.data.user.dailyReward.date)
+
+                    if (res.data.user.dailyReward.date) {
+                        const is1Day = check1day(res.data.user.dailyReward.date);
                         if (is1Day) {
+                            console.log("Day 0 is going on");
                             setCurrentDay(res.data.user.dailyReward.day - 1);
                         } else {
+                            console.log("is not 1 day means next day started");
                             setCurrentDay(res.data.user.dailyReward.day);
                         }
                     } else {
@@ -198,7 +206,6 @@ export const UserProvider = (props) => {
                     setEnergyLevel(res.data.user.energy.level);
                     setEnergyLimit(res.data.user.energy.limit);
 
-
                     setMultitapLevel(res.data.user.multitaps.level);
                     setAddCoins(res.data.user.multitaps.value);
 
@@ -212,9 +219,6 @@ export const UserProvider = (props) => {
             }
         } catch (error) {
             console.log("Error initlitializing user", error);
-            await axios.post(`${apiUrl}/user/test`, {
-                error: error
-            });
             setLoaderErrorMes({
                 mess: "Error Initilizing User!",
                 error: ""
@@ -347,6 +351,24 @@ export const UserProvider = (props) => {
         }
     }
 
+    const updateBalance = async (tapBalance) => {
+        try {
+            const res = await axios.post(`${apiUrl}/update-balance`, {
+                userId: userId,
+                tapBalance: tapBalance
+            });
+
+            if (res.data.status === 'success') {
+                return { success: true, mess: res.data.message };
+            } else {
+                return { success: false, mess: res.data.message };
+            }
+        } catch (error) {
+            console.log("Error updating balance", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
     return (
         <UserContext.Provider value={{
             initializeUser,
@@ -391,7 +413,8 @@ export const UserProvider = (props) => {
             disableEnergy,
             claimed,
             currentDay,
-            claimDailyReward
+            claimDailyReward,
+            updateBalance
         }}>
             {props.children}
         </UserContext.Provider>

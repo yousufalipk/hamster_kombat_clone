@@ -59,7 +59,8 @@ const Home = () => {
 		disableEnergy,
 		claimDailyReward,
 		claimed,
-		currentDay
+		currentDay,
+		updateBalance
 	} = useUser();
 
 	useEffect(() => {
@@ -111,6 +112,30 @@ const Home = () => {
 		}
 	}, []);
 
+
+	// Update Balance Interval
+
+	useEffect(() => {
+		const intervalId = setInterval(async () => {
+			if (tapBalance !== 0) {
+				try {
+					const res = await updateBalance(tapBalance);
+					if (res.success) {
+						console.log("Balance updated succesfuly!")
+						setTapBalance(0);
+					} else {
+						console.log("Error updating balance", res.mess);
+					}
+				} catch (error) {
+					console.error("Error updating balance:", error);
+				}
+			}
+		}, 1000); // Every 1 sec
+
+		return () => clearInterval(intervalId);
+	}, [tapBalance]);
+
+	/*
 	useEffect(() => {
 		const intervalId = setInterval(async () => {
 			if (tapBalance !== 0) {
@@ -125,6 +150,7 @@ const Home = () => {
 
 		return () => clearInterval(intervalId);
 	}, [tapBalance]);
+	*/
 
 	// Handle Haptic Feedback (Vibrate)
 	const triggerHapticFeedback = () => {
@@ -161,10 +187,10 @@ const Home = () => {
 			navigate('/gameplay');
 		}
 		else if (id === 2) {
-			navigate('/');
+			setDailyRewardPopup(true);
 		}
 		else if (id === 3) {
-			setDailyRewardPopup(true);
+			navigate('/');
 		}
 		else if (id === 4) {
 			navigate('/');
@@ -246,7 +272,7 @@ const Home = () => {
 			data1: "Daily",
 			data2: "Reward",
 			timer: "13:11:35",
-			isDone: false
+			isDone: claimed.includes(currentDay) ? true : false
 		},
 		{
 			id: 3,
@@ -254,7 +280,7 @@ const Home = () => {
 			data1: "Daily",
 			data2: "Combo",
 			timer: "02:33:48",
-			isDone: true
+			isDone: false
 		},
 		{
 			id: 4,
@@ -325,6 +351,7 @@ const Home = () => {
 		const res = await claimDailyReward();
 		if (res.success) {
 			toast.success('Daily Reward Claimed Succesfuly!');
+			setDailyRewardPopup(false);
 		} else {
 			toast.error(res.mess);
 		}
@@ -864,7 +891,7 @@ const Home = () => {
 															key={index}
 															className={`border-2 w-[23vw] h-[20vh] rounded-lg p-3 flex flex-col items-center gap-2 ${currentDay >= day && `border-blue-500`}`}
 														>
-															<hr className="border-2 w-10" />
+															<hr className={`border-2 w-10 ${claimed.includes(day) && (`border-blue-500`)}`} />
 															<h1 className="font-semibold">Day {day + 1}</h1>
 
 															<img
