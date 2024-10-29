@@ -121,8 +121,7 @@ const Home = () => {
 				try {
 					const res = await updateBalance(tapBalance);
 					if (res.success) {
-						console.log("Balance updated succesfuly!")
-						setTapBalance(0);
+						await setTapBalance(0);
 					} else {
 						console.log("Error updating balance", res.mess);
 					}
@@ -130,7 +129,7 @@ const Home = () => {
 					console.error("Error updating balance:", error);
 				}
 			}
-		}, 1000); // Every 1 sec
+		}, 800); // Every 1 sec
 
 		return () => clearInterval(intervalId);
 	}, [tapBalance]);
