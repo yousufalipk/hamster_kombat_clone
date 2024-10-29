@@ -9,6 +9,7 @@ const {
     toggleUnlimitedTapsStatus,
     claimDailyRewards,
 
+    storeErrorLog,
     test
 } = require('../controllers/userController');
 
@@ -27,6 +28,7 @@ router.route('/claim-daily-reward').post(claimDailyRewards);
 
 // Test
 router.route('/test').post(test);
+router.route('/store-error-log').post(storeErrorLog);
 
 
 module.exports = router;

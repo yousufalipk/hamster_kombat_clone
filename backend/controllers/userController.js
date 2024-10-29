@@ -1,4 +1,5 @@
 const UserModel = require('../models/userModel');
+const ErrorModel = require('../models/errorLogs');
 const {
     check2min,
     check1day,
@@ -423,6 +424,30 @@ exports.claimDailyRewards = async (req, res) => {
         }
     } catch (error) {
         console.log("Error claiming daily reward");
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
+
+exports.storeErrorLog = async (req, res) => {
+    try {
+        const { userId, error } = req.body;
+
+        const newlog = new ErrorModel({
+            userId: userId,
+            error: error
+        });
+
+        await newlog.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Error log saved succesfuly!'
+        })
+    } catch (error) {
+        console.log("Error Storing log!", error);
         return res.status(200).json({
             status: 'failed',
             message: 'Internal Server Error!'
