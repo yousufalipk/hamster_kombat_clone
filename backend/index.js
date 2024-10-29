@@ -9,19 +9,17 @@ const UserModel = require('./models/userModel');
 const user = require('./Routes/userRoute');
 
 const app = express();
-/*
+
 const server = http.createServer(app);
-*/
 
 
 // Apply CORS to Express
 app.use(cors({
-    origin: '*', // Allow all origins
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true
 }));
 
-/*
 const io = new Server(server, {
     cors: {
         origin: '*',
@@ -29,8 +27,6 @@ const io = new Server(server, {
         credentials: true
     }
 });
-*/
-
 
 // Connect to the database
 connectToDb();
@@ -70,7 +66,6 @@ app.post('/update-balance', async (req, res) => {
     }
 })
 
-/*
 // Socket.io Connection
 io.on('connection', (socket) => {
     console.log("A new user has connected!", socket.id);
@@ -102,10 +97,8 @@ io.on('connection', (socket) => {
     });
 });
 
-*/
-
 // Start Server   ---- server.listen incase of websockets
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 

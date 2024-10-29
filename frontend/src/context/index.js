@@ -68,7 +68,6 @@ export const UserProvider = (props) => {
 
 
     // Socket connection
-    /*
     useEffect(() => {
         const newSocket = io(apiUrl);
         setSocket(newSocket);
@@ -76,7 +75,6 @@ export const UserProvider = (props) => {
             newSocket.disconnect();
         };
     }, [apiUrl]);
-    */
 
     const check1day = (inputDate) => {
         const currentDate = new Date();

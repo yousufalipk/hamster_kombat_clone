@@ -33,6 +33,7 @@ const Home = () => {
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 
 	const {
+		userId,
 		initializeUser,
 		userDataInitilized,
 		username,
@@ -59,7 +60,6 @@ const Home = () => {
 		claimDailyReward,
 		claimed,
 		currentDay,
-		updateBalance,
 		tapBalance,
 		setTapBalance
 	} = useUser();
@@ -107,18 +107,13 @@ const Home = () => {
 	}, []);
 
 	// Update Balance Interval
-
 	useEffect(() => {
 		const intervalId = setInterval(async () => {
 			if (tapBalance !== 0 && !isUpdating.current) {
 				isUpdating.current = true;
 				try {
-					const res = await updateBalance(tapBalance);
-					if (res.success) {
-						setTapBalance(0);
-					} else {
-						console.log("Error updating balance", res.mess);
-					}
+					await socket.emit('updateBalance', { userId, tapBalance });
+					setTapBalance(0);
 				} catch (error) {
 					console.error("Error updating balance:", error);
 				} finally {
@@ -286,8 +281,10 @@ const Home = () => {
 
 			if (res.success) {
 				console.log("Unlimited tap's Enabled for 2 minutes!", res.mess);
+				setUnlimitedTapsPopup(false);
 				toast.success(res.mess);
 			} else {
+				setUnlimitedTapsPopup(false);
 				toast.error(res.mess);
 			}
 
@@ -303,8 +300,10 @@ const Home = () => {
 
 			if (res.success) {
 				console.log("Energy Refilled succesfuly!", res.mess);
+				setEnergyRefillPopup(false);
 				toast.success(res.mess);
 			} else {
+				setEnergyRefillPopup(false);
 				toast.error(res.mess);
 			}
 
@@ -318,9 +317,11 @@ const Home = () => {
 		const res = await energyUpgrade();
 		if (res.success) {
 			toast.success("Energy Limit Upgraded!");
+			setEnergyPopup(false);
 			initializeUser();
 		} else {
 			toast.error(res.mess);
+			setEnergyPopup(false);
 		}
 	}
 
@@ -328,9 +329,11 @@ const Home = () => {
 		const res = await multitapUpgrade();
 		if (res.success) {
 			toast.success("Multitap Level Upgraded!");
+			setMultitapsPopup(false);
 			initializeUser();
 		} else {
 			toast.error(res.mess);
+			setMultitapsPopup(false);
 		}
 	}
 
@@ -670,7 +673,6 @@ const Home = () => {
 														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
 														onClick={() => {
 															// Upgrade Unlimited Taps
-															setUnlimitedTapsPopup(false);
 															handleUnlimitedTaps();
 														}}
 														disabled={avaliableUnlimitedTaps === 0}
@@ -723,7 +725,6 @@ const Home = () => {
 														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
 														onClick={() => {
 															// Upgrade energy limit
-															setEnergyRefillPopup(false);
 															handleEnergyRefill()
 														}}
 														disabled={avaliableEnergyRefill === 0}
@@ -785,7 +786,6 @@ const Home = () => {
 														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
 														onClick={() => {
 															// Upgrade energy limit
-															setEnergyPopup(false);
 															handleEnergyUpgrade()
 														}}
 														disabled={energyLevel >= 9}
@@ -847,7 +847,6 @@ const Home = () => {
 														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
 														onClick={() => {
 															// Upgrade multitap limit
-															setMultitapsPopup(false);
 															handleMultitapUpgrade()
 														}}
 														disabled={multitapLevel >= 9}
@@ -908,12 +907,11 @@ const Home = () => {
 													className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
 													onClick={() => {
 														// Upgrade multitap limit
-														setDailyRewardPopup(false);
 														handleDailyRewardClaim();
 													}}
 													disabled={multitapLevel >= 9}
 												>
-													{multitapLevel >= 9 ? ("Max") : ('Claim')}
+													Claim
 												</button>
 											</div>
 										</div>
