@@ -80,7 +80,6 @@ io.on('connection', (socket) => {
                 console.log("User not found!");
                 socket.emit('error', { message: 'User not found!' });
             } else {
-                // Update the user's balance
                 isUser.balance += data.tapBalance;
                 await isUser.save();
                 console.log("User balance updated successfully!");
@@ -91,7 +90,6 @@ io.on('connection', (socket) => {
         }
     });
 
-    // Handle disconnect event
     socket.on('disconnect', () => {
         console.log("User disconnected", socket.id);
     });

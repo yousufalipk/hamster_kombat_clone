@@ -433,15 +433,18 @@ exports.claimDailyRewards = async (req, res) => {
 
 exports.storeErrorLog = async (req, res) => {
     try {
-        const { userId, error } = req.body;
+        const { error } = req.body;
 
+        console.log("Error", error);
+
+        /*
         const newlog = new ErrorModel({
-            userId: userId,
             error: error
         });
 
         await newlog.save();
 
+        */
         return res.status(200).json({
             status: 'success',
             message: 'Error log saved succesfuly!'

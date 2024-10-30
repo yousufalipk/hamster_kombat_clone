@@ -121,6 +121,7 @@ export const UserProvider = (props) => {
             }
 
             if (telegramUser) {
+                console.log("ENV", apiUrl);
                 const res = await axios.post(`${apiUrl}/user/fetch-user`, {
                     telegramId: telegramUser.id,
                     firstName: telegramUser.first_name,
@@ -218,10 +219,6 @@ export const UserProvider = (props) => {
             }
         } catch (error) {
             console.log("Error initlitializing user", error);
-            const res = await axios.post(`${apiUrl}/user/store-error-log`, {
-                userId: userId,
-                error: error
-            })
             setLoaderErrorMes({
                 mess: "Error Initilizing User!",
                 error: ""
