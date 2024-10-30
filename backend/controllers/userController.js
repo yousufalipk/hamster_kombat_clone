@@ -9,6 +9,9 @@ const {
     resetBoosters,
     resetDailyRewards
 } = require('../utils/reset');
+const {
+    getCoinsPerMinute
+} = require('../utils/coinsPerMinute');
 
 const energyUpgradeCost = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
 const energyLimits = [1500, 3000, 4500, 6000, 7500, 9000, 10500, 12000, 13500, 15000];
@@ -31,6 +34,8 @@ exports.initializeUser = async (req, res) => {
         const { telegramId, firstName, lastName, username } = req.body;
 
         let isUser = await UserModel.findOne({ telegramId });
+
+        const currentDate = new Date();
 
         if (!isUser) {
             isUser = new UserModel({
@@ -61,14 +66,22 @@ exports.initializeUser = async (req, res) => {
                     claimed: [],
                     day: 0,
                     reward: 500
+                },
+                coinsPerMinute: {
+                    value: 0,
+                    lastClaimed: currentDate
                 }
             });
             isUser = await isUser.save();
         } else {
-            const res1 = resetBoosters(isUser); // If 1 day passed (only for ex-users)
-            const res2 = resetDailyRewards(res1);
-            await res2.save();
-            isUser = res2;
+            let res1, res2, res3;
+            res1 = resetBoosters(isUser); // If 1 day passed (only for ex-users)
+            res2 = resetDailyRewards(res1);
+            if (isUser.coinsPerMinute.value !== 0) {
+                res3 = await getCoinsPerMinute(res2);
+            }
+            await res3.save();
+            isUser = res3;
 
             if (isUser.unlimitedTaps.status === true) {
                 const lastClaimed = isUser.unlimitedTaps.lastClaimed;

@@ -86,6 +86,16 @@ const userSchema = new mongoose.Schema({
             type: Number,
             default: 500
         }
+    },
+    coinsPerMinute: {
+        value: {
+            type: Number,
+            default: 0
+        },
+        lastClaimed: {
+            type: Date,
+            default: null
+        }
     }
 }, { timestamps: true });
 

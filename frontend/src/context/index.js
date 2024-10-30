@@ -28,6 +28,7 @@ export const UserProvider = (props) => {
     const [currentRank, setCurrentRank] = useState(null);
     const [balance, setBalance] = useState(0);
     const [tapBalance, setTapBalance] = useState(0);
+    const [coinsPerMinute, setCoinsPerMinute] = useState(0);
 
     // 4 Boosters 
     const [disableEnergy, setDisableEnergy] = useState(false);
@@ -121,7 +122,6 @@ export const UserProvider = (props) => {
             }
 
             if (telegramUser) {
-                console.log("ENV", apiUrl);
                 const res = await axios.post(`${apiUrl}/user/fetch-user`, {
                     telegramId: telegramUser.id,
                     firstName: telegramUser.first_name,
@@ -141,19 +141,16 @@ export const UserProvider = (props) => {
                     setLevel(res.data.user.level);
                     setCurrentRank(res.data.user.currentRank);
                     setBalance(res.data.user.balance);
+                    setCoinsPerMinute(res.data.user.coinsPerMinute.value);
 
                     // Daily Reward 
                     setClaimed(res.data.user.dailyReward.claimed);
 
-                    console.log(res.data.user.dailyReward.date)
-
                     if (res.data.user.dailyReward.date) {
                         const is1Day = check1day(res.data.user.dailyReward.date);
                         if (is1Day) {
-                            console.log("Day 0 is going on");
                             setCurrentDay(res.data.user.dailyReward.day - 1);
                         } else {
-                            console.log("is not 1 day means next day started");
                             setCurrentDay(res.data.user.dailyReward.day);
                         }
                     } else {
@@ -192,7 +189,6 @@ export const UserProvider = (props) => {
                                     }
                                 }, timeDifferenceInMilliseconds)
                             }
-                            console.log("Difference in milliseconds:", timeDifferenceInMilliseconds);
                         }
                     } else {
                         setDisableEnergy(res.data.user.unlimitedTaps.status);
@@ -416,7 +412,8 @@ export const UserProvider = (props) => {
             claimDailyReward,
             updateBalance,
             tapBalance,
-            setTapBalance
+            setTapBalance,
+            coinsPerMinute
         }}>
             {props.children}
         </UserContext.Provider>

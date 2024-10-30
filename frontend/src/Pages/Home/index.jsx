@@ -61,7 +61,8 @@ const Home = () => {
 		claimed,
 		currentDay,
 		tapBalance,
-		setTapBalance
+		setTapBalance,
+		coinsPerMinute
 	} = useUser();
 
 	const [clicks, setClicks] = useState([]);
@@ -493,7 +494,7 @@ const Home = () => {
 												<img className="pl-3" src={LittleCoin} alt="Coin-Icon" />
 											</div>
 											<div className="text-[#FFF] text-[11.655px] font-medium">
-												<p>+ 2.56M</p>
+												<p>+{coinsPerMinute}M</p>
 											</div>
 										</div>
 										<div className="flex justify-center items-center gap-1 pl-1">
