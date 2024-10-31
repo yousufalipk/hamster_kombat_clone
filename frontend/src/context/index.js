@@ -67,16 +67,25 @@ export const UserProvider = (props) => {
         initializeUser();
     }, [])
 
-
-
     // Socket connection
     useEffect(() => {
-        const newSocket = io(apiUrl);
-        setSocket(newSocket);
-        return () => {
-            newSocket.disconnect();
-        };
-    }, [apiUrl]);
+        if (userId) {
+            const newSocket = io(apiUrl);
+
+            const socketUserId = userId;
+            newSocket.emit('register', socketUserId);
+            setSocket(newSocket);
+
+            newSocket.on('referral-claimed', (balance) => {
+                console.log("New balance", balance);
+                setBalance(balance);
+            });
+
+            return () => {
+                newSocket.disconnect();
+            };
+        }
+    }, [apiUrl, userId]);
 
     const check1day = (inputDate) => {
         const currentDate = new Date();

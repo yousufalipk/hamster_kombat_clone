@@ -1,8 +1,11 @@
 const UserModel = require('../models/userModel');
 const { TELEGRAM_BOT_TOKEN } = require('../config/env');
 const { Telegraf } = require("telegraf");
+const { getIo, userSocketMap } = require('../utils/socketHelper');
 
 const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
+const io = getIo();
+
 const {
     check2min,
     check1day,
@@ -66,6 +69,10 @@ exports.initializeUser = async (req, res) => {
                 }
                 refRes.referrals.push(data);
                 refRes.balance += balance;
+
+                // Emiting balance update to reffere user
+                const socketId = userSocketMap.get(referrerId);
+                io.to(socketId).emit('referral-claimed', refRes.balance);
                 await refRes.save();
             }
         }
