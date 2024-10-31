@@ -24,42 +24,15 @@ const io = initializeIo(server);
 connectToDb();
 app.use(express.json());
 
-// Define routes
-app.post('/update-balance', async (req, res) => {
-    try {
-        const { userId, tapBalance } = req.body;
-        const isUser = await UserModel.findById(userId);
-
-        if (!isUser) {
-            return res.status(200).json({
-                status: 'failed',
-                message: 'User not found!'
-            });
-        }
-
-        isUser.balance += tapBalance;
-        await isUser.save();
-
-        return res.status(200).json({
-            status: 'success',
-            message: 'Balance updated successfully!'
-        });
-    } catch (error) {
-        console.log("Error Updating Balance!");
-        return res.status(200).json({
-            status: 'failed',
-            message: 'Internal Server Error!'
-        });
-    }
-});
-
 // Socket.io Connection
 io.on('connection', (socket) => {
     console.log("A new user has connected!", socket.id);
 
-    socket.on('register', (userId) => {
-        userSocketMap.set(userId, socket.id);
-        console.log(`User ${userId} registered with socket ID ${socket.id}`);
+    socket.on('register', (telegramId) => {
+        console.log("Telegram id", telegramId);
+        userSocketMap.set(telegramId, socket.id);
+        console.log(`User ${telegramId} registered with socket ID ${socket.id}`);
+        console.log("UserSocketMap", userSocketMap);
     });
 
     // Update Balance

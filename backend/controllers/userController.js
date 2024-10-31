@@ -73,9 +73,10 @@ exports.initializeUser = async (req, res) => {
 
                 // Emiting balance update to reffere user
                 const socketId = userSocketMap.get(refRes.telegramId);
-
-                console.log("===========> socket emiting", socketId);
-                io.to(socketId).emit('refresh', refRes.balance);
+                if (socketId) {
+                    console.log("Socket id backend", socketId);
+                    io.to(socketId).emit('refresh', refRes.balance);
+                }
                 await refRes.save();
             }
         }

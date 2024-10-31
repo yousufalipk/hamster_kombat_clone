@@ -69,13 +69,13 @@ export const UserProvider = (props) => {
 
     // Socket connection
     useEffect(() => {
-        if (userId) {
+        if (telegramId) {
             const newSocket = io(apiUrl);
 
-            console.log("Socket Id -----> ", newSocket.id);
-
-            newSocket.emit('register', telegramId);
-            setSocket(newSocket);
+            setTimeout(() => {
+                newSocket.emit('register', telegramId);
+                setSocket(newSocket);
+            }, 300)
 
             newSocket.on('refresh', (balance) => {
                 console.log("New balance", balance);
@@ -116,7 +116,7 @@ export const UserProvider = (props) => {
 
     // Initilize User
     const initializeUser = async () => {
-        let referrerId = '6396333346', isPremium = false;
+        let referrerId = '5840841171', isPremium = false;
         // let referrerId = null, isPremium = false;
         setLoader(true);
         try {
