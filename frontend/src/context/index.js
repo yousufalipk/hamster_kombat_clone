@@ -79,7 +79,7 @@ export const UserProvider = (props) => {
 
             newSocket.on('refresh', (balance) => {
                 console.log("New balance", balance);
-                setBalance(balance);
+                initializeUser();
             });
 
             return () => {
