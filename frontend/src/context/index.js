@@ -121,6 +121,8 @@ export const UserProvider = (props) => {
                 tg.ready();
                 telegramUser = tg.initDataUnsafe?.user;
                 referrerId = window.Telegram.WebApp.initDataUnsafe.start_param;
+
+                console.log("==========> ReferrerID", referrerId);
             }
 
             if (referrerId) {
