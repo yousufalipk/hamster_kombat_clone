@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import './index.css';
 
@@ -11,6 +11,22 @@ import LittlePandaBgIcon from "../../assets/LittlePandaBg.svg";
 
 const Footer = () => {
     const [activeIcon, setActiveIcon] = useState(null);
+    const [togglePanda, setTogglePanda] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            togglePandaLogo();
+        }, 800);
+    }, [togglePanda])
+
+
+    const togglePandaLogo = () => {
+        if (togglePanda === true) {
+            setTogglePanda(false);
+        } else {
+            setTogglePanda(true);
+        }
+    }
     const navigate = useNavigate();
 
     const handleClick = (iconName, route) => {
@@ -33,9 +49,8 @@ const Footer = () => {
                     {iconData.slice(0, 2).map(({ name, icon, route }) => (
                         <div
                             key={name}
-                            className={`w-[35px] h-[35px] flex justify-center items-center rounded-full ${
-                                activeIcon === name ? "bg-[#44466b] shadow-inner" : "bg-transparent"
-                            }`}
+                            className={`w-[35px] h-[35px] flex justify-center items-center rounded-full ${activeIcon === name ? "bg-[#44466b] shadow-inner" : "bg-transparent"
+                                }`}
                             onClick={() => handleClick(name, route)}
                         >
                             <img src={icon} alt={`${name}-Icon`} width="22" />
@@ -56,11 +71,22 @@ const Footer = () => {
                             onClick={() => handleClick("Home", "/")}
                         />
                         <div className='absolute top-[24%] left-[33%]'>
-                            <img
-                                src={LittlePandaIcon}
-                                alt='Panda-Icon'
-                                onClick={() => handleClick("Home", "/")}
-                            />
+                            {togglePanda ? (
+                                <>
+                                    <img
+                                        src={LittlePandaIcon}
+                                        alt='Panda-Icon'
+                                        onClick={() => handleClick("Home", "/")}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <p className="text-white font-semibold">
+                                        Tap & Earn
+                                    </p>
+                                </>
+                            )}
+
                         </div>
                     </div>
                 </div>
@@ -70,9 +96,8 @@ const Footer = () => {
                     {iconData.slice(2).map(({ name, icon, route }) => (
                         <div
                             key={name}
-                            className={`w-[35px] h-[35px] flex justify-center items-center rounded-full ${
-                                activeIcon === name ? "bg-[#44466b] shadow-inner" : "bg-transparent"
-                            }`}
+                            className={`w-[35px] h-[35px] flex justify-center items-center rounded-full ${activeIcon === name ? "bg-[#44466b] shadow-inner" : "bg-transparent"
+                                }`}
                             onClick={() => handleClick(name, route)}
                         >
                             <img src={icon} alt={`${name}-Icon`} width="22" />
