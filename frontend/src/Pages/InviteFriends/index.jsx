@@ -1,5 +1,5 @@
-import React from "react";
-import BackIcon from "../../assets/BackIcon.svg";
+import React, { useState } from "react";
+import { toast } from 'react-toastify';
 import Coin from "../../assets/BigCoinIcon.svg";
 import FriendsPic from "../../assets/FriendsPic.png";
 import GiftBox from "../../assets/GiftBox.png";
@@ -7,8 +7,30 @@ import Friend1 from "../../assets/Friend1.svg";
 import Friend2 from "../../assets/Friend2.svg";
 import Invite from "../../assets/InviteIcon.svg";
 import Copy from "../../assets/CopyIcon.svg";
+import { useUser } from '../../context/index';
+import { Link } from 'react-router-dom';
 
 const InviteFriends = () => {
+	const { userId, balance } = useUser();
+
+	const copyToClipboard = async () => {
+		const reflink = `https://t.me/pandatap_mini_bot/pandatap?startapp=${userId}`;
+
+		const textArea = document.createElement("textarea");
+		textArea.value = reflink;
+		document.body.appendChild(textArea);
+		textArea.select();
+		try {
+			document.execCommand("copy");
+			toast.success('Copied!');
+		} catch (err) {
+			toast.error('Failed to copy!');
+			console.error("Failed to copy", err);
+		}
+		document.body.removeChild(textArea);
+	};
+
+
 	const data = [
 		{
 			id: 1,
@@ -193,7 +215,12 @@ const InviteFriends = () => {
 											alt=''
 										/>
 									</div>
-									<div className='text-md font-semibold'>Invite a Friend</div>
+									<Link
+										to={`https://t.me/share/url?url=t.me/pandatap_mini_bot/pandatap?startapp=${userId}&text=Hey  I just made ${balance} $MFI Points on Panda Tap To Earn Game ! The airdrop is definitely going to be huge ! Join via my referral link and we both can get a headstart.`}
+										className='text-md font-semibold'
+									>
+										Invite a Friend
+									</Link>
 								</div>
 							</div>
 							{/* Copy Link */}
@@ -204,7 +231,9 @@ const InviteFriends = () => {
 										alt=''
 										width="16"
 									/>
-									<div className='text-md font-semibold'>Copy Link</div>
+									<div
+										onClick={() => copyToClipboard()}
+										className='text-md font-semibold'>Copy Link</div>
 								</div>
 							</div>
 						</div>
