@@ -11,10 +11,10 @@ import { useUser } from '../../context/index';
 import { Link } from 'react-router-dom';
 
 const InviteFriends = () => {
-	const { userId, balance } = useUser();
+	const { telegramId, balance } = useUser();
 
 	const copyToClipboard = async () => {
-		const reflink = `https://t.me/pandatap_mini_bot/pandatap?startapp=${userId}`;
+		const reflink = `https://t.me/pandatap_mini_bot/pandatap?startapp=${telegramId}`;
 
 		const textArea = document.createElement("textarea");
 		textArea.value = reflink;
@@ -216,7 +216,7 @@ const InviteFriends = () => {
 										/>
 									</div>
 									<Link
-										to={`https://t.me/share/url?url=t.me/pandatap_mini_bot/pandatap?startapp=${userId}&text=Hey  I just made ${balance} $MFI Points on Panda Tap To Earn Game ! The airdrop is definitely going to be huge ! Join via my referral link and we both can get a headstart.`}
+										to={`https://t.me/share/url?url=t.me/pandatap_mini_bot/pandatap?startapp=${telegramId}&text=Hey  I just made ${balance} $MFI Points on Panda Tap To Earn Game ! The airdrop is definitely going to be huge ! Join via my referral link and we both can get a headstart.`}
 										className='text-md font-semibold'
 									>
 										Invite a Friend

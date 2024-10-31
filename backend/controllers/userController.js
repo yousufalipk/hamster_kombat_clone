@@ -36,9 +36,6 @@ exports.initializeUser = async (req, res) => {
     try {
         const { telegramId, firstName, lastName, username, referrerId, isPremium } = req.body;
 
-        console.log("refferid", referrerId);
-        console.log("isPremiun", isPremium);
-
         let isUser = await UserModel.findOne({ telegramId });
 
         const currentDate = new Date();
@@ -57,7 +54,7 @@ exports.initializeUser = async (req, res) => {
                 balance = 0;
             }
             // update refferals array
-            const refRes = await UserModel.findById(referrerId);
+            const refRes = await UserModel.findOne({ telegramId: referrerId });
             if (!refRes) {
                 console.log("Reffer not found!");
             } else {
