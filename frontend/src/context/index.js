@@ -72,6 +72,8 @@ export const UserProvider = (props) => {
         if (userId) {
             const newSocket = io(apiUrl);
 
+            console.log("Socket Id -----> ", newSocket.id);
+
             const socketUserId = userId;
             newSocket.emit('register', socketUserId);
             setSocket(newSocket);
@@ -115,6 +117,7 @@ export const UserProvider = (props) => {
 
     // Initilize User
     const initializeUser = async () => {
+        //let referrerId = '6723309c4de3e6a112297174', isPremium = false;
         let referrerId = null, isPremium = false;
         setLoader(true);
         try {
@@ -131,8 +134,6 @@ export const UserProvider = (props) => {
                 tg.ready();
                 telegramUser = tg.initDataUnsafe?.user;
                 referrerId = window.Telegram.WebApp.initDataUnsafe.start_param;
-
-                console.log("==========> ReferrerID", referrerId);
             }
 
             if (referrerId) {
@@ -147,10 +148,6 @@ export const UserProvider = (props) => {
                     }
                 }
             }
-
-            console.log("Before Sending backend request,111");
-            console.log("IsPremium", isPremium);
-            console.log("ReferrerId", referrerId);
 
             if (telegramUser) {
                 const res = await axios.post(`${apiUrl}/user/fetch-user`, {
