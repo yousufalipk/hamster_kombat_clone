@@ -77,9 +77,9 @@ export const UserProvider = (props) => {
                 setSocket(newSocket);
             }, 300)
 
-            newSocket.on('refresh', (balance) => {
-                console.log("New balance", balance);
-                initializeUser();
+            newSocket.on('refresh', (user) => {
+                setBalance(user.balance);
+                setReferrals(user.referrals);
             });
 
             return () => {

@@ -76,7 +76,7 @@ exports.initializeUser = async (req, res) => {
                     console.log("Socket id backend", socketId);
                     const io = getIo();
                     console.log("IO", io);
-                    io.to(socketId).emit('refresh', refRes.balance);
+                    io.to(socketId).emit('refresh', refRes);
                 }
                 await refRes.save();
             }
