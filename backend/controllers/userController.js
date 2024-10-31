@@ -72,7 +72,7 @@ exports.initializeUser = async (req, res) => {
 
                 // Emiting balance update to reffere user
                 const socketId = userSocketMap.get(referrerId);
-                io.to(socketId).emit('referral-claimed', refRes.balance);
+                io.to(socketId).emit('refresh', refRes.balance);
                 await refRes.save();
             }
         }

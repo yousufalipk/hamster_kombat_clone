@@ -76,7 +76,7 @@ export const UserProvider = (props) => {
             newSocket.emit('register', socketUserId);
             setSocket(newSocket);
 
-            newSocket.on('referral-claimed', (balance) => {
+            newSocket.on('refresh', (balance) => {
                 console.log("New balance", balance);
                 setBalance(balance);
             });
