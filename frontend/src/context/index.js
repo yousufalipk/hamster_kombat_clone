@@ -105,7 +105,7 @@ export const UserProvider = (props) => {
 
     // Initilize User
     const initializeUser = async () => {
-        let referrerId, isPremium;
+        let referrerId = null, isPremium = false;
         setLoader(true);
         try {
             let telegramUser;
@@ -125,7 +125,6 @@ export const UserProvider = (props) => {
 
             if (referrerId) {
                 if (staticUser !== 'true') {
-                    isPremium = false;
                     const res = await axios.post(`${apiUrl}/user/check-premium`, {
                         telegramId: telegramUser.id
                     });
@@ -137,14 +136,18 @@ export const UserProvider = (props) => {
                 }
             }
 
+            console.log("Before Sending backend request,111");
+            console.log("IsPremium", isPremium);
+            console.log("ReferrerId", referrerId);
+
             if (telegramUser) {
                 const res = await axios.post(`${apiUrl}/user/fetch-user`, {
                     telegramId: telegramUser.id,
                     firstName: telegramUser.first_name,
                     lastName: telegramUser.last_name,
                     username: telegramUser.username || `${telegramUser.first_name || ''} ${telegramUser.last_name || ''}`.trim(),
-                    referrerId: referrerId || null,
-                    isPremium: isPremium || false
+                    referrerId: referrerId,
+                    isPremium: isPremium
                 });
 
                 if (res.data.status === 'success') {

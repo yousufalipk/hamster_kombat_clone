@@ -42,7 +42,7 @@ exports.initializeUser = async (req, res) => {
 
         let balance = 0;
 
-        if (!User) {
+        if (!isUser) {
             // Set balance accordingly
             if (referrerId) {
                 if (isPremium) {
