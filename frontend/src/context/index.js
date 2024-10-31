@@ -74,8 +74,7 @@ export const UserProvider = (props) => {
 
             console.log("Socket Id -----> ", newSocket.id);
 
-            const socketUserId = userId;
-            newSocket.emit('register', socketUserId);
+            newSocket.emit('register', telegramId);
             setSocket(newSocket);
 
             newSocket.on('refresh', (balance) => {
@@ -117,8 +116,8 @@ export const UserProvider = (props) => {
 
     // Initilize User
     const initializeUser = async () => {
-        //let referrerId = '6723309c4de3e6a112297174', isPremium = false;
-        let referrerId = null, isPremium = false;
+        let referrerId = '6396333346', isPremium = false;
+        // let referrerId = null, isPremium = false;
         setLoader(true);
         try {
             let telegramUser;

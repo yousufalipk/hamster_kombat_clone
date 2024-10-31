@@ -57,6 +57,7 @@ exports.initializeUser = async (req, res) => {
                 balance = 0;
             }
             // update refferals array
+            console.log("Reffere id ", referrerId);
             const refRes = await UserModel.findOne({ telegramId: referrerId });
             if (!refRes) {
                 console.log("Reffer not found!");
@@ -71,7 +72,7 @@ exports.initializeUser = async (req, res) => {
                 refRes.balance += balance;
 
                 // Emiting balance update to reffere user
-                const socketId = userSocketMap.get(referrerId);
+                const socketId = userSocketMap.get(refRes.telegramId);
 
                 console.log("===========> socket emiting", socketId);
                 io.to(socketId).emit('refresh', refRes.balance);
