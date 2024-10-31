@@ -36,6 +36,9 @@ exports.initializeUser = async (req, res) => {
     try {
         const { telegramId, firstName, lastName, username, referrerId, isPremium } = req.body;
 
+        console.log("refferid", referrerId);
+        console.log("isPremiun", isPremium);
+
         let isUser = await UserModel.findOne({ telegramId });
 
         const currentDate = new Date();
@@ -54,12 +57,12 @@ exports.initializeUser = async (req, res) => {
                 balance = 0;
             }
             // update refferals array
-            const refRes = await UserModel.findOne({ telegramId: referrerId });
+            const refRes = await UserModel.findById(referrerId);
             if (!refRes) {
                 console.log("Reffer not found!");
             } else {
                 const data = {
-                    telegramId: id,
+                    telegramId: telegramId,
                     firstName: firstName,
                     lastName: lastName,
                     reward: balance
@@ -110,11 +113,15 @@ exports.initializeUser = async (req, res) => {
             let res1, res2, res3;
             res1 = resetBoosters(isUser); // If 1 day passed (only for ex-users)
             res2 = resetDailyRewards(res1);
+
             if (isUser.coinsPerMinute.value !== 0) {
                 res3 = await getCoinsPerMinute(res2);
+                await res3.save();
+                isUser = res3;
+            } else {
+                await res2.save();
+                isUser = res2;
             }
-            await res3.save();
-            isUser = res3;
 
             if (isUser.unlimitedTaps.status === true) {
                 const lastClaimed = isUser.unlimitedTaps.lastClaimed;
