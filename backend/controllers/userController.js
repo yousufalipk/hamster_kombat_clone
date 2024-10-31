@@ -65,6 +65,7 @@ exports.initializeUser = async (req, res) => {
                     reward: balance
                 }
                 refRes.referrals.push(data);
+                refRes.balance += balance;
                 await refRes.save();
             }
         }

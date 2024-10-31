@@ -29,6 +29,7 @@ export const UserProvider = (props) => {
     const [balance, setBalance] = useState(0);
     const [tapBalance, setTapBalance] = useState(0);
     const [coinsPerMinute, setCoinsPerMinute] = useState(0);
+    const [referrals, setReferrals] = useState([]);
 
     // 4 Boosters 
     const [disableEnergy, setDisableEnergy] = useState(false);
@@ -165,6 +166,7 @@ export const UserProvider = (props) => {
                     setCurrentRank(res.data.user.currentRank);
                     setBalance(res.data.user.balance);
                     setCoinsPerMinute(res.data.user.coinsPerMinute.value);
+                    setReferrals(res.data.user.referrals);
 
                     // Daily Reward 
                     setClaimed(res.data.user.dailyReward.claimed);
@@ -436,7 +438,8 @@ export const UserProvider = (props) => {
             updateBalance,
             tapBalance,
             setTapBalance,
-            coinsPerMinute
+            coinsPerMinute,
+            referrals
         }}>
             {props.children}
         </UserContext.Provider>

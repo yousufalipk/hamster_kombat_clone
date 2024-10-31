@@ -4,14 +4,17 @@ import Coin from "../../assets/BigCoinIcon.svg";
 import FriendsPic from "../../assets/FriendsPic.png";
 import GiftBox from "../../assets/GiftBox.png";
 import Friend1 from "../../assets/Friend1.svg";
-import Friend2 from "../../assets/Friend2.svg";
 import Invite from "../../assets/InviteIcon.svg";
 import Copy from "../../assets/CopyIcon.svg";
 import { useUser } from '../../context/index';
 import { Link } from 'react-router-dom';
 
 const InviteFriends = () => {
-	const { telegramId, balance } = useUser();
+	const { telegramId, balance, referrals } = useUser();
+
+	const formatBalanceWithCommas = (balance) => {
+		return balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	};
 
 	const copyToClipboard = async () => {
 		const reflink = `https://t.me/pandatap_mini_bot/pandatap?startapp=${telegramId}`;
@@ -37,47 +40,17 @@ const InviteFriends = () => {
 			img1: Coin,
 			img2: GiftBox,
 			text: "Invite a Friends",
-			description: "+5,000 for you and your friend",
+			description: "+10,000 for you and your friend",
 		},
 		{
 			id: 2,
 			img1: Coin,
 			img2: GiftBox,
 			text: "Invite a Friend with Telegram Premium",
-			description: "+5,000 for you and your friend",
+			description: "+25,000 for you and your friend",
 		},
 	];
 
-	const friendsData = [
-		{
-			id: 1,
-			img1: Friend1,
-			img2: Coin,
-			name: "Jane Cooper",
-			coins: "+5,000",
-		},
-		{
-			id: 2,
-			img1: Friend2,
-			img2: Coin,
-			name: "Esther Howard",
-			coins: "+5,000",
-		},
-		{
-			id: 3,
-			img1: Friend2,
-			img2: Coin,
-			name: "Esther Howard",
-			coins: "+5,000",
-		},
-		{
-			id: 4,
-			img1: Friend2,
-			img2: Coin,
-			name: "Esther Howard",
-			coins: "+5,000",
-		},
-	];
 	return (
 		<>
 			<div className='relative h-[86vh] w-[100vw] overflow-y-scroll overflow-x-hidden'>
@@ -160,46 +133,59 @@ const InviteFriends = () => {
 								<p>Friends</p>
 							</div>
 
-							{/* Friends List Cards */}
-							{friendsData.map((values) => {
-								const { id, img1, img2, name, coins } = values;
-								return (
-									<div
-										key={id}
-										className='bg-[#12121C] text-white text-base font-medium flex justify-between items-center rounded-[14px] gap-4 py-1 px-3 my-2'
+							{referrals.length === 0 ? (
+								<>
+									<h1
+										className="text-xs text-center italic my-5"
 									>
-										<div className='flex items-center gap-4 py-1'>
-											{/* Sr.No */}
-											<div className='w-[18px] text-xs rounded-full border border-[#21212D] flex items-center justify-center'>
-												<p>{id}</p>
-											</div>
+										No referral found!
+									</h1>
+								</>
+							) : (
+								<>
+									{/* Friends List Cards */}
+									{referrals.map((user, index) => {
+										const username = `${user.firstName || ''} ${user.lastName || ''}`;
+										return (
+											<div
+												key={index}
+												className='bg-[#12121C] text-white text-base font-medium flex justify-between items-center rounded-[14px] gap-4 py-1 px-3 my-2'
+											>
+												<div className='flex items-center gap-4 py-1'>
+													{/* Sr.No */}
+													<div className='w-[18px] text-xs rounded-full border border-[#21212D] flex items-center justify-center'>
+														<p>{index + 1}</p>
+													</div>
 
-											{/* Display Picture */}
-											<div>
-												<img
-													width="40"
-													src={img1}
-													alt='Coin-Icon'
-												/>
-											</div>
-											{/* Name & Reward */}
-											<div className=''>
-												<div className='text-[15px]'>{name}</div>
-												<div className='-mt-1 flex items-center gap-1'>
-													<div className=''>
+													{/* Display Picture */}
+													<div>
 														<img
-															width="13"
-															src={img2}
+															width="40"
+															src={Friend1}
 															alt='Coin-Icon'
 														/>
 													</div>
-													<div className='text-[12px]'>{coins}</div>
+													{/* Name & Reward */}
+													<div className=''>
+														<div className='text-[15px]'>{username}</div>
+														<div className='-mt-1 flex items-center gap-1'>
+															<div className=''>
+																<img
+																	width="13"
+																	src={Coin}
+																	alt='Coin-Icon'
+																/>
+															</div>
+															<div className='text-[12px]'>+{formatBalanceWithCommas(user.reward)}</div>
+														</div>
+													</div>
 												</div>
 											</div>
-										</div>
-									</div>
-								);
-							})}
+										);
+									})}
+								</>
+							)}
+
 						</div>
 					</div>
 
