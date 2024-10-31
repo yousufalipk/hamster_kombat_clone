@@ -96,7 +96,23 @@ const userSchema = new mongoose.Schema({
             type: Date,
             default: null
         }
-    }
+    },
+    referrals: [
+        {
+            telegramId: {
+                type: String
+            },
+            firstName: {
+                type: String,
+            },
+            lastName: {
+                type: String,
+            },
+            reward: {
+                type: Number,
+            }
+        }
+    ]
 }, { timestamps: true });
 
 const UserModel = mongoose.model('User', userSchema);

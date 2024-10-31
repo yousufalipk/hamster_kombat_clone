@@ -1,5 +1,8 @@
 const UserModel = require('../models/userModel');
-const ErrorModel = require('../models/errorLogs');
+const { TELEGRAM_BOT_TOKEN } = require('../config/env');
+const { Telegraf } = require("telegraf");
+
+const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 const {
     check2min,
     check1day,
@@ -31,11 +34,40 @@ const reward = [500, 1000, 1500, 2000, 2500, 3000, 3500];
 // Initialize User
 exports.initializeUser = async (req, res) => {
     try {
-        const { telegramId, firstName, lastName, username } = req.body;
+        const { telegramId, firstName, lastName, username, referrerId, isPremium } = req.body;
 
         let isUser = await UserModel.findOne({ telegramId });
 
         const currentDate = new Date();
+
+        let balance = 0;
+
+        if (!User) {
+            // Set balance accordingly
+            if (referrerId) {
+                if (isPremium) {
+                    balance = 25000;
+                } else {
+                    balance = 10000;
+                }
+            } else {
+                balance = 0;
+            }
+            // update refferals array
+            const refRes = await UserModel.findOne({ telegramId: referrerId });
+            if (!refRes) {
+                console.log("Reffer not found!");
+            } else {
+                const data = {
+                    telegramId: id,
+                    firstName: firstName,
+                    lastName: lastName,
+                    reward: balance
+                }
+                refRes.referrals.push(data);
+                await refRes.save();
+            }
+        }
 
         if (!isUser) {
             isUser = new UserModel({
@@ -46,7 +78,7 @@ exports.initializeUser = async (req, res) => {
                 pic: null,
                 level: 'silver',
                 currentRank: 0,
-                balance: 0,
+                balance: balance,
                 energy: {
                     level: 0,
                     limit: 1500
@@ -70,7 +102,8 @@ exports.initializeUser = async (req, res) => {
                 coinsPerMinute: {
                     value: 0,
                     lastClaimed: currentDate
-                }
+                },
+                referrals: []
             });
             isUser = await isUser.save();
         } else {
@@ -470,6 +503,31 @@ exports.storeErrorLog = async (req, res) => {
         })
     }
 }
+
+exports.checkPremium = async (req, res) => {
+    try {
+        const { telegramId } = req.body;
+
+        console.log("Telegram bot token", process.env.TELEGRAM_BOT_TOKEN, telegramId);
+
+        const chatMember = await bot.telegram.getChatMember(telegramId, telegramId);
+
+        const isPremium = chatMember.user?.is_premium || false;
+
+        return res.status(200).json({
+            status: 'success',
+            telegramId,
+            isPremium
+        });
+    } catch (error) {
+        console.error("Error checking premium!", error);
+        return res.status(500).json({
+            status: 'failed',  // Fixed typo here
+            message: 'Internal Server Error'
+        });
+    }
+};
+
 
 exports.test = async (req, res) => {
     try {

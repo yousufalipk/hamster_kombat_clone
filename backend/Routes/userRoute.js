@@ -8,6 +8,7 @@ const {
     refillEnergy,
     toggleUnlimitedTapsStatus,
     claimDailyRewards,
+    checkPremium,
 
     storeErrorLog,
     test
@@ -23,6 +24,7 @@ router.route('/claim-unlimited-taps').post(unlimitedTaps);
 router.route('/toggle-unlimited-taps-status').post(toggleUnlimitedTapsStatus);
 router.route('/refill-energy').post(refillEnergy);
 router.route('/claim-daily-reward').post(claimDailyRewards);
+router.route('/check-premium').post(checkPremium);
 
 
 

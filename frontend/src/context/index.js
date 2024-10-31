@@ -105,6 +105,7 @@ export const UserProvider = (props) => {
 
     // Initilize User
     const initializeUser = async () => {
+        let referrerId, isPremium;
         setLoader(true);
         try {
             let telegramUser;
@@ -119,6 +120,21 @@ export const UserProvider = (props) => {
                 const tg = window.Telegram.WebApp;
                 tg.ready();
                 telegramUser = tg.initDataUnsafe?.user;
+                referrerId = window.Telegram.WebApp.initDataUnsafe.start_param;
+            }
+
+            if (referrerId) {
+                if (staticUser !== 'true') {
+                    isPremium = false;
+                    const res = await axios.post(`${apiUrl}/user/check-premium`, {
+                        telegramId: telegramUser.id
+                    });
+                    if (res.data.status === 'success') {
+                        isPremium = res.data.isPremium;
+                    } else {
+                        console.log("Error checking premium, ", res.data.message);
+                    }
+                }
             }
 
             if (telegramUser) {
@@ -126,7 +142,9 @@ export const UserProvider = (props) => {
                     telegramId: telegramUser.id,
                     firstName: telegramUser.first_name,
                     lastName: telegramUser.last_name,
-                    username: telegramUser.username || `${telegramUser.first_name || ''} ${telegramUser.last_name || ''}`.trim()
+                    username: telegramUser.username || `${telegramUser.first_name || ''} ${telegramUser.last_name || ''}`.trim(),
+                    referrerId: referrerId || null,
+                    isPremium: isPremium || false
                 });
 
                 if (res.data.status === 'success') {
