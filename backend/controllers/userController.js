@@ -4,7 +4,6 @@ const { Telegraf } = require("telegraf");
 const { getIo, userSocketMap } = require('../utils/socketHelper');
 
 const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
-const io = getIo();
 
 const {
     check2min,
@@ -75,6 +74,8 @@ exports.initializeUser = async (req, res) => {
                 const socketId = userSocketMap.get(refRes.telegramId);
                 if (socketId) {
                     console.log("Socket id backend", socketId);
+                    const io = getIo();
+                    console.log("IO", io);
                     io.to(socketId).emit('refresh', refRes.balance);
                 }
                 await refRes.save();
