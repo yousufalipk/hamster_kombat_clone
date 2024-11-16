@@ -1,0 +1,562 @@
+import React, { createContext, useContext, useState, useEffect } from "react";
+import axios from 'axios';
+
+
+const FirebaseContext = createContext(null);
+
+export const useFirebase = () => useContext(FirebaseContext);
+
+export const FirebaseProvider = (props) => {
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+
+    const [userId, setUserId] = useState(null);
+
+    const [username, setUsername] = useState(null);
+
+    const [userType, setUserType] = useState(null);
+
+    const [isAuth, setAuth] = useState(null);
+
+    const [users, setUsers] = useState([]);
+
+    const [telegramUsers, setTelegramUsers] = useState([]);
+
+    const [annoucement, setAnnoucement] = useState([]);
+
+    const [loading, setLoading] = useState(false);
+
+    const [tasks, setTasks] = useState([]);
+
+    const [dailyTasks, setDailyTasks] = useState([]);
+
+    const refreshAuth = async () => {
+        try {
+            console.log("Refreshing Auth!");
+            const refreshToken = localStorage.getItem('refreshToken');
+            setLoading(true);
+            const response = await axios.post(`${apiUrl}/refresh`, {
+                originalRefreshToken: refreshToken
+            });
+
+
+            console.log("Response: ", response.data);
+
+            if (response.data.status === 'success') {
+                console.log("Auth Verified!");
+                localStorage.setItem('accessToken', response.data.accessToken);
+                localStorage.setItem('refreshToken', response.data.refreshToken);
+                setUserId(response.data.user._id);
+                setAuth(response.data.auth);
+                setUsername(`${response.data.user.fname} ${response.data.user.lname}`);
+                setUserType(response.data.user.userType);
+            }
+            else {
+                console.log("Failed refreshing!");
+                localStorage.setItem('accessToken', '');
+                localStorage.setItem('refreshToken', '');
+                setAuth(false);
+                setUsername(null);
+                setUserId(null);
+                setUserType(null);
+            }
+        } catch (error) {
+            console.log("Internal Server Error/ Refresh");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        const refreshToken = localStorage.getItem('refreshToken');
+        if (refreshToken) {
+            refreshAuth();
+        }
+    }, []);
+
+    const registerUser = async (fname, lname, email, password, confirmPassword, tick) => {
+        setLoading(true);
+        try {
+            const response = await axios.post(`${apiUrl}/register-user`, {
+                fname: fname,
+                lname: lname,
+                email: email,
+                password: password,
+                confirmPassword: confirmPassword,
+                tick: tick
+            }, {
+                withCredentials: true
+            })
+            if (!tick) {
+                return { success: true };
+            }
+            else {
+                localStorage.setItem('accessToken', response.data.accessToken);
+                localStorage.setItem('refreshToken', response.data.refreshToken);
+                setUserId(response.data.user._id);
+                setAuth(response.data.auth);
+                setUsername(`${response.data.user.fname} ${response.data.user.lname}`);
+                setUserType('user');
+                return { success: true };
+            }
+        } catch (error) {
+            console.error("Error during registration:", error);
+            return { success: false, message: "Error creating user!" };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const loginUser = async (email, password) => {
+        setLoading(true);
+        try {
+            const response = await axios.post(`${apiUrl}/login-user`, {
+                email: email,
+                password: password
+            }, {
+                withCredentials: true
+            })
+
+            if (response.data.status === 'success') {
+                localStorage.setItem('accessToken', response.data.accessToken);
+                localStorage.setItem('refreshToken', response.data.refreshToken);
+                setUserId(response.data.user._id);
+                setAuth(response.data.auth);
+                setUsername(`${response.data.user.fname} ${response.data.user.lname}`);
+                setUserType(response.data.user.userType);
+                return { success: true };
+            }
+        } catch (error) {
+            console.error("Error logging in:", error);
+            return { success: false, message: "Error logging in!" };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const logoutUser = async () => {
+        const refreshToken = localStorage.getItem('refreshToken');
+        if (!refreshToken) {
+            return
+        }
+        setLoading(true);
+        try {
+            const response = await axios.post(`${apiUrl}/logout-user`, {
+                refreshToken: refreshToken
+            });
+
+            if (response.data.status === 'success') {
+                localStorage.setItem('accessToken', '');
+                localStorage.setItem('refreshToken', '');
+                setAuth(false);
+                setUserId(null);
+                setUsername(null);
+                setUserType(null);
+                return { success: true };
+            } else {
+                return { success: false };
+            }
+        } catch (error) {
+            console.error("Error logging out:", error);
+            return { success: false, message: "Error logging out!" };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchUsers = async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/fetch-users`);
+            if (response.data.status === 'success') {
+                setUsers(response.data.users);
+            }
+            else {
+                return { success: false };
+            }
+        } catch (error) {
+            console.error("Error fetching non-admin users:", error);
+            return { success: false, message: "Error fetching users!" };
+        }
+    };
+
+    const fetchTelegramUsers = async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/fetch-telegram-users`);
+            if (response.data.status === 'success') {
+                setTelegramUsers(response.data.telegramUsers);
+                console.log(response.data.telegramUsers);
+                return { success: true, telegramUsers: response.data.telegramUsers };
+            }
+            else {
+                return { success: false };
+            }
+        } catch (error) {
+            console.error("Error fetching telegram users:", error);
+            return { success: false, message: "Error fetching telegram users!" };
+        }
+    };
+
+
+    const updateUser = async (id, firstName, lastName) => {
+        setLoading(true);
+        try {
+            const response = await axios.put(`${apiUrl}/update-user`, {
+                fname: firstName,
+                lname: lastName,
+                userId: id
+            })
+            if (response.data.status === 'success') {
+                return { success: true };
+            }
+            else {
+                return { success: false };
+            }
+        } catch (error) {
+            return { success: false };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const deleteUser = async (id) => {
+        setLoading(true);
+        try {
+            const response = await axios.delete(`${apiUrl}/remove-user`, {
+                data: {
+                    userId: id
+                }
+            })
+            if (response.data.status === 'success') {
+                return { success: true };
+            }
+        } catch (error) {
+            return { success: false };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const createTask = async (values) => {
+        try {
+            setLoading(true);
+            const response = await axios.post(`${apiUrl}/create-social-task`, {
+                img: values.type,
+                priority: values.priority,
+                title: values.title,
+                link: values.link,
+                reward: values.reward
+            })
+
+            if (response.data.status === 'success') {
+                return { success: true };
+            }
+            else {
+                return { success: false, message: response.data.message };
+            }
+        } catch (error) {
+            return { success: false, message: "Internal Server Error!" };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchTasks = async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/fetch-social-task`);
+            if (response.data.status === 'success') {
+                setTasks(response.data.tasks);
+                return { success: true };
+            } else {
+                return { success: false, message: response.data.message };
+            }
+        } catch (error) {
+            console.error("Error fetching tasks:", error);
+            return { success: false, message: "Error fetching tasks!" };
+        }
+    };
+
+    const updateTask = async ({ uid, type, priority, title, link, reward }) => {
+        try {
+            setLoading(true);
+            const response = await axios.post(`${apiUrl}/update-social-task/${uid}`, {
+                img: type,
+                priority: priority,
+                title: title,
+                link: link,
+                reward: reward
+            });
+            if (response.data.status === 'success') {
+                return { success: true };
+            }
+            else {
+                return { success: false, message: response.data.message };
+            }
+        } catch (error) {
+            console.log("Error updating task", error);
+            return { success: false };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const deleteTask = async (uid) => {
+        try {
+            setLoading(true);
+            const response = await axios.delete(`${apiUrl}/delete-task/${uid}`);
+            if (response.data.status === "success") {
+                console.log("Response", response);
+                return { success: true };
+            }
+            else {
+                return { success: false, message: response.data.message };
+            }
+        } catch (error) {
+            return { success: false, message: "Internal Server Error" };
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const createDailyTask = async (values) => {
+        try {
+            setLoading(true);
+            const response = await axios.post(`${apiUrl}/create-daily-task`, {
+                img: values.type,
+                priority: values.priority,
+                title: values.title,
+                link: values.link,
+                reward: values.reward
+            })
+            if (response.data.status === 'success') {
+                return { success: true };
+            }
+            else {
+                return { success: false };
+            }
+        } catch (error) {
+            return { success: false, message: "Internal Server Error!" };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchDailyTask = async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/fetch-daily-task`);
+            if (response.data.status === 'success') {
+                setDailyTasks(response.data.tasks);
+                return { success: true };
+            } else {
+                return { success: false, message: response.data.message };
+            }
+        } catch (error) {
+            console.error("Error fetching tasks:", error);
+            return { success: false, message: "Error fetching tasks!" };
+        }
+    };
+
+
+    const updateDailyTask = async ({ uid, type, priority, title, link, reward }) => {
+        try {
+            setLoading(true);
+
+            setLoading(true);
+            const response = await axios.post(`${apiUrl}/update-daily-task/${uid}`, {
+                img: type,
+                priority: priority,
+                title: title,
+                link: link,
+                reward: reward
+            });
+            if (response.data.status === 'success') {
+                return { success: true };
+            }
+            else {
+                return { success: false, message: response.data.message };
+            }
+        } catch (error) {
+            console.log("Error updating task", error);
+            return { success: false };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const deleteDailyTask = async (uid) => {
+        try {
+            setLoading(true);
+            const response = await axios.delete(`${apiUrl}/delete-daily/${uid}`);
+            if (response.data.status === "success") {
+                return { success: true };
+            }
+            else {
+                return { success: false, message: response.data.message };
+            }
+        } catch (error) {
+            return { success: false };
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const fetchAnnoucement = async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/fetch-annoucements`);
+            if (response.data.status === 'success') {
+                setAnnoucement(response.data.annoucements);
+                return { success: true };
+            }
+            else {
+                return { success: false };
+            }
+        } catch (error) {
+            console.error("Error fetching annoucement:", error);
+            return { success: false, message: "Error fetching annoucements!" };
+        }
+    };
+
+    const toggleAnnoucementStatus = async (uid, status) => {
+        try {
+            setLoading(true);
+
+            const response = await axios.post(`${apiUrl}/toggle-annoucement`, {
+                id: uid
+            })
+
+            if (response.data.status === 'success') {
+                return { success: true };
+            }
+            else {
+                return { success: false, message: response.data.message };
+            }
+        } catch (error) {
+            console.error("Error updating announcement:", error);
+            return { success: false, error: error.message };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    const deleteAnnoucement = async (uid) => {
+        try {
+            setLoading(true);
+            const response = await axios.delete(`${apiUrl}/remove-annoucement/${uid}`);
+            if (response.data.status === 'success') {
+                return { success: true };
+            }
+            else {
+                return { success: false };
+            }
+        } catch (error) {
+            console.error("Error deleting announcement:", error);
+            return { success: false, error: error.message };
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    /*
+
+    const calculateDashboardMetrics = async () => {
+        try {
+            // Fetch users data
+            const usersCollectionRef = collection(firestore, 'users');
+            const usersSnapshot = await getDocs(usersCollectionRef);
+
+            const telegramUsersCollectionRef = collection(firestore, 'telegramUsers');
+            const telegramUsersSnapshot = await getDocs(telegramUsersCollectionRef);
+
+            const totalUsers = usersSnapshot.size; // Total number of users
+            const totalTelegramUsers = telegramUsersSnapshot.size; // Total number of Telegram users
+
+            const userTypes = {};
+            usersSnapshot.forEach((doc) => {
+                const userType = doc.data().userType;
+                if (userTypes[userType]) {
+                    userTypes[userType] += 1;
+                } else {
+                    userTypes[userType] = 1;
+                }
+            });
+
+            // Fetch announcements data
+            const announcementsCollectionRef = collection(firestore, 'announcements');
+            const activeAnnouncementsQuery = query(announcementsCollectionRef, where("status", "==", true));
+            const activeAnnouncementsSnapshot = await getDocs(activeAnnouncementsQuery);
+            const activeAnnouncements = activeAnnouncementsSnapshot.size;
+
+            // Fetch tasks data
+            const tasksCollectionRef = collection(firestore, 'socialTask');
+            const tasksSnapshot = await getDocs(tasksCollectionRef);
+            const totalTasks = tasksSnapshot.size;
+
+            const tasksByType = {};
+            tasksSnapshot.forEach((doc) => {
+                const taskType = doc.data().image;
+                if (tasksByType[taskType]) {
+                    tasksByType[taskType] += 1;
+                } else {
+                    tasksByType[taskType] = 1;
+                }
+            });
+
+            const data = {
+                totalUsers,
+                totalTelegramUsers,
+                userTypes,
+                activeAnnouncements,
+                totalTasks,
+                tasksByType
+            }
+            setMetrics(data);
+        } catch (error) {
+            console.error("Error calculating dashboard metrics:", error);
+            return { success: false, message: "Error calculating metrics" };
+        }
+    };  */
+
+
+
+
+
+    return (
+        <FirebaseContext.Provider value={{
+            registerUser,
+            loginUser,
+            logoutUser,
+            fetchUsers,
+            deleteUser,
+            fetchTelegramUsers,
+            updateUser,
+            createTask,
+            fetchTasks,
+            updateTask,
+            deleteTask,
+            deleteAnnoucement,
+            toggleAnnoucementStatus,
+            fetchAnnoucement,
+            setTelegramUsers,
+            telegramUsers,
+            setLoading,
+            loading,
+            userId,
+            username,
+            isAuth,
+            users,
+            userType,
+            tasks,
+            annoucement,
+            createDailyTask,
+            fetchDailyTask,
+            updateDailyTask,
+            deleteDailyTask,
+            setDailyTasks,
+            dailyTasks
+        }}>
+            {props.children}
+        </FirebaseContext.Provider>
+    );
+};
+
+export default FirebaseContext;
