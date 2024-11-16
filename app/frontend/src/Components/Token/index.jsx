@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 import PopUp from '../../Components/PopUp/popup2';
 
-import BackIcon from "../../assets/BackIcon.svg";
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import Twitter from "../../assets/twitterIcon.png";
@@ -13,7 +12,7 @@ import Telegram from "../../assets/telegramIcon.png";
 import Youtube from "../../assets/youtubeIcon.png";
 
 const Token = () => {
-	const { sendTokenData, userData, isModalOpen, setModalOpen } = useUser();
+	const { sendTokenData, isModalOpen, setModalOpen, currentRank, balance } = useUser();
 
 	const navigate = useNavigate();
 
@@ -67,9 +66,9 @@ const Token = () => {
 		<>
 			<>
 				{sendTokenData && (
-					<>	
+					<>
 						{isModalOpen && (
-								<PopUp />
+							<PopUp />
 						)}
 						<div className='bg-[#060611] p-4 h-[100vh] overflow-hidden'>
 							<div className='flex items-center gap-4'>
@@ -110,7 +109,7 @@ const Token = () => {
 														<p>{sendTokenData.name}</p>
 													</div>
 													<div className='text-xs bg-black bg-opacity-30 w-fit p-1 rounded-[5px]'>
-														<p className=''>lvl {userData.currentRank}</p>
+														<p className=''>lvl {currentRank}</p>
 													</div>
 												</div>
 											</div>
@@ -122,7 +121,7 @@ const Token = () => {
 													/>
 												</div>
 												<div className='text-[#FFF] text-[29.043px]'>
-													{userData.balance}
+													{balance}
 												</div>
 											</div>
 										</div>
