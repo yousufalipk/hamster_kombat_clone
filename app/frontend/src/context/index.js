@@ -64,7 +64,9 @@ export const UserProvider = (props) => {
     const [tgeToggle, setTgeToggle] = useState('launchpad');
 
     useEffect(() => {
-        initializeUser();
+        if (!userId) {
+            initializeUser();
+        }
     }, [])
 
     // Socket connection

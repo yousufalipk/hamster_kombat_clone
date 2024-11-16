@@ -81,7 +81,10 @@ const Footer = () => {
                                 </>
                             ) : (
                                 <>
-                                    <p className="text-white font-semibold">
+                                    <p
+                                        onClick={() => handleClick("Home", "/")}
+                                        className="text-white font-semibold"
+                                    >
                                         Tap & Earn
                                     </p>
                                 </>

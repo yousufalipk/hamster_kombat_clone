@@ -126,23 +126,6 @@ const Home = () => {
 		return () => clearInterval(intervalId);
 	}, [tapBalance]);
 
-	/*
-	useEffect(() => {
-		const intervalId = setInterval(async () => {
-			if (tapBalance !== 0) {
-				try {
-					await socket.emit('updateBalance', { userId, tapBalance });
-					setTapBalance(0);
-				} catch (error) {
-					console.error("Error updating balance:", error);
-				}
-			}
-		}, 1000); // Every 1 sec
-
-		return () => clearInterval(intervalId);
-	}, [tapBalance]);
-	*/
-
 	// Handle Haptic Feedback (Vibrate)
 	const triggerHapticFeedback = () => {
 		const isAndroid = /Android/i.test(navigator.userAgent);
@@ -173,17 +156,20 @@ const Home = () => {
 		navigate('/rankings');
 	}
 
-	const handleCardClick = (id) => {
-		if (id === 1) {
+	const handleCardClick = (data) => {
+		if (data.isCommingSoon) {
+			return;
+		}
+		if (data.id === 1) {
 			navigate('/gameplay');
 		}
-		else if (id === 2) {
+		else if (data.id === 2) {
 			setDailyRewardPopup(true);
 		}
-		else if (id === 3) {
+		else if (data.id === 3) {
 			navigate('/');
 		}
-		else if (id === 4) {
+		else if (data.id === 4) {
 			navigate('/');
 		}
 	}
@@ -248,7 +234,8 @@ const Home = () => {
 			data1: "Daily",
 			data2: "Game play",
 			timer: "13:11:35",
-			isDone: false
+			isDone: false,
+			isCommingSoon: true,
 		},
 		{
 			id: 2,
@@ -256,7 +243,8 @@ const Home = () => {
 			data1: "Daily",
 			data2: "Reward",
 			timer: "13:11:35",
-			isDone: claimed.includes(currentDay) ? true : false
+			isDone: claimed.includes(currentDay) ? true : false,
+			isCommingSoon: false,
 		},
 		{
 			id: 3,
@@ -264,16 +252,20 @@ const Home = () => {
 			data1: "Daily",
 			data2: "Combo",
 			timer: "02:33:48",
-			isDone: false
+			isDone: false,
+			isCommingSoon: true,
 		},
+		/*
 		{
 			id: 4,
 			img: DailySecretCode,
 			data1: "Daily",
 			data2: "Secret Code",
 			timer: "23:18:33",
-			isDone: false
+			isDone: false,
+			isCommingSoon: false,
 		},
+		*/
 	];
 
 	const handleUnlimitedTaps = async () => {
@@ -416,10 +408,17 @@ const Home = () => {
 
 											return (
 												<div
-													onClick={() => handleCardClick(id)}
+													onClick={() => handleCardClick(data)}
 													key={id}
-													className="min-w-[20%]"
+													className="relative min-w-[20%]"
 												>
+													{data.isCommingSoon && (
+														<>
+															<div className="absolute -top-1 -right-1 px-1 py-1 z-50 text-white font-bold text-[6px] bg-blue-700 rounded-full">
+																Comming Soon
+															</div>
+														</>
+													)}
 													{isDone ? (
 														<div
 															className="relative border border-[#0072ff] rounded-[14px] overflow-hidden">
@@ -443,7 +442,7 @@ const Home = () => {
 															</div>
 														</div>
 													) : (
-														<div className="relative py-[1px] px-[0.5px] rounded-[14px] overflow-hidden">
+														<div className={`relative py-[1px] px-[0.5px] rounded-[14px] overflow-hidden ${data.isCommingSoon && `opacity-60`}`}>
 															<div className="flex flex-col justify-center items-center p-2 h-20 bg-[#1B1B27] rounded-[14px] gap-2 border-gradient">
 																<div>
 																	<img src={img} alt="Logo" width="30" />
