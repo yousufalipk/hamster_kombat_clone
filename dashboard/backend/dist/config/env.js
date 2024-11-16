@@ -1,0 +1,16 @@
+"use strict";
+
+var dotenv = require('dotenv');
+dotenv.config();
+var PORT = process.env.PORT;
+var MONGODB_URI = process.env.MONGODB_URI;
+var REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+var ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+var FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN;
+module.exports = {
+  PORT: PORT,
+  MONGODB_URI: MONGODB_URI,
+  REFRESH_TOKEN_SECRET: REFRESH_TOKEN_SECRET,
+  ACCESS_TOKEN_SECRET: ACCESS_TOKEN_SECRET,
+  FRONTEND_ORIGIN: FRONTEND_ORIGIN
+};
