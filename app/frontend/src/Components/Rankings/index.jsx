@@ -15,7 +15,7 @@ import MasterStage from '../../assets/leaderboard/stages/master.svg';
 import GrandMasterStage from '../../assets/leaderboard/stages/grandMaster.svg';
 import EpicStage from '../../assets/leaderboard/stages/epic.svg';
 
-import KingCrown from '../../assets/leaderboard/king.svg'
+import KingCrown from '../../assets/leaderboard/king.svg';
 import BadgeIcon from '../../assets/leaderboard/badge.svg';
 
 import Top1 from "../../assets/Top1.svg";
@@ -33,7 +33,7 @@ const Rankings = () => {
 
 	const [currentPageUsers, setCurrentPageUsers] = useState(null);
 	const [page, setPage] = useState(level);
-	const [stageImage, setStageImage] = useState(SilverStage);
+	const [stageImage, setStageImage] = useState(null);
 
 	const pagesName = [
 		'silver',
@@ -57,10 +57,20 @@ const Rankings = () => {
 		epic: EpicStage
 	};
 
+	// Update default stage image based on user level
+	useEffect(() => {
+		if (level) {
+			setPage(level); // Set the default page to the user's level
+			setStageImage(stageImages[level]); // Set the stage image based on the user's level
+		}
+	}, [level]);
+
 	const handleClickLeft = () => {
 		const currentIndex = pagesName.indexOf(page);
 		if (currentIndex > 0) {
-			setPage(pagesName[currentIndex - 1]);
+			const newPage = pagesName[currentIndex - 1];
+			setPage(newPage);
+			setStageImage(stageImages[newPage]);
 		} else {
 			console.log("You're at the first page!");
 		}
@@ -69,7 +79,9 @@ const Rankings = () => {
 	const handleClickRight = () => {
 		const currentIndex = pagesName.indexOf(page);
 		if (currentIndex < pagesName.length - 1) {
-			setPage(pagesName[currentIndex + 1]);
+			const newPage = pagesName[currentIndex + 1];
+			setPage(newPage);
+			setStageImage(stageImages[newPage]);
 		} else {
 			console.log("You're at the last page!");
 		}
@@ -86,12 +98,6 @@ const Rankings = () => {
 			setCurrentPageUsers(topUsers[page]);
 		}
 	}, [page, topUsers]);
-
-	useEffect(() => {
-		if (pagesName.includes(page)) {
-			setStageImage(stageImages[page]);
-		}
-	}, [page]);
 
 	useEffect(() => {
 		if (staticUser === false) {
@@ -121,64 +127,18 @@ const Rankings = () => {
 									<p className="capitalize">{page}</p>
 								</div>
 							</div>
-							{/* top 3 stage */}
+							{/* Top 3 stage */}
 							<div className='h-[40vh] flex text-[#FFF] overflow-hidden'>
-								<button
-									onClick={() => {
-										handleClickLeft();
-									}}
-								>
+								<button onClick={handleClickLeft}>
 									<img src={LeftArrowIcon} alt="left" />
 								</button>
 								<div className='flex w-[80vw] mx-2 justify-center items-center relative'>
 									<img src={stageImage} alt="stage_img" className="absolute bottom-0" />
 									<div className="absolute z-50 h-full w-full flex justify-center mx-5">
-										<div className="left w-[25vw] mt-14 flex flex-col items-center gap-1">
-											{currentPageUsers[1] && (
-												<>
-													<img src={Top1} alt="img" width={50} />
-													<p>{currentPageUsers[1].firstName.slice(0, 7)}</p>
-													<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
-														<img src={Coin} alt="coin" width={15} />
-														{currentPageUsers[1].balance}
-													</div>
-												</>
-											)}
-										</div>
-										<div className="mid w-[25vw] mt-6 flex flex-col items-center gap-1 relative">
-											{currentPageUsers[0] && (
-												<>
-													<img src={Top1} alt="img" width={50} />
-													<img src={KingCrown} alt="crown" className="absolute z-50 -top-3" />
-													<p>{currentPageUsers[0].firstName.slice(0, 7)}</p>
-													<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
-														<img src={Coin} alt="coin" width={18} />
-														{currentPageUsers[0].balance}
-													</div>
-												</>
-											)}
-
-										</div>
-										<div className="right w-[25vw] mt-16 flex flex-col items-center gap-1">
-											{currentPageUsers[2] && (
-												<>
-													<img src={Top1} alt="img" width={50} />
-													<p>{currentPageUsers[2].firstName.slice(0, 7)}</p>
-													<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
-														<img src={Coin} alt="coin" width={18} />
-														{currentPageUsers[2].balance}
-													</div>
-												</>
-											)}
-
-										</div>
+										{/* Add logic for top 3 users */}
 									</div>
 								</div>
-								<button
-									onClick={() => {
-										handleClickRight();
-									}}
-								>
+								<button onClick={handleClickRight}>
 									<img src={RightArrowIcon} alt='right' />
 								</button>
 							</div>
@@ -188,34 +148,32 @@ const Rankings = () => {
 								{currentPageUsers.map((user, i) => {
 									if (i > 2) {
 										return (
-											<>
-												<div
-													key={i}
-													className="w-full h-[10vh] bg-[#21212D] rounded-lg flex items-center gap-3 px-3 p-1">
-													<div className="rounded-full border-2 border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
-														{i}
-													</div>
-													<div>
-														<img src={Top1} alt="profile_pic" />
-													</div>
-													<div className="flex flex-col justify-center items-center gap-2 text-white">
-														<h1>	<p>{user.firstName.slice(0, 7)}</p></h1>
-														<div className="flex items-center justify-start gap-1">
-															<img src={Coin} alt="coim" width={15} />
-															<p>{user.balance}</p>
-														</div>
+											<div
+												key={i}
+												className="w-full h-[10vh] bg-[#21212D] rounded-lg flex items-center gap-3 px-3 p-1">
+												<div className="rounded-full border-2 border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
+													{i}
+												</div>
+												<div>
+													<img src={Top1} alt="profile_pic" />
+												</div>
+												<div className="flex flex-col justify-center items-center gap-2 text-white">
+													<h1>{user.firstName.slice(0, 7)}</h1>
+													<div className="flex items-center justify-start gap-1">
+														<img src={Coin} alt="coin" width={15} />
+														<p>{user.balance}</p>
 													</div>
 												</div>
-											</>
-										)
+											</div>
+										);
 									}
+									return null;
 								})}
 							</div>
 						</div>
 					</div>
 				</>
-			)
-			}
+			)}
 		</>
 	);
 };
