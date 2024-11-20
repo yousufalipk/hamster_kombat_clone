@@ -7,6 +7,10 @@ const UserModel = require('./models/userModel');
 const { initializeIo, userSocketMap } = require('./utils/socketHelper');
 const user = require('./Routes/userRoute');
 
+const {
+    checkLevelUpgrade
+} = require('./utils/updateLevel');
+
 const app = express();
 const server = http.createServer(app);
 
@@ -29,25 +33,27 @@ io.on('connection', (socket) => {
     console.log("A new user has connected!", socket.id);
 
     socket.on('register', (telegramId) => {
-        console.log("Telegram id", telegramId);
         userSocketMap.set(telegramId, socket.id);
-        console.log(`User ${telegramId} registered with socket ID ${socket.id}`);
-        console.log("UserSocketMap", userSocketMap);
     });
 
     // Update Balance
     socket.on('updateBalance', async (data) => {
         try {
-            console.log("User ID", data.userId, "Tap Balance", data.tapBalance);
             const isUser = await UserModel.findById(data.userId);
 
             if (!isUser) {
-                console.log("User not found!");
                 socket.emit('error', { message: 'User not found!' });
             } else {
                 isUser.balance += data.tapBalance;
+                const res = await checkLevelUpgrade(isUser.balance, isUser.level, isUser.currentRank);
+
+                if (res.success) {
+                    isUser.level = res.data.newLevel;
+                    isUser.currentRank = res.data.newRank;
+
+                }
                 await isUser.save();
-                console.log("User balance updated successfully!");
+                socket.emit('levelup', isUser);
             }
         } catch (error) {
             console.error("Error updating balance:", error);

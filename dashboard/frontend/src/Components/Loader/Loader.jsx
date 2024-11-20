@@ -8,7 +8,7 @@ const Loader = () => {
                 <Circles
                     height="200"
                     width="200"
-                    color="#2fedbf"
+                    color="#dba211"
                     ariaLabel="loading"
                 />
             </div>

@@ -3,125 +3,178 @@
 @tailwind utilities;
 
 * {
-	box-sizing: border-box;
-	margin: 0px;
-	padding: 0px;
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
 }
 
 .back-color {
-	background: rgba(255, 176, 0, 0.35);
+  background: rgba(255, 176, 0, 0.35);
 }
 
 .grad {
-	border-radius: 18px;
-	border: 1px solid rgba(255, 255, 255, 0.43);
-	background: linear-gradient(180deg, #00b2ff 0%, #2226ff 100%);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.43);
+  background: linear-gradient(180deg, #00b2ff 0%, #2226ff 100%);
 }
 
 .memefi-bg {
-	background: linear-gradient(96deg, #f58300 6.27%, #cd6000 100%);
+  background: linear-gradient(96deg, #f58300 6.27%, #cd6000 100%);
 }
 
 .tonfish-bg {
-	background: linear-gradient(96deg, #0077fc 6.27%, #002c5c 100%);
+  background: linear-gradient(96deg, #0077fc 6.27%, #002c5c 100%);
 }
 
 .gamefi1-bg {
-	background: linear-gradient(96deg, #202020 6.27%, #000 100%);
+  background: linear-gradient(96deg, #202020 6.27%, #000 100%);
 }
 
 .gamefi2-bg {
-	background: linear-gradient(96deg, #06b657 6.27%, #00904b 100%);
+  background: linear-gradient(96deg, #06b657 6.27%, #00904b 100%);
 }
 
 .blue-grad {
-	background: linear-gradient(96deg, #0077fc 6.27%, #002c5c 100%);
+  background: linear-gradient(96deg, #0077fc 6.27%, #002c5c 100%);
 }
 
 .red-grad {
-	background: linear-gradient(96deg, #5b0002 6.27%, #a40003 100%);
+  background: linear-gradient(96deg, #5b0002 6.27%, #a40003 100%);
 }
 
 .purple-grad {
-	background: linear-gradient(96deg, #4b00cf 6.27%, #290070 100%);
+  background: linear-gradient(96deg, #4b00cf 6.27%, #290070 100%);
 }
 
 .yellow-grad {
-	background: linear-gradient(96deg, #c76a00 6.27%, #753700 100%);
+  background: linear-gradient(96deg, #c76a00 6.27%, #753700 100%);
 }
 
 .button-grad {
-	background: linear-gradient(180deg, #00b2ff 0%, #2226ff 100%);
+  background: linear-gradient(180deg, #00b2ff 0%, #2226ff 100%);
 }
 
 .rank-number {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	color: white;
-	font-size: 2rem;
-	font-weight: bold;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
 }
-
 
 /* Border Gradient  */
 .border-gradient {
-	position: relative;
+  position: relative;
 }
 
 .border-gradient::before {
-	position: absolute;
-	content: "";
-	inset: 0;
-	border-radius: 0.75rem;
-	pointer-events: none;
-	padding: 1px;
-	background: linear-gradient(135deg, #232323, #808080);
-	-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-	-webkit-mask-composite: xor;
-	mask-composite: exclude;
+  position: absolute;
+  content: "";
+  inset: 0;
+  border-radius: 0.75rem;
+  pointer-events: none;
+  padding: 1px;
+  background: linear-gradient(135deg, #232323, #808080);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
 
 /* For Webkit Browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-	display: none;
-	/* Hide scrollbar */
+  display: none;
+  /* Hide scrollbar */
 }
 
 /* For Firefox */
 html {
-	scrollbar-width: none;
-	/* Hide scrollbar */
+  scrollbar-width: none;
+  /* Hide scrollbar */
 }
 
 @keyframes textAnimation {
-	0% {
-		opacity: 1;
-		transform: translateY(0) scale(1);
-	}
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 
-	50% {
-		opacity: 1;
-		transform: translateY(-25px) scale(1.1);
-	}
+  50% {
+    opacity: 1;
+    transform: translateY(-25px) scale(1.1);
+  }
 
-	100% {
-		opacity: 0;
-		transform: translateY(-70px) scale(1.2);
-	}
+  100% {
+    opacity: 0;
+    transform: translateY(-70px) scale(1.2);
+  }
 }
 
 .bot-tap:active {
-	width: 125px;
+  width: 125px;
 }
 
 /* Optional: Adjust the styling of the tap-image class */
 .tap-image {
-	position: relative;
-	/* Ensure the parent container has relative positioning */
+  position: relative;
+  /* Ensure the parent container has relative positioning */
 }
 
 .sortable-handler {
-	touch-action: none;
+  touch-action: none;
+}
+
+@layer components {
+  .custom-button {
+    background: linear-gradient(60deg, #475c6c, #303d46, #475c6c);
+    box-shadow: inset 0 0 10px rgba(69, 38, 5, 0.36);
+    transition: background 0.1s ease-in-out, color 0.2s ease-in-out,
+      filter 0.6s ease-in-out, transform 0.6s ease-in-out;
+    position: relative;
+    display: inline-block; /* Ensure it behaves like a button */
+    transform: translateX(-6px);
+  }
+  .custom-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 1.1px;
+    background: linear-gradient(to right, #3b4c5a, rgb(252, 252, 252), #3b4c5a);
+  }
+  .custom-button::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 1.1px;
+    background: linear-gradient(to right, #3b4c5a, rgb(251, 250, 250), #3b4c5a);
+  }
+  .custom-button:hover::before,
+  .custom-button:hover::after {
+    opacity: 0;
+  }
+  .custom-button-2 {
+    background: linear-gradient(60deg, #fffcfa, #ffffff);
+    box-shadow: inset 0 0 10px rgba(69, 38, 5, 0.36);
+    transition: background 0.1s ease-in-out, color 0.2s ease-in-out,
+      filter 0.6s ease-in-out, transform 0.6s ease-in-out;
+    position: relative;
+    display: inline-block;
+    transform: translateX(-6px);
+  }
+  .custom-button-2:hover {
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out,
+      filter 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transform: scale(1.04);
+  }
+  .custom-button-2:hover::before,
+  .custom-button-2:hover::after {
+    opacity: 1;
+  }
 }

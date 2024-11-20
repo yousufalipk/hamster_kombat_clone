@@ -10,6 +10,8 @@ export const FirebaseProvider = (props) => {
 
     const apiUrl = process.env.REACT_APP_API_URL;
 
+    const [page, setPage] = useState('dashboard');
+
     const [userId, setUserId] = useState(null);
 
     const [username, setUsername] = useState(null);
@@ -18,32 +20,21 @@ export const FirebaseProvider = (props) => {
 
     const [isAuth, setAuth] = useState(null);
 
-    const [users, setUsers] = useState([]);
-
-    const [telegramUsers, setTelegramUsers] = useState([]);
-
-    const [annoucement, setAnnoucement] = useState([]);
-
     const [loading, setLoading] = useState(false);
 
-    const [tasks, setTasks] = useState([]);
+    const [sendData, setSendData] = useState(null);
 
-    const [dailyTasks, setDailyTasks] = useState([]);
+    const [projects, setProjects] = useState(null);
 
     const refreshAuth = async () => {
         try {
-            console.log("Refreshing Auth!");
             const refreshToken = localStorage.getItem('refreshToken');
             setLoading(true);
             const response = await axios.post(`${apiUrl}/refresh`, {
                 originalRefreshToken: refreshToken
             });
 
-
-            console.log("Response: ", response.data);
-
             if (response.data.status === 'success') {
-                console.log("Auth Verified!");
                 localStorage.setItem('accessToken', response.data.accessToken);
                 localStorage.setItem('refreshToken', response.data.refreshToken);
                 setUserId(response.data.user._id);
@@ -52,7 +43,6 @@ export const FirebaseProvider = (props) => {
                 setUserType(response.data.user.userType);
             }
             else {
-                console.log("Failed refreshing!");
                 localStorage.setItem('accessToken', '');
                 localStorage.setItem('refreshToken', '');
                 setAuth(false);
@@ -61,7 +51,7 @@ export const FirebaseProvider = (props) => {
                 setUserType(null);
             }
         } catch (error) {
-            console.log("Internal Server Error/ Refresh");
+            console.log("Internal Server Error");
         } finally {
             setLoading(false);
         }
@@ -164,360 +154,90 @@ export const FirebaseProvider = (props) => {
         }
     };
 
-    const fetchUsers = async () => {
+    // Project Functions
+
+    const fetchProjects = async () => {
         try {
-            const response = await axios.get(`${apiUrl}/fetch-users`);
+            const response = await axios.get(`${apiUrl}/project/fetch`);
             if (response.data.status === 'success') {
-                setUsers(response.data.users);
-            }
-            else {
-                return { success: false };
+                setProjects(response.data.projects);
+            } else {
+                console.log(response.data.message);
             }
         } catch (error) {
-            console.error("Error fetching non-admin users:", error);
-            return { success: false, message: "Error fetching users!" };
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const createProject = async (data) => {
+        try {
+            const response = await axios.post(`${apiUrl}/project/create`, {
+                name: data.name,
+                icon: {
+                    name: data.icon.name,
+                    data: data.icon.data,
+                    contentType: data.icon.contentType,
+                },
+                fromColor: data.fromColor,
+                toColor: data.toColor
+            });
+            if (response.data.status === 'success') {
+                await fetchProjects();
+                return ({ success: true, mess: response.data.message });
+            } else {
+                return ({ success: false, mess: response.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
         }
     };
 
-    const fetchTelegramUsers = async () => {
+    const updateProject = async (data, id) => {
         try {
-            const response = await axios.get(`${apiUrl}/fetch-telegram-users`);
+            const response = await axios.post(`${apiUrl}/project/update`, {
+                id: id,
+                name: data.name,
+                icon: {
+                    name: data.icon.name,
+                    data: data.icon.data,
+                    contentType: data.icon.contentType,
+                },
+                fromColor: data.fromColor,
+                toColor: data.toColor
+            });
             if (response.data.status === 'success') {
-                setTelegramUsers(response.data.telegramUsers);
-                console.log(response.data.telegramUsers);
-                return { success: true, telegramUsers: response.data.telegramUsers };
-            }
-            else {
-                return { success: false };
+                await fetchProjects();
+                return ({ success: true, mess: response.data.message });
+            } else {
+                return ({ success: false, mess: response.data.message });
             }
         } catch (error) {
-            console.error("Error fetching telegram users:", error);
-            return { success: false, message: "Error fetching telegram users!" };
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
         }
     };
 
-
-    const updateUser = async (id, firstName, lastName) => {
-        setLoading(true);
+    const deleteProject = async (id) => {
         try {
-            const response = await axios.put(`${apiUrl}/update-user`, {
-                fname: firstName,
-                lname: lastName,
-                userId: id
-            })
-            if (response.data.status === 'success') {
-                return { success: true };
-            }
-            else {
-                return { success: false };
-            }
-        } catch (error) {
-            return { success: false };
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const deleteUser = async (id) => {
-        setLoading(true);
-        try {
-            const response = await axios.delete(`${apiUrl}/remove-user`, {
+            const response = await axios.delete(`${apiUrl}/project/remove`, {
                 data: {
-                    userId: id
+                    projectId: id
                 }
-            })
-            if (response.data.status === 'success') {
-                return { success: true };
-            }
-        } catch (error) {
-            return { success: false };
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const createTask = async (values) => {
-        try {
-            setLoading(true);
-            const response = await axios.post(`${apiUrl}/create-social-task`, {
-                img: values.type,
-                priority: values.priority,
-                title: values.title,
-                link: values.link,
-                reward: values.reward
-            })
-
-            if (response.data.status === 'success') {
-                return { success: true };
-            }
-            else {
-                return { success: false, message: response.data.message };
-            }
-        } catch (error) {
-            return { success: false, message: "Internal Server Error!" };
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const fetchTasks = async () => {
-        try {
-            const response = await axios.get(`${apiUrl}/fetch-social-task`);
-            if (response.data.status === 'success') {
-                setTasks(response.data.tasks);
-                return { success: true };
-            } else {
-                return { success: false, message: response.data.message };
-            }
-        } catch (error) {
-            console.error("Error fetching tasks:", error);
-            return { success: false, message: "Error fetching tasks!" };
-        }
-    };
-
-    const updateTask = async ({ uid, type, priority, title, link, reward }) => {
-        try {
-            setLoading(true);
-            const response = await axios.post(`${apiUrl}/update-social-task/${uid}`, {
-                img: type,
-                priority: priority,
-                title: title,
-                link: link,
-                reward: reward
             });
-            if (response.data.status === 'success') {
-                return { success: true };
-            }
-            else {
-                return { success: false, message: response.data.message };
-            }
-        } catch (error) {
-            console.log("Error updating task", error);
-            return { success: false };
-        } finally {
-            setLoading(false);
-        }
-    };
 
-    const deleteTask = async (uid) => {
-        try {
-            setLoading(true);
-            const response = await axios.delete(`${apiUrl}/delete-task/${uid}`);
-            if (response.data.status === "success") {
-                console.log("Response", response);
-                return { success: true };
-            }
-            else {
-                return { success: false, message: response.data.message };
+            if (response.data.status === 'success') {
+                setProjects((prevData) => prevData.filter((project) => project._id !== id));
+                return ({ success: true, mess: response.data.message });
+            } else {
+                return ({ success: false, mess: response.data.message });
             }
         } catch (error) {
-            return { success: false, message: "Internal Server Error" };
-        } finally {
-            setLoading(false);
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
         }
     }
-
-    const createDailyTask = async (values) => {
-        try {
-            setLoading(true);
-            const response = await axios.post(`${apiUrl}/create-daily-task`, {
-                img: values.type,
-                priority: values.priority,
-                title: values.title,
-                link: values.link,
-                reward: values.reward
-            })
-            if (response.data.status === 'success') {
-                return { success: true };
-            }
-            else {
-                return { success: false };
-            }
-        } catch (error) {
-            return { success: false, message: "Internal Server Error!" };
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const fetchDailyTask = async () => {
-        try {
-            const response = await axios.get(`${apiUrl}/fetch-daily-task`);
-            if (response.data.status === 'success') {
-                setDailyTasks(response.data.tasks);
-                return { success: true };
-            } else {
-                return { success: false, message: response.data.message };
-            }
-        } catch (error) {
-            console.error("Error fetching tasks:", error);
-            return { success: false, message: "Error fetching tasks!" };
-        }
-    };
-
-
-    const updateDailyTask = async ({ uid, type, priority, title, link, reward }) => {
-        try {
-            setLoading(true);
-
-            setLoading(true);
-            const response = await axios.post(`${apiUrl}/update-daily-task/${uid}`, {
-                img: type,
-                priority: priority,
-                title: title,
-                link: link,
-                reward: reward
-            });
-            if (response.data.status === 'success') {
-                return { success: true };
-            }
-            else {
-                return { success: false, message: response.data.message };
-            }
-        } catch (error) {
-            console.log("Error updating task", error);
-            return { success: false };
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const deleteDailyTask = async (uid) => {
-        try {
-            setLoading(true);
-            const response = await axios.delete(`${apiUrl}/delete-daily/${uid}`);
-            if (response.data.status === "success") {
-                return { success: true };
-            }
-            else {
-                return { success: false, message: response.data.message };
-            }
-        } catch (error) {
-            return { success: false };
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    const fetchAnnoucement = async () => {
-        try {
-            const response = await axios.get(`${apiUrl}/fetch-annoucements`);
-            if (response.data.status === 'success') {
-                setAnnoucement(response.data.annoucements);
-                return { success: true };
-            }
-            else {
-                return { success: false };
-            }
-        } catch (error) {
-            console.error("Error fetching annoucement:", error);
-            return { success: false, message: "Error fetching annoucements!" };
-        }
-    };
-
-    const toggleAnnoucementStatus = async (uid, status) => {
-        try {
-            setLoading(true);
-
-            const response = await axios.post(`${apiUrl}/toggle-annoucement`, {
-                id: uid
-            })
-
-            if (response.data.status === 'success') {
-                return { success: true };
-            }
-            else {
-                return { success: false, message: response.data.message };
-            }
-        } catch (error) {
-            console.error("Error updating announcement:", error);
-            return { success: false, error: error.message };
-        } finally {
-            setLoading(false);
-        }
-    };
-
-
-    const deleteAnnoucement = async (uid) => {
-        try {
-            setLoading(true);
-            const response = await axios.delete(`${apiUrl}/remove-annoucement/${uid}`);
-            if (response.data.status === 'success') {
-                return { success: true };
-            }
-            else {
-                return { success: false };
-            }
-        } catch (error) {
-            console.error("Error deleting announcement:", error);
-            return { success: false, error: error.message };
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    /*
-
-    const calculateDashboardMetrics = async () => {
-        try {
-            // Fetch users data
-            const usersCollectionRef = collection(firestore, 'users');
-            const usersSnapshot = await getDocs(usersCollectionRef);
-
-            const telegramUsersCollectionRef = collection(firestore, 'telegramUsers');
-            const telegramUsersSnapshot = await getDocs(telegramUsersCollectionRef);
-
-            const totalUsers = usersSnapshot.size; // Total number of users
-            const totalTelegramUsers = telegramUsersSnapshot.size; // Total number of Telegram users
-
-            const userTypes = {};
-            usersSnapshot.forEach((doc) => {
-                const userType = doc.data().userType;
-                if (userTypes[userType]) {
-                    userTypes[userType] += 1;
-                } else {
-                    userTypes[userType] = 1;
-                }
-            });
-
-            // Fetch announcements data
-            const announcementsCollectionRef = collection(firestore, 'announcements');
-            const activeAnnouncementsQuery = query(announcementsCollectionRef, where("status", "==", true));
-            const activeAnnouncementsSnapshot = await getDocs(activeAnnouncementsQuery);
-            const activeAnnouncements = activeAnnouncementsSnapshot.size;
-
-            // Fetch tasks data
-            const tasksCollectionRef = collection(firestore, 'socialTask');
-            const tasksSnapshot = await getDocs(tasksCollectionRef);
-            const totalTasks = tasksSnapshot.size;
-
-            const tasksByType = {};
-            tasksSnapshot.forEach((doc) => {
-                const taskType = doc.data().image;
-                if (tasksByType[taskType]) {
-                    tasksByType[taskType] += 1;
-                } else {
-                    tasksByType[taskType] = 1;
-                }
-            });
-
-            const data = {
-                totalUsers,
-                totalTelegramUsers,
-                userTypes,
-                activeAnnouncements,
-                totalTasks,
-                tasksByType
-            }
-            setMetrics(data);
-        } catch (error) {
-            console.error("Error calculating dashboard metrics:", error);
-            return { success: false, message: "Error calculating metrics" };
-        }
-    };  */
-
-
-
 
 
     return (
@@ -525,34 +245,22 @@ export const FirebaseProvider = (props) => {
             registerUser,
             loginUser,
             logoutUser,
-            fetchUsers,
-            deleteUser,
-            fetchTelegramUsers,
-            updateUser,
-            createTask,
-            fetchTasks,
-            updateTask,
-            deleteTask,
-            deleteAnnoucement,
-            toggleAnnoucementStatus,
-            fetchAnnoucement,
-            setTelegramUsers,
-            telegramUsers,
             setLoading,
             loading,
             userId,
             username,
             isAuth,
-            users,
             userType,
-            tasks,
-            annoucement,
-            createDailyTask,
-            fetchDailyTask,
-            updateDailyTask,
-            deleteDailyTask,
-            setDailyTasks,
-            dailyTasks
+            setPage,
+            page,
+            setSendData,
+            sendData,
+
+            projects,
+            fetchProjects,
+            createProject,
+            deleteProject,
+            updateProject
         }}>
             {props.children}
         </FirebaseContext.Provider>

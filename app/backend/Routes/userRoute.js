@@ -14,6 +14,10 @@ const {
     test
 } = require('../controllers/userController');
 
+const {
+    fetchTopUsersForAllLevels
+} = require('../utils/updateLevel');
+
 const router = express.Router();
 
 
@@ -25,6 +29,7 @@ router.route('/toggle-unlimited-taps-status').post(toggleUnlimitedTapsStatus);
 router.route('/refill-energy').post(refillEnergy);
 router.route('/claim-daily-reward').post(claimDailyRewards);
 router.route('/check-premium').post(checkPremium);
+router.route('/fetch-leaderboard').post(fetchTopUsersForAllLevels);
 
 
 

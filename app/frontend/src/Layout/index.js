@@ -8,9 +8,11 @@ import InviteFriends from '../Pages/InviteFriends/index';
 import Wallet from '../Pages/Wallet/index';
 import Footer from '../Components/Footer';
 
+import Rankings from '../Components/Rankings/index';
+
 const Layout = () => {
     return (
-        <>  
+        <>
             <div className='relative h-full w-screen overflow-hidden z-20'>
                 <div>
                     <Routes>
@@ -19,6 +21,7 @@ const Layout = () => {
                         <Route path="/wallet" element={<Wallet />} />
                         <Route path="/hammer" element={<Hammer />} />
                         <Route path="/invite-friends" element={<InviteFriends />} />
+                        <Route path="/rankings" element={<Rankings />} />
                     </Routes>
                 </div>
                 <div>

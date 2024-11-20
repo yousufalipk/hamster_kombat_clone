@@ -1,16 +1,19 @@
-const express = require('express')
+const express = require('express');
 const { PORT, FRONTEND_ORIGIN } = require('./config/env');
 const ConnectToDB = require('./config/db');
 const cors = require('cors');
 
 const userRoutes = require('./routes/userRoutes');
+const projectRoutes = require('./routes/projectRoutes');
 
 const app = express();
-app.use(express.json());
+
+app.use(express.json({ limit: '2mb' }));
+app.use(express.urlencoded({ limit: '2mb', extended: true }));
 
 app.use(
     cors({
-        origin: function (FRONTEND_ORIGIN, callback) {
+        origin: function (origin, callback) {
             return callback(null, true);
         },
         optionsSuccessStatus: 200,
@@ -18,17 +21,15 @@ app.use(
     })
 );
 
-app.use(express.json());
-
 ConnectToDB();
 
-// test route
 app.get('/', (req, res) => {
-    return res.json('Server Running...')
-})
+    return res.json('Server Running...');
+});
 
 app.use('/', userRoutes);
+app.use('/project', projectRoutes);
 
 app.listen(PORT, () => {
-    console.log(`Server running on port: ${PORT}`)
-})
+    console.log(`Server running on port: ${PORT}`);
+});

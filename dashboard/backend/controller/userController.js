@@ -234,6 +234,8 @@ exports.refresh = async (req, res) => {
     }
 }
 
+/*
+
 exports.fetchUsers = async (req, res) => {
     try {
         const users = await UserModel.find({ userType: { $ne: 'admin' } });
@@ -859,5 +861,7 @@ exports.fetchAnnoucement = async (req, res) => {
         })
     }
 }
+
+*/
 
 

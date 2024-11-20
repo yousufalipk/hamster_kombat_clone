@@ -50,6 +50,10 @@ export const UserProvider = (props) => {
     const [claimed, setClaimed] = useState([]);
     const [currentDay, setCurrentDay] = useState(null);
 
+    // Leaderboard 
+
+    const [topUsers, setTopUsers] = useState(null);
+
     // Others 
     const [loader, setLoader] = useState(false);
 
@@ -69,6 +73,11 @@ export const UserProvider = (props) => {
         }
     }, [])
 
+
+    useEffect(() => {
+
+    }, [balance]);
+
     // Socket connection
     useEffect(() => {
         if (telegramId) {
@@ -83,6 +92,15 @@ export const UserProvider = (props) => {
                 setBalance(user.balance);
                 setReferrals(user.referrals);
             });
+
+            newSocket.on('levelup', (user) => {
+                const percentage = (user.currentRank / 10) * 100;
+                setLevelPercentage(percentage);
+                setCurrentRank(user.currentRank);
+                setLevel(user.level);
+            });
+
+
 
             return () => {
                 newSocket.disconnect();
@@ -118,7 +136,6 @@ export const UserProvider = (props) => {
 
     // Initilize User
     const initializeUser = async () => {
-        //let referrerId = '5840841171', isPremium = false;
         let referrerId = null, isPremium = false;
         setLoader(true);
         try {
@@ -379,21 +396,18 @@ export const UserProvider = (props) => {
         }
     }
 
-    const updateBalance = async (tapBalance) => {
+    const fetchLeaderboardUsers = async () => {
         try {
-            const res = await axios.post(`${apiUrl}/update-balance`, {
-                userId: userId,
-                tapBalance: tapBalance
+            console.log("Fetching Top Users...");
+            const response = await axios.post(`${apiUrl}/user/fetch-leaderboard`, {
+                userId: userId
             });
-
-            if (res.data.status === 'success') {
-                return { success: true, mess: res.data.message };
-            } else {
-                return { success: false, mess: res.data.message };
+            if (response.data.status === 'success') {
+                setTopUsers(response.data.leaderboard);
             }
         } catch (error) {
-            console.log("Error updating balance", error);
-            return ({ success: false, mess: 'Internal Server Error!' });
+            console.log("Internal Server Error!");
+            return ({ success: false, message: 'Internal Server Error!' });
         }
     }
 
@@ -442,11 +456,12 @@ export const UserProvider = (props) => {
             claimed,
             currentDay,
             claimDailyReward,
-            updateBalance,
             tapBalance,
             setTapBalance,
             coinsPerMinute,
-            referrals
+            referrals,
+            topUsers,
+            fetchLeaderboardUsers
         }}>
             {props.children}
         </UserContext.Provider>

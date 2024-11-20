@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Routes, Route } from 'react-router-dom';
 import { LuLoader2 } from "react-icons/lu";
 
-import Rankings from './Components/Rankings/index';
 import Token from './Components/Token/index';
 import GamePage from './Pages/Game/Game';
 
@@ -49,7 +48,7 @@ const App = () => {
 					<Route path="*" element={<Layout />} />
 
 					{/* Other Routes */}
-					<Route path="/rankings" element={<Rankings />} />
+					{/*<Route path="/rankings" element={<Rankings />} /> */}
 					<Route path="/gameplay" element={<GamePage />} />
 					<Route path="/token" element={<Token />} />
 				</Routes>

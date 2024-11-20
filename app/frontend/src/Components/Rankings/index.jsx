@@ -1,229 +1,219 @@
-import React, { useEffect } from "react";
-import { useNavigate } from 'react-router-dom'; 
+import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
-import BackIcon from "../../assets/BackIcon.svg";
-import Friend1 from "../../assets/Friend1.svg";
-import Friend2 from "../../assets/Friend2.svg";
-import Coin from "../../assets/BigCoinIcon.svg";
-import Rank1 from "../../assets/1stRank.svg";
-import Rank2 from "../../assets/2ndRank.svg";
-import Rank3 from "../../assets/3rdRank.svg";
-import Panda from "../../assets/PandaPicture.png";
+import { useUser } from '../../context/index';
+
+import LeftArrowIcon from '../../assets/leaderboard/left.svg';
+import RightArrowIcon from '../../assets/leaderboard/right.svg';
+
+import SilverStage from '../../assets/leaderboard/stages/silver.svg';
+import GoldStage from '../../assets/leaderboard/stages/gold.svg';
+import DaimondStage from '../../assets/leaderboard/stages/daimond.svg';
+import PlatinumStage from '../../assets/leaderboard/stages/platinum.svg';
+import LegendaryStage from '../../assets/leaderboard/stages/legendary.svg';
+import MasterStage from '../../assets/leaderboard/stages/master.svg';
+import GrandMasterStage from '../../assets/leaderboard/stages/grandMaster.svg';
+import EpicStage from '../../assets/leaderboard/stages/epic.svg';
+
+import KingCrown from '../../assets/leaderboard/king.svg'
+import BadgeIcon from '../../assets/leaderboard/badge.svg';
+
 import Top1 from "../../assets/Top1.svg";
-import Top2 from "../../assets/Top2.svg";
-import Top3 from "../../assets/Top3.svg";
+import Coin from "../../assets/BigCoinIcon.svg";
 
 const Rankings = () => {
+	const {
+		topUsers,
+		fetchLeaderboardUsers,
+		level
+	} = useUser();
+
+	const staticUser = process.env.REACT_APP_STATIC_USER;
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		const tg = window.Telegram.WebApp;
+	const [currentPageUsers, setCurrentPageUsers] = useState(null);
+	const [page, setPage] = useState(level);
+	const [stageImage, setStageImage] = useState(SilverStage);
 
-		tg.BackButton.show();
-		tg.BackButton.onClick(() => {
-			navigate("/");
-		});
-
-		return () => {
-			tg.BackButton.hide();
-			tg.BackButton.offClick();
-		};
-	}, [navigate]);
-
-	const friendsData = [
-		{
-			id: 1,
-			img1: Friend1,
-			img2: Coin,
-			name: "Jane Cooper",
-			coins: "+5,000",
-		},
-		{
-			id: 2,
-			img1: Friend2,
-			img2: Coin,
-			name: "Esther Howard",
-			coins: "+5,000",
-		},
-		{
-			id: 3,
-			img1: Friend2,
-			img2: Coin,
-			name: "Cameron Williamson",
-			coins: "+5,000",
-		},
-		{
-			id: 4,
-			img1: Friend2,
-			img2: Coin,
-			name: "Leslie Alexander (you)",
-			coins: "+5,000",
-		},
+	const pagesName = [
+		'silver',
+		'gold',
+		'diamond',
+		'platinum',
+		'legendary',
+		'master',
+		'grandMaster',
+		'epic'
 	];
 
-	const data = {
-		name1: "Virat Kohli",
-		img1: Top1,
-		img2: Top2,
-		img3: Top3,
-		name2: "Babar",
-		name3: "Misbah",
-		points: 25951,
+	const stageImages = {
+		silver: SilverStage,
+		gold: GoldStage,
+		diamond: DaimondStage,
+		platinum: PlatinumStage,
+		legendary: LegendaryStage,
+		master: MasterStage,
+		grandMaster: GrandMasterStage,
+		epic: EpicStage
 	};
+
+	const handleClickLeft = () => {
+		const currentIndex = pagesName.indexOf(page);
+		if (currentIndex > 0) {
+			setPage(pagesName[currentIndex - 1]);
+		} else {
+			console.log("You're at the first page!");
+		}
+	};
+
+	const handleClickRight = () => {
+		const currentIndex = pagesName.indexOf(page);
+		if (currentIndex < pagesName.length - 1) {
+			setPage(pagesName[currentIndex + 1]);
+		} else {
+			console.log("You're at the last page!");
+		}
+	};
+
+	useEffect(() => {
+		if (!topUsers) {
+			fetchLeaderboardUsers();
+		}
+	}, []);
+
+	useEffect(() => {
+		if (topUsers && topUsers[page]) {
+			setCurrentPageUsers(topUsers[page]);
+		}
+	}, [page, topUsers]);
+
+	useEffect(() => {
+		if (pagesName.includes(page)) {
+			setStageImage(stageImages[page]);
+		}
+	}, [page]);
+
+	useEffect(() => {
+		if (staticUser === false) {
+			const tg = window.Telegram.WebApp;
+
+			tg.BackButton.show();
+			tg.BackButton.onClick(() => {
+				navigate("/");
+			});
+
+			return () => {
+				tg.BackButton.hide();
+				tg.BackButton.offClick();
+			};
+		}
+	}, [navigate]);
 
 	return (
 		<>
-			<div className='overflow-hidden h-[100vh]'>
-					<div className='bg-[#080813] min-h-[37vh] pb-3 pt-5 px-5 rounded-br-3xl rounded-bl-3xl'>
-						{/* top 3 stage */}
-						<div className='h-[40vh] flex mt-5 text-[#FFF] overflow-hidden'>
-							<div className='flex mx-auto mt-4'>
-								{/* right col */}
-								<div className='mt-7 text-center'>
-									<div className='mb-2'>
-										<img
-											src={data.img2}
-											alt='Person 2'
-											className='w-12 h-12 rounded-full mx-auto'
-										/>
-										<p className='text-sm font-medium pt-2 pb-1'>
-											{data.name2}
-										</p>
-										<div className='ml-2 text-sm flex items-center gap-1 w-fit p-1 rounded-[7px] bg-[#262639]'>
-											<div className=''>
-												<img
-													className='w-[14px]'
-													src={Coin}
-													alt=''
-												/>
-											</div>
-											<div className=''>
-												<p>{data.points}</p>
-											</div>
-										</div>
-									</div>
-									<div className='relative'>
-										<img
-											src={Rank2}
-											alt=''
-										/>
-										<div className='rank-number pt-4'>2</div>
-									</div>
-								</div>
-								{/* mid col */}
-								<div className='text-center'>
-									<div className='mb-2'>
-										<img
-											src={data.img1}
-											alt='Person 1'
-											className='w-12 h-12 rounded-full mx-auto'
-										/>
-										<p className='text-sm font-medium pt-2 pb-1'>
-											{data.name1}
-										</p>
-										<div className='ml-2 text-sm flex items-center gap-1 w-fit p-1 rounded-[7px] bg-[#262639]'>
-											<div className=''>
-												<img
-													className='w-[14px]'
-													src={Coin}
-													alt=''
-												/>
-											</div>
-											<div className=''>
-												<p>{data.points}</p>
-											</div>
-										</div>
-									</div>
-									<div className='relative'>
-										<img
-											src={Rank1}
-											alt=''
-										/>
-										<div className='rank-number pt-8'>
-											<img
-												src={Panda}
-												alt='Rank-1'
-											/>
-										</div>
-									</div>
-								</div>
-								{/* right col */}
-								<div className='mt-12 text-center'>
-									<div className='mb-2'>
-										<img
-											src={data.img3}
-											alt='Person 3'
-											className='w-12 h-12 rounded-full mx-auto'
-										/>
-										<p className='text-sm font-medium pt-2 pb-1'>
-											{data.name3}
-										</p>
-										<div className='ml-2 text-sm flex items-center gap-1 w-fit p-1 rounded-[7px] bg-[#262639]'>
-											<div className=''>
-												<img
-													className='w-[14px]'
-													src={Coin}
-													alt=''
-												/>
-											</div>
-											<div className=''>
-												<p>{data.points}</p>
-											</div>
-										</div>
-									</div>
-									<div className='relative'>
-										<img
-											src={Rank3}
-											alt=''
-										/>
-										<div className='rank-number pt-2'>3</div>
-									</div>
+			{topUsers && currentPageUsers && (
+				<>
+					<div className='h-[86vh] w-[100vw] overflow-hidden'>
+						<div className='bg-[#080813] min-h-[37vh] pb-3 pt-5 px-5 rounded-br-3xl rounded-bl-3xl'>
+							<div className="w-full h-[5vh] flex justify-end items-center">
+								<div className="flex justify-center items-center text-white font-semibold gap-1">
+									<img src={BadgeIcon} alt="badge_icon" />
+									<p className="capitalize">{page}</p>
 								</div>
 							</div>
-						</div>
-						{/* List of competitors */}
-						<div className='bg-[#272a2f] pb-3 pt-5 px-5 rounded-tl-[14px] rounded-tr-[14px] overflow-scroll h-[60vh]'>
-							{friendsData.map((values) => {
-								const { id, img1, img2, name, coins } = values;
-								return (
-									<div
-										key={id}
-										className={`${
-											id === 4 ? "bg-black" : "bg-[#202029]"
-										} text-[#FFF] text-base font-medium flex justify-between items-center rounded-[14px] gap-4 p-4 my-3`}>
-										<div className=''>
-											<div className='flex items-center gap-4 py-2'>
-												<div className='w-[18px] text-xs rounded-full border flex items-center pl-[4px] '>
-													<p>{id}</p>
-												</div>
-												<div className=''>
-													<img
-														className='w-[50px]'
-														src={img1}
-														alt='Coin-Icon'
-													/>
-												</div>
-												<div className=''>
-													<div className=''>{name}</div>
-													<div className='-mt-1 flex items-center gap-1'>
-														<div className=''>
-															<img
-																className='w-[15px]'
-																src={img2}
-																alt='Coin-Icon'
-															/>
-														</div>
-														<div className=''>{coins}</div>
+							{/* top 3 stage */}
+							<div className='h-[40vh] flex text-[#FFF] overflow-hidden'>
+								<button
+									onClick={() => {
+										handleClickLeft();
+									}}
+								>
+									<img src={LeftArrowIcon} alt="left" />
+								</button>
+								<div className='flex w-[80vw] mx-2 justify-center items-center relative'>
+									<img src={stageImage} alt="stage_img" className="absolute bottom-0" />
+									<div className="absolute z-50 h-full w-full flex justify-center mx-5">
+										<div className="left w-[25vw] mt-14 flex flex-col items-center gap-1">
+											{currentPageUsers[1] && (
+												<>
+													<img src={Top1} alt="img" width={50} />
+													<p>{currentPageUsers[1].firstName.slice(0, 7)}</p>
+													<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
+														<img src={Coin} alt="coin" width={15} />
+														{currentPageUsers[1].balance}
 													</div>
-												</div>
-											</div>
+												</>
+											)}
+										</div>
+										<div className="mid w-[25vw] mt-6 flex flex-col items-center gap-1 relative">
+											{currentPageUsers[0] && (
+												<>
+													<img src={Top1} alt="img" width={50} />
+													<img src={KingCrown} alt="crown" className="absolute z-50 -top-3" />
+													<p>{currentPageUsers[0].firstName.slice(0, 7)}</p>
+													<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
+														<img src={Coin} alt="coin" width={18} />
+														{currentPageUsers[0].balance}
+													</div>
+												</>
+											)}
+
+										</div>
+										<div className="right w-[25vw] mt-16 flex flex-col items-center gap-1">
+											{currentPageUsers[2] && (
+												<>
+													<img src={Top1} alt="img" width={50} />
+													<p>{currentPageUsers[2].firstName.slice(0, 7)}</p>
+													<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
+														<img src={Coin} alt="coin" width={18} />
+														{currentPageUsers[2].balance}
+													</div>
+												</>
+											)}
+
 										</div>
 									</div>
-								);
-							})}
+								</div>
+								<button
+									onClick={() => {
+										handleClickRight();
+									}}
+								>
+									<img src={RightArrowIcon} alt='right' />
+								</button>
+							</div>
+
+							{/* List of competitors */}
+							<div className='bg-[#272a2f] pb-3 pt-5 px-3 rounded-tl-[14px] rounded-tr-[14px] overflow-scroll h-[60vh] flex flex-col gap-2'>
+								{currentPageUsers.map((user, i) => {
+									if (i > 2) {
+										return (
+											<>
+												<div className="w-full h-[10vh] bg-[#21212D] rounded-lg flex items-center gap-3 px-3 p-1">
+													<div className="rounded-full border-2 border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
+														{i}
+													</div>
+													<div>
+														<img src={Top1} alt="profile_pic" />
+													</div>
+													<div className="flex flex-col justify-center items-center gap-2 text-white">
+														<h1>	<p>{user.firstName.slice(0, 7)}</p></h1>
+														<div className="flex items-center justify-start gap-1">
+															<img src={Coin} alt="coim" width={15} />
+															<p>{user.balance}</p>
+														</div>
+													</div>
+												</div>
+											</>
+										)
+									}
+								})}
+							</div>
 						</div>
 					</div>
-			</div>
+				</>
+			)
+			}
 		</>
 	);
 };

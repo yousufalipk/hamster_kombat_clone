@@ -56,7 +56,6 @@ exports.initializeUser = async (req, res) => {
                 balance = 0;
             }
             // update refferals array
-            console.log("Reffere id ", referrerId);
             const refRes = await UserModel.findOne({ telegramId: referrerId });
             if (!refRes) {
                 console.log("Reffer not found!");
@@ -326,21 +325,6 @@ exports.refillEnergy = async (req, res) => {
             })
         }
 
-        /*
-        if (user.energyRefill.lastClaimed !== null) {
-            const lastClaimed = user.energyRefill.lastClaimed;
-
-            const alreadyBoosterEnabled = check1hour(lastClaimed);
-
-            if (alreadyBoosterEnabled) {
-                return res.status(200).json({
-                    status: 'failed',
-                    message: 'Claim Refill after 1 hour!',
-                    lastClaimed: user.energyRefill.lastClaimed
-                })
-            }
-        } */
-
         const currentDate = new Date()
 
         user.energyRefill.available -= 1;
@@ -525,8 +509,6 @@ exports.checkPremium = async (req, res) => {
     try {
         const { telegramId } = req.body;
 
-        console.log("Telegram bot token", process.env.TELEGRAM_BOT_TOKEN, telegramId);
-
         const chatMember = await bot.telegram.getChatMember(telegramId, telegramId);
 
         const isPremium = chatMember.user?.is_premium || false;
@@ -544,7 +526,6 @@ exports.checkPremium = async (req, res) => {
         });
     }
 };
-
 
 exports.test = async (req, res) => {
     try {

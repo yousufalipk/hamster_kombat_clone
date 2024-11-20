@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FiLogOut } from "react-icons/fi";
 import { toast } from 'react-toastify';
@@ -6,7 +6,18 @@ import { useNavigate } from 'react-router-dom';
 import { useFirebase } from '../../Context/Firebase';
 
 const SideBar = () => {
-  const { username, userType, logoutUser } = useFirebase();
+  const { username, userType, logoutUser, page, setPage } = useFirebase();
+
+
+  useEffect(() => {
+    const path = window.location.pathname.substring(1);
+
+    if (!path) {
+      setPage("dashboard");
+    } else if (path === "manage-projects") {
+      setPage("projects");
+    }
+  }, []);
 
   const navigate = useNavigate();
 
@@ -14,16 +25,16 @@ const SideBar = () => {
     // LogOut Logic 
     try {
       const response = await logoutUser();
-      if(response.success){
-        setTimeout(()=> {
+      if (response.success) {
+        setTimeout(() => {
           toast.success("Logged Out Succesfully!")
-        },1000)
+        }, 1000)
         navigate('/')
       }
-      else{
-        setTimeout(()=> {
+      else {
+        setTimeout(() => {
           toast.error("Error Logging Out!")
-        },1000)
+        }, 1000)
       }
     } catch (error) {
       console.log(error);
@@ -37,7 +48,7 @@ const SideBar = () => {
         {/* Logo */}
         <div className='flex flex-col items-center mt-4'>
           <Link to='/'>
-            <p className='mt-8 mx-5 px-7 text-5xl text-white'> Kvantas</p>
+            <p className='mt-8 mx-5 px-7 text-4xl text-white'>PandaTap</p>
           </Link>
 
           {/* Menu*/}
@@ -46,20 +57,28 @@ const SideBar = () => {
               Welcome Back!
               <p className='text-bluebtn mb-8'>{username}</p>
             </div>
-            <Link className='w-full py-5 px-10 hover:text-bluebtn' to='/'>Dashboard</Link>
+            <Link
+              onClick={() => {
+                setPage('dashboard');
+              }}
+              className={`w-full py-5 px-10 ${[page === 'dashboard' && 'text-bluebtn']}`}
+              to='/'
+            >
+              Dashboard
+            </Link>
             <hr className='border-1 border-[gray] w-4/5 mx-auto' />
 
             {userType === 'admin' ? (
               <>
-                <Link className='w-full py-5 px-10 hover:text-bluebtn' to='/manage-users' >Manage Users</Link>
-                <hr className='border-1 border-[gray] w-4/5 mx-auto' />
-                <Link className='w-full py-5 px-10 hover:text-bluebtn' to='/manage-telegram-users' >Telegram Users</Link>
-                <hr className='border-1 border-[gray] w-4/5 mx-auto' />
-                <Link className='w-full py-5 px-10 hover:text-bluebtn' to='/social-tasks' >Social Tasks</Link>
-                <hr className='border-1 border-[gray] w-4/5 mx-auto' />
-                <Link className='w-full py-5 px-10 hover:text-bluebtn' to='/daily-tasks' >Daily Tasks</Link>
-                <hr className='border-1 border-[gray] w-4/5 mx-auto' />
-                <Link className='w-full py-5 px-10 hover:text-bluebtn' to='/annoucements' >Annoucements</Link>
+                <Link
+                  onClick={() => {
+                    setPage('projects');
+                  }}
+                  className={`w-full py-5 px-10 ${[page === 'projects' && 'text-bluebtn']}`}
+                  to='/manage-projects'
+                >
+                  Manage Projects
+                </Link>
               </>
             ) : (
               <>
