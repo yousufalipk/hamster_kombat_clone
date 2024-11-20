@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 import { useUser } from '../../context/index';
@@ -15,25 +15,21 @@ import MasterStage from '../../assets/leaderboard/stages/master.svg';
 import GrandMasterStage from '../../assets/leaderboard/stages/grandMaster.svg';
 import EpicStage from '../../assets/leaderboard/stages/epic.svg';
 
-import KingCrown from '../../assets/leaderboard/king.svg'
+import KingCrown from '../../assets/leaderboard/king.svg';
 import BadgeIcon from '../../assets/leaderboard/badge.svg';
 
 import Top1 from "../../assets/Top1.svg";
 import Coin from "../../assets/BigCoinIcon.svg";
 
 const Rankings = () => {
-	const {
-		topUsers,
-		fetchLeaderboardUsers,
-		level
-	} = useUser();
+	const { topUsers, fetchLeaderboardUsers, level } = useUser();
 
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 	const navigate = useNavigate();
 
 	const [currentPageUsers, setCurrentPageUsers] = useState(null);
 	const [page, setPage] = useState(level);
-	const [stageImage, setStageImage] = useState(SilverStage);
+	const stageImageRef = useRef();
 
 	const pagesName = [
 		'silver',
@@ -60,16 +56,22 @@ const Rankings = () => {
 	useEffect(() => {
 		if (level) {
 			setPage(level);
-			setStageImage(stageImages[level]);
+			updateStageImage(level);
 		}
 	}, [level]);
+
+	const updateStageImage = (stage) => {
+		if (stageImageRef.current) {
+			stageImageRef.current.src = stageImages[stage];
+		}
+	};
 
 	const handleClickLeft = () => {
 		const currentIndex = pagesName.indexOf(page);
 		if (currentIndex > 0) {
 			const newPage = pagesName[currentIndex - 1];
 			setPage(newPage);
-			setStageImage(stageImages[newPage]);
+			updateStageImage(newPage);
 		} else {
 			console.log("You're at the first page!");
 		}
@@ -80,7 +82,7 @@ const Rankings = () => {
 		if (currentIndex < pagesName.length - 1) {
 			const newPage = pagesName[currentIndex + 1];
 			setPage(newPage);
-			setStageImage(stageImages[newPage]);
+			updateStageImage(newPage);
 		} else {
 			console.log("You're at the last page!");
 		}
@@ -128,13 +130,11 @@ const Rankings = () => {
 							</div>
 							{/* top 3 stage */}
 							<div className='h-[40vh] flex text-[#FFF] overflow-hidden'>
-								<button
-									onClick={handleClickLeft}
-								>
+								<button onClick={handleClickLeft}>
 									<img src={LeftArrowIcon} alt="left" />
 								</button>
 								<div className='flex w-[80vw] mx-2 justify-center items-center relative'>
-									<img src={stageImage} alt="stage_img" className="absolute bottom-0" />
+									<img ref={stageImageRef} src={stageImages[page]} alt="stage_img" className="absolute bottom-0" />
 									<div className="absolute z-50 h-full w-full flex justify-center mx-5">
 										<div className="left w-[25vw] mt-14 flex flex-col items-center gap-1">
 											{currentPageUsers[1] && (
@@ -160,7 +160,6 @@ const Rankings = () => {
 													</div>
 												</>
 											)}
-
 										</div>
 										<div className="right w-[25vw] mt-16 flex flex-col items-center gap-1">
 											{currentPageUsers[2] && (
@@ -173,17 +172,13 @@ const Rankings = () => {
 													</div>
 												</>
 											)}
-
 										</div>
 									</div>
 								</div>
-								<button
-									onClick={handleClickRight}
-								>
+								<button onClick={handleClickRight}>
 									<img src={RightArrowIcon} alt='right' />
 								</button>
 							</div>
-
 							{/* List of competitors */}
 							<div className='bg-[#272a2f] pb-3 pt-5 px-3 rounded-tl-[14px] rounded-tr-[14px] overflow-scroll h-[60vh] flex flex-col gap-2'>
 								{currentPageUsers.map((user, i) => {
@@ -199,7 +194,7 @@ const Rankings = () => {
 													<img src={Top1} alt="profile_pic" />
 												</div>
 												<div className="flex flex-col justify-center items-center gap-2 text-white">
-													<h1>	<p>{user.firstName.slice(0, 7)}</p></h1>
+													<h1> <p>{user.firstName.slice(0, 7)}</p></h1>
 													<div className="flex items-center justify-start gap-1">
 														<img src={Coin} alt="coim" width={15} />
 														<p>{user.balance}</p>
