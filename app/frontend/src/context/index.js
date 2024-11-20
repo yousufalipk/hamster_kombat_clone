@@ -398,6 +398,7 @@ export const UserProvider = (props) => {
 
     const fetchLeaderboardUsers = async () => {
         try {
+            setLoader(true);
             console.log("Fetching Top Users...");
             const response = await axios.post(`${apiUrl}/user/fetch-leaderboard`, {
                 userId: userId
@@ -408,6 +409,8 @@ export const UserProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error!");
             return ({ success: false, message: 'Internal Server Error!' });
+        } finally {
+            setLoader(false);
         }
     }
 

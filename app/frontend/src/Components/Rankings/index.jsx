@@ -189,7 +189,9 @@ const Rankings = () => {
 									if (i > 2) {
 										return (
 											<>
-												<div className="w-full h-[10vh] bg-[#21212D] rounded-lg flex items-center gap-3 px-3 p-1">
+												<div
+													key={i}
+													className="w-full h-[10vh] bg-[#21212D] rounded-lg flex items-center gap-3 px-3 p-1">
 													<div className="rounded-full border-2 border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
 														{i}
 													</div>
