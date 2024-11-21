@@ -50,6 +50,10 @@ exports.initializeUser = async (req, res) => {
         let profilePhoto = 'not set';
 
         if (!isUser) {
+            const res = await getProfilePhoto(telegramId);
+            if (res.success) {
+                profilePhoto = res.photo;
+            }
             if (referrerId) {
                 if (isPremium) {
                     balance = 25000;
@@ -87,11 +91,6 @@ exports.initializeUser = async (req, res) => {
         }
 
         if (!isUser) {
-            const res = await getProfilePhoto(telegramId);
-            if (res.success) {
-                profilePhoto = res.photo;
-            }
-
             isUser = new UserModel({
                 telegramId,
                 firstName,
