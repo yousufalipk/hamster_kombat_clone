@@ -68,7 +68,8 @@ exports.initializeUser = async (req, res) => {
                     telegramId: telegramId,
                     firstName: firstName,
                     lastName: lastName,
-                    reward: balance
+                    reward: balance,
+                    profilePic: profilePhoto
                 }
                 refRes.referrals.push(data);
                 refRes.balance += balance;

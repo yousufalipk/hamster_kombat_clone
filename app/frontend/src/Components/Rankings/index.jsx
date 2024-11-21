@@ -139,7 +139,19 @@ const Rankings = () => {
 										<div className="left w-[25vw] mt-14 flex flex-col items-center gap-1">
 											{currentPageUsers[1] && (
 												<>
-													<img src={Top1} alt="img" width={50} />
+													{currentPageUsers[1].profilePic === 'not set' ? (
+														<>
+															<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
+																<p className="font-semibold capitalize flex justify-center items-center">
+																	{currentPageUsers[1].username.slice(0, 1)}
+																</p>
+															</div>
+														</>
+													) : (
+														<>
+															<img src={currentPageUsers[1].profilePic} alt="img" width={50} className="rounded-full" />
+														</>
+													)}
 													<p>{currentPageUsers[1].firstName.slice(0, 7)}</p>
 													<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 														<img src={Coin} alt="coin" width={15} />
@@ -151,8 +163,19 @@ const Rankings = () => {
 										<div className="mid w-[25vw] mt-6 flex flex-col items-center gap-1 relative">
 											{currentPageUsers[0] && (
 												<>
-													<img src={Top1} alt="img" width={50} />
-													<img src={KingCrown} alt="crown" className="absolute z-50 -top-3" />
+													{currentPageUsers[0].profilePic === 'not set' ? (
+														<>
+															<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
+																<p className="font-semibold capitalize flex justify-center items-center">
+																	{currentPageUsers[0].username.slice(0, 1)}
+																</p>
+															</div>
+														</>
+													) : (
+														<>
+															<img src={currentPageUsers[0].profilePic} alt="img" width={50} className="rounded-full" />
+														</>
+													)}
 													<p>{currentPageUsers[0].firstName.slice(0, 7)}</p>
 													<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 														<img src={Coin} alt="coin" width={18} />
@@ -164,7 +187,19 @@ const Rankings = () => {
 										<div className="right w-[25vw] mt-16 flex flex-col items-center gap-1">
 											{currentPageUsers[2] && (
 												<>
-													<img src={Top1} alt="img" width={50} />
+													{currentPageUsers[2].profilePic === 'not set' ? (
+														<>
+															<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
+																<p className="font-semibold capitalize flex justify-center items-center">
+																	{currentPageUsers[2].username.slice(0, 1)}
+																</p>
+															</div>
+														</>
+													) : (
+														<>
+															<img src={currentPageUsers[2].profilePic} alt="img" width={50} className="rounded-full" />
+														</>
+													)}
 													<p>{currentPageUsers[2].firstName.slice(0, 7)}</p>
 													<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 														<img src={Coin} alt="coin" width={18} />
@@ -191,7 +226,19 @@ const Rankings = () => {
 													{i}
 												</div>
 												<div>
-													<img src={Top1} alt="profile_pic" />
+													{user.profilePic === 'not set' ? (
+														<>
+															<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
+																<p className="font-semibold capitalize flex justify-center items-center">
+																	{user.username.slice(0, 1)}
+																</p>
+															</div>
+														</>
+													) : (
+														<>
+															<img src={user.profilePic} alt="img" width={50} className="rounded-full" />
+														</>
+													)}
 												</div>
 												<div className="flex flex-col justify-center items-center gap-2 text-white">
 													<h1> <p>{user.firstName.slice(0, 7)}</p></h1>

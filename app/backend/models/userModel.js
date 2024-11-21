@@ -106,6 +106,9 @@ const userSchema = new mongoose.Schema({
             },
             reward: {
                 type: Number,
+            },
+            profilePic: {
+                type: String,
             }
         }
     ],

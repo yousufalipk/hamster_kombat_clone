@@ -347,10 +347,6 @@ const Home = () => {
 		}
 	}
 
-	useEffect(() => {
-		console.log("Profile Pic", profilePic);
-	}, [profilePic])
-
 	return (
 		<>
 			{userDataInitilized && (
