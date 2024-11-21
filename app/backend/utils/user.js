@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { TELEGRAM_BOT_TOKEN } = require('./config/env');
+const { TELEGRAM_BOT_TOKEN } = require('../config/env');
 
 exports.getProfilePhoto = async (telegramId) => {
     try {
