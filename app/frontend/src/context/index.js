@@ -178,7 +178,6 @@ export const UserProvider = (props) => {
                 });
 
                 if (res.data.status === 'success') {
-                    console.log("I am User Data =======> ", res.data.user);
                     const percentage = (res.data.user.currentRank / 10) * 100;
                     setUserId(res.data.user._id);
                     setTelegramId(res.data.user.telegramId);
