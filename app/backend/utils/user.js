@@ -3,6 +3,10 @@ const { TelegramBotToken } = require('../config/env');
 
 exports.getProfilePhoto = async (telegramId) => {
     try {
+
+        console.log("telegrma ID", telegramId);
+        console.log("Bot token", TelegramBotToken);
+
         const photosResponse = await axios.get(`https://api.telegram.org/bot${TelegramBotToken}/getUserProfilePhotos`, {
             params: {
                 user_id: telegramId,
