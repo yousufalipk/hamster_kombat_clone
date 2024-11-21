@@ -1,13 +1,13 @@
 const axios = require('axios');
-const { TelegramBotToken } = require('../config/env');
+const { TELEGRAM_BOT_TOKEN } = require('./config/env');
 
 exports.getProfilePhoto = async (telegramId) => {
     try {
 
         console.log("telegrma ID", telegramId);
-        console.log("Bot token", TelegramBotToken);
+        console.log("Bot token", TELEGRAM_BOT_TOKEN);
 
-        const photosResponse = await axios.get(`https://api.telegram.org/bot${TelegramBotToken}/getUserProfilePhotos`, {
+        const photosResponse = await axios.get(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUserProfilePhotos`, {
             params: {
                 user_id: telegramId,
                 limit: 1,
@@ -20,12 +20,12 @@ exports.getProfilePhoto = async (telegramId) => {
         }
 
         const fileId = photos[0][0].file_id;
-        const fileResponse = await axios.get(`https://api.telegram.org/bot${TelegramBotToken}/getFile`, {
+        const fileResponse = await axios.get(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getFile`, {
             params: { file_id: fileId },
         });
 
         const filePath = fileResponse.data.result.file_path;
-        const fileUrl = `https://api.telegram.org/file/bot${TelegramBotToken}/${filePath}`;
+        const fileUrl = `https://api.telegram.org/file/bot${TELEGRAM_BOT_TOKEN}/${filePath}`;
 
         const imageResponse = await axios.get(fileUrl, { responseType: 'arraybuffer' });
         const base64Data = Buffer.from(imageResponse.data, 'binary').toString('base64');
