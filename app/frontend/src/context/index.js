@@ -136,7 +136,7 @@ export const UserProvider = (props) => {
 
     // Initilize User
     const initializeUser = async () => {
-        let referrerId = null, isPremium = false;
+        let referrerId = null, isPremium = false, profileUrl = "not set";
         setLoader(true);
         try {
             let telegramUser;

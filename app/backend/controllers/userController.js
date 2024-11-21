@@ -17,6 +17,9 @@ const {
 const {
     getCoinsPerMinute
 } = require('../utils/coinsPerMinute');
+const {
+    getProfilePhoto
+} = require('../utils/user');
 
 const energyUpgradeCost = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
 const energyLimits = [1500, 3000, 4500, 6000, 7500, 9000, 10500, 12000, 13500, 15000];
@@ -45,7 +48,6 @@ exports.initializeUser = async (req, res) => {
         let balance = 0;
 
         if (!isUser) {
-            // Set balance accordingly
             if (referrerId) {
                 if (isPremium) {
                     balance = 25000;
@@ -82,6 +84,12 @@ exports.initializeUser = async (req, res) => {
         }
 
         if (!isUser) {
+            let profilePhoto = 'not set';
+            const res = await getProfilePhoto(telegramId);
+            if (res.success) {
+                profilePhoto = res.photo;
+            }
+
             isUser = new UserModel({
                 telegramId,
                 firstName,
@@ -115,7 +123,8 @@ exports.initializeUser = async (req, res) => {
                     value: 0,
                     lastClaimed: currentDate
                 },
-                referrals: []
+                referrals: [],
+                profilePic: profilePhoto
             });
             isUser = await isUser.save();
         } else {

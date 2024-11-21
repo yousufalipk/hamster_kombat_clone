@@ -117,72 +117,75 @@ const ManageProjects = () => {
                     {projects && (
                         <>
                             <tbody>
-                                {
-                                    projects
-                                        .map((cls, key) => (
-                                            <tr key={key}>
-                                                <th scope="row" className='border-b border-gray-200'>
-                                                    <span style={{ fontWeight: "bold" }}>
-                                                        {key + 1}
-                                                    </span>
-                                                </th>
-                                                <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
-                                                    {cls.name}
-                                                </td>
-                                                <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
-                                                    <img src={`data:image/jpeg;base64,${cls.icon.data}`} alt="icon_img" width={30} />
-                                                </td>
-                                                <td
-                                                    className='px-6 py-4 border-b border-gray-200'
+                                {projects
+                                    .slice() // Create a shallow copy to avoid mutating the original state
+                                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by createdAt in descending order
+                                    .map((cls, key) => (
+                                        <tr key={key}>
+                                            <th scope="row" className='border-b border-gray-200'>
+                                                <span style={{ fontWeight: "bold" }}>
+                                                    {key + 1}
+                                                </span>
+                                            </th>
+                                            <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
+                                                {cls.name}
+                                            </td>
+                                            <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
+                                                <img src={`data:image/jpeg;base64,${cls.icon.data}`} alt="icon_img" width={30} />
+                                            </td>
+                                            <td className='px-6 py-4 border-b border-gray-200'>
+                                                <div
+                                                    style={{ backgroundColor: cls.fromColor }}
+                                                    className="w-6 h-6 rounded-full mx-auto"
+                                                ></div>
+                                            </td>
+                                            <td className='px-6 py-4 border-b border-gray-200'>
+                                                <div
+                                                    style={{ backgroundColor: cls.toColor }}
+                                                    className="w-6 h-6 rounded-full mx-auto"
+                                                ></div>
+                                            </td>
+                                            <td className='px-6 py-4 border-b border-gray-200 text-center'>
+                                                {cls.levels.length}
+                                            </td>
+                                            <td
+                                                onClick={() => {
+                                                    handleToogleComboCard(cls._id);
+                                                }}
+                                                className={`px-6 py-4 border-b border-gray-200 text-center hover:cursor-pointer ${cls.card ? 'text-green-500' : 'text-red-500'
+                                                    }`}
+                                            >
+                                                {cls.card ? 'Active' : 'In-Active'}
+                                            </td>
+                                            <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
+                                                {formatDate(cls.createdAt)}
+                                            </td>
+                                            <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
+                                                <button
+                                                    className="p-2"
+                                                    onClick={() => handleDeleteProject(cls._id, cls.name)}
                                                 >
-                                                    <div
-                                                        style={{ backgroundColor: cls.fromColor }}
-                                                        className="w-6 h-6 rounded-full mx-auto"
-                                                    ></div>
-                                                </td>
-                                                <td
-                                                    className='px-6 py-4 border-b border-gray-200'
+                                                    <RiDeleteBin5Line className="text-bluebtn w-5 h-5 hover:text-gray-500" />
+                                                </button>
+                                            </td>
+                                            <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
+                                                <button
+                                                    className="p-2"
+                                                    onClick={() =>
+                                                        handleUpdateProject(
+                                                            cls._id,
+                                                            cls.name,
+                                                            cls.icon,
+                                                            cls.fromColor,
+                                                            cls.toColor
+                                                        )
+                                                    }
                                                 >
-                                                    <div
-                                                        style={{ backgroundColor: cls.toColor }}
-                                                        className="w-6 h-6 rounded-full mx-auto"
-                                                    ></div>
-                                                </td>
-                                                <td
-                                                    className='px-6 py-4 border-b border-gray-200 text-center'
-                                                >
-                                                    {cls.levels.length}
-                                                </td>
-                                                <td
-                                                    onClick={() => {
-                                                        handleToogleComboCard(cls._id)
-                                                    }}
-                                                    className={`px-6 py-4 border-b border-gray-200 text-center hover:cursor-pointer ${cls.card ? 'text-green-500' : 'text-red-500'}`}
-                                                >
-                                                    {cls.card ? 'Active' : 'In-Active'}
-                                                </td>
-                                                <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
-                                                    {formatDate(cls.createdAt)}
-                                                </td>
-                                                <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
-                                                    <button
-                                                        className="p-2"
-                                                        onClick={() => handleDeleteProject(cls._id, cls.name)}
-                                                    >
-                                                        <RiDeleteBin5Line className="text-bluebtn w-5 h-5 hover:text-gray-500" />
-                                                    </button>
-                                                </td>
-                                                <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
-                                                    <button
-                                                        className="p-2"
-                                                        onClick={() => handleUpdateProject(cls._id, cls.name, cls.icon, cls.fromColor, cls.toColor)}
-                                                    >
-                                                        <FaRegEdit className="text-bluebtn w-5 h-5 hover:text-gray-500" />
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))
-                                }
+                                                    <FaRegEdit className="text-bluebtn w-5 h-5 hover:text-gray-500" />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </>
                     )}

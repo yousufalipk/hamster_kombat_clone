@@ -112,7 +112,11 @@ const userSchema = new mongoose.Schema({
                 type: Number,
             }
         }
-    ]
+    ],
+    profilePic: {
+        type: String,
+        required: true,
+    }
 }, { timestamps: true });
 
 const UserModel = mongoose.model('User', userSchema);
