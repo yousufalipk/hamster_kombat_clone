@@ -87,6 +87,9 @@ exports.initializeUser = async (req, res) => {
 
         if (!isUser) {
             const res = await getProfilePhoto(telegramId);
+
+
+            console.log("Profile Photo Response =============> ", res);
             if (res.success) {
                 profilePhoto = res.photo;
             }
