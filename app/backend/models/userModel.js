@@ -9,10 +9,6 @@ const userSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
     username: String,
-    pic: {
-        type: String,
-        default: null
-    },
     level: {
         type: String,
         default: 'silver'

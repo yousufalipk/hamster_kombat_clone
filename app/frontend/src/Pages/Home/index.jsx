@@ -347,6 +347,10 @@ const Home = () => {
 		}
 	}
 
+	useEffect(() => {
+		console.log("Profile Pic", profilePic);
+	}, [profilePic])
+
 	return (
 		<>
 			{userDataInitilized && (
@@ -370,8 +374,16 @@ const Home = () => {
 									{/* Header */}
 									<div className="px-2 flex justify-between">
 										<div className="flex">
-											<div className="rounded-full bg-gray-300 w-[42px] h-[42px]">
-												<img src={profilePic || ProfilePic} alt="Profile-Picture" />
+											<div className="rounded-full bg-gray-700 text-white w-[42px] h-[42px] overflow-hidden flex items-center justify-center">
+												{profilePic === 'not set' ? (
+													<p className="font-semibold capitalize">
+														{username.slice(0, 1)}
+													</p>
+												) : (
+													<>
+														<img src={profilePic} alt="Profile-Picture" className="rounded-full" />
+													</>
+												)}
 											</div>
 											<div className="pl-2 text-[#FFF]">
 												<p className="font-medium text-sm">{username}</p>

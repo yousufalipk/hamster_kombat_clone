@@ -118,8 +118,8 @@ const ManageProjects = () => {
                         <>
                             <tbody>
                                 {projects
-                                    .slice() // Create a shallow copy to avoid mutating the original state
-                                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by createdAt in descending order
+                                    .slice()
+                                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                                     .map((cls, key) => (
                                         <tr key={key}>
                                             <th scope="row" className='border-b border-gray-200'>

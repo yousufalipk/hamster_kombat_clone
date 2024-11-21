@@ -23,7 +23,7 @@ export const UserProvider = (props) => {
     const [firstName, setFirstName] = useState(null);
     const [lastName, setLastName] = useState(null);
     const [username, setUsername] = useState(null);
-    const [profilePic, setProfilePic] = useState(null);
+    const [profilePic, setProfilePic] = useState('not set');
     const [level, setLevel] = useState(null);
     const [currentRank, setCurrentRank] = useState(null);
     const [balance, setBalance] = useState(0);
@@ -184,7 +184,7 @@ export const UserProvider = (props) => {
                     setFirstName(res.data.user.firstName);
                     setLastName(res.data.user.lastName);
                     setUsername(res.data.user.username);
-                    setProfilePic(res.data.user.pic);
+                    setProfilePic(res.data.user.profilePic);
                     setLevel(res.data.user.level);
                     setCurrentRank(res.data.user.currentRank);
                     setBalance(res.data.user.balance);
