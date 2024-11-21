@@ -20,13 +20,15 @@ import FlashIcon from "../../assets/lighteningIcon.png";
 import InfoIcon from "../../assets/InfoIcon.svg";
 import AngleIcon from "../../assets/AngleIcon.svg";
 
-import ProfilePic from "../../assets/ProfilePicIcon.svg";
 import tick from "../../assets/dailyreward/tick.svg";
 import close from "../../assets/dailyreward/close.svg"
 import day7coin from "../../assets/dailyreward/day7coin.svg";
 
-import Gift1Image from '../../assets/dailyreward/gift1.svg';
-import Gift2Image from '../../assets/dailyreward/gift2.svg';
+import leftbox from '../../assets/dailyreward/gift1.svg';
+import rightbox from '../../assets/dailyreward/gift2.svg';
+
+import leftreward from '../../assets/dailyreward/leftReward.svg';
+import rightreward from '../../assets/dailyreward/rightReward.svg';
 
 const Home = () => {
 
@@ -878,95 +880,122 @@ const Home = () => {
 						{/* Daily Reward Popup */}
 						{dailyRewardPopup && (
 							<>
-								<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end">
-									<div>
-										<div className="relative bg-[#1B1B27] w-[100vw] h-[80vh] rounded-t-3xl p-6 text-white">
-											<div className="absolute top-[50vh] left-0">
-												<img src={Gift1Image} alt="gift1" />
-											</div>
-											<div className="absolute bottom-0 right-0">
-												<img src={Gift2Image} alt="gift2" width={100} />
-											</div>
-											<div className="z-50">
-												<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
-												<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-												<div className="flex flex-col gap-4 items-center justify-center">
-													<p className="w-16 border-b-4 rounded-md"></p>
-													<h1 className="text-2xl font-semibold">Daily Reward</h1>
-													<p className="text-xs text-center text-[#CACACA]">Earn Coins by logging in game daily! Don't miss a day, or your streak will reset!</p>
-													<div className="overflow-scroll w-[90vw] h-[50vh] flex flex-wrap gap-4 justify-center items-center">
-														{days.map((day, index) => (
+								<div
+									className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end"
+									style={{
+										animation: "openPopup 0.7s ease-in-out",
+									}}
+								>
+									<div className="relative bg-[#06060E] w-[100vw] h-[80vh] rounded-t-3xl p-4 text-white">
+										<div className="absolute left-0 -top-10">
+											<img src={leftreward} alt="" />
+										</div>
+										<div className="absolute bottom-0 right-0">
+											<img src={rightreward} alt="" />
+										</div>
+										<div className="absolute left-0 bottom-20">
+											<img src={leftbox} alt="" />
+										</div>
+										<div className="absolute bottom-0 right-0">
+											<img src={rightbox} alt="" />
+										</div>
+										<div className="absolute bottom-0 -inset-1 bg-[#23A7FF] rounded-[35px] -z-10"></div>
+										<div className="absolute bottom-0 -inset-2 bg-[#23A7FF] blur rounded-[50px] -z-10"></div>
+										<div className="flex flex-col gap-4 items-center justify-center z-50">
+											<p className="w-16 border-b-4 rounded-md"></p>
+											<h1 className="text-2xl font-semibold">Daily Reward</h1>
+											<p className="text-xs text-center text-[#CACACA]">
+												Earn Coins by logging in game daily! Don't miss a day, or your streak will reset!
+											</p>
+											<div className="overflow-scroll w-[90vw] h-[50vh] flex flex-wrap gap-4 justify-center items-center">
+												{days.map((day, index) => (
+													<div
+														key={index}
+														className={`border-2 relative w-[23vw] h-[14vh] border-[#AFABAB] rounded-lg pt-2 flex flex-col gap-2 ${index === 6 ? "w-[80vw]" : ""
+															} ${currentDay >= day
+																? "bg-[#2E60B2]"
+																: "bg-[#767676]"
+															} ${claimed.includes(day) ? "bg-[#767676]" : ""
+															}`}
+													>
+														<div>
 															<div
-																key={index}
-																className={`border-2 relative w-[23vw] h-[14vh] border-[#AFABAB] rounded-lg pt-2 flex flex-col  gap-2 ${index === 6 ? "w-[80vw]" : ""}  ${currentDay >= day ? `bg-[#2E60B2]  ` : `bg-[#767676]`} ${claimed.includes(day) ? "bg-[#767676]" : ""}`}
+																className={`${claimed.includes(day)
+																	? "bg-[#474750]"
+																	: "bg-[#1942EC]"
+																	} mr-6 flex w-[20vw] shadow-inherit shadow-xl items-center justify-center rounded-r-md text-white`}
 															>
-																<div>
-																	<div className={`${claimed.includes(day) ? "bg-[#474750]" : "bg-[#1942EC]"}  mr-6 flex w-[20vw] shadow-inner items-center justify-center rounded-r-md text-white text-sm`}>
-																		<h1 className="font-semibold">Day {day + 1}</h1>
-
-																	</div>
-																	<div className=" flex flex-col items-center mt-2">
-
-																		{claimed.includes(day) ? (
-																			<div className="bg-[#D9D9D9] rounded-full h-7 flex items-center justify-center ">
-																				<img
-																					src={tick}
-																					width={30}
-																					alt="tick"
-																				/>
-																			</div>
-
-																		) : (
-																			<>
-																				{index === 6 ? (<img
-																					src={day7coin}
-																					width={60}
-																					alt="Big Coin" />
-																				) : (
-																					<img
-																						src={BigCoin}
-																						width={40}
-																						alt="Big Coin" />
-																				)
-
-																				}
-																			</>
-																		)}
-																		<h2 className={`text-[17px] text-[#000000] font-medium ${claimed.includes(day) && "text-[#393838]"} ${currentDay === day && "text-[#ffffff]"}`}>{reward[day]}</h2>
-																	</div>
-																</div>
-
-
+																<h1 className="font-semibold text-sm">Day {day + 1}</h1>
 															</div>
-														))}
+															<div className="flex flex-col items-center mt-2 gap-1">
+																{claimed.includes(day) ? (
+																	<div className="bg-[#D9D9D9] rounded-full h-6 w-6 flex items-center justify-center">
+																		<img
+																			src={tick}
+																			width={25}
+																			alt="tick"
+																		/>
+																	</div>
+																) : (
+																	<>
+																		{index === 6 ? (
+																			<img
+																				className="absolute top-6"
+																				src={day7coin}
+																				width={80}
+																				alt="Big Coin"
+																			/>
+																		) : (
+																			<img
+																				src={BigCoin}
+																				width={30}
+																				alt="Big Coin"
+																			/>
+																		)}
+																	</>
+																)}
+
+																{index === 6 ? (
+																	<h2
+																		className={`text-md text-[#000000] absolute bottom-1 font-medium ${claimed.includes(day) &&
+																			"text-[#393838]"
+																			} ${currentDay === day &&
+																			"text-[#ffffff]"
+																			}`}
+																	>
+																		{reward[day]}
+																	</h2>
+																) : (
+																	<h2
+																		className={`text-md text-[#000000] font-medium ${claimed.includes(day) &&
+																			"text-[#393838]"
+																			} ${currentDay === day &&
+																			"text-[#ffffff]"
+																			}`}
+																	>
+																		{reward[day]}
+																	</h2>
+																)}
+															</div>
+														</div>
 													</div>
-												</div>
-
-												{/* action buttons */}
-												<div className='flex gap-4 justify-center mt-5'>
-
-													<button
-														className='w-24 p-2 bg-[#242434] rounded-lg text-sm font-semibold'
-														onClick={() => {
-															handleDailyRewardClaim();
-														}}
-														disabled={claimed.includes(currentDay)}
-													>
-														Claim
-													</button>
-												</div>
-												<div className="absolute top-3 right-5">
-													<button
-														className=''
-														onClick={() => {
-															setDailyRewardPopup(false);
-														}}
-													>
-														<img src={close} alt="" width={25}
-														/>
-													</button>
-												</div>
+												))}
 											</div>
+										</div>
+										{/* action buttons */}
+										<div className="flex gap-4 justify-center mt-8">
+											<button
+												className="w-1/3 p-2 bg-[#242434] rounded-xl text-sm z-50 border-b-4 border-b-[#191922] shadow-zinc-900"
+												onClick={handleDailyRewardClaim}
+												disabled={multitapLevel >= 9}
+											>
+												Claim
+											</button>
+										</div>
+										<div className="absolute top-4 right-5">
+											<button onClick={() => setDailyRewardPopup(false)}>
+												<img src={close} alt="" width={25} />
+											</button>
 										</div>
 									</div>
 								</div>

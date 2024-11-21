@@ -161,8 +161,9 @@ const InviteFriends = () => {
 													<div>
 														<img
 															width="40"
-															src={Friend1}
+															src={user.profilePic}
 															alt='Coin-Icon'
+															className="rounded-full"
 														/>
 													</div>
 													{/* Name & Reward */}

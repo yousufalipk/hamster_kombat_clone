@@ -139,8 +139,14 @@ const Wallet = () => {
 						</>
 					)}
 				</div>
+
 				{iswithdraw && (
-					<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end">
+					<div
+						className={`popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end`}
+						style={{
+							animation: `openPopup 0.7s ease-in-out`,
+						}}
+					>
 						<div>
 							<div className="relative bg-[#06060E] w-[100vw] rounded-t-3xl p-6 text-white">
 								<div className="absolute -top-16 left-0"><img src={walletLeft} alt="" /></div>
@@ -171,8 +177,14 @@ const Wallet = () => {
 						</div>
 					</div>
 				)}
+
 				{isconnect && (
-					<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end">
+					<div
+						className={`popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end`}
+						style={{
+							animation: `openPopup 0.7s ease-in-out`,
+						}}
+					>
 						<div>
 							<div className="relative bg-[#06060E] w-[100vw] rounded-t-3xl p-6 text-white">
 								<div className="absolute -top-16 left-0"><img src={walletLeft} alt="" /></div>
