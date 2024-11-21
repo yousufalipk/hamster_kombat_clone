@@ -1,4 +1,5 @@
 const { TELEGRAM_BOT_TOKEN } = require('../config/env');
+const axios = require('axios');
 
 exports.getProfilePhoto = async (telegramId) => {
     try {
@@ -33,10 +34,6 @@ exports.getProfilePhoto = async (telegramId) => {
             return ({ success: false, mess: 'Photo Found!', photo: `data:${contentType};base64,${imageBase64}` });
         } else {
             return ({ success: false, mess: 'No Photo Found!' });
-            return res.status(200).json({
-                status: 'failed',
-                message: "No photo found!"
-            });
         }
     } catch (error) {
         console.error("Internal Server Error!", error);
