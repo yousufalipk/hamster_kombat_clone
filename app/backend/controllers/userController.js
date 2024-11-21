@@ -129,7 +129,7 @@ exports.initializeUser = async (req, res) => {
             isUser = await isUser.save();
         } else {
             let res1, res2, res3;
-            res1 = resetBoosters(isUser); // If 1 day passed (only for ex-users)
+            res1 = resetBoosters(isUser);
             res2 = resetDailyRewards(res1);
 
             if (isUser.coinsPerMinute.value !== 0) {

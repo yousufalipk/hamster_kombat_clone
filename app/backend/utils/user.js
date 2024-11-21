@@ -1,42 +1,42 @@
-const { TELEGRAM_BOT_TOKEN } = require('../config/env');
 const axios = require('axios');
+const { TelegramBotToken } = require('../config/env');
 
 exports.getProfilePhoto = async (telegramId) => {
     try {
-        const profilePhotosResponse = await axios.get(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUserProfilePhotos`, {
+        const photosResponse = await axios.get(`https://api.telegram.org/bot${TelegramBotToken}/getUserProfilePhotos`, {
             params: {
                 user_id: telegramId,
-                limit: 1
-            }
+                limit: 1,
+            },
         });
 
-        const photos = profilePhotosResponse.data.result.photos;
-
-        if (photos.length > 0) {
-            const fileId = photos[0][0].file_id;
-
-            const fileResponse = await axios.get(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getFile`, {
-                params: { file_id: fileId }
-            });
-
-            const filePath = fileResponse.data.result.file_path;
-
-            const profilePhotoUrl = `https://api.telegram.org/file/bot${TELEGRAM_BOT_TOKEN}/${filePath}`;
-
-            const imageResponse = await axios.get(profilePhotoUrl, {
-                responseType: 'arraybuffer'
-            });
-
-            const imageBase64 = Buffer.from(imageResponse.data, 'binary').toString('base64');
-
-            const contentType = imageResponse.headers['content-type'];
-
-            return ({ success: false, mess: 'Photo Found!', photo: `data:${contentType};base64,${imageBase64}` });
-        } else {
-            return ({ success: false, mess: 'No Photo Found!' });
+        const photos = photosResponse.data.result.photos;
+        if (!photos || photos.length === 0) {
+            return ({ success: false, mess: 'No profile photo found for this user' });
         }
+
+        const fileId = photos[0][0].file_id;
+        const fileResponse = await axios.get(`https://api.telegram.org/bot${TelegramBotToken}/getFile`, {
+            params: { file_id: fileId },
+        });
+
+        const filePath = fileResponse.data.result.file_path;
+        const fileUrl = `https://api.telegram.org/file/bot${TelegramBotToken}/${filePath}`;
+
+        const imageResponse = await axios.get(fileUrl, { responseType: 'arraybuffer' });
+        const base64Data = Buffer.from(imageResponse.data, 'binary').toString('base64');
+
+        const buffer = Buffer.from(base64Data, 'base64');
+        const maxSize = 1 * 1024 * 1024;
+
+        if (buffer.length > maxSize) {
+            return ({ success: false, mess: 'Image size exceeds the maximum allowed size (1MB)' });
+        }
+
+        return ({ success: true, mess: 'photo found', photo: `data:image/jpeg;base64,${base64Data}` });
+
     } catch (error) {
-        console.error("Internal Server Error!", error);
-        return ({ success: false, mess: 'Internal Server Error!' });
+        console.error('Error fetching or saving Telegram photo:', error.message);
+        return ({ success: false, mess: 'Internal Server Error' });
     }
-};
+}
