@@ -239,6 +239,32 @@ export const FirebaseProvider = (props) => {
         }
     }
 
+    const toggleProjectCombo = async (projectId) => {
+        try {
+            const response = await axios.post(`${apiUrl}/project/toogle-combo-card`, {
+                projectId: projectId,
+            });
+
+            if (response.data.status === 'success') {
+                const updatedProject = response.data.project;
+
+                setProjects((prevProjects) =>
+                    prevProjects.map((project) =>
+                        project._id === projectId
+                            ? { ...project, card: updatedProject.card }
+                            : project
+                    )
+                );
+
+                return { success: true, mess: response.data.message };
+            } else {
+                return { success: false, mess: response.data.message };
+            }
+        } catch (error) {
+            console.error("Error toggling project combo card:", error);
+            return { success: false, mess: 'Internal Server Error!' };
+        }
+    };
 
     return (
         <FirebaseContext.Provider value={{
@@ -260,7 +286,8 @@ export const FirebaseProvider = (props) => {
             fetchProjects,
             createProject,
             deleteProject,
-            updateProject
+            updateProject,
+            toggleProjectCombo
         }}>
             {props.children}
         </FirebaseContext.Provider>

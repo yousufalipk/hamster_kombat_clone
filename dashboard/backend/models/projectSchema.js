@@ -26,11 +26,27 @@ const projectsSchema = new mongoose.Schema({
     toColor: {
         type: String,
         required: true,
+    },
+    levels: [
+        {
+            level: {
+                type: String,
+                default: '0',
+            },
+            cost: {
+                type: String,
+                default: '0',
+            },
+        },
+    ],
+    card: {
+        type: Boolean,
+        default: false
     }
 }, {
-    timestamps: true
+    timestamps: true,
 });
 
-const projects = mongoose.model('Projects', projectsSchema, 'projects');
+const Projects = mongoose.model('Projects', projectsSchema, 'projects');
 
-module.exports = projects;
+module.exports = Projects;

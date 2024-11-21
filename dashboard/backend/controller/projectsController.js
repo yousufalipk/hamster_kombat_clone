@@ -62,7 +62,6 @@ exports.createProject = async (req, res) => {
     }
 };
 
-
 exports.removeProject = async (req, res) => {
     try {
         const { projectId } = req.body;
@@ -159,10 +158,54 @@ exports.updateProject = async (req, res) => {
     }
 };
 
-exports.test = async (req, res) => {
-    return res.status(200).json({
-        status: 'success',
-        message: "Projects routes running fine!"
-    })
-}
+exports.toggleComboCard = async (req, res) => {
+    try {
+        const { projectId } = req.body;
 
+        const project = await ProjectModel.findById(projectId);
+
+        if (!project) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Project not found to update!'
+            });
+        }
+
+        if (project.card === true) {
+            project.card = false;
+            await project.save();
+            return res.status(200).json({
+                status: 'success',
+                message: 'Project Combo Card Deactivated!',
+                project: {
+                    card: project.card
+                }
+            });
+        }
+
+        const activeProjects = await ProjectModel.find({ card: true });
+        if (activeProjects.length >= 2) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Already two combo cards enabled!'
+            });
+        }
+
+        project.card = true;
+        await project.save();
+        return res.status(200).json({
+            status: 'success',
+            message: 'Project Combo Card Activated!',
+            project: {
+                card: project.card
+            }
+        });
+
+    } catch (error) {
+        console.error('Internal Server Error:', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error',
+        });
+    }
+};

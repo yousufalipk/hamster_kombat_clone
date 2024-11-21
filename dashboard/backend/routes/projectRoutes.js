@@ -6,7 +6,7 @@ const {
     removeProject,
     fetchProjects,
     updateProject,
-    test
+    toggleComboCard
 } = require('../controller/projectsController');
 
 
@@ -20,6 +20,6 @@ router.route('/fetch').get(fetchProjects);
 
 router.route('/update').post(updateProject);
 
-router.route('/test').post(test);
+router.route('/toogle-combo-card').post(toggleComboCard);
 
 module.exports = router;

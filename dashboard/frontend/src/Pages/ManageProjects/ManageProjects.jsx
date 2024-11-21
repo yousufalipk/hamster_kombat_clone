@@ -8,7 +8,7 @@ import { FaRegEdit } from "react-icons/fa";
 
 const ManageProjects = () => {
     const navigate = useNavigate();
-    const { sendData, setSendData, projects, fetchProjects, deleteProject } = useFirebase();
+    const { setSendData, projects, fetchProjects, deleteProject, toggleProjectCombo } = useFirebase();
 
     useEffect(() => {
         if (!projects) {
@@ -60,6 +60,26 @@ const ManageProjects = () => {
         return `${day}/${month}/${year}`;
     }
 
+    const handleToogleComboCard = async (projectId) => {
+        const confirm = window.confirm("Are you sure you want to toggle the combo card?");
+
+        if (!confirm) {
+            return;
+        }
+
+        try {
+            const res = await toggleProjectCombo(projectId);
+            if (res.success) {
+                toast.success(res.mess);
+            } else {
+                toast.error(res.mess);
+            }
+        } catch (error) {
+            console.log("Internal Server Error!");
+            toast.error('Internal Server Error!');
+        }
+    };
+
     return (
         <>
             <div>
@@ -87,6 +107,8 @@ const ManageProjects = () => {
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Icon</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">From Color</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">To Color</th>
+                            <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Max Level</th>
+                            <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Combo Card</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Launch Date</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Delete</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Update</th>
@@ -125,6 +147,19 @@ const ManageProjects = () => {
                                                         style={{ backgroundColor: cls.toColor }}
                                                         className="w-6 h-6 rounded-full mx-auto"
                                                     ></div>
+                                                </td>
+                                                <td
+                                                    className='px-6 py-4 border-b border-gray-200 text-center'
+                                                >
+                                                    {cls.levels.length}
+                                                </td>
+                                                <td
+                                                    onClick={() => {
+                                                        handleToogleComboCard(cls._id)
+                                                    }}
+                                                    className={`px-6 py-4 border-b border-gray-200 text-center hover:cursor-pointer ${cls.card ? 'text-green-500' : 'text-red-500'}`}
+                                                >
+                                                    {cls.card ? 'Active' : 'In-Active'}
                                                 </td>
                                                 <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
                                                     {formatDate(cls.createdAt)}
