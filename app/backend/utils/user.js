@@ -26,13 +26,6 @@ exports.getProfilePhoto = async (telegramId) => {
         const imageResponse = await axios.get(fileUrl, { responseType: 'arraybuffer' });
         const base64Data = Buffer.from(imageResponse.data, 'binary').toString('base64');
 
-        const buffer = Buffer.from(base64Data, 'base64');
-        const maxSize = 1 * 1024 * 1024;
-
-        if (buffer.length > maxSize) {
-            return ({ success: false, mess: 'Image size exceeds the maximum allowed size (1MB)' });
-        }
-
         return ({ success: true, mess: 'photo found', photo: `data:image/jpeg;base64,${base64Data}` });
 
     } catch (error) {
