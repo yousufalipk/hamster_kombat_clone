@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 import { useUser } from '../../context/index';
+import { LuLoader2 } from "react-icons/lu";
 
 import LeftArrowIcon from '../../assets/leaderboard/left.svg';
 import RightArrowIcon from '../../assets/leaderboard/right.svg';
@@ -23,6 +24,8 @@ import Coin from "../../assets/BigCoinIcon.svg";
 
 const Rankings = () => {
 	const { topUsers, fetchLeaderboardUsers, level } = useUser();
+
+	const [rankLoader, setRankLoader] = useState(null);
 
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 	const navigate = useNavigate();
@@ -67,23 +70,33 @@ const Rankings = () => {
 	};
 
 	const handleClickLeft = () => {
+		setRankLoader(true);
 		const currentIndex = pagesName.indexOf(page);
 		if (currentIndex > 0) {
 			const newPage = pagesName[currentIndex - 1];
 			setPage(newPage);
 			updateStageImage(newPage);
+			setTimeout(() => {
+				setRankLoader(false);
+			}, 300)
 		} else {
+			setRankLoader(false);
 			console.log("You're at the first page!");
 		}
 	};
 
 	const handleClickRight = () => {
+		setRankLoader(true);
 		const currentIndex = pagesName.indexOf(page);
 		if (currentIndex < pagesName.length - 1) {
 			const newPage = pagesName[currentIndex + 1];
 			setPage(newPage);
 			updateStageImage(newPage);
+			setTimeout(() => {
+				setRankLoader(false);
+			}, 300)
 		} else {
+			setRankLoader(false);
 			console.log("You're at the last page!");
 		}
 	};
@@ -115,6 +128,16 @@ const Rankings = () => {
 			};
 		}
 	}, [navigate]);
+
+	if (rankLoader) {
+		return (
+			<>
+				<div className="h-[100vh] w-[100vw] bg-black flex justify-center items-center">
+					<LuLoader2 className="animate-spin w-20 h-20 text-white" />
+				</div>
+			</>
+		)
+	}
 
 	return (
 		<>

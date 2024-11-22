@@ -463,7 +463,9 @@ export const UserProvider = (props) => {
             coinsPerMinute,
             referrals,
             topUsers,
-            fetchLeaderboardUsers
+            fetchLeaderboardUsers,
+            loader,
+            setLoader
         }}>
             {props.children}
         </UserContext.Provider>
