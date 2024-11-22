@@ -14,10 +14,6 @@ const Footer = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log("Active Icon", activeIcon);
-    }, [activeIcon])
-
-    useEffect(() => {
         const timer = setTimeout(() => {
             setTogglePanda((prev) => !prev);
         }, 800);
@@ -25,7 +21,6 @@ const Footer = () => {
     }, [togglePanda]);
 
     const handleClick = (iconName, route) => {
-        console.log("Button Clicked!");
         setActiveIcon(iconName);
         navigate(route);
     };

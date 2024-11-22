@@ -18,8 +18,6 @@ import EpicStage from '../../assets/leaderboard/stages/epic.svg';
 
 import KingCrown from '../../assets/leaderboard/king.svg';
 import BadgeIcon from '../../assets/leaderboard/badge.svg';
-
-import Top1 from "../../assets/Top1.svg";
 import Coin from "../../assets/BigCoinIcon.svg";
 
 const Rankings = () => {
@@ -196,7 +194,10 @@ const Rankings = () => {
 														</>
 													) : (
 														<>
-															<img src={currentPageUsers[0].profilePic} alt="img" width={50} className="rounded-full" />
+															<div className="relative flex justify-center items-start">
+																<img src={KingCrown} alt="crown" width={20} className="absolute -top-3" />
+																<img src={currentPageUsers[0].profilePic} alt="img" width={50} className="rounded-full" />
+															</div>
 														</>
 													)}
 													<p>{currentPageUsers[0].firstName.slice(0, 7)}</p>
