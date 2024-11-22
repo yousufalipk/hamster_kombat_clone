@@ -212,3 +212,7 @@ html {
 .popup-overlay.closing .popup-content {
   animation: closePopup 0.7s ease-in-out forwards;
 }
+
+.footer {
+  z-index: 10000;
+}

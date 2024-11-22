@@ -888,10 +888,10 @@ const Home = () => {
 								>
 									<div className="relative bg-[#06060E] w-[100vw] h-[80vh] rounded-t-3xl p-4 text-white">
 										<div className="absolute left-0 -top-10">
-											<img src={leftreward} alt="" />
+											<img src={rightreward} alt="" />
 										</div>
 										<div className="absolute bottom-0 right-0">
-											<img src={rightreward} alt="" />
+											<img src={leftreward} alt="" />
 										</div>
 										<div className="absolute left-0 bottom-20">
 											<img src={leftbox} alt="" />
@@ -987,7 +987,7 @@ const Home = () => {
 											<button
 												className="w-1/3 p-2 bg-[#242434] rounded-xl text-sm z-50 border-b-4 border-b-[#191922] shadow-zinc-900"
 												onClick={handleDailyRewardClaim}
-												disabled={multitapLevel >= 9}
+												disabled={claimed.includes(currentDay)}
 											>
 												Claim
 											</button>
