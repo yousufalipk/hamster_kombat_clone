@@ -26,6 +26,8 @@ export const FirebaseProvider = (props) => {
 
     const [projects, setProjects] = useState(null);
 
+    const [projectLevels, setProjectLevels] = useState([]);
+
     const refreshAuth = async () => {
         try {
             const refreshToken = localStorage.getItem('refreshToken');
@@ -266,6 +268,91 @@ export const FirebaseProvider = (props) => {
         }
     };
 
+    const fetchProjectLevels = async (projectId) => {
+        try {
+            const res = await axios.post(`${apiUrl}/project/fetch-project-level`, {
+                projectId: projectId
+            });
+            if (res.data.status === 'success') {
+                setProjectLevels(res.data.levels);
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const addProjectLevel = async (projectId, level, cost) => {
+        try {
+            const res = await axios.post(`${apiUrl}/project/add-project-level`, {
+                projectId: projectId,
+                level: level,
+                cost: cost
+            });
+            if (res.data.status === 'success') {
+                const data = {
+                    level: level,
+                    cost: cost
+                }
+                setProjectLevels((prevData) => [...prevData, data]);
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const removeProjectLevel = async (projectId, levelId) => {
+        try {
+            const res = await axios.post(`${apiUrl}/project/remove-project-level`, {
+                projectId: projectId,
+                levelId: levelId
+            });
+            if (res.data.status === 'success') {
+                setProjectLevels(prevLevels => prevLevels.filter(level => level._id !== levelId));
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const updateProjectLevel = async (projectId, levelId, newCost) => {
+        try {
+            const res = await axios.post(`${apiUrl}/project/update-project-level`, {
+                projectId: projectId,
+                levelId: levelId,
+                newCost: newCost
+            });
+            if (res.data.status === 'success') {
+                setProjectLevels(prevLevels =>
+                    prevLevels.map(level =>
+                        level._id === levelId
+                            ? { ...level, cost: newCost }
+                            : level
+                    )
+                );
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+
+
     return (
         <FirebaseContext.Provider value={{
             registerUser,
@@ -287,7 +374,14 @@ export const FirebaseProvider = (props) => {
             createProject,
             deleteProject,
             updateProject,
-            toggleProjectCombo
+            toggleProjectCombo,
+            fetchProjectLevels,
+            projectLevels,
+            setProjectLevels,
+            setProjects,
+            addProjectLevel,
+            removeProjectLevel,
+            updateProjectLevel
         }}>
             {props.children}
         </FirebaseContext.Provider>

@@ -1,4 +1,5 @@
 const ProjectModel = require('../models/projectSchema');
+const mongoose = require('mongoose');
 
 exports.createProject = async (req, res) => {
     try {
@@ -206,6 +207,160 @@ exports.toggleComboCard = async (req, res) => {
         return res.status(500).json({
             status: 'failed',
             message: 'Internal Server Error',
+        });
+    }
+};
+
+exports.fetchProjectLevel = async (req, res) => {
+    try {
+        const { projectId } = req.body;
+        const project = await ProjectModel.findById(projectId);
+
+        if (!project) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Project not found!',
+            });
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Project level fetched succesfully',
+            levels: project.levels
+        });
+    } catch (error) {
+        console.log("Internal Server Error!", error);
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
+
+exports.addProjectLevel = async (req, res) => {
+    try {
+        const { projectId, level, cost } = req.body;
+
+        const project = await ProjectModel.findById(projectId);
+
+        if (!project) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Project not found!',
+            });
+        }
+
+        if (project.levels.some(l => l.level === level)) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Level already added!',
+            });
+        }
+
+        const levelData = {
+            level: level,
+            cost: cost
+        }
+
+        project.levels.push(levelData);
+
+        await project.save();
+        return res.status(200).json({
+            status: 'success',
+            message: 'Level Added Succesfuly!',
+        });
+
+    } catch (error) {
+        console.log("Internal Server Error", error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
+exports.removeProjectLevel = async (req, res) => {
+    try {
+        const { projectId, levelId } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(projectId) || !mongoose.Types.ObjectId.isValid(levelId)) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Invalid projectId or levelId!',
+            });
+        }
+
+        const project = await ProjectModel.findById(projectId);
+
+        if (!project) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Project not found!',
+            });
+        }
+
+        project.levels = project.levels.filter(level => level._id.toString() !== levelId);
+
+        await project.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Level removed successfully!',
+        });
+
+    } catch (error) {
+        console.error("Internal Server Error!", error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error',
+        });
+    }
+}
+
+exports.updateProjectLevel = async (req, res) => {
+    try {
+        const { projectId, levelId, newCost } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(projectId) || !mongoose.Types.ObjectId.isValid(levelId)) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Invalid projectId or levelId!',
+            });
+        }
+
+        const project = await ProjectModel.findById(projectId);
+
+        if (!project) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Project not found!',
+            });
+        }
+
+        const levelToUpdate = project.levels.find(level => level._id.toString() === levelId);
+
+        if (!levelToUpdate) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Level not found!',
+            });
+        }
+
+        levelToUpdate.cost = newCost;
+
+        await project.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Cost updated successfully!',
+            newCost: newCost
+        });
+
+    } catch (error) {
+        console.error("Internal Server Error", error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!',
         });
     }
 };

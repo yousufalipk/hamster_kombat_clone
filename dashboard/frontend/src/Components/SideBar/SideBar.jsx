@@ -8,17 +8,6 @@ import { useFirebase } from '../../Context/Firebase';
 const SideBar = () => {
   const { username, userType, logoutUser, page, setPage } = useFirebase();
 
-
-  useEffect(() => {
-    const path = window.location.pathname.substring(1);
-
-    if (!path) {
-      setPage("dashboard");
-    } else if (path === "manage-projects") {
-      setPage("projects");
-    }
-  }, []);
-
   const navigate = useNavigate();
 
   const handleLogOut = async () => {

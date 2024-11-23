@@ -6,11 +6,10 @@ import SideBar from '../../Components/SideBar/SideBar';
 import HomePage from '../../Pages/HomePage/HomePage';
 
 
-//Manage Social Tasks
+//Manage Project 
 import ManageProjectsPage from '../../Pages/ManageProjects/ManageProjects';
 import ProjectsForm from '../../Components/Forms/ProjectsForm/ProjectsForm';
-
-// import SocialTaskFrom from '../../Components/Forms/SocialTaskForm/SocialTaskForm';
+import ProjectLevelsPage from '../../Components/ProjectLevels/ProjectLevels';
 
 import UserProtected from '../../Components/Protected/UserProtected';
 
@@ -30,6 +29,7 @@ const AdminLayout = () => {
             {/* Manage Projects */}
             <Route path='/manage-projects' element={<UserProtected ><ManageProjectsPage /></UserProtected>} />
             <Route path='/project-form' element={<UserProtected ><ProjectsForm /></UserProtected>} />
+            <Route path='/project-levels' element={<UserProtected ><ProjectLevelsPage /></UserProtected>} />
 
           </Routes>
         </div>

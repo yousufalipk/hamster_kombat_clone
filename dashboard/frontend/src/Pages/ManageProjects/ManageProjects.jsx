@@ -5,6 +5,7 @@ import { useFirebase } from '../../Context/Firebase';
 
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
+import { SiLevelsdotfyi } from "react-icons/si";
 
 const ManageProjects = () => {
     const navigate = useNavigate();
@@ -80,6 +81,11 @@ const ManageProjects = () => {
         }
     };
 
+    const handleManageLevels = (project) => {
+        setSendData(project);
+        navigate('/project-levels');
+    }
+
     return (
         <>
             <div>
@@ -112,6 +118,7 @@ const ManageProjects = () => {
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Launch Date</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Delete</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Update</th>
+                            <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Manage Levels</th>
                         </tr>
                     </thead>
                     {projects && (
@@ -184,13 +191,23 @@ const ManageProjects = () => {
                                                     <FaRegEdit className="text-bluebtn w-5 h-5 hover:text-gray-500" />
                                                 </button>
                                             </td>
+                                            <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
+                                                <button
+                                                    className='p-2'
+                                                    onClick={() => {
+                                                        handleManageLevels(cls)
+                                                    }}
+                                                >
+                                                    <SiLevelsdotfyi className="text-bluebtn w-5 h-5 hover:text-gray-500" />
+                                                </button>
+                                            </td>
                                         </tr>
                                     ))}
                             </tbody>
                         </>
                     )}
                 </table>
-            </div>
+            </div >
         </>
     )
 }

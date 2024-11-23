@@ -30,19 +30,45 @@ const projectsSchema = new mongoose.Schema({
     levels: [
         {
             level: {
-                type: String,
-                default: '0',
+                type: Number,
+                default: 0,
             },
             cost: {
-                type: String,
-                default: '0',
+                type: Number,
+                default: 0,
             },
         },
     ],
     card: {
         type: Boolean,
         default: false
-    }
+    },
+    tasks: [
+        {
+            icon: {
+                name: {
+                    type: String,
+                    default: null
+                },
+                data: {
+                    type: String,
+                    default: null
+                },
+                contentType: {
+                    type: String,
+                    default: null
+                }
+            },
+            title: {
+                type: String,
+                default: true
+            },
+            reward: {
+                type: Number,
+                default: 0
+            }
+        }
+    ]
 }, {
     timestamps: true,
 });
