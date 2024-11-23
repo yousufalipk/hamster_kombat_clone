@@ -39,11 +39,13 @@ const ProjectTasks = () => {
         initialValues: {
             iconType: updateTask ? updateTask.iconType : '',
             title: updateTask ? updateTask.title : '',
+            link: updateTask ? updateTask.link : '',
             reward: updateTask ? updateTask.reward : ''
         },
         validationSchema: Yup.object({
             iconType: Yup.string().required('Task Type is required!'),
             title: Yup.string().required('Title is required!'),
+            link: Yup.string().required('Link is required!'),
             reward: Yup.number().required('Reward is required!'),
         }),
         enableReinitialize: true,
@@ -52,10 +54,10 @@ const ProjectTasks = () => {
                 let res;
                 if (updateTask) {
                     // Update Task
-                    res = await updateProjectTask(sendData._id, updateTask._id, values.iconType, values.title, values.reward);
+                    res = await updateProjectTask(sendData._id, updateTask._id, values.iconType, values.title, values.link, values.reward);
                 } else {
                     // Add Task
-                    res = await addProjectTask(sendData._id, values.iconType, values.title, values.reward);
+                    res = await addProjectTask(sendData._id, values.iconType, values.title, values.link, values.reward);
                 }
 
                 if (res.success) {
@@ -130,6 +132,7 @@ const ProjectTasks = () => {
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">SR.No</th>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Icon Type</th>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Title</th>
+                                    <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Link</th>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Reward</th>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Edit</th>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Delete</th>
@@ -142,6 +145,7 @@ const ProjectTasks = () => {
                                             <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{i + 1}</td>
                                             <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.iconType}</td>
                                             <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.title}</td>
+                                            <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.link}</td>
                                             <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.reward}</td>
                                             <td
                                                 className="px-6 py-4 border-b border-gray-200 text-sm text-center"
@@ -180,6 +184,7 @@ const ProjectTasks = () => {
                                 src={CloseIcon}
                                 alt="close"
                                 onClick={() => {
+                                    formik.resetForm();
                                     setAddLevelPopup(false);
                                     setUpdateLevelPopup(false);
                                 }}
@@ -220,6 +225,19 @@ const ProjectTasks = () => {
                             />
                             {formik.errors.title && formik.touched.title && (
                                 <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.title}</p>
+                            )}
+                            <label className="block text-sm font-medium mb-1">{`Link: https://www.xyx.com`}</label>
+                            <input
+                                type="text"
+                                name="link"
+                                id="link"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.link}
+                                className={`w-full p-2 text-black rounded-md bg-gray-300 ${formik.errors.link && formik.touched.link ? 'border-red-500' : ''}`}
+                            />
+                            {formik.errors.link && formik.touched.link && (
+                                <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.link}</p>
                             )}
                             <label className="block text-sm font-medium mb-1">Reward</label>
                             <input

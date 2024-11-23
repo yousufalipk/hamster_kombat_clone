@@ -26,7 +26,7 @@ const ProjectLevels = () => {
 
     useEffect(() => {
         if (sendData) {
-            if (projectLevels.length === 0) {
+            if (!projectLevels) {
                 fetchProjectLevels(sendData._id);
             }
         } else {

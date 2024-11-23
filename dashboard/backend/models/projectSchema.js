@@ -61,6 +61,10 @@ const projectsSchema = new mongoose.Schema({
                 type: String,
                 default: true
             },
+            link: {
+                type: String,
+                default: true
+            },
             reward: {
                 type: Number,
                 default: 0

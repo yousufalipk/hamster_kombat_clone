@@ -338,7 +338,7 @@ export const FirebaseProvider = (props) => {
                 setProjectLevels(prevLevels =>
                     prevLevels.map(level =>
                         level._id === levelId
-                            ? { ...level, cost: newCost }
+                            ? { ...level, cost: newCost, reward: newReward, cpm: newCpm }
                             : level
                     )
                 );
@@ -370,12 +370,13 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    const addProjectTask = async (projectId, iconType, title, reward) => {
+    const addProjectTask = async (projectId, iconType, title, link, reward) => {
         try {
             const res = await axios.post(`${apiUrl}/project/add-project-task`, {
                 projectId: projectId,
                 iconType: iconType,
                 title: title,
+                link: link,
                 reward: reward
             });
             if (res.data.status === 'success') {
@@ -408,20 +409,21 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    const updateProjectTask = async (projectId, taskId, newIconType, newTitle, newReward) => {
+    const updateProjectTask = async (projectId, taskId, newIconType, newTitle, newLink, newReward) => {
         try {
             const res = await axios.post(`${apiUrl}/project/update-project-task`, {
                 projectId: projectId,
                 taskId: taskId,
                 newIconType: newIconType,
                 newTitle: newTitle,
+                newLink: newLink,
                 newReward: newReward,
             });
             if (res.data.status === 'success') {
                 setProjectTasks(prevTasks =>
                     prevTasks.map(task =>
                         task._id === taskId
-                            ? { ...task, iconType: newIconType, title: newTitle, reward: newReward }
+                            ? { ...task, iconType: newIconType, title: newTitle, link: newLink, reward: newReward }
                             : task
                     )
                 );

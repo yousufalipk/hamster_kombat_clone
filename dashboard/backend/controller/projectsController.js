@@ -405,7 +405,7 @@ exports.fetchProjectTasks = async (req, res) => {
 
 exports.addProjectTask = async (req, res) => {
     try {
-        const { projectId, iconType, title, reward } = req.body;
+        const { projectId, iconType, title, link, reward } = req.body;
 
         const project = await ProjectModel.findById(projectId);
 
@@ -419,6 +419,7 @@ exports.addProjectTask = async (req, res) => {
         const taskData = {
             iconType: iconType,
             title: title,
+            link: link,
             reward: reward,
         };
 
@@ -487,7 +488,10 @@ exports.removeProjectTask = async (req, res) => {
 
 exports.updateProjectTask = async (req, res) => {
     try {
-        const { projectId, taskId, newIconType, newTitle, newReward } = req.body;
+        const { projectId, taskId, newIconType, newTitle, newLink, newReward } = req.body;
+
+
+        console.log("New Link", newLink);
 
         if (!mongoose.Types.ObjectId.isValid(projectId) || !mongoose.Types.ObjectId.isValid(taskId)) {
             return res.status(200).json({
@@ -517,6 +521,7 @@ exports.updateProjectTask = async (req, res) => {
         taskToUpdate.iconType = newIconType;
         taskToUpdate.title = newTitle;
         taskToUpdate.reward = newReward;
+        taskToUpdate.link = newLink;
 
         await project.save();
 
