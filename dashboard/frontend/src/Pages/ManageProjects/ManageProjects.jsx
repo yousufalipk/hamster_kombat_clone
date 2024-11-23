@@ -50,6 +50,12 @@ const ManageProjects = () => {
     }
 
     const handleDeleteProject = async (id, name) => {
+        const confirmDelete = window.confirm(`Are you sure you want to delete the project "${name}"?`);
+
+        if (!confirmDelete) {
+            return;
+        }
+
         try {
             const res = await deleteProject(id);
             if (res.success) {
@@ -60,7 +66,7 @@ const ManageProjects = () => {
         } catch (error) {
             toast.error("Internal Server Error!");
         }
-    }
+    };
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
