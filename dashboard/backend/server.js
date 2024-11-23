@@ -5,6 +5,9 @@ const cors = require('cors');
 
 const userRoutes = require('./routes/userRoutes');
 const projectRoutes = require('./routes/projectRoutes');
+const patnerRoutes = require('./routes/patnerRoutes');
+const kolsRoutes = require('./routes/kolsRoutes');
+const vcRoutes = require('./routes/vsRoutes');
 
 const app = express();
 
@@ -29,6 +32,9 @@ app.get('/', (req, res) => {
 
 app.use('/', userRoutes);
 app.use('/project', projectRoutes);
+app.use('/patners', patnerRoutes);
+app.use('/kols', kolsRoutes);
+app.use('/vcs', vcRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
