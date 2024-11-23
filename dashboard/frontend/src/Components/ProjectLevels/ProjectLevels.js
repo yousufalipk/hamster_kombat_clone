@@ -13,7 +13,7 @@ const ProjectLevels = () => {
         sendData,
         fetchProjectLevels,
         projectLevels,
-        setProjects,
+        setProjectLevels,
         addProjectLevel,
         removeProjectLevel,
         updateProjectLevel,
@@ -30,7 +30,7 @@ const ProjectLevels = () => {
                 fetchProjectLevels(sendData._id);
             }
         } else {
-            setProjects(null);
+            setProjectLevels(null);
             navigate('/manage-projects');
         }
     }, [sendData, projectLevels]);
@@ -79,7 +79,7 @@ const ProjectLevels = () => {
 
     const handleBack = () => {
         formik.resetForm();
-        setProjects(null);
+        setProjectLevels(null);
         navigate('/manage-projects');
     };
 
@@ -101,7 +101,10 @@ const ProjectLevels = () => {
         }
     };
 
-    const sortedLevels = projectLevels.slice().sort((a, b) => b.level + a.level);
+    let sortedLevels;
+    if (projectLevels) {
+        sortedLevels = projectLevels.slice().sort((a, b) => b.level + a.level);
+    }
 
     return (
         <>
@@ -131,37 +134,50 @@ const ProjectLevels = () => {
                                 <tr>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Level No</th>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Upgrade Cost</th>
+                                    <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Reward</th>
+                                    <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Coin's Per Minute</th>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Edit</th>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Delete</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {sortedLevels.map((cls) => (
-                                    <tr key={cls._id}>
-                                        <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">
-                                            {cls.level}
-                                        </td>
-                                        <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">
-                                            {cls.cost}
-                                        </td>
-                                        <td
-                                            className="px-6 py-4 border-b border-gray-200 text-sm text-center"
-                                            onClick={() => {
-                                                setUpdateLevel(cls);
-                                                setUpdateLevelPopup(true);
-                                            }}
-                                        >
-                                            <FaRegEdit className="text-bluebtn w-5 h-5 hover:text-gray-500 mx-auto" />
-                                        </td>
-                                        <td
-                                            className="px-6 py-4 border-b border-gray-200 text-sm text-center"
-                                            onClick={() => handleDeleteLevel(cls._id)}
-                                        >
-                                            <RiDeleteBin5Line className="text-bluebtn w-5 h-5 hover:text-gray-700 mx-auto" />
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
+                            {projectLevels && (
+                                <>
+
+                                    <tbody>
+                                        {sortedLevels.map((cls) => (
+                                            <tr key={cls._id}>
+                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">
+                                                    {cls.level}
+                                                </td>
+                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">
+                                                    {cls.cost}
+                                                </td>
+                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">
+                                                    {cls.reward}
+                                                </td>
+                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">
+                                                    {cls.cpm}
+                                                </td>
+                                                <td
+                                                    className="px-6 py-4 border-b border-gray-200 text-sm text-center"
+                                                    onClick={() => {
+                                                        setUpdateLevel(cls);
+                                                        setUpdateLevelPopup(true);
+                                                    }}
+                                                >
+                                                    <FaRegEdit className="text-bluebtn w-5 h-5 hover:text-gray-500 mx-auto" />
+                                                </td>
+                                                <td
+                                                    className="px-6 py-4 border-b border-gray-200 text-sm text-center"
+                                                    onClick={() => handleDeleteLevel(cls._id)}
+                                                >
+                                                    <RiDeleteBin5Line className="text-bluebtn w-5 h-5 hover:text-gray-700 mx-auto" />
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </>
+                            )}
                         </table>
                     </div>
                 </div>

@@ -50,7 +50,7 @@ const ManageProjects = () => {
     }
 
     const handleDeleteProject = async (id, name) => {
-        const confirmDelete = window.confirm(`Are you sure you want to delete the project "${name}"?`);
+        const confirmDelete = window.confirm(`Are you sure you want to delete the project "${name}"? \nThis action cannot be undone!`);
 
         if (!confirmDelete) {
             return;
