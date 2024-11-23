@@ -100,8 +100,7 @@ const ManageProjects = () => {
         navigate('/project-tasks');
     }
     const handleAddTgeDate = async (projectId) => {
-        const isConfirmed = window.confirm("Are you sure you want to add the TGE date?");
-
+        const isConfirmed = window.confirm(`Are you sure you want to add the TGE date? \nThis action cannot be undone!`);
         if (isConfirmed) {
             setTgeDatePopup(true);
             setProjectId(projectId);
