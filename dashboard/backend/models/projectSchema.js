@@ -58,7 +58,15 @@ const projectsSchema = new mongoose.Schema({
                 default: 0
             }
         }
-    ]
+    ],
+    tgeDate: {
+        type: Date,
+        default: null
+    },
+    tge: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true,
 });

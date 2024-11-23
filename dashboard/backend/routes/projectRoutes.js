@@ -15,7 +15,9 @@ const {
     fetchProjectTasks,
     addProjectTask,
     removeProjectTask,
-    updateProjectTask
+    updateProjectTask,
+
+    addtgeDate
 } = require('../controller/projectsController');
 
 
@@ -46,5 +48,7 @@ router.route('/add-project-task').post(addProjectTask);
 router.route('/remove-project-task').post(removeProjectTask);
 
 router.route('/update-project-task').post(updateProjectTask);
+
+router.route('/add-tge-date').post(addtgeDate);
 
 module.exports = router;

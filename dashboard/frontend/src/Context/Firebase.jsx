@@ -431,6 +431,24 @@ export const FirebaseProvider = (props) => {
         }
     }
 
+    const addTgeDate = async (projectId, tgeDate) => {
+        try {
+            const res = await axios.post(`${apiUrl}/project/add-tge-date`, {
+                projectId: projectId,
+                tgeDate: tgeDate
+            });
+            if (res.data.status === 'success') {
+                fetchProjects();
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error' })
+        }
+    }
+
     return (
         <FirebaseContext.Provider value={{
             registerUser,
@@ -464,7 +482,8 @@ export const FirebaseProvider = (props) => {
             fetchProjectTasks,
             addProjectTask,
             removeProjectTask,
-            updateProjectTask
+            updateProjectTask,
+            addTgeDate
         }}>
             {props.children}
         </FirebaseContext.Provider>

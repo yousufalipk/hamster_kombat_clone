@@ -529,3 +529,30 @@ exports.updateProjectTask = async (req, res) => {
         });
     }
 };
+
+exports.addtgeDate = async (req, res) => {
+    try {
+        const { projectId, tgeDate } = req.body;
+
+        const project = await ProjectModel.findById(projectId);
+
+        if (!project) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Project not found!'
+            })
+        }
+        project.tgeDate = tgeDate;
+        await project.save();
+        return res.status(200).json({
+            status: 'success',
+            message: 'Tge date Added Succesfuly!'
+        })
+    } catch (error) {
+        console.log("Internal Server Error", error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        })
+    }
+}
