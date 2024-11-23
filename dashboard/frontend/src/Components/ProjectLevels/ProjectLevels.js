@@ -58,7 +58,7 @@ const ProjectLevels = () => {
                     }
                 } else {
                     // Add Level
-                    const res = await addProjectLevel(sendData._id, values.level, values.cost);
+                    const res = await addProjectLevel(sendData._id, values.cost);
                     if (res.success) {
                         toast.success(res.mess);
                         setAddLevelPopup(false);

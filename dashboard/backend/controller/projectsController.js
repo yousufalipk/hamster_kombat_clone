@@ -313,7 +313,7 @@ exports.removeProjectLevel = async (req, res) => {
 
         return res.status(200).json({
             status: 'success',
-            message: 'Level removed and levels re-arranged successfully!',
+            message: 'Level removed successfully!',
         });
 
     } catch (error) {
