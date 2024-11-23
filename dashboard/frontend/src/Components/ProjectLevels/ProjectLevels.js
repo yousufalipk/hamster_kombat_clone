@@ -82,16 +82,20 @@ const ProjectLevels = () => {
     };
 
     const handleDeleteLevel = async (levelId) => {
-        try {
-            const res = await removeProjectLevel(sendData._id, levelId);
-            if (res.success) {
-                toast.success(res.mess);
-            } else {
-                toast.error(res.mess);
+        const isConfirmed = window.confirm('Are you sure you want to delete this level?');
+
+        if (isConfirmed) {
+            try {
+                const res = await removeProjectLevel(sendData._id, levelId);
+                if (res.success) {
+                    toast.success(res.mess);
+                } else {
+                    toast.error(res.mess);
+                }
+            } catch (error) {
+                console.log("Internal Server Error!", error);
+                toast.error('Internal Server Error');
             }
-        } catch (error) {
-            console.log("Internal Server Error!", error);
-            toast.error('Internal Server Error');
         }
     };
 
