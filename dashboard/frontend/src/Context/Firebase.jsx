@@ -28,6 +28,8 @@ export const FirebaseProvider = (props) => {
 
     const [projectLevels, setProjectLevels] = useState([]);
 
+    const [projectTasks, setProjectTasks] = useState([]);
+
     const refreshAuth = async () => {
         try {
             const refreshToken = localStorage.getItem('refreshToken');
@@ -346,6 +348,88 @@ export const FirebaseProvider = (props) => {
         }
     }
 
+    const fetchProjectTasks = async (projectId) => {
+        try {
+            const res = await axios.post(`${apiUrl}/project/fetch-project-task`, {
+                projectId: projectId
+            });
+            if (res.data.status === 'success') {
+                console.log("Project Tasks", res.data.tasks);
+                setProjectTasks(res.data.tasks);
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const addProjectTask = async (projectId, iconType, title, reward) => {
+        try {
+            const res = await axios.post(`${apiUrl}/project/add-project-task`, {
+                projectId: projectId,
+                iconType: iconType,
+                title: title,
+                reward: reward
+            });
+            if (res.data.status === 'success') {
+                fetchProjectTasks(projectId);
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const removeProjectTask = async (projectId, taskId) => {
+        try {
+            const res = await axios.post(`${apiUrl}/project/remove-project-task`, {
+                projectId: projectId,
+                taskId: taskId
+            });
+            if (res.data.status === 'success') {
+                fetchProjectTasks(projectId);
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const updateProjectTask = async (projectId, taskId, newIconType, newTitle, newReward) => {
+        try {
+            const res = await axios.post(`${apiUrl}/project/update-project-task`, {
+                projectId: projectId,
+                taskId: taskId,
+                newIconType: newIconType,
+                newTitle: newTitle,
+                newReward: newReward,
+            });
+            if (res.data.status === 'success') {
+                setProjectTasks(prevTasks =>
+                    prevTasks.map(task =>
+                        task._id === taskId
+                            ? { ...task, iconType: newIconType, title: newTitle, reward: newReward }
+                            : task
+                    )
+                );
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
 
     return (
         <FirebaseContext.Provider value={{
@@ -374,7 +458,13 @@ export const FirebaseProvider = (props) => {
             setProjects,
             addProjectLevel,
             removeProjectLevel,
-            updateProjectLevel
+            updateProjectLevel,
+            projectTasks,
+            setProjectTasks,
+            fetchProjectTasks,
+            addProjectTask,
+            removeProjectTask,
+            updateProjectTask
         }}>
             {props.children}
         </FirebaseContext.Provider>

@@ -6,6 +6,7 @@ import { useFirebase } from '../../Context/Firebase';
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import { SiLevelsdotfyi } from "react-icons/si";
+import { FaTasks } from "react-icons/fa";
 
 const ManageProjects = () => {
     const navigate = useNavigate();
@@ -86,6 +87,11 @@ const ManageProjects = () => {
         navigate('/project-levels');
     }
 
+    const handleManageTasks = (project) => {
+        setSendData(project);
+        navigate('/project-tasks');
+    }
+
     return (
         <>
             <div>
@@ -114,11 +120,13 @@ const ManageProjects = () => {
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">From Color</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">To Color</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Max Level</th>
+                            <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">No. Tasks</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Combo Card</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Launch Date</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Delete</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Update</th>
                             <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Manage Levels</th>
+                            <th className='px-6 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Manage Tasks</th>
                         </tr>
                     </thead>
                     {projects && (
@@ -154,6 +162,9 @@ const ManageProjects = () => {
                                             </td>
                                             <td className='px-6 py-4 border-b border-gray-200 text-center'>
                                                 {cls.levels.length}
+                                            </td>
+                                            <td className='px-6 py-4 border-b border-gray-200 text-center'>
+                                                {cls.tasks.length}
                                             </td>
                                             <td
                                                 onClick={() => {
@@ -199,6 +210,16 @@ const ManageProjects = () => {
                                                     }}
                                                 >
                                                     <SiLevelsdotfyi className="text-bluebtn w-5 h-5 hover:text-gray-500" />
+                                                </button>
+                                            </td>
+                                            <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
+                                                <button
+                                                    className='p-2'
+                                                    onClick={() => {
+                                                        handleManageTasks(cls)
+                                                    }}
+                                                >
+                                                    <FaTasks className="text-bluebtn w-5 h-5 hover:text-gray-500" />
                                                 </button>
                                             </td>
                                         </tr>

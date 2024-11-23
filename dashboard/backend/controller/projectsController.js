@@ -372,3 +372,160 @@ exports.updateProjectLevel = async (req, res) => {
         });
     }
 };
+
+exports.fetchProjectTasks = async (req, res) => {
+    try {
+        const { projectId } = req.body;
+        const project = await ProjectModel.findById(projectId);
+
+        if (!project) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Project not found!',
+            });
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Project level fetched succesfully',
+            tasks: project.tasks
+        });
+    } catch (error) {
+        console.log("Internal Server Error!", error);
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
+
+exports.addProjectTask = async (req, res) => {
+    try {
+        const { projectId, iconType, title, reward } = req.body;
+
+        const project = await ProjectModel.findById(projectId);
+
+        if (!project) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Project not found!',
+            });
+        }
+
+        const taskData = {
+            iconType: iconType,
+            title: title,
+            reward: reward,
+        };
+
+        project.tasks.push(taskData);
+
+        await project.save();
+        return res.status(200).json({
+            status: 'success',
+            message: 'Task Added Successfully!',
+        });
+
+    } catch (error) {
+        console.log("Internal Server Error", error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
+exports.removeProjectTask = async (req, res) => {
+    try {
+        const { projectId, taskId } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(projectId) || !mongoose.Types.ObjectId.isValid(taskId)) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Invalid projectId or taskId!',
+            });
+        }
+
+        const project = await ProjectModel.findById(projectId);
+
+        if (!project) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Project not found!',
+            });
+        }
+
+        const taskIndex = project.tasks.findIndex(task => task._id.toString() === taskId);
+
+        if (taskIndex === -1) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Task not found!',
+            });
+        }
+
+        project.tasks.splice(taskIndex, 1);
+
+        await project.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Task removed successfully!',
+        });
+    } catch (error) {
+        console.error("Internal Server Error!", error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error',
+        });
+    }
+};
+
+exports.updateProjectTask = async (req, res) => {
+    try {
+        const { projectId, taskId, newIconType, newTitle, newReward } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(projectId) || !mongoose.Types.ObjectId.isValid(taskId)) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Invalid projectId or levelId!',
+            });
+        }
+
+        const project = await ProjectModel.findById(projectId);
+
+        if (!project) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Project not found!',
+            });
+        }
+
+        const taskToUpdate = project.tasks.find(task => task._id.toString() === taskId);
+
+        if (!taskToUpdate) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Task not found!',
+            });
+        }
+
+        taskToUpdate.iconType = newIconType;
+        taskToUpdate.title = newTitle;
+        taskToUpdate.reward = newReward;
+
+        await project.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Task updated successfully!'
+        });
+
+    } catch (error) {
+        console.error("Internal Server Error", error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!',
+        });
+    }
+};

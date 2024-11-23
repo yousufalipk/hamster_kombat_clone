@@ -10,7 +10,12 @@ const {
     fetchProjectLevel,
     addProjectLevel,
     removeProjectLevel,
-    updateProjectLevel
+    updateProjectLevel,
+
+    fetchProjectTasks,
+    addProjectTask,
+    removeProjectTask,
+    updateProjectTask
 } = require('../controller/projectsController');
 
 
@@ -33,5 +38,13 @@ router.route('/add-project-level').post(addProjectLevel);
 router.route('/remove-project-level').post(removeProjectLevel);
 
 router.route('/update-project-level').post(updateProjectLevel);
+
+router.route('/fetch-project-task').post(fetchProjectTasks);
+
+router.route('/add-project-task').post(addProjectTask);
+
+router.route('/remove-project-task').post(removeProjectTask);
+
+router.route('/update-project-task').post(updateProjectTask);
 
 module.exports = router;

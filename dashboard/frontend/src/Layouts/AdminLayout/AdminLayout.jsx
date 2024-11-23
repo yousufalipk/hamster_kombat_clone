@@ -10,6 +10,7 @@ import HomePage from '../../Pages/HomePage/HomePage';
 import ManageProjectsPage from '../../Pages/ManageProjects/ManageProjects';
 import ProjectsForm from '../../Components/Forms/ProjectsForm/ProjectsForm';
 import ProjectLevelsPage from '../../Components/ProjectLevels/ProjectLevels';
+import ProjectTasksPage from '../../Components/ProjectTasks/ProjectTasks';
 
 import UserProtected from '../../Components/Protected/UserProtected';
 
@@ -30,6 +31,7 @@ const AdminLayout = () => {
             <Route path='/manage-projects' element={<UserProtected ><ManageProjectsPage /></UserProtected>} />
             <Route path='/project-form' element={<UserProtected ><ProjectsForm /></UserProtected>} />
             <Route path='/project-levels' element={<UserProtected ><ProjectLevelsPage /></UserProtected>} />
+            <Route path='/project-tasks' element={<UserProtected ><ProjectTasksPage /></UserProtected>} />
 
           </Routes>
         </div>

@@ -45,19 +45,9 @@ const projectsSchema = new mongoose.Schema({
     },
     tasks: [
         {
-            icon: {
-                name: {
-                    type: String,
-                    default: null
-                },
-                data: {
-                    type: String,
-                    default: null
-                },
-                contentType: {
-                    type: String,
-                    default: null
-                }
+            iconType: {
+                type: String,
+                default: null
             },
             title: {
                 type: String,
