@@ -239,7 +239,7 @@ exports.fetchProjectLevel = async (req, res) => {
 
 exports.addProjectLevel = async (req, res) => {
     try {
-        const { projectId, level, cost } = req.body;
+        const { projectId, cost } = req.body;
 
         const project = await ProjectModel.findById(projectId);
 
@@ -250,24 +250,19 @@ exports.addProjectLevel = async (req, res) => {
             });
         }
 
-        if (project.levels.some(l => l.level === level)) {
-            return res.status(200).json({
-                status: 'failed',
-                message: 'Level already added!',
-            });
-        }
+        const nextLevel = project.levels.length > 0 ? Math.max(...project.levels.map(level => level.level)) + 1 : 1;
 
         const levelData = {
-            level: level,
-            cost: cost
-        }
+            level: nextLevel,
+            cost: cost,
+        };
 
         project.levels.push(levelData);
 
         await project.save();
         return res.status(200).json({
             status: 'success',
-            message: 'Level Added Succesfuly!',
+            message: 'Level Added Successfully!',
         });
 
     } catch (error) {
@@ -299,13 +294,26 @@ exports.removeProjectLevel = async (req, res) => {
             });
         }
 
+        const levelToRemove = project.levels.find(level => level._id.toString() === levelId);
+        if (!levelToRemove) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Level not found!',
+            });
+        }
+
         project.levels = project.levels.filter(level => level._id.toString() !== levelId);
+
+        project.levels = project.levels.map((level, index) => {
+            level.level = index + 1;
+            return level;
+        });
 
         await project.save();
 
         return res.status(200).json({
             status: 'success',
-            message: 'Level removed successfully!',
+            message: 'Level removed and levels re-arranged successfully!',
         });
 
     } catch (error) {
@@ -315,7 +323,7 @@ exports.removeProjectLevel = async (req, res) => {
             message: 'Internal Server Error',
         });
     }
-}
+};
 
 exports.updateProjectLevel = async (req, res) => {
     try {

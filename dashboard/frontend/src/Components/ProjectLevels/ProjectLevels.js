@@ -185,17 +185,21 @@ const ProjectLevels = () => {
                             onSubmit={formik.handleSubmit}
                             className="w-full flex flex-col justify-center items-start gap-2 px-20"
                         >
-                            <label className="block text-sm font-medium mb-1">Level</label>
-                            <input
-                                type="number"
-                                name="level"
-                                placeholder="Level"
-                                className={`text-black border rounded-md p-2 w-full bg-gray-300 ${formik.errors.level && formik.touched.level ? 'border-red-500' : ''
-                                    }`}
-                                value={formik.values.level}
-                                disabled={!addLevelPopup}
-                                onChange={formik.handleChange}
-                            />
+                            {updateLevelPopup && (
+                                <>
+                                    <label className="block text-sm font-medium mb-1">Level</label>
+                                    <input
+                                        type="number"
+                                        name="level"
+                                        placeholder="Level"
+                                        className={`text-black border rounded-md p-2 w-full bg-gray-300 ${formik.errors.level && formik.touched.level ? 'border-red-500' : ''
+                                            }`}
+                                        value={formik.values.level}
+                                        disabled={!addLevelPopup}
+                                        onChange={formik.handleChange}
+                                    />
+                                </>
+                            )}
                             <label className="block text-sm font-medium mb-1">Cost</label>
                             <input
                                 type="number"

@@ -285,19 +285,14 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    const addProjectLevel = async (projectId, level, cost) => {
+    const addProjectLevel = async (projectId, cost) => {
         try {
             const res = await axios.post(`${apiUrl}/project/add-project-level`, {
                 projectId: projectId,
-                level: level,
                 cost: cost
             });
             if (res.data.status === 'success') {
-                const data = {
-                    level: level,
-                    cost: cost
-                }
-                setProjectLevels((prevData) => [...prevData, data]);
+                fetchProjectLevels(projectId);
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -315,7 +310,7 @@ export const FirebaseProvider = (props) => {
                 levelId: levelId
             });
             if (res.data.status === 'success') {
-                setProjectLevels(prevLevels => prevLevels.filter(level => level._id !== levelId));
+                fetchProjectLevels(projectId);
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -352,7 +347,6 @@ export const FirebaseProvider = (props) => {
     }
 
 
-
     return (
         <FirebaseContext.Provider value={{
             registerUser,
@@ -368,7 +362,6 @@ export const FirebaseProvider = (props) => {
             page,
             setSendData,
             sendData,
-
             projects,
             fetchProjects,
             createProject,
