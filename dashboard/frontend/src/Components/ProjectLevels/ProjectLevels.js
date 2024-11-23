@@ -39,6 +39,8 @@ const ProjectLevels = () => {
         initialValues: {
             level: updateLevel ? updateLevel.level : 0,
             cost: updateLevel ? updateLevel.cost : 0,
+            reward: updateLevel ? updateLevel.reward : 0,
+            cpm: updateLevel ? updateLevel.cpm : 0,
         },
         validationSchema: Yup.object({
             level: Yup.number().required('Level is required!'),
@@ -49,7 +51,7 @@ const ProjectLevels = () => {
             try {
                 if (updateLevel) {
                     // Update Level
-                    const res = await updateProjectLevel(sendData._id, updateLevel._id, values.cost);
+                    const res = await updateProjectLevel(sendData._id, updateLevel._id, values.cost, values.reward, values.cpm);
                     if (res.success) {
                         toast.success(res.mess);
                         setUpdateLevelPopup(false);
@@ -58,7 +60,7 @@ const ProjectLevels = () => {
                     }
                 } else {
                     // Add Level
-                    const res = await addProjectLevel(sendData._id, values.cost);
+                    const res = await addProjectLevel(sendData._id, values.cost, values.reward, values.cpm);
                     if (res.success) {
                         toast.success(res.mess);
                         setAddLevelPopup(false);
@@ -202,6 +204,9 @@ const ProjectLevels = () => {
                                         disabled={!addLevelPopup}
                                         onChange={formik.handleChange}
                                     />
+                                    {formik.errors.level && formik.touched.level && (
+                                        <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.level}</p>
+                                    )}
                                 </>
                             )}
                             <label className="block text-sm font-medium mb-1">Cost</label>
@@ -215,6 +220,37 @@ const ProjectLevels = () => {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                             />
+                            {formik.errors.cost && formik.touched.cost && (
+                                <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.cost}</p>
+                            )}
+                            <label className="block text-sm font-medium mb-1">Reward</label>
+                            <input
+                                type="number"
+                                name="reward"
+                                placeholder="Reward"
+                                className={`text-black border rounded-md p-2 w-full ${formik.errors.reward && formik.touched.reward ? 'border-red-500' : ''
+                                    }`}
+                                value={formik.values.reward}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            {formik.errors.reward && formik.touched.reward && (
+                                <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.reward}</p>
+                            )}
+                            <label className="block text-sm font-medium mb-1">Coin Per Min's</label>
+                            <input
+                                type="number"
+                                name="cpm"
+                                placeholder="Coin's Per Minute"
+                                className={`text-black border rounded-md p-2 w-full ${formik.errors.cpm && formik.touched.cpm ? 'border-red-500' : ''
+                                    }`}
+                                value={formik.values.cpm}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            {formik.errors.cpm && formik.touched.cpm && (
+                                <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.cpm}</p>
+                            )}
                             <div className="w-full flex justify-center mt-5">
                                 <button
                                     type="submit"

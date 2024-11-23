@@ -239,7 +239,7 @@ exports.fetchProjectLevel = async (req, res) => {
 
 exports.addProjectLevel = async (req, res) => {
     try {
-        const { projectId, cost } = req.body;
+        const { projectId, cost, reward, cpm } = req.body;
 
         const project = await ProjectModel.findById(projectId);
 
@@ -255,6 +255,8 @@ exports.addProjectLevel = async (req, res) => {
         const levelData = {
             level: nextLevel,
             cost: cost,
+            reward: reward,
+            cpm: cpm
         };
 
         project.levels.push(levelData);
@@ -327,7 +329,7 @@ exports.removeProjectLevel = async (req, res) => {
 
 exports.updateProjectLevel = async (req, res) => {
     try {
-        const { projectId, levelId, newCost } = req.body;
+        const { projectId, levelId, newCost, newReward, newCpm } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(projectId) || !mongoose.Types.ObjectId.isValid(levelId)) {
             return res.status(200).json({
@@ -355,6 +357,8 @@ exports.updateProjectLevel = async (req, res) => {
         }
 
         levelToUpdate.cost = newCost;
+        levelToUpdate.reward = newReward;
+        levelToUpdate.cpm = newCpm;
 
         await project.save();
 

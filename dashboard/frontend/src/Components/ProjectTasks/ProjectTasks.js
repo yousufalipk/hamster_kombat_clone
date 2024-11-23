@@ -205,6 +205,9 @@ const ProjectTasks = () => {
                                 <option value='telegram'>Telegram</option>
                                 <option value='youtube'>Youtube</option>
                             </select>
+                            {formik.errors.iconType && formik.touched.iconType && (
+                                <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.iconType}</p>
+                            )}
                             <label className="block text-sm font-medium mb-1">Title</label>
                             <input
                                 type="text"
@@ -215,6 +218,9 @@ const ProjectTasks = () => {
                                 value={formik.values.title}
                                 className={`w-full p-2 text-black rounded-md bg-gray-300 ${formik.errors.title && formik.touched.title ? 'border-red-500' : ''}`}
                             />
+                            {formik.errors.title && formik.touched.title && (
+                                <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.title}</p>
+                            )}
                             <label className="block text-sm font-medium mb-1">Reward</label>
                             <input
                                 type="number"
@@ -225,6 +231,9 @@ const ProjectTasks = () => {
                                 value={formik.values.reward}
                                 className={`w-full p-2 text-black rounded-md bg-gray-300 ${formik.errors.reward && formik.touched.reward ? 'border-red-500' : ''}`}
                             />
+                            {formik.errors.reward && formik.touched.reward && (
+                                <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.reward}</p>
+                            )}
                             <button
                                 type="submit"
                                 className="py-1 px-4 rounded-md bg-bluebtn text-gray-700 hover:bg-transparent hover:border-2 hover:border-bluebtn hover:text-bluebtn mx-auto mt-5"

@@ -37,6 +37,14 @@ const projectsSchema = new mongoose.Schema({
                 type: Number,
                 default: 0,
             },
+            reward: {
+                type: Number,
+                default: 0,
+            },
+            cpm: {
+                type: Number,
+                default: 0,
+            },
         },
     ],
     card: {

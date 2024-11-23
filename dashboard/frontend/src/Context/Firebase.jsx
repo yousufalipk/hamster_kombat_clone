@@ -287,11 +287,13 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    const addProjectLevel = async (projectId, cost) => {
+    const addProjectLevel = async (projectId, cost, reward, cpm) => {
         try {
             const res = await axios.post(`${apiUrl}/project/add-project-level`, {
                 projectId: projectId,
-                cost: cost
+                cost: cost,
+                reward: reward,
+                cpm: cpm
             });
             if (res.data.status === 'success') {
                 fetchProjectLevels(projectId);
@@ -323,12 +325,14 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    const updateProjectLevel = async (projectId, levelId, newCost) => {
+    const updateProjectLevel = async (projectId, levelId, newCost, newReward, newCpm) => {
         try {
             const res = await axios.post(`${apiUrl}/project/update-project-level`, {
                 projectId: projectId,
                 levelId: levelId,
-                newCost: newCost
+                newCost: newCost,
+                newReward: newReward,
+                newCpm: newCpm
             });
             if (res.data.status === 'success') {
                 setProjectLevels(prevLevels =>
