@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { useUser } from '../../context/index';
 import { LuLoader2 } from "react-icons/lu";
@@ -33,17 +34,19 @@ const Rankings = () => {
 	const stageImageRef = useRef();
 
 	useEffect(() => {
-		const tg = window.Telegram.WebApp;
+		if (staticUser === 'false') {
+			const tg = window.Telegram.WebApp;
 
-		tg.BackButton.show();
-		tg.BackButton.onClick(() => {
-			navigate("/");
-		});
+			tg.BackButton.show();
+			tg.BackButton.onClick(() => {
+				navigate("/");
+			});
 
-		return () => {
-			tg.BackButton.hide();
-			tg.BackButton.offClick();
-		};
+			return () => {
+				tg.BackButton.hide();
+				tg.BackButton.offClick();
+			};
+		}
 	}, [navigate]);
 
 	const pagesName = [
@@ -83,6 +86,10 @@ const Rankings = () => {
 
 	const handleClickLeft = () => {
 		setRankLoader(true);
+		if (level === 'silver') {
+			toast.error("Reach the Gold level to unlock more pages!");
+			return;
+		}
 		const currentIndex = pagesName.indexOf(page);
 		if (currentIndex > 0) {
 			const newPage = pagesName[currentIndex - 1];
@@ -99,6 +106,10 @@ const Rankings = () => {
 
 	const handleClickRight = () => {
 		setRankLoader(true);
+		if (level === 'silver') {
+			toast.error("Reach the Gold level to unlock more pages!");
+			return;
+		}
 		const currentIndex = pagesName.indexOf(page);
 		if (currentIndex < pagesName.length - 1) {
 			const newPage = pagesName[currentIndex + 1];
@@ -165,7 +176,10 @@ const Rankings = () => {
 							</div>
 							{/* top 3 stage */}
 							<div className='h-[40vh] flex text-[#FFF] overflow-hidden'>
-								<button onClick={handleClickLeft}>
+								<button
+									onClick={handleClickLeft}
+									className={`${pagesName.indexOf(page) === 0 ? "opacity-50 pointer-events-none" : "opacity-100"}`}
+								>
 									<img src={LeftArrowIcon} alt="left" />
 								</button>
 								<div className='flex w-[80vw] mx-2 justify-center items-center relative'>
@@ -248,8 +262,11 @@ const Rankings = () => {
 										</div>
 									</div>
 								</div>
-								<button onClick={handleClickRight}>
-									<img src={RightArrowIcon} alt='right' />
+								<button
+									onClick={handleClickRight}
+									className={`${pagesName.indexOf(page) === pagesName.length - 1 ? "opacity-50 pointer-events-none" : "opacity-100"}`}
+								>
+									<img src={RightArrowIcon} alt="right" />
 								</button>
 							</div>
 							{/* List of competitors */}
