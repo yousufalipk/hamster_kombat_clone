@@ -68,6 +68,16 @@ const SideBar = () => {
                 >
                   Manage Projects
                 </Link>
+                <hr className='border-1 border-[gray] w-4/5 mx-auto' />
+                <Link
+                  onClick={() => {
+                    setPage('kols');
+                  }}
+                  className={`w-full py-5 px-10 ${[page === 'kols' && 'text-bluebtn']}`}
+                  to='/manage-kols'
+                >
+                  Manage Kols
+                </Link>
               </>
             ) : (
               <>

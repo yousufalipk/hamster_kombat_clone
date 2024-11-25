@@ -12,6 +12,10 @@ import ProjectsForm from '../../Components/Forms/ProjectsForm/ProjectsForm';
 import ProjectLevelsPage from '../../Components/ProjectLevels/ProjectLevels';
 import ProjectTasksPage from '../../Components/ProjectTasks/ProjectTasks';
 
+//Manage Kols
+import ManageKolsPage from '../../Pages/ManageKols/ManageKols';
+import KolsForm from '../../Components/Forms/KolsForm/KolsForm';
+
 import UserProtected from '../../Components/Protected/UserProtected';
 
 const AdminLayout = () => {
@@ -33,6 +37,10 @@ const AdminLayout = () => {
             <Route path='/project-levels' element={<UserProtected ><ProjectLevelsPage /></UserProtected>} />
             <Route path='/project-tasks' element={<UserProtected ><ProjectTasksPage /></UserProtected>} />
 
+
+            {/* Manage Kols */}
+            <Route path='/manage-kols' element={<UserProtected ><ManageKolsPage /></UserProtected>} />
+            <Route path='/kols-form' element={<UserProtected ><KolsForm /></UserProtected>} />
           </Routes>
         </div>
       </div>

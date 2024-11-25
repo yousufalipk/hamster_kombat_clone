@@ -32,6 +32,20 @@ const Rankings = () => {
 	const [page, setPage] = useState(level);
 	const stageImageRef = useRef();
 
+	useEffect(() => {
+		const tg = window.Telegram.WebApp;
+
+		tg.BackButton.show();
+		tg.BackButton.onClick(() => {
+			navigate("/");
+		});
+
+		return () => {
+			tg.BackButton.hide();
+			tg.BackButton.offClick();
+		};
+	}, [navigate]);
+
 	const pagesName = [
 		'silver',
 		'gold',

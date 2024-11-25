@@ -26,6 +26,12 @@ export const FirebaseProvider = (props) => {
 
     const [projects, setProjects] = useState(null);
 
+    const [patners, setPatners] = useState(null);
+
+    const [kols, setKols] = useState(null);
+
+    const [vcs, setVcs] = useState(null);
+
     const [projectLevels, setProjectLevels] = useState([]);
 
     const [projectTasks, setProjectTasks] = useState([]);
@@ -455,6 +461,244 @@ export const FirebaseProvider = (props) => {
         }
     }
 
+    // Kols Functions 
+
+    const fetchKols = async () => {
+        try {
+            const response = await axios.post(`${apiUrl}/kols/fetch-kol`);
+            if (response.data.status === 'success') {
+                setKols(response.data.kols);
+            } else {
+                console.log(response.data.message);
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const createKol = async (data) => {
+        try {
+            const response = await axios.post(`${apiUrl}/kols/add-kol`, {
+                name: data.name,
+                icon: {
+                    name: data.icon.name,
+                    data: data.icon.data,
+                    contentType: data.icon.contentType,
+                }
+            });
+            if (response.data.status === 'success') {
+                await fetchKols();
+                return ({ success: true, mess: response.data.message });
+            } else {
+                return ({ success: false, mess: response.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    };
+
+    const updateKol = async (data, id) => {
+        try {
+            const response = await axios.post(`${apiUrl}/kols/update-kol`, {
+                id: id,
+                name: data.name,
+                icon: {
+                    name: data.icon.name,
+                    data: data.icon.data,
+                    contentType: data.icon.contentType,
+                }
+            });
+            if (response.data.status === 'success') {
+                await fetchKols();
+                return ({ success: true, mess: response.data.message });
+            } else {
+                return ({ success: false, mess: response.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    };
+
+    const deleteKol = async (id) => {
+        try {
+            const response = await axios.post(`${apiUrl}/kols/remove-kol`, {
+                kolId: id
+            });
+
+            if (response.data.status === 'success') {
+                setKols((prevKols) => prevKols.filter((kol) => kol._id !== id));
+                return ({ success: true, mess: response.data.message });
+            } else {
+                return ({ success: false, mess: response.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    // Patners Functions 
+
+    const fetchPathners = async () => {
+        try {
+            const response = await axios.post(`${apiUrl}/patners/fetch-patner`);
+            if (response.data.status === 'success') {
+                setPatners(response.data.patners);
+            } else {
+                console.log(response.data.message);
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const createPatner = async (data) => {
+        try {
+            const response = await axios.post(`${apiUrl}/patners/add-patner`, {
+                name: data.name,
+                icon: {
+                    name: data.icon.name,
+                    data: data.icon.data,
+                    contentType: data.icon.contentType,
+                }
+            });
+            if (response.data.status === 'success') {
+                await fetchPathners();
+                return ({ success: true, mess: response.data.message });
+            } else {
+                return ({ success: false, mess: response.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    };
+
+    const updatePatner = async (data, id) => {
+        try {
+            const response = await axios.post(`${apiUrl}/patners/update-patner`, {
+                id: id,
+                name: data.name,
+                icon: {
+                    name: data.icon.name,
+                    data: data.icon.data,
+                    contentType: data.icon.contentType,
+                }
+            });
+            if (response.data.status === 'success') {
+                await fetchPathners();
+                return ({ success: true, mess: response.data.message });
+            } else {
+                return ({ success: false, mess: response.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    };
+
+    const deletePatner = async (id) => {
+        try {
+            const response = await axios.post(`${apiUrl}/patners/remove-patner`, {
+                patnerId: id
+            });
+
+            if (response.data.status === 'success') {
+                setPatners((prevPatner) => prevPatner.filter((patner) => patner._id !== id));
+                return ({ success: true, mess: response.data.message });
+            } else {
+                return ({ success: false, mess: response.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    // Vcs Functions 
+
+    const fetchVcs = async () => {
+        try {
+            const response = await axios.post(`${apiUrl}/vcs/fetch-vc`);
+            if (response.data.status === 'success') {
+                setPatners(response.data.patners);
+            } else {
+                console.log(response.data.message);
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const createVc = async (data) => {
+        try {
+            const response = await axios.post(`${apiUrl}/vcs/add-vc`, {
+                name: data.name,
+                icon: {
+                    name: data.icon.name,
+                    data: data.icon.data,
+                    contentType: data.icon.contentType,
+                }
+            });
+            if (response.data.status === 'success') {
+                await fetchVcs();
+                return ({ success: true, mess: response.data.message });
+            } else {
+                return ({ success: false, mess: response.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    };
+
+    const updateVc = async (data, id) => {
+        try {
+            const response = await axios.post(`${apiUrl}/vcs/update-vc`, {
+                id: id,
+                name: data.name,
+                icon: {
+                    name: data.icon.name,
+                    data: data.icon.data,
+                    contentType: data.icon.contentType,
+                }
+            });
+            if (response.data.status === 'success') {
+                await fetchVcs();
+                return ({ success: true, mess: response.data.message });
+            } else {
+                return ({ success: false, mess: response.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    };
+
+    const deleteVc = async (id) => {
+        try {
+            const response = await axios.post(`${apiUrl}/vcs/remove-vc`, {
+                vcId: id
+            });
+
+            if (response.data.status === 'success') {
+                setPatners((prevPatner) => prevPatner.filter((patner) => patner._id !== id));
+                return ({ success: true, mess: response.data.message });
+            } else {
+                return ({ success: false, mess: response.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+
     return (
         <FirebaseContext.Provider value={{
             registerUser,
@@ -489,7 +733,28 @@ export const FirebaseProvider = (props) => {
             addProjectTask,
             removeProjectTask,
             updateProjectTask,
-            addTgeDate
+            addTgeDate,
+
+            fetchKols,
+            createKol,
+            updateKol,
+            deleteKol,
+            setKols,
+            kols,
+
+            fetchPathners,
+            createPatner,
+            updatePatner,
+            deletePatner,
+            setPatners,
+            patners,
+
+            fetchVcs,
+            createVc,
+            updateVc,
+            deleteVc,
+            setVcs,
+            vcs
         }}>
             {props.children}
         </FirebaseContext.Provider>
