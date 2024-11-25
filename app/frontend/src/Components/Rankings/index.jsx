@@ -23,6 +23,8 @@ import KingCrown from '../../assets/leaderboard/king.svg';
 import BadgeIcon from '../../assets/leaderboard/badge.svg';
 import Coin from "../../assets/BigCoinIcon.svg";
 
+import ProfilePic from '../../assets/profile.png';
+
 const Rankings = () => {
 	const { topUsers, fetchLeaderboardUsers, level, userId } = useUser();
 
@@ -168,17 +170,17 @@ const Rankings = () => {
 		<>
 			{topUsers && currentPageUsers && (
 				<>
-					<div className='h-[86vh] w-[100vw]'>
+					<div className='h-[86vh] w-[100vw] z-10'>
 						<div className='min-h-[37vh] pb-3 pt-5 px-5 rounded-br-3xl rounded-bl-3xl relative'>
 							{/* Background Image */}
-							<div className="absolute z-20">
+							<div className="absolute z-10">
 								<img
 									src={BackgroundImg}
 									alt="Background"
 									className="w-full h-full object-cover scale-[1] fixed top-[0vh]"
 								/>
 							</div>
-							<div className="relative z-30">
+							<div className="relative z-10">
 								<div className="w-full h-[5vh] flex justify-end items-center">
 									<div className="flex justify-center items-center text-white font-semibold gap-1">
 										<img src={BadgeIcon} alt="badge_icon" />
@@ -196,16 +198,12 @@ const Rankings = () => {
 									<div className='flex w-[80vw] mx-2 justify-center items-center relative'>
 										<img ref={stageImageRef} src={stageImages[page]} alt="stage_img" className="absolute bottom-0" />
 										<div className="absolute z-50 h-full w-full flex justify-center mx-5">
-											<div className="left w-[25vw] mt-12 flex flex-col items-center gap-1">
+											<div className="left w-[25vw] mt-10 flex flex-col items-center gap-1">
 												{currentPageUsers[1] && (
 													<>
 														{currentPageUsers[1].profilePic === 'not set' ? (
 															<>
-																<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
-																	<p className="font-semibold capitalize flex justify-center items-center">
-																		{currentPageUsers[1].username.slice(0, 1)}
-																	</p>
-																</div>
+																<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
 															</>
 														) : (
 															<>
@@ -220,16 +218,12 @@ const Rankings = () => {
 													</>
 												)}
 											</div>
-											<div className="mid w-[25vw] mt-6 flex flex-col items-center gap-1 relative">
+											<div className="mid w-[25vw] mt-4 flex flex-col items-center gap-1 relative">
 												{currentPageUsers[0] && (
 													<>
 														{currentPageUsers[0].profilePic === 'not set' ? (
 															<>
-																<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
-																	<p className="font-semibold capitalize flex justify-center items-center">
-																		{currentPageUsers[0].username.slice(0, 1)}
-																	</p>
-																</div>
+																<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
 															</>
 														) : (
 															<>
@@ -247,16 +241,12 @@ const Rankings = () => {
 													</>
 												)}
 											</div>
-											<div className="right w-[25vw] mt-20 flex flex-col items-center gap-1">
+											<div className="right w-[25vw] mt-12 flex flex-col items-center gap-1">
 												{currentPageUsers[2] && (
 													<>
 														{currentPageUsers[2].profilePic === 'not set' ? (
 															<>
-																<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
-																	<p className="font-semibold capitalize flex justify-center items-center">
-																		{currentPageUsers[2].username.slice(0, 1)}
-																	</p>
-																</div>
+																<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
 															</>
 														) : (
 															<>
@@ -302,9 +292,7 @@ const Rankings = () => {
 															</div>
 															<div>
 																{user.profilePic === "not set" ? (
-																	<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
-																		<p className="font-semibold capitalize">{user.username.slice(0, 1)}</p>
-																	</div>
+																	<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
 																) : (
 																	<img src={user.profilePic} alt="Profile" width={50} className="rounded-full" />
 																)}
@@ -324,7 +312,7 @@ const Rankings = () => {
 											) : (
 												<div
 													key={user.id}
-													className="shadow-md border-[0.5px] border-[#12121C] w-full h-[10vh] bg-gradient-to-t from-[#12121C] to-[#21212D] rounded-lg flex items-center gap-3 px-3 p-1"
+													className="shadow-md border-[0.5px] border-[#12121C] w-[85vw] h-[10vh] bg-gradient-to-t from-[#12121C] to-[#21212D] rounded-lg flex items-center gap-3 px-3 p-1"
 												>
 													{/* Other user's */}
 													<div className="rounded-full border-2 border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
@@ -332,9 +320,7 @@ const Rankings = () => {
 													</div>
 													<div>
 														{user.profilePic === "not set" ? (
-															<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
-																<p className="font-semibold capitalize">{user.username.slice(0, 1)}</p>
-															</div>
+															<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
 														) : (
 															<img src={user.profilePic} alt="Profile" width={50} className="rounded-full" />
 														)}

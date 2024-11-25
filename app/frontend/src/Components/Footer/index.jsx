@@ -34,7 +34,7 @@ const Footer = () => {
     ];
 
     return (
-        <div className="w-screen h-[14vh] flex justify-center items-center relative footer">
+        <div className="w-screen h-[14vh] flex justify-center items-center relative z-10">
             <div className="bg-custom-image1 bg-cover px-6 h-[7vh] w-[90%] flex items-center justify-between rounded-[27px]">
 
                 {iconData.map((cls, index) => {
@@ -65,12 +65,12 @@ const Footer = () => {
                                             src={LittlePandaIcon}
                                             alt="Panda Icon"
                                             onClick={() => handleClick("Home", "/")}
-                                            className="cursor-pointer z-50"
+                                            className="cursor-pointer z-10"
                                         />
                                     ) : (
                                         <p
                                             onClick={() => handleClick("Home", "/")}
-                                            className="text-white font-semibold cursor-pointer z-50 px-5 text-center leading-5 text-sm w-15"
+                                            className="text-white font-semibold cursor-pointer z-10 px-5 text-center leading-5 text-sm w-15"
                                         >
                                             Tap & Earn
                                         </p>
@@ -81,46 +81,6 @@ const Footer = () => {
                         )
                     }
                 })}
-
-
-                {/*
-                <div className="flex justify-center items-center">
-                    <div className="relative">
-                        <img
-                            className="w-[80px] h-[80px] rounded-full cursor-pointer"
-                            src={LittlePandaBgIcon}
-                            alt="Outer Circle"
-                            onClick={() => handleClick("Home", "/")}
-                        />
-                        <div className="absolute top-[24%] left-[33%] text-center">
-                            {togglePanda ? (
-                                <img
-                                    src={LittlePandaIcon}
-                                    alt="Panda Icon"
-                                    onClick={() => handleClick("Home", "/")}
-                                    className="cursor-pointer"
-                                />
-                            ) : (
-                                <p
-                                    onClick={() => handleClick("Home", "/")}
-                                    className="text-white font-semibold cursor-pointer"
-                                >
-                                    Tap & Earn
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                </div>
-
-                <div className="flex-1 flex justify-center gap-5">
-                    {iconData.slice(2).map((icon) => (
-                        <Icon key={icon.name} {...icon} />
-                    ))}
-                </div>
-
-                */}
-
-
             </div>
         </div>
     );

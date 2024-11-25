@@ -25,7 +25,6 @@ const Layout = () => {
                     </Routes>
                 </div>
                 <div>
-                    {/* Bottom Menu */}
                     <Footer />
                 </div>
             </div>

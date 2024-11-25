@@ -19,6 +19,7 @@ import TouchIcon from "../../assets/touchIcon.png";
 import FlashIcon from "../../assets/lighteningIcon.png";
 import InfoIcon from "../../assets/InfoIcon.svg";
 import AngleIcon from "../../assets/AngleIcon.svg";
+import DomeProfilePic from "../../assets/profile.png";
 
 import tick from "../../assets/dailyreward/tick.svg";
 import close from "../../assets/dailyreward/close.svg"
@@ -374,9 +375,7 @@ const Home = () => {
 										<div className="flex">
 											<div className="rounded-full bg-gray-700 text-white w-[42px] h-[42px] overflow-hidden flex items-center justify-center">
 												{profilePic === 'not set' ? (
-													<p className="font-semibold capitalize">
-														{username.slice(0, 1)}
-													</p>
+													<img src={DomeProfilePic} alt="img" width={70} className="rounded-full" />
 												) : (
 													<>
 														<img src={profilePic} alt="Profile-Picture" className="rounded-full" />
@@ -819,7 +818,12 @@ const Home = () => {
 						{/* 4 - Multitap Upgrade Popup */}
 						{multitapsPopup && (
 							<>
-								<div className="absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end">
+								<div
+									className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end"
+									style={{
+										animation: "openPopup 0.7s ease-in-out",
+									}}
+								>
 									<div>
 										<div className="relative bg-[#1B1B27] w-[100vw] rounded-t-3xl p-6 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>

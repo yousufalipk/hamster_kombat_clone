@@ -6,6 +6,7 @@ import GiftBox from "../../assets/GiftBox.png";
 import Friend1 from "../../assets/Friend1.svg";
 import Invite from "../../assets/InviteIcon.svg";
 import Copy from "../../assets/CopyIcon.svg";
+import DomeProfilePic from "../../assets/profile.png";
 import { useUser } from '../../context/index';
 import { Link } from 'react-router-dom';
 
@@ -136,9 +137,9 @@ const InviteFriends = () => {
 							{referrals.length === 0 ? (
 								<>
 									<h1
-										className="text-xs text-center italic my-5"
+										className="text-xs text-center my-5 h-[10vh]"
 									>
-										No referral found!
+										No referral yet
 									</h1>
 								</>
 							) : (
@@ -158,14 +159,29 @@ const InviteFriends = () => {
 													</div>
 
 													{/* Display Picture */}
-													<div>
-														<img
-															width="40"
-															src={user.profilePic}
-															alt='Coin-Icon'
-															className="rounded-full"
-														/>
-													</div>
+													{user.profilePic === 'not set' ? (
+														<>
+															<div>
+																<img
+																	width="40"
+																	src={DomeProfilePic}
+																	alt='Coin-Icon'
+																	className="rounded-full"
+																/>
+															</div>
+														</>
+													) : (
+														<>
+															<div>
+																<img
+																	width="40"
+																	src={user.profilePic}
+																	alt='Coin-Icon'
+																	className="rounded-full"
+																/>
+															</div>
+														</>
+													)}
 													{/* Name & Reward */}
 													<div className=''>
 														<div className='text-[15px]'>{username}</div>
