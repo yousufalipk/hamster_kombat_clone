@@ -8,6 +8,8 @@ import { LuLoader2 } from "react-icons/lu";
 import LeftArrowIcon from '../../assets/leaderboard/left.svg';
 import RightArrowIcon from '../../assets/leaderboard/right.svg';
 
+import BackgroundImg from '../../assets/background/bg.png';
+
 import SilverStage from '../../assets/leaderboard/stages/silver.svg';
 import GoldStage from '../../assets/leaderboard/stages/gold.svg';
 import DaimondStage from '../../assets/leaderboard/stages/daimond.svg';
@@ -22,7 +24,7 @@ import BadgeIcon from '../../assets/leaderboard/badge.svg';
 import Coin from "../../assets/BigCoinIcon.svg";
 
 const Rankings = () => {
-	const { topUsers, fetchLeaderboardUsers, level } = useUser();
+	const { topUsers, fetchLeaderboardUsers, level, userId } = useUser();
 
 	const [rankLoader, setRankLoader] = useState(null);
 
@@ -166,151 +168,197 @@ const Rankings = () => {
 		<>
 			{topUsers && currentPageUsers && (
 				<>
-					<div className='h-[86vh] w-[100vw] overflow-hidden'>
-						<div className='bg-[#080813] min-h-[37vh] pb-3 pt-5 px-5 rounded-br-3xl rounded-bl-3xl'>
-							<div className="w-full h-[5vh] flex justify-end items-center">
-								<div className="flex justify-center items-center text-white font-semibold gap-1">
-									<img src={BadgeIcon} alt="badge_icon" />
-									<p className="capitalize">{page}</p>
-								</div>
+					<div className='h-[86vh] w-[100vw]'>
+						<div className='min-h-[37vh] pb-3 pt-5 px-5 rounded-br-3xl rounded-bl-3xl relative'>
+							{/* Background Image */}
+							<div className="absolute z-20">
+								<img
+									src={BackgroundImg}
+									alt="Background"
+									className="w-full h-full object-cover scale-[1] fixed top-[0vh]"
+								/>
 							</div>
-							{/* top 3 stage */}
-							<div className='h-[40vh] flex text-[#FFF] overflow-hidden'>
-								<button
-									onClick={handleClickLeft}
-									className={`${pagesName.indexOf(page) === 0 ? "opacity-50 pointer-events-none" : "opacity-100"}`}
-								>
-									<img src={LeftArrowIcon} alt="left" />
-								</button>
-								<div className='flex w-[80vw] mx-2 justify-center items-center relative'>
-									<img ref={stageImageRef} src={stageImages[page]} alt="stage_img" className="absolute bottom-0" />
-									<div className="absolute z-50 h-full w-full flex justify-center mx-5">
-										<div className="left w-[25vw] mt-14 flex flex-col items-center gap-1">
-											{currentPageUsers[1] && (
-												<>
-													{currentPageUsers[1].profilePic === 'not set' ? (
-														<>
-															<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
-																<p className="font-semibold capitalize flex justify-center items-center">
-																	{currentPageUsers[1].username.slice(0, 1)}
-																</p>
-															</div>
-														</>
-													) : (
-														<>
-															<img src={currentPageUsers[1].profilePic} alt="img" width={50} className="rounded-full" />
-														</>
-													)}
-													<p>{currentPageUsers[1].firstName.slice(0, 7)}</p>
-													<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
-														<img src={Coin} alt="coin" width={15} />
-														{currentPageUsers[1].balance}
-													</div>
-												</>
-											)}
-										</div>
-										<div className="mid w-[25vw] mt-6 flex flex-col items-center gap-1 relative">
-											{currentPageUsers[0] && (
-												<>
-													{currentPageUsers[0].profilePic === 'not set' ? (
-														<>
-															<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
-																<p className="font-semibold capitalize flex justify-center items-center">
-																	{currentPageUsers[0].username.slice(0, 1)}
-																</p>
-															</div>
-														</>
-													) : (
-														<>
-															<div className="relative flex justify-center items-start">
-																<img src={KingCrown} alt="crown" width={20} className="absolute -top-3" />
-																<img src={currentPageUsers[0].profilePic} alt="img" width={50} className="rounded-full" />
-															</div>
-														</>
-													)}
-													<p>{currentPageUsers[0].firstName.slice(0, 7)}</p>
-													<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
-														<img src={Coin} alt="coin" width={18} />
-														{currentPageUsers[0].balance}
-													</div>
-												</>
-											)}
-										</div>
-										<div className="right w-[25vw] mt-16 flex flex-col items-center gap-1">
-											{currentPageUsers[2] && (
-												<>
-													{currentPageUsers[2].profilePic === 'not set' ? (
-														<>
-															<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
-																<p className="font-semibold capitalize flex justify-center items-center">
-																	{currentPageUsers[2].username.slice(0, 1)}
-																</p>
-															</div>
-														</>
-													) : (
-														<>
-															<img src={currentPageUsers[2].profilePic} alt="img" width={50} className="rounded-full" />
-														</>
-													)}
-													<p>{currentPageUsers[2].firstName.slice(0, 7)}</p>
-													<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
-														<img src={Coin} alt="coin" width={18} />
-														{currentPageUsers[2].balance}
-													</div>
-												</>
-											)}
-										</div>
+							<div className="relative z-30">
+								<div className="w-full h-[5vh] flex justify-end items-center">
+									<div className="flex justify-center items-center text-white font-semibold gap-1">
+										<img src={BadgeIcon} alt="badge_icon" />
+										<p className="capitalize">{page}</p>
 									</div>
 								</div>
-								<button
-									onClick={handleClickRight}
-									className={`${pagesName.indexOf(page) === pagesName.length - 1 ? "opacity-50 pointer-events-none" : "opacity-100"}`}
-								>
-									<img src={RightArrowIcon} alt="right" />
-								</button>
-							</div>
-							{/* List of competitors */}
-							<div className='bg-[#272a2f] pb-3 pt-5 px-3 rounded-tl-[14px] rounded-tr-[14px] overflow-scroll h-[60vh] flex flex-col gap-2'>
-								{currentPageUsers.map((user, i) => {
-									if (i > 2) {
-										return (
-											<div
-												key={i}
-												className="w-full h-[10vh] bg-[#21212D] rounded-lg flex items-center gap-3 px-3 p-1">
-												<div className="rounded-full border-2 border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
-													{i}
-												</div>
-												<div>
-													{user.profilePic === 'not set' ? (
-														<>
-															<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
-																<p className="font-semibold capitalize flex justify-center items-center">
-																	{user.username.slice(0, 1)}
-																</p>
+								{/* top 3 stage */}
+								<div className='h-[40vh] flex text-[#FFF] overflow-hidden'>
+									<button
+										onClick={handleClickLeft}
+										className={`${pagesName.indexOf(page) === 0 ? "opacity-50 pointer-events-none" : "opacity-100"}`}
+									>
+										<img src={LeftArrowIcon} alt="left" />
+									</button>
+									<div className='flex w-[80vw] mx-2 justify-center items-center relative'>
+										<img ref={stageImageRef} src={stageImages[page]} alt="stage_img" className="absolute bottom-0" />
+										<div className="absolute z-50 h-full w-full flex justify-center mx-5">
+											<div className="left w-[25vw] mt-12 flex flex-col items-center gap-1">
+												{currentPageUsers[1] && (
+													<>
+														{currentPageUsers[1].profilePic === 'not set' ? (
+															<>
+																<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
+																	<p className="font-semibold capitalize flex justify-center items-center">
+																		{currentPageUsers[1].username.slice(0, 1)}
+																	</p>
+																</div>
+															</>
+														) : (
+															<>
+																<img src={currentPageUsers[1].profilePic} alt="img" width={50} className="rounded-full" />
+															</>
+														)}
+														<p>{currentPageUsers[1].firstName.slice(0, 7)}</p>
+														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
+															<img src={Coin} alt="coin" width={15} />
+															{currentPageUsers[1].balance}
+														</div>
+													</>
+												)}
+											</div>
+											<div className="mid w-[25vw] mt-6 flex flex-col items-center gap-1 relative">
+												{currentPageUsers[0] && (
+													<>
+														{currentPageUsers[0].profilePic === 'not set' ? (
+															<>
+																<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
+																	<p className="font-semibold capitalize flex justify-center items-center">
+																		{currentPageUsers[0].username.slice(0, 1)}
+																	</p>
+																</div>
+															</>
+														) : (
+															<>
+																<div className="relative flex justify-center items-start">
+																	<img src={KingCrown} alt="crown" width={20} className="absolute -top-3" />
+																	<img src={currentPageUsers[0].profilePic} alt="img" width={50} className="rounded-full" />
+																</div>
+															</>
+														)}
+														<p>{currentPageUsers[0].firstName.slice(0, 7)}</p>
+														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
+															<img src={Coin} alt="coin" width={18} />
+															{currentPageUsers[0].balance}
+														</div>
+													</>
+												)}
+											</div>
+											<div className="right w-[25vw] mt-20 flex flex-col items-center gap-1">
+												{currentPageUsers[2] && (
+													<>
+														{currentPageUsers[2].profilePic === 'not set' ? (
+															<>
+																<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
+																	<p className="font-semibold capitalize flex justify-center items-center">
+																		{currentPageUsers[2].username.slice(0, 1)}
+																	</p>
+																</div>
+															</>
+														) : (
+															<>
+																<img src={currentPageUsers[2].profilePic} alt="img" width={50} className="rounded-full" />
+															</>
+														)}
+														<p>{currentPageUsers[2].firstName.slice(0, 7)}</p>
+														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
+															<img src={Coin} alt="coin" width={18} />
+															{currentPageUsers[2].balance}
+														</div>
+													</>
+												)}
+											</div>
+										</div>
+									</div>
+									<button
+										onClick={handleClickRight}
+										className={`${pagesName.indexOf(page) === pagesName.length - 1 ? "opacity-50 pointer-events-none" : "opacity-100"}`}
+									>
+										<img src={RightArrowIcon} alt="right" />
+									</button>
+								</div>
+								{/* List of competitors */}
+								<div className='bg-[#1B1B27] pb-3 pt-5 rounded-tl-[14px] rounded-tr-[14px] overflow-hidden h-[55vh] flex flex-col gap-3 w-[90vw]'>
+									<div className="flex flex-col gap-4 justify-center items-center h-[40vh]">
+										{currentPageUsers.map((user, i) => {
+											if (i <= 2) return null;
+
+											return user._id === userId ? (
+												<div className="relative w-[85vw] rounded-lg">
+													<div className="absolute left-0 top-0 -bottom-1 -inset-4 w-[85vw] bg-[#23A7FF] rounded-2xl z-10"></div>
+													<div className="absolute top-5 -bottom-0 inset-4 bg-[#23A7FF] blur rounded-lg z-10"></div>
+													<div className="absolute -top-1 -bottom-2 -inset-0 bg-[#962833] blur rounded-lg z-0 opacity-50"></div>
+													<div
+														key={user.id}
+														className="relative z-20 shadow-md border-[0.5px] border-[#12121C] w-[85vw] h-[10vh] bg-[#0C0C0C] rounded-xl flex items-center gap-3 font-semibold"
+													>
+														{/* User Profile */}
+														<div className="flex items-center gap-3 py-1 px-3">
+															<div className="rounded-full border-2 border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
+																{i}
 															</div>
-														</>
-													) : (
-														<>
-															<img src={user.profilePic} alt="img" width={50} className="rounded-full" />
-														</>
-													)}
-												</div>
-												<div className="flex flex-col justify-center items-center gap-2 text-white">
-													<h1> <p>{user.firstName.slice(0, 7)}</p></h1>
-													<div className="flex items-center justify-start gap-1">
-														<img src={Coin} alt="coim" width={15} />
-														<p>{user.balance}</p>
+															<div>
+																{user.profilePic === "not set" ? (
+																	<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
+																		<p className="font-semibold capitalize">{user.username.slice(0, 1)}</p>
+																	</div>
+																) : (
+																	<img src={user.profilePic} alt="Profile" width={50} className="rounded-full" />
+																)}
+															</div>
+															<div className="flex flex-col justify-center items-center gap-2 text-white">
+																<h1>
+																	<p>{user.firstName.slice(0, 7)}</p>
+																</h1>
+																<div className="flex items-center justify-start gap-1">
+																	<img src={Coin} alt="Coin" width={15} />
+																	<p>{user.balance}</p>
+																</div>
+															</div>
+														</div>
 													</div>
 												</div>
-											</div>
-										)
-									}
-								})}
+											) : (
+												<div
+													key={user.id}
+													className="shadow-md border-[0.5px] border-[#12121C] w-full h-[10vh] bg-gradient-to-t from-[#12121C] to-[#21212D] rounded-lg flex items-center gap-3 px-3 p-1"
+												>
+													{/* Other user's */}
+													<div className="rounded-full border-2 border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
+														{i}
+													</div>
+													<div>
+														{user.profilePic === "not set" ? (
+															<div className="bg-gray-700 rounded-full w-12 h-12 font-semibold flex justify-center items-center">
+																<p className="font-semibold capitalize">{user.username.slice(0, 1)}</p>
+															</div>
+														) : (
+															<img src={user.profilePic} alt="Profile" width={50} className="rounded-full" />
+														)}
+													</div>
+													<div className="flex flex-col justify-center items-center gap-2 text-white">
+														<h1>
+															<p>{user.firstName.slice(0, 7)}</p>
+														</h1>
+														<div className="flex items-center justify-start gap-1">
+															<img src={Coin} alt="Coin" width={15} />
+															<p>{user.balance}</p>
+														</div>
+													</div>
+												</div>
+											);
+										})}
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</>
-			)}
+			)
+			}
 		</>
 	);
 };
