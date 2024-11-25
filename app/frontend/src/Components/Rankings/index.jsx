@@ -85,11 +85,11 @@ const Rankings = () => {
 	};
 
 	const handleClickLeft = () => {
-		setRankLoader(true);
 		if (level === 'silver') {
 			toast.error("Reach the Gold level to unlock more pages!");
 			return;
 		}
+		setRankLoader(true);
 		const currentIndex = pagesName.indexOf(page);
 		if (currentIndex > 0) {
 			const newPage = pagesName[currentIndex - 1];
@@ -105,11 +105,11 @@ const Rankings = () => {
 	};
 
 	const handleClickRight = () => {
-		setRankLoader(true);
 		if (level === 'silver') {
 			toast.error("Reach the Gold level to unlock more pages!");
 			return;
 		}
+		setRankLoader(true);
 		const currentIndex = pagesName.indexOf(page);
 		if (currentIndex < pagesName.length - 1) {
 			const newPage = pagesName[currentIndex + 1];
