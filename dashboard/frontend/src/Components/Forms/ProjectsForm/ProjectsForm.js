@@ -1,30 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useFirebase } from '../../../Context/Firebase';
+import CoinImage from '../../../Assets/coin.svg';
 
 const ProjectForm = () => {
     const { createProject, updateProject, sendData } = useFirebase();
     const navigate = useNavigate();
 
-    const [selectedFileName, setSelectedFileName] = useState(sendData.icon?.name || 'No file chosen');
+    const [selectedFileName, setSelectedFileName] = useState(sendData?.icon?.name || 'No file chosen');
 
     // Formik Setup
     const formik = useFormik({
         initialValues: {
-            name: sendData.name || '',
-            fromColor: sendData.fromColor || '#ffffff',
-            toColor: sendData.toColor || '#ffffff',
-            icon: sendData.icon || null,
-            numberOfLevel: sendData.numberOfLevel || '',
-            baseCost: sendData.baseCost || '',
-            baseReward: sendData.baseReward || '',
-            baseCpm: sendData.baseCpm || '',
-            costMultiplier: sendData.costMultiplier || '',
-            rewardMultiplier: sendData.rewardMultiplier || '',
-            cpmMultiplier: sendData.cpmMultiplier || '',
+            name: sendData?.name || '',
+            fromColor: sendData?.fromColor || '#dba211',
+            toColor: sendData?.toColor || '#dba211',
+            icon: sendData?.icon || null,
+            numberOfLevel: sendData?.numberOfLevel || '',
+            baseCost: sendData?.baseCost || '',
+            baseReward: sendData?.baseReward || '',
+            baseCpm: sendData?.baseCpm || '',
+            costMultiplier: sendData?.costMultiplier || '',
+            rewardMultiplier: sendData?.rewardMultiplier || '',
+            cpmMultiplier: sendData?.cpmMultiplier || '',
         },
         validationSchema: Yup.object({
             name: Yup.string()
@@ -117,6 +118,48 @@ const ProjectForm = () => {
         navigate('/manage-projects');
     };
 
+
+    const Card = ({ name, icon, fromColor, toColor }) => {
+        return (
+            <div
+                className={`w-[24vw] h-[29vh] p-5 rounded-3xl text-white`}
+                style={{
+                    background: `linear-gradient(to left, ${fromColor}, ${toColor})`,
+                }}
+            >
+                <div className="flex justify-between items-center">
+                    <div className="text-sm font-semibold">
+                        <p className='text-2xl font-semibold'>{name || 'no_name'}</p>
+                    </div>
+                    {!icon ? (
+                        <div className="h-full ml-2 flex justify-center text-center items-center shadow-xl p-5 rounded-3xl">
+                            No Image
+                        </div>
+                    ) : (
+                        <div>
+                            <img
+                                src={`data:image/jpeg;base64,${icon.data}`}
+                                alt={name ? `${name}-img` : "Image"}
+                                width={70}
+                            />
+                        </div>
+                    )}
+                </div>
+                <div className="mt-2 flex items-center gap-2 text-[18.519px] font-normal">
+                    <div>
+                        <img src={CoinImage} alt="Coin-Icon" width="17" />
+                    </div>
+                    <div className="text-[16px]">100000</div>
+                </div>
+                <div
+                    className="mt-2 text-[8px] font-medium bg-[rgba(0,0,0,0.3)] w-fit p-1 rounded-[5px]"
+                >
+                    <p className="opacity-100">lvl 0</p>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className="p-4">
             <div className="flex flex-row justify-between items-center mb-5">
@@ -139,6 +182,16 @@ const ProjectForm = () => {
                     </button>
                 </div>
             </div>
+
+            <div className='w-full flex justify-center items-center'>
+                <Card
+                    name={formik.values.name}
+                    icon={formik.values.icon}
+                    fromColor={formik.values.fromColor}
+                    toColor={formik.values.toColor}
+                />
+            </div>
+
             <hr className="my-5 border-gray-300" />
             <form onSubmit={formik.handleSubmit}>
                 {/* Project Name Input */}
