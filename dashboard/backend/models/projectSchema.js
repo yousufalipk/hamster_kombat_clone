@@ -27,6 +27,38 @@ const projectsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    numberOfLevel: {
+        type: Number,
+        default: 0
+    },
+    baseValues: {
+        baseCost: {
+            type: String,
+            default: 0
+        },
+        baseReward: {
+            type: Number,
+            default: 0
+        },
+        baseCpm: {
+            type: Number,
+            default: 0
+        }
+    },
+    multipliers: {
+        costMultiplier: {
+            type: String,
+            default: 0
+        },
+        rewardMultiplier: {
+            type: Number,
+            default: 0
+        },
+        cpmMultiplier: {
+            type: Number,
+            default: 0
+        }
+    },
     levels: [
         {
             level: {

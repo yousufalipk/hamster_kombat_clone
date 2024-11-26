@@ -190,7 +190,18 @@ export const FirebaseProvider = (props) => {
                     contentType: data.icon.contentType,
                 },
                 fromColor: data.fromColor,
-                toColor: data.toColor
+                toColor: data.toColor,
+                numberOfLevel: data.numberOfLevel,
+                baseValues: {
+                    baseCost: data.baseCost,
+                    baseReward: data.baseReward,
+                    baseCpm: data.baseCpm
+                },
+                multipliers: {
+                    costMultiplier: data.costMultiplier,
+                    rewardMultiplier: data.rewardMultiplier,
+                    cpmMultiplier: data.cpmMultiplier
+                }
             });
             if (response.data.status === 'success') {
                 await fetchProjects();
@@ -207,7 +218,7 @@ export const FirebaseProvider = (props) => {
     const updateProject = async (data, id) => {
         try {
             const response = await axios.post(`${apiUrl}/project/update`, {
-                id: id,
+                projectId: id,
                 name: data.name,
                 icon: {
                     name: data.icon.name,
@@ -215,7 +226,18 @@ export const FirebaseProvider = (props) => {
                     contentType: data.icon.contentType,
                 },
                 fromColor: data.fromColor,
-                toColor: data.toColor
+                toColor: data.toColor,
+                numberOfLevel: data.numberOfLevel,
+                baseValues: {
+                    baseCost: data.baseCost,
+                    baseReward: data.baseReward,
+                    baseCpm: data.baseCpm
+                },
+                multipliers: {
+                    costMultiplier: data.costMultiplier,
+                    rewardMultiplier: data.rewardMultiplier,
+                    cpmMultiplier: data.cpmMultiplier
+                }
             });
             if (response.data.status === 'success') {
                 await fetchProjects();
@@ -714,6 +736,7 @@ export const FirebaseProvider = (props) => {
             page,
             setSendData,
             sendData,
+
             projects,
             fetchProjects,
             createProject,

@@ -3,9 +3,14 @@ const mongoose = require('mongoose');
 
 exports.createProject = async (req, res) => {
     try {
-        const { name, icon, fromColor, toColor } = req.body;
+        const { name, icon, fromColor, toColor, numberOfLevel, baseValues, multipliers } = req.body;
 
-        if (!name || !icon || !icon.name || !icon.data || !icon.contentType || !fromColor || !toColor) {
+        if (
+            !name || !icon || !icon.name || !icon.data || !icon.contentType ||
+            !fromColor || !toColor || !numberOfLevel || !baseValues ||
+            !baseValues.baseCost || !baseValues.baseReward || !baseValues.baseCpm ||
+            !multipliers || !multipliers.costMultiplier || !multipliers.rewardMultiplier || !multipliers.cpmMultiplier
+        ) {
             return res.status(400).json({
                 status: 'failed',
                 message: "All fields are required!",
@@ -20,10 +25,33 @@ exports.createProject = async (req, res) => {
 
         const maxSize = 1 * 1024 * 1024;
         if (buffer.length > maxSize) {
-            return res.status(200).json({
+            return res.status(400).json({
                 status: 'failed',
                 message: "Image size exceeds the maximum allowed size (1MB).",
             });
+        }
+
+        const levels = [];
+        const { baseCost, baseReward, baseCpm } = baseValues;
+        const { costMultiplier, rewardMultiplier, cpmMultiplier } = multipliers;
+
+        for (let i = 0; i < numberOfLevel; i++) {
+            if (i === 0) {
+                levels.push({
+                    level: i + 1,
+                    cost: baseCost,
+                    reward: baseReward,
+                    cpm: baseCpm,
+                });
+            } else {
+                const prevLevel = levels[i - 1];
+                levels.push({
+                    level: i + 1,
+                    cost: prevLevel.cost + costMultiplier,
+                    reward: prevLevel.reward + rewardMultiplier,
+                    cpm: prevLevel.cpm + cpmMultiplier,
+                });
+            }
         }
 
         const newProject = new ProjectModel({
@@ -35,6 +63,18 @@ exports.createProject = async (req, res) => {
             },
             fromColor,
             toColor,
+            levels,
+            numberOfLevel: numberOfLevel,
+            baseValues: {
+                baseCost: baseCost,
+                baseReward: baseReward,
+                baseCpm: baseCpm
+            },
+            multipliers: {
+                costMultiplier: costMultiplier,
+                rewardMultiplier: rewardMultiplier,
+                cpmMultiplier: cpmMultiplier
+            }
         });
 
         await newProject.save();
@@ -52,6 +92,7 @@ exports.createProject = async (req, res) => {
                     data: newProject.icon.data,
                     contentType: newProject.icon.contentType,
                 },
+                levels,
             },
         });
     } catch (error) {
@@ -123,38 +164,111 @@ exports.fetchProjects = async (req, res) => {
 
 exports.updateProject = async (req, res) => {
     try {
-        const { id, name, icon, fromColor, toColor } = req.body;
+        const { projectId, name, icon, fromColor, toColor, numberOfLevel, baseValues, multipliers } = req.body;
 
-        if (!id) {
-            return res.status(200).json({
+        const project = await ProjectModel.findById(projectId);
+        if (!project) {
+            return res.status(404).json({
                 status: 'failed',
-                message: "Project ID is required!"
+                message: "Project not found!",
             });
         }
 
-        const updatedProject = await ProjectModel.findByIdAndUpdate(
-            id,
-            { name, icon, fromColor, toColor },
-            { new: true, runValidators: true }
-        );
-
-        if (!updatedProject) {
-            return res.status(200).json({
+        if (
+            (icon && (!icon.name || !icon.data || !icon.contentType)) ||
+            (baseValues && (!baseValues.baseCost || !baseValues.baseReward || !baseValues.baseCpm)) ||
+            (multipliers && (!multipliers.costMultiplier || !multipliers.rewardMultiplier || !multipliers.cpmMultiplier))
+        ) {
+            return res.status(400).json({
                 status: 'failed',
-                message: "Project not found!"
+                message: "Invalid input fields!",
             });
         }
+
+        if (icon) {
+            const base64Data = icon.data.startsWith('data:image')
+                ? icon.data.split(',')[1]
+                : icon.data;
+            const buffer = Buffer.from(base64Data, 'base64');
+            const maxSize = 1 * 1024 * 1024;
+            if (buffer.length > maxSize) {
+                return res.status(400).json({
+                    status: 'failed',
+                    message: "Image size exceeds the maximum allowed size (1MB).",
+                });
+            }
+            project.icon = {
+                name: icon.name,
+                data: icon.data,
+                contentType: icon.contentType,
+            };
+        }
+
+        if (name) project.name = name;
+        if (fromColor) project.fromColor = fromColor;
+        if (toColor) project.toColor = toColor;
+
+        if (numberOfLevel || baseValues || multipliers) {
+            const newNumberOfLevels = numberOfLevel || project.levels.length;
+            const newBaseValues = baseValues || {
+                baseCost: project.levels[0].cost,
+                baseReward: project.levels[0].reward,
+                baseCpm: project.levels[0].cpm,
+            };
+            const newMultipliers = multipliers || {
+                costMultiplier: project.levels[1]?.cost - project.levels[0]?.cost || 0,
+                rewardMultiplier: project.levels[1]?.reward - project.levels[0]?.reward || 0,
+                cpmMultiplier: project.levels[1]?.cpm - project.levels[0]?.cpm || 0,
+            };
+
+            const { baseCost, baseReward, baseCpm } = newBaseValues;
+            const { costMultiplier, rewardMultiplier, cpmMultiplier } = newMultipliers;
+
+            const updatedLevels = [];
+            for (let i = 0; i < newNumberOfLevels; i++) {
+                if (i === 0) {
+                    updatedLevels.push({
+                        level: i + 1,
+                        cost: baseCost,
+                        reward: baseReward,
+                        cpm: baseCpm,
+                    });
+                } else {
+                    const prevLevel = updatedLevels[i - 1];
+                    updatedLevels.push({
+                        level: i + 1,
+                        cost: prevLevel.cost + costMultiplier,
+                        reward: prevLevel.reward + rewardMultiplier,
+                        cpm: prevLevel.cpm + cpmMultiplier,
+                    });
+                }
+            }
+            project.levels = updatedLevels;
+        }
+
+        await project.save();
 
         res.status(200).json({
             status: 'success',
             message: "Project updated successfully!",
-            project: updatedProject
+            project: {
+                id: project._id,
+                name: project.name,
+                fromColor: project.fromColor,
+                toColor: project.toColor,
+                icon: {
+                    name: project.icon.name,
+                    data: project.icon.data,
+                    contentType: project.icon.contentType,
+                },
+                levels: project.levels,
+            },
         });
     } catch (error) {
-        console.log("Internal Server Error!", error);
+        console.error("Internal Server Error!", error);
         res.status(500).json({
             status: 'failed',
-            message: "Internal Server Error!"
+            message: "Internal Server Error!",
         });
     }
 };
@@ -211,6 +325,7 @@ exports.toggleComboCard = async (req, res) => {
     }
 };
 
+/*
 exports.fetchProjectLevel = async (req, res) => {
     try {
         const { projectId } = req.body;
@@ -376,6 +491,7 @@ exports.updateProjectLevel = async (req, res) => {
         });
     }
 };
+*/
 
 exports.fetchProjectTasks = async (req, res) => {
     try {

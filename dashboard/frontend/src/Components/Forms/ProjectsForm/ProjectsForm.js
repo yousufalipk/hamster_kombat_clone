@@ -18,6 +18,13 @@ const ProjectForm = () => {
             fromColor: sendData.fromColor || '#ffffff',
             toColor: sendData.toColor || '#ffffff',
             icon: sendData.icon || null,
+            numberOfLevel: sendData.numberOfLevel || '',
+            baseCost: sendData.baseCost || '',
+            baseReward: sendData.baseReward || '',
+            baseCpm: sendData.baseCpm || '',
+            costMultiplier: sendData.costMultiplier || '',
+            rewardMultiplier: sendData.rewardMultiplier || '',
+            cpmMultiplier: sendData.cpmMultiplier || '',
         },
         validationSchema: Yup.object({
             name: Yup.string()
@@ -30,6 +37,25 @@ const ProjectForm = () => {
                 .required('To Color is required')
                 .matches(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid HEX color'),
             icon: Yup.mixed().required('An icon file is required'),
+            numberOfLevel: Yup.mixed().required('Number of Level is required!'),
+            baseCost: Yup.number()
+                .required('Base cost is required!')
+                .min(0, 'Base cost cannot be negative!'),
+            baseReward: Yup.number()
+                .required('Base Reward is required!')
+                .min(0, 'Base Reward cannot be negative!'),
+            baseCpm: Yup.number()
+                .required('Base Cpm is required!')
+                .min(0, 'Base Cpm cannot be negative!'),
+            costMultiplier: Yup.number()
+                .required('Cost multiplier is required!')
+                .min(0, 'Cost multiplier cannot be negative!'),
+            rewardMultiplier: Yup.number()
+                .required('Reward multiplier is required!')
+                .min(0, 'Reward multiplier cannot be negative!'),
+            cpmMultiplier: Yup.number()
+                .required('Cpm multiplier is required!')
+                .min(0, 'Cpm multiplier cannot be negative!')
         }),
         onSubmit: async (values) => {
             try {
@@ -87,7 +113,6 @@ const ProjectForm = () => {
         }
     };
 
-
     const handleBack = () => {
         navigate('/manage-projects');
     };
@@ -106,8 +131,8 @@ const ProjectForm = () => {
                         Back
                     </button>
                     <button
+                        type="button"
                         className="mx-2 py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600"
-                        type="submit"
                         onClick={formik.handleSubmit}
                     >
                         {sendData.tick === 'update' ? 'Confirm Changes' : 'Add Project'}
@@ -123,8 +148,7 @@ const ProjectForm = () => {
                         type="text"
                         name="name"
                         placeholder="Enter project name"
-                        className={`text-black border rounded-md p-2 w-full ${formik.errors.name && formik.touched.name ? 'border-red-500' : ''
-                            }`}
+                        className={`text-black border rounded-md p-2 w-full ${formik.errors.name && formik.touched.name ? 'border-red-500' : ''}`}
                         value={formik.values.name}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -140,8 +164,7 @@ const ProjectForm = () => {
                     <input
                         type="color"
                         name="fromColor"
-                        className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.fromColor && formik.touched.fromColor ? 'border-red-500' : ''
-                            }`}
+                        className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.fromColor && formik.touched.fromColor ? 'border-red-500' : ''}`}
                         value={formik.values.fromColor}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -157,8 +180,7 @@ const ProjectForm = () => {
                     <input
                         type="color"
                         name="toColor"
-                        className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.toColor && formik.touched.toColor ? 'border-red-500' : ''
-                            }`}
+                        className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.toColor && formik.touched.toColor ? 'border-red-500' : ''}`}
                         value={formik.values.toColor}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -168,29 +190,152 @@ const ProjectForm = () => {
                     )}
                 </div>
 
-                {/* Icon Upload */}
+                {/* Number of Levels */}
                 <div className="mb-4">
-                    <label className="block text-sm font-medium mb-1">Project Icon</label>
-                    <div className="flex items-center gap-4 mt-2">
+                    <label className="block text-sm font-medium mb-1">Number of Levels</label>
+                    <input
+                        type="number"
+                        name="numberOfLevel"
+                        placeholder='No of Levels'
+                        className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.numberOfLevel && formik.touched.numberOfLevel ? 'border-red-500' : ''}`}
+                        value={formik.values.numberOfLevel}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    {formik.errors.numberOfLevel && formik.touched.numberOfLevel && (
+                        <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.numberOfLevel}</p>
+                    )}
+                </div>
+
+                <hr />
+                <h1>Base Values</h1>
+                <div className='w-full flex justify-center items-center gap-2'>
+                    {/* Base cost input */}
+                    <div className="mb-4 w-[33%]">
+                        <input
+                            type="number"
+                            name="baseCost"
+                            placeholder="Base Cost"
+                            className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.baseCost && formik.touched.baseCost ? 'border-red-500' : ''}`}
+                            value={formik.values.baseCost}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.errors.baseCost && formik.touched.baseCost && (
+                            <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.baseCost}</p>
+                        )}
+                    </div>
+
+                    {/* Base reward input */}
+                    <div className="mb-4 w-[33%]">
+                        <input
+                            type="number"
+                            name="baseReward"
+                            placeholder="Base Reward"
+                            className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.baseReward && formik.touched.baseReward ? 'border-red-500' : ''}`}
+                            value={formik.values.baseReward}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.errors.baseReward && formik.touched.baseReward && (
+                            <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.baseReward}</p>
+                        )}
+                    </div>
+
+                    {/* Base cpm input */}
+                    <div className="mb-4 w-[33%]">
+                        <input
+                            type="number"
+                            name="baseCpm"
+                            placeholder="Base CPM"
+                            className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.baseCpm && formik.touched.baseCpm ? 'border-red-500' : ''}`}
+                            value={formik.values.baseCpm}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.errors.baseCpm && formik.touched.baseCpm && (
+                            <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.baseCpm}</p>
+                        )}
+                    </div>
+                </div>
+
+                <hr />
+                <h1>Multipliers</h1>
+                <div className='w-full flex justify-center items-center gap-2'>
+                    {/* Cost multiplier input */}
+                    <div className="mb-4 w-[33%]">
+                        <input
+                            type="number"
+                            name="costMultiplier"
+                            placeholder="Cost Multiplier"
+                            className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.costMultiplier && formik.touched.costMultiplier ? 'border-red-500' : ''}`}
+                            value={formik.values.costMultiplier}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.errors.costMultiplier && formik.touched.costMultiplier && (
+                            <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.costMultiplier}</p>
+                        )}
+                    </div>
+
+                    {/* Reward multiplier input */}
+                    <div className="mb-4 w-[33%]">
+                        <input
+                            type="number"
+                            name="rewardMultiplier"
+                            placeholder="Reward Multiplier"
+                            className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.rewardMultiplier && formik.touched.rewardMultiplier ? 'border-red-500' : ''}`}
+                            value={formik.values.rewardMultiplier}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.errors.rewardMultiplier && formik.touched.rewardMultiplier && (
+                            <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.rewardMultiplier}</p>
+                        )}
+                    </div>
+
+                    {/* Cpm multiplier input */}
+                    <div className="mb-4 w-[33%]">
+                        <input
+                            type="number"
+                            name="cpmMultiplier"
+                            placeholder="CPM Multiplier"
+                            className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.cpmMultiplier && formik.touched.cpmMultiplier ? 'border-red-500' : ''}`}
+                            value={formik.values.cpmMultiplier}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.errors.cpmMultiplier && formik.touched.cpmMultiplier && (
+                            <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.cpmMultiplier}</p>
+                        )}
+                    </div>
+                </div>
+
+                {/* Icon File Upload */}
+                <label className="block text-sm font-medium mb-1">Project Icon</label>
+                <div className='flex gap-2 mt-3'>
+                    <div>
                         <input
                             type="file"
-                            accept="image/*"
-                            className="hidden"
+                            name="icon"
                             id="file-input"
                             onChange={handleFileChange}
-                            onBlur={formik.handleBlur}
+                            accept="image/png, image/jpeg"
+                            style={{ display: 'none' }}
                         />
                         <label
                             htmlFor="file-input"
-                            className="cursor-pointer py-2 px-4 rounded-md bg-bluebtn"
+                            className="cursor-pointer py-2 px-4 rounded-md bg-bluebtn text-white"
                         >
                             Choose File
                         </label>
-                        <span className="text-white font-semibold text-lg">{selectedFileName}</span>
                     </div>
-                    {formik.errors.icon && formik.touched.icon && (
-                        <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.icon}</p>
-                    )}
+                    <div className="mb-4">
+                        <span>{selectedFileName}</span>
+                        {formik.errors.icon && formik.touched.icon && (
+                            <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.icon}</p>
+                        )}
+                    </div>
                 </div>
             </form>
         </div>

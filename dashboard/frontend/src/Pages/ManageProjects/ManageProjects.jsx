@@ -35,18 +35,25 @@ const ManageProjects = () => {
         }, 200);
     }
 
-    const handleUpdateProject = (id, name, icon, fromColor, toColor) => {
+    const handleUpdateProject = (project) => {
         setSendData({
             tick: 'update',
-            id: id,
-            name: name,
-            icon: icon,
-            fromColor: fromColor,
-            toColor: toColor
+            id: project._id,
+            name: project.name,
+            icon: project.icon,
+            fromColor: project.fromColor,
+            toColor: project.toColor,
+            numberOfLevel: project.numberOfLevel,
+            baseCost: project.baseValues.baseCost,
+            baseReward: project.baseValues.baseReward,
+            baseCpm: project.baseValues.baseCpm,
+            costMultiplier: project.multipliers.costMultiplier,
+            rewardMultiplier: project.multipliers.rewardMultiplier,
+            cpmMultiplier: project.multipliers.cpmMultiplier
         });
         setTimeout(() => {
             navigate(`/project-form`)
-        }, 200);
+        }, 500);
     }
 
     const handleDeleteProject = async (id, name) => {
@@ -267,7 +274,7 @@ const ManageProjects = () => {
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Launch Date</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Delete</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Update</th>
-                            <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Manage Levels</th>
+                            <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Levels</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Manage Tasks</th>
                         </tr>
                     </thead>
@@ -350,11 +357,7 @@ const ManageProjects = () => {
                                                     className="p-2"
                                                     onClick={() =>
                                                         handleUpdateProject(
-                                                            cls._id,
-                                                            cls.name,
-                                                            cls.icon,
-                                                            cls.fromColor,
-                                                            cls.toColor
+                                                            cls
                                                         )
                                                     }
                                                 >
