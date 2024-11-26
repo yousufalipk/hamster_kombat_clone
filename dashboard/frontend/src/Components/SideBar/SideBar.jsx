@@ -33,7 +33,7 @@ const SideBar = () => {
 
   return (
     <>
-      <div className='flex flex-col justify-between h-screen bg-transparent backdrop-blur-3xl'>
+      <div className='fixed top-0 left-0 w-[20vw] h-[100vh] flex flex-col justify-between bg-transparent backdrop-blur-3xl'>
         {/* Logo */}
         <div className='flex flex-col items-center mt-4'>
           <Link to='/'>

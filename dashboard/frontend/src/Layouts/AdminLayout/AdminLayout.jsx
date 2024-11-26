@@ -10,6 +10,7 @@ import HomePage from '../../Pages/HomePage/HomePage';
 import ManageProjectsPage from '../../Pages/ManageProjects/ManageProjects';
 import ProjectsForm from '../../Components/Forms/ProjectsForm/ProjectsForm';
 import ProjectTasksPage from '../../Components/ProjectTasks/ProjectTasks';
+import PorjectLevelsPage from '../../Components/ProjectLevels/ProjectLevels';
 
 //Manage Kols
 import ManageKolsPage from '../../Pages/ManageKols/ManageKols';
@@ -21,19 +22,20 @@ const AdminLayout = () => {
   return (
     <>
       {/* Side Bar */}
-      <div className='relative flex flex-row bg-custom-image bg-cover bg-center'>
+      <div className='w-[100vw] h-[100vh] relative flex flex-row bg-custom-image bg-cover bg-center'>
         <div className='absolute w-full h-full bg-black opacity-50'></div>
-        <div className='w-1/5'>
+        <div className='w-[20vw] h-[100vh]'>
           <SideBar />
         </div>
         {/* Content */}
-        <div className='p-10 w-full z-10'>
+        <div className='w-[80vw] h-[100vh] overflow-y-scroll p-10 z-10'>
           <Routes>
             <Route path='*' element={<HomePage />} />
             {/* Manage Projects */}
             <Route path='/manage-projects' element={<UserProtected ><ManageProjectsPage /></UserProtected>} />
             <Route path='/project-form' element={<UserProtected ><ProjectsForm /></UserProtected>} />
             <Route path='/project-tasks' element={<UserProtected ><ProjectTasksPage /></UserProtected>} />
+            <Route path='/project-levels' element={<UserProtected ><PorjectLevelsPage /></UserProtected>} />
 
 
             {/* Manage Kols */}
