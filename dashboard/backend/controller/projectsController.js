@@ -166,6 +166,32 @@ exports.updateProject = async (req, res) => {
     try {
         const { projectId, name, icon, fromColor, toColor, numberOfLevel, baseValues, multipliers } = req.body;
 
+        if (
+            !name || !icon || !icon.name || !icon.data || !icon.contentType ||
+            !fromColor || !toColor || !numberOfLevel || !baseValues ||
+            !baseValues.baseCost || !baseValues.baseReward || !baseValues.baseCpm ||
+            !multipliers || !multipliers.costMultiplier || !multipliers.rewardMultiplier || !multipliers.cpmMultiplier
+        ) {
+            return res.status(400).json({
+                status: 'failed',
+                message: "All fields are required!",
+            });
+        }
+
+        const base64Data = icon.data.startsWith('data:image')
+            ? icon.data.split(',')[1]
+            : icon.data;
+
+        const buffer = Buffer.from(base64Data, 'base64');
+
+        const maxSize = 1 * 1024 * 1024;
+        if (buffer.length > maxSize) {
+            return res.status(400).json({
+                status: 'failed',
+                message: "Image size exceeds the maximum allowed size (1MB).",
+            });
+        }
+
         const project = await ProjectModel.findById(projectId);
         if (!project) {
             return res.status(404).json({
@@ -174,77 +200,49 @@ exports.updateProject = async (req, res) => {
             });
         }
 
-        if (
-            (icon && (!icon.name || !icon.data || !icon.contentType)) ||
-            (baseValues && (!baseValues.baseCost || !baseValues.baseReward || !baseValues.baseCpm)) ||
-            (multipliers && (!multipliers.costMultiplier || !multipliers.rewardMultiplier || !multipliers.cpmMultiplier))
-        ) {
-            return res.status(400).json({
-                status: 'failed',
-                message: "Invalid input fields!",
-            });
-        }
+        const levels = [];
+        const { baseCost, baseReward, baseCpm } = baseValues;
+        const { costMultiplier, rewardMultiplier, cpmMultiplier } = multipliers;
 
-        if (icon) {
-            const base64Data = icon.data.startsWith('data:image')
-                ? icon.data.split(',')[1]
-                : icon.data;
-            const buffer = Buffer.from(base64Data, 'base64');
-            const maxSize = 1 * 1024 * 1024;
-            if (buffer.length > maxSize) {
-                return res.status(400).json({
-                    status: 'failed',
-                    message: "Image size exceeds the maximum allowed size (1MB).",
+        for (let i = 0; i < numberOfLevel; i++) {
+            if (i === 0) {
+                levels.push({
+                    level: i + 1,
+                    cost: baseCost,
+                    reward: baseReward,
+                    cpm: baseCpm,
+                });
+            } else {
+                const prevLevel = levels[i - 1];
+                levels.push({
+                    level: i + 1,
+                    cost: prevLevel.cost + costMultiplier,
+                    reward: prevLevel.reward + rewardMultiplier,
+                    cpm: prevLevel.cpm + cpmMultiplier,
                 });
             }
-            project.icon = {
-                name: icon.name,
-                data: icon.data,
-                contentType: icon.contentType,
-            };
         }
 
-        if (name) project.name = name;
-        if (fromColor) project.fromColor = fromColor;
-        if (toColor) project.toColor = toColor;
-
-        if (numberOfLevel || baseValues || multipliers) {
-            const newNumberOfLevels = numberOfLevel || project.levels.length;
-            const newBaseValues = baseValues || {
-                baseCost: project.levels[0].cost,
-                baseReward: project.levels[0].reward,
-                baseCpm: project.levels[0].cpm,
-            };
-            const newMultipliers = multipliers || {
-                costMultiplier: project.levels[1]?.cost - project.levels[0]?.cost || 0,
-                rewardMultiplier: project.levels[1]?.reward - project.levels[0]?.reward || 0,
-                cpmMultiplier: project.levels[1]?.cpm - project.levels[0]?.cpm || 0,
-            };
-
-            const { baseCost, baseReward, baseCpm } = newBaseValues;
-            const { costMultiplier, rewardMultiplier, cpmMultiplier } = newMultipliers;
-
-            const updatedLevels = [];
-            for (let i = 0; i < newNumberOfLevels; i++) {
-                if (i === 0) {
-                    updatedLevels.push({
-                        level: i + 1,
-                        cost: baseCost,
-                        reward: baseReward,
-                        cpm: baseCpm,
-                    });
-                } else {
-                    const prevLevel = updatedLevels[i - 1];
-                    updatedLevels.push({
-                        level: i + 1,
-                        cost: prevLevel.cost + costMultiplier,
-                        reward: prevLevel.reward + rewardMultiplier,
-                        cpm: prevLevel.cpm + cpmMultiplier,
-                    });
-                }
-            }
-            project.levels = updatedLevels;
-        }
+        project.name = name;
+        project.icon = {
+            name: icon.name,
+            data: icon.data,
+            contentType: icon.contentType,
+        };
+        project.fromColor = fromColor;
+        project.toColor = toColor;
+        project.levels = levels;
+        project.numberOfLevel = numberOfLevel;
+        project.baseValues = {
+            baseCost: baseCost,
+            baseReward: baseReward,
+            baseCpm: baseCpm,
+        };
+        project.multipliers = {
+            costMultiplier: costMultiplier,
+            rewardMultiplier: rewardMultiplier,
+            cpmMultiplier: cpmMultiplier,
+        };
 
         await project.save();
 
