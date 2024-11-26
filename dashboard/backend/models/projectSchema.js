@@ -33,7 +33,7 @@ const projectsSchema = new mongoose.Schema({
     },
     baseValues: {
         baseCost: {
-            type: String,
+            type: Number,
             default: 0
         },
         baseReward: {
@@ -47,7 +47,7 @@ const projectsSchema = new mongoose.Schema({
     },
     multipliers: {
         costMultiplier: {
-            type: String,
+            type: Number,
             default: 0
         },
         rewardMultiplier: {

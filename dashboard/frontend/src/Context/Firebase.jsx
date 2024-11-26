@@ -213,7 +213,43 @@ export const FirebaseProvider = (props) => {
         }
     };
 
+    function logFieldTypes(obj) {
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                if (typeof obj[key] === 'object' && obj[key] !== null) {
+                    console.log(`${key}: object`);
+                    logFieldTypes(obj[key]);  // Recursively log types for nested objects
+                } else {
+                    console.log(`${key}: ${typeof obj[key]}`);
+                }
+            }
+        }
+    }
+
     const updateProject = async (data, id) => {
+        const data1 = {
+            projectId: id,
+            name: data.name,
+            icon: {
+                name: data.icon.name,
+                data: data.icon.data,
+                contentType: data.icon.contentType,
+            },
+            fromColor: data.fromColor,
+            toColor: data.toColor,
+            numberOfLevel: data.numberOfLevel,
+            baseValues: {
+                baseCost: data.baseCost,
+                baseReward: data.baseReward,
+                baseCpm: data.baseCpm
+            },
+            multipliers: {
+                costMultiplier: data.costMultiplier,
+                rewardMultiplier: data.rewardMultiplier,
+                cpmMultiplier: data.cpmMultiplier
+            }
+        };
+        logFieldTypes(data1);
         try {
             const response = await axios.post(`${apiUrl}/project/update`, {
                 projectId: id,

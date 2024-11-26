@@ -7,10 +7,6 @@ const {
     fetchProjects,
     updateProject,
     toggleComboCard,
-    fetchProjectLevel,
-    addProjectLevel,
-    removeProjectLevel,
-    updateProjectLevel,
 
     fetchProjectTasks,
     addProjectTask,
@@ -32,18 +28,6 @@ router.route('/fetch').get(fetchProjects);
 router.route('/update').post(updateProject);
 
 router.route('/toogle-combo-card').post(toggleComboCard);
-
-/*
-
-router.route('/fetch-project-level').post(fetchProjectLevel);
-
-router.route('/add-project-level').post(addProjectLevel);
-
-router.route('/remove-project-level').post(removeProjectLevel);
-
-router.route('/update-project-level').post(updateProjectLevel);
-
-*/
 
 router.route('/fetch-project-task').post(fetchProjectTasks);
 
