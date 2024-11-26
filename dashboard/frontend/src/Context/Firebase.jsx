@@ -32,8 +32,6 @@ export const FirebaseProvider = (props) => {
 
     const [vcs, setVcs] = useState(null);
 
-    const [projectLevels, setProjectLevels] = useState([]);
-
     const [projectTasks, setProjectTasks] = useState([]);
 
     const refreshAuth = async () => {
@@ -297,88 +295,6 @@ export const FirebaseProvider = (props) => {
             return { success: false, mess: 'Internal Server Error!' };
         }
     };
-
-    const fetchProjectLevels = async (projectId) => {
-        try {
-            const res = await axios.post(`${apiUrl}/project/fetch-project-level`, {
-                projectId: projectId
-            });
-            if (res.data.status === 'success') {
-                setProjectLevels(res.data.levels);
-                return ({ success: true, mess: res.data.message });
-            } else {
-                return ({ success: false, mess: res.data.message });
-            }
-        } catch (error) {
-            console.log("Internal Server Error!", error);
-            return ({ success: false, mess: 'Internal Server Error!' });
-        }
-    }
-
-    const addProjectLevel = async (projectId, cost, reward, cpm) => {
-        try {
-            const res = await axios.post(`${apiUrl}/project/add-project-level`, {
-                projectId: projectId,
-                cost: cost,
-                reward: reward,
-                cpm: cpm
-            });
-            if (res.data.status === 'success') {
-                fetchProjectLevels(projectId);
-                return ({ success: true, mess: res.data.message });
-            } else {
-                return ({ success: false, mess: res.data.message });
-            }
-        } catch (error) {
-            console.log("Internal Server Error!", error);
-            return ({ success: false, mess: 'Internal Server Error!' });
-        }
-    }
-
-    const removeProjectLevel = async (projectId, levelId) => {
-        try {
-            const res = await axios.post(`${apiUrl}/project/remove-project-level`, {
-                projectId: projectId,
-                levelId: levelId
-            });
-            if (res.data.status === 'success') {
-                fetchProjectLevels(projectId);
-                return ({ success: true, mess: res.data.message });
-            } else {
-                return ({ success: false, mess: res.data.message });
-            }
-        } catch (error) {
-            console.log("Internal Server Error!", error);
-            return ({ success: false, mess: 'Internal Server Error!' });
-        }
-    }
-
-    const updateProjectLevel = async (projectId, levelId, newCost, newReward, newCpm) => {
-        try {
-            const res = await axios.post(`${apiUrl}/project/update-project-level`, {
-                projectId: projectId,
-                levelId: levelId,
-                newCost: newCost,
-                newReward: newReward,
-                newCpm: newCpm
-            });
-            if (res.data.status === 'success') {
-                setProjectLevels(prevLevels =>
-                    prevLevels.map(level =>
-                        level._id === levelId
-                            ? { ...level, cost: newCost, reward: newReward, cpm: newCpm }
-                            : level
-                    )
-                );
-                return ({ success: true, mess: res.data.message });
-            } else {
-                return ({ success: false, mess: res.data.message });
-            }
-        } catch (error) {
-            console.log("Internal Server Error!", error);
-            return ({ success: false, mess: 'Internal Server Error!' });
-        }
-    }
 
     const fetchProjectTasks = async (projectId) => {
         try {
@@ -743,13 +659,7 @@ export const FirebaseProvider = (props) => {
             deleteProject,
             updateProject,
             toggleProjectCombo,
-            fetchProjectLevels,
-            projectLevels,
-            setProjectLevels,
             setProjects,
-            addProjectLevel,
-            removeProjectLevel,
-            updateProjectLevel,
             projectTasks,
             setProjectTasks,
             fetchProjectTasks,
