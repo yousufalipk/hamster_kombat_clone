@@ -38,7 +38,9 @@ const PatnersSchema = new mongoose.Schema({
     card: {
         type: Boolean,
         default: false
-    }
+    },
+    conditions: [
+    ]
 }, {
     timestamps: true,
 });
