@@ -6,11 +6,7 @@ const DailyComboCard = () => {
     const { twoComboCards, fetchTwoComboCards } = useFirebase();
 
     useEffect(() => {
-        console.log("TwoComboCards", twoComboCards);
-    }, [])
-
-    useEffect(() => {
-        if (!twoComboCards) {
+        if (twoComboCards.length === 0) {
             fetchTwoComboCards();
         }
     }, [])
