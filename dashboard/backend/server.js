@@ -48,6 +48,7 @@ app.listen(PORT, () => {
 
 const updateRandomCardStatus = async () => {
     try {
+        console.log("Setting random card true!");
         await Promise.all([
             ProjectModel.updateMany({}, { card: false }),
             KolsModel.updateMany({}, { card: false }),
