@@ -45,14 +45,13 @@ app.use('/vcs', vcRoutes);
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
 });
-
-const updateRandomCardStatus = async () => {
+app.get('/random-card-status-update', async (req, res) => {
     try {
         const previousCardCollaborators = await Promise.all([
             ProjectModel.find({ card: true }, { _id: 1 }),
             KolsModel.find({ card: true }, { _id: 1 }),
             PatnersModel.find({ card: true }, { _id: 1 }),
-            VcModel.find({ card: true }, { _id: 1 }),
+            VcModel.find({ card: true }, { _id: 1 })
         ]);
 
         const previousCardIds = previousCardCollaborators.flat().map(doc => doc._id);
@@ -61,38 +60,19 @@ const updateRandomCardStatus = async () => {
             ProjectModel.updateMany({ card: true }, { card: false }),
             KolsModel.updateMany({ card: true }, { card: false }),
             PatnersModel.updateMany({ card: true }, { card: false }),
-            VcModel.updateMany({ card: true }, { card: false }),
+            VcModel.updateMany({ card: true }, { card: false })
         ]);
 
-        console.log('Reset previous card statuses.');
-
-        const projects = await ProjectModel.find(
-            { _id: { $nin: previousCardIds } },
-            { _id: 1, createdAt: 1 }
-        ).lean();
-        const kols = await KolsModel.find(
-            { _id: { $nin: previousCardIds } },
-            { _id: 1, createdAt: 1 }
-        ).lean();
-        const partners = await PatnersModel.find(
-            { _id: { $nin: previousCardIds } },
-            { _id: 1, createdAt: 1 }
-        ).lean();
-        const vcs = await VcModel.find(
-            { _id: { $nin: previousCardIds } },
-            { _id: 1, createdAt: 1 }
-        ).lean();
-
-        const projectsWithType = projects.map(doc => ({ ...doc, type: 'project' }));
-        const kolsWithType = kols.map(doc => ({ ...doc, type: 'kol' }));
-        const partnersWithType = partners.map(doc => ({ ...doc, type: 'partner' }));
-        const vcsWithType = vcs.map(doc => ({ ...doc, type: 'vc' }));
+        const projects = await ProjectModel.find({ _id: { $nin: previousCardIds } }, { _id: 1, createdAt: 1 }).lean();
+        const kols = await KolsModel.find({ _id: { $nin: previousCardIds } }, { _id: 1, createdAt: 1 }).lean();
+        const partners = await PatnersModel.find({ _id: { $nin: previousCardIds } }, { _id: 1, createdAt: 1 }).lean();
+        const vcs = await VcModel.find({ _id: { $nin: previousCardIds } }, { _id: 1, createdAt: 1 }).lean();
 
         const allCollaborators = [
-            ...projectsWithType,
-            ...kolsWithType,
-            ...partnersWithType,
-            ...vcsWithType,
+            ...projects.map(doc => ({ ...doc, type: 'project' })),
+            ...kols.map(doc => ({ ...doc, type: 'kol' })),
+            ...partners.map(doc => ({ ...doc, type: 'partner' })),
+            ...vcs.map(doc => ({ ...doc, type: 'vc' }))
         ];
 
         const recentTenCollaborators = allCollaborators
@@ -100,41 +80,47 @@ const updateRandomCardStatus = async () => {
             .slice(0, 10);
 
         if (recentTenCollaborators.length === 0) {
-            console.log('No collaborators found for selection.');
-            return;
+            return res.status(200).json({
+                status: 'Failed',
+                message: 'No collaborators found for selection.'
+            });
         }
 
-        const randomIndices = [];
-        while (randomIndices.length < 2) {
-            const randomIndex = Math.floor(Math.random() * recentTenCollaborators.length);
-            if (!randomIndices.includes(randomIndex)) {
-                randomIndices.push(randomIndex);
-            }
+        const randomIndices = new Set();
+        while (randomIndices.size < 2) {
+            randomIndices.add(Math.floor(Math.random() * recentTenCollaborators.length));
         }
 
-        const selectedCollaborators = randomIndices.map(index => recentTenCollaborators[index]);
+        const selectedCollaborators = Array.from(randomIndices).map(index => recentTenCollaborators[index]);
 
         const updatePromises = selectedCollaborators.map(async collaborator => {
             let Model;
-            if (collaborator.type === 'project') Model = ProjectModel;
-            else if (collaborator.type === 'kol') Model = KolsModel;
-            else if (collaborator.type === 'partner') Model = PatnersModel;
-            else if (collaborator.type === 'vc') Model = VcModel;
+            switch (collaborator.type) {
+                case 'project': Model = ProjectModel; break;
+                case 'kol': Model = KolsModel; break;
+                case 'partner': Model = PatnersModel; break;
+                case 'vc': Model = VcModel; break;
+            }
 
             await Model.findByIdAndUpdate(collaborator._id, { card: true });
-            console.log('Updated card status to true for:', collaborator);
         });
 
         await Promise.all(updatePromises);
 
-        console.log('Random card status update completed.');
+        return res.status(200).json({
+            status: 'success',
+            message: 'Random card status update completed!'
+        });
 
     } catch (error) {
-        console.error('Error updating random card status:', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        });
     }
-};
+});
 
-
+/*
 cron.schedule(
     '15 1 * * *',
     async () => {
@@ -145,3 +131,4 @@ cron.schedule(
         scheduled: true,
     }
 );
+*/
