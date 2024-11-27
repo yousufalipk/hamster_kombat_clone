@@ -83,26 +83,6 @@ const ManageProjects = () => {
         return `${day}/${month}/${year}`;
     }
 
-    const handleToogleComboCard = async (projectId) => {
-        const confirm = window.confirm("Are you sure you want to toggle the combo card?");
-
-        if (!confirm) {
-            return;
-        }
-
-        try {
-            const res = await toggleProjectCombo(projectId);
-            if (res.success) {
-                toast.success(res.mess);
-            } else {
-                toast.error(res.mess);
-            }
-        } catch (error) {
-            console.log("Internal Server Error!");
-            toast.error('Internal Server Error!');
-        }
-    };
-
     const handleManageLevels = (project) => {
         const data = {
             type: 'project',
@@ -321,10 +301,7 @@ const ManageProjects = () => {
                                                 {cls.tasks.length}
                                             </td>
                                             <td
-                                                onClick={() => {
-                                                    handleToogleComboCard(cls._id);
-                                                }}
-                                                className={`px-6 py-4 border-b border-gray-200 text-center hover:cursor-pointer ${cls.card ? 'text-green-500' : 'text-red-500'
+                                                className={`px-6 py-4 border-b border-gray-200 text-center ${cls.card ? 'text-green-500' : 'text-red-500'
                                                     }`}
                                             >
                                                 {cls.card ? 'Active' : 'In-Active'}
