@@ -2,7 +2,7 @@ name: Cron job to trigger API
 
 on:
   schedule:
-    - cron: "50 20 * * *"  # 8:50 PM UTC = 1:50 AM PKT (Karachi time)
+    - cron: "0 19 * * *"  # 7:00 PM UTC = 12:00 AM PKT (Karachi time)
   workflow_dispatch:
 
 jobs:
