@@ -48,7 +48,6 @@ app.listen(PORT, () => {
 
 const updateRandomCardStatus = async () => {
     try {
-        console.log("Setting random card true!");
         await Promise.all([
             ProjectModel.updateMany({}, { card: false }),
             KolsModel.updateMany({}, { card: false }),
@@ -83,26 +82,42 @@ const updateRandomCardStatus = async () => {
             return;
         }
 
-        const randomIndex = Math.floor(Math.random() * recentTenCollaborators.length);
-        const selectedCollaborator = recentTenCollaborators[randomIndex];
+        const randomIndices = [];
+        while (randomIndices.length < 2) {
+            const randomIndex = Math.floor(Math.random() * recentTenCollaborators.length);
+            if (!randomIndices.includes(randomIndex)) {
+                randomIndices.push(randomIndex);
+            }
+        }
 
-        let Model;
-        if (selectedCollaborator.type === 'project') Model = ProjectModel;
-        else if (selectedCollaborator.type === 'kol') Model = KolsModel;
-        else if (selectedCollaborator.type === 'partner') Model = PatnersModel;
-        else if (selectedCollaborator.type === 'vc') Model = VcModel;
+        const selectedCollaborators = randomIndices.map(index => recentTenCollaborators[index]);
 
-        await Model.findByIdAndUpdate(selectedCollaborator._id, { card: true });
-        console.log('Updated card status to true for:', selectedCollaborator);
+        const updatePromises = selectedCollaborators.map(async collaborator => {
+            let Model;
+            if (collaborator.type === 'project') Model = ProjectModel;
+            else if (collaborator.type === 'kol') Model = KolsModel;
+            else if (collaborator.type === 'partner') Model = PatnersModel;
+            else if (collaborator.type === 'vc') Model = VcModel;
+
+            await Model.findByIdAndUpdate(collaborator._id, { card: true });
+            console.log('Updated card status to true for:', collaborator);
+        });
+
+        await Promise.all(updatePromises);
+
     } catch (error) {
         console.error('Error updating random card status:', error);
     }
 };
 
-cron.schedule('0 12 * * *', async () => {
-    await updateRandomCardStatus();
-    cronJobScheduled = false;
-}, {
-    timezone: 'Asia/Karachi',
-    scheduled: true,
-});
+
+cron.schedule(
+    '20 0 * * *',
+    async () => {
+        await updateRandomCardStatus();
+    },
+    {
+        timezone: 'Asia/Karachi',
+        scheduled: true,
+    }
+);
