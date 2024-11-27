@@ -271,6 +271,7 @@ exports.updateProject = async (req, res) => {
     }
 };
 
+/*
 exports.toggleComboCard = async (req, res) => {
     try {
         const { projectId } = req.body;
@@ -322,6 +323,7 @@ exports.toggleComboCard = async (req, res) => {
         });
     }
 };
+*/
 
 exports.fetchProjectTasks = async (req, res) => {
     try {

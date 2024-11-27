@@ -5,7 +5,8 @@ const {
     createUser,
     loginUser,
     logOutUser,
-    refresh
+    refresh,
+    fetchTwoTrueCards
 } = require('../controller/userController');
 
 // User routes
@@ -17,5 +18,7 @@ router.route('/login-user').post(loginUser);
 router.route('/logout-user').post(logOutUser);
 
 router.route('/refresh').post(refresh);
+
+router.route('/fetch-dailyComboCard').get(fetchTwoTrueCards);
 
 module.exports = router;

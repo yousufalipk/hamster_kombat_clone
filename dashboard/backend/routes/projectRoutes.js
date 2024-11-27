@@ -6,7 +6,6 @@ const {
     removeProject,
     fetchProjects,
     updateProject,
-    toggleComboCard,
 
     fetchProjectTasks,
     addProjectTask,
@@ -26,8 +25,6 @@ router.route('/remove').delete(removeProject);
 router.route('/fetch').get(fetchProjects);
 
 router.route('/update').post(updateProject);
-
-router.route('/toogle-combo-card').post(toggleComboCard);
 
 router.route('/fetch-project-task').post(fetchProjectTasks);
 

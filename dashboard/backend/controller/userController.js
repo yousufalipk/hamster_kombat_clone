@@ -1,6 +1,11 @@
 const UserModel = require('../models/userSchema');
 const RefreshTokenModel = require("../models/tokenSchema");
 
+const ProjectModel = require('../models/projectSchema');
+const KolsModel = require('../models/kolsSchema');
+const PatnersModel = require('../models/patnersSchema');
+const VcModel = require('../models/vcSchema');
+
 const bcrypt = require('bcrypt');
 const JWTService = require('../Services/JWTService');
 const refreshToken = require('../models/tokenSchema');
@@ -227,3 +232,34 @@ exports.refresh = async (req, res) => {
         });
     }
 }
+
+exports.fetchTwoTrueCards = async (req, res) => {
+    try {
+        const [projects, kols, partners, vcs] = await Promise.all([
+            ProjectModel.find({ card: true }, { name: 1, card: 1, createdAt: 1 }).sort({ createdAt: -1 }).lean(),
+            KolsModel.find({ card: true }, { name: 1, card: 1, createdAt: 1 }).sort({ createdAt: -1 }).lean(),
+            PatnersModel.find({ card: true }, { name: 1, card: 1, createdAt: 1 }).sort({ createdAt: -1 }).lean(),
+            VcModel.find({ card: true }, { name: 1, card: 1, createdAt: 1 }).sort({ createdAt: -1 }).lean(),
+        ]);
+
+        const allTrueCards = [
+            ...projects.map(doc => ({ ...doc, type: 'project' })),
+            ...kols.map(doc => ({ ...doc, type: 'kol' })),
+            ...partners.map(doc => ({ ...doc, type: 'partner' })),
+            ...vcs.map(doc => ({ ...doc, type: 'vc' })),
+        ];
+
+        const twoTrueCards = allTrueCards.slice(0, 2);
+
+        return res.status(200).json({
+            status: 'success',
+            data: twoTrueCards,
+        });
+    } catch (error) {
+        console.error('Error fetching documents:', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: error.message || 'Internal Server Error',
+        });
+    }
+};
