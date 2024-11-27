@@ -247,7 +247,7 @@ const ProjectForm = () => {
                 <div className="mb-4">
                     <label className="block text-sm font-medium mb-1">Number of Levels</label>
                     <input
-                        type="number"
+                        type="text"
                         name="numberOfLevel"
                         placeholder='No of Levels'
                         className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.numberOfLevel && formik.touched.numberOfLevel ? 'border-red-500' : ''}`}
@@ -266,7 +266,7 @@ const ProjectForm = () => {
                     {/* Base cost input */}
                     <div className="mb-4 w-[33%]">
                         <input
-                            type="number"
+                            type="text"
                             name="baseCost"
                             placeholder="Base Cost"
                             className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.baseCost && formik.touched.baseCost ? 'border-red-500' : ''}`}
@@ -282,7 +282,7 @@ const ProjectForm = () => {
                     {/* Base reward input */}
                     <div className="mb-4 w-[33%]">
                         <input
-                            type="number"
+                            type="text"
                             name="baseReward"
                             placeholder="Base Reward"
                             className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.baseReward && formik.touched.baseReward ? 'border-red-500' : ''}`}
@@ -298,7 +298,7 @@ const ProjectForm = () => {
                     {/* Base cpm input */}
                     <div className="mb-4 w-[33%]">
                         <input
-                            type="number"
+                            type="text"
                             name="baseCpm"
                             placeholder="Base CPM"
                             className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.baseCpm && formik.touched.baseCpm ? 'border-red-500' : ''}`}
@@ -318,7 +318,7 @@ const ProjectForm = () => {
                     {/* Cost multiplier input */}
                     <div className="mb-4 w-[33%]">
                         <input
-                            type="number"
+                            type="text"
                             name="costMultiplier"
                             placeholder="Cost Multiplier"
                             className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.costMultiplier && formik.touched.costMultiplier ? 'border-red-500' : ''}`}
@@ -334,7 +334,7 @@ const ProjectForm = () => {
                     {/* Reward multiplier input */}
                     <div className="mb-4 w-[33%]">
                         <input
-                            type="number"
+                            type="text"
                             name="rewardMultiplier"
                             placeholder="Reward Multiplier"
                             className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.rewardMultiplier && formik.touched.rewardMultiplier ? 'border-red-500' : ''}`}
@@ -350,7 +350,7 @@ const ProjectForm = () => {
                     {/* Cpm multiplier input */}
                     <div className="mb-4 w-[33%]">
                         <input
-                            type="number"
+                            type="text"
                             name="cpmMultiplier"
                             placeholder="CPM Multiplier"
                             className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.cpmMultiplier && formik.touched.cpmMultiplier ? 'border-red-500' : ''}`}

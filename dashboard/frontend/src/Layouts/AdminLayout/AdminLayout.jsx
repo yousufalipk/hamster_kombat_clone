@@ -25,6 +25,9 @@ import PatnerForm from '../../Components/Forms/PatnersForm/PatnersForm';
 import ManageVcsPage from '../../Pages/ManageVcs/ManageVcs';
 import VcsForm from '../../Components/Forms/VcsForm/VcsForm';
 
+//Daily Combo Card
+import DailyComboCardPage from '../../Pages/DailyComboCard/DailyComboCard';
+
 import UserProtected from '../../Components/Protected/UserProtected';
 
 const AdminLayout = () => {
@@ -60,6 +63,9 @@ const AdminLayout = () => {
             {/* Manage Vcs */}
             <Route path='/manage-vcs' element={<UserProtected ><ManageVcsPage /></UserProtected>} />
             <Route path='/vcs-form' element={<UserProtected ><VcsForm /></UserProtected>} />
+
+            {/* Daily Combo Card */}
+            <Route path='/daily-combo-card' element={<UserProtected ><DailyComboCardPage /></UserProtected>} />
           </Routes>
         </div>
       </div>

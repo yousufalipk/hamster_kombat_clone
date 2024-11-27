@@ -98,6 +98,16 @@ const SideBar = () => {
                 >
                   Manage Vcs
                 </Link>
+                <hr className='border-1 border-[gray] w-4/5 mx-auto' />
+                <Link
+                  onClick={() => {
+                    setPage('dailyComboCard');
+                  }}
+                  className={`w-full py-5 px-10 ${[page === 'dailyComboCard' && 'text-bluebtn']}`}
+                  to='/daily-combo-card'
+                >
+                  Daily Combo Card
+                </Link>
               </>
             ) : (
               <>
