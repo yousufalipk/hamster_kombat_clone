@@ -98,6 +98,10 @@ const updateRandomCardStatus = async () => {
     }
 };
 
-cron.schedule('0 12 * * *', updateRandomCardStatus, {
+cron.schedule('0 12 * * *', async () => {
+    await updateRandomCardStatus();
+    cronJobScheduled = false;
+}, {
     timezone: 'Asia/Karachi',
+    scheduled: true,
 });

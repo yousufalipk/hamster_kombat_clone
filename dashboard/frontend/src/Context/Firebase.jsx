@@ -34,6 +34,8 @@ export const FirebaseProvider = (props) => {
 
     const [projectTasks, setProjectTasks] = useState([]);
 
+    const [twoComboCards, setTwoComboCards] = useState([]);
+
     const refreshAuth = async () => {
         try {
             const refreshToken = localStorage.getItem('refreshToken');
@@ -734,6 +736,21 @@ export const FirebaseProvider = (props) => {
             }
         } catch (error) {
             console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const fetchTwoComboCards = async () => {
+        try {
+            const res = await axios.get(`${apiUrl}/fetch-dailyComboCard`);
+            if (res.data.status === 'success') {
+                setTwoComboCards(res.data.data);
+                return ({ success: true, mess: 'Card data fetched!' });
+            } else {
+                return ({ success: false, mess: 'Error fetching card data!' });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
             return ({ success: false, mess: 'Internal Server Error!' });
         }
     }
