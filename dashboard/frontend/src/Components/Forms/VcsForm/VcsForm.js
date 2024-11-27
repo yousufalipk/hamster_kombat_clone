@@ -7,8 +7,8 @@ import { useFirebase } from '../../../Context/Firebase';
 import CoinImage from '../../../Assets/coin.svg';
 import { FaAngleRight } from "react-icons/fa6";
 
-const KolsForm = () => {
-    const { createKol, updateKol, sendData } = useFirebase();
+const VcFrom = () => {
+    const { createVc, updateVc, sendData } = useFirebase();
     const navigate = useNavigate();
 
     const [selectedIconName, setSelectedIconName] = useState(sendData?.icon?.name || 'No file chosen');
@@ -30,7 +30,7 @@ const KolsForm = () => {
         },
         validationSchema: Yup.object({
             name: Yup.string()
-                .required('Kol name is required')
+                .required('Vc name is required')
                 .min(3, 'Name must be at least 3 characters'),
             fromColor: Yup.string()
                 .required('From Color is required')
@@ -57,29 +57,29 @@ const KolsForm = () => {
         onSubmit: async (values) => {
             try {
                 if (sendData.tick === 'update') {
-                    const res = await updateKol(values, sendData.id);
+                    const res = await updateVc(values, sendData.id);
                     if (res.success) {
                         toast.success(res.mess);
-                        navigate('/manage-kols');
+                        navigate('/manage-vcs');
                     } else {
                         toast.error(res.mess);
-                        navigate('/manage-kols');
+                        navigate('/manage-vcs');
                     }
                 } else {
-                    const res = await createKol(values);
+                    const res = await createVc(values);
                     if (res.success) {
                         toast.success(res.mess);
-                        navigate('/manage-kols');
+                        navigate('/manage-vcs');
                     } else {
                         toast.error(res.mess);
-                        navigate('/manage-kols');
+                        navigate('/manage-vcs');
                     }
                 }
             } catch (error) {
                 if (sendData.tick === 'update') {
-                    toast.error('Failed to update project.');
+                    toast.error('Failed to update vcs.');
                 } else {
-                    toast.error('Failed to create project.');
+                    toast.error('Failed to create vcs.');
                 }
             }
         },
@@ -136,7 +136,7 @@ const KolsForm = () => {
     };
 
     const handleBack = () => {
-        navigate('/manage-kols');
+        navigate('/manage-patners');
     };
 
 
@@ -155,7 +155,7 @@ const KolsForm = () => {
                         <div className="left w-[70%] flex flex-col justify-center items-start gap-1">
                             {/* head */}
                             <div className="flex justify-start items-center gap-1">
-                                <div className="text-lg">{name || 'No Name'}</div>
+                                <div className="text-lg w-15">{name || 'No Name'}</div>
                                 <div
                                     style={{
                                         backgroundColor: fromColor,
@@ -203,7 +203,7 @@ const KolsForm = () => {
                                                 src={`data:image/jpeg;base64,${logo.data}`}
                                                 alt={name ? `${name}-logo` : "Image"}
                                                 width={85}
-                                                className='absolute bottom-0 right-[5vw]'
+                                                className='absolute bottom-0 right-[7vw]'
                                             />
                                         </>
                                     ) : (
@@ -242,7 +242,7 @@ const KolsForm = () => {
         <div className="p-4">
             <div className="flex flex-row justify-between items-center mb-5">
                 <h1 className="font-bold text-left text-xl">
-                    {sendData.tick === 'update' ? 'Edit Kol' : 'Add Kol'}
+                    {sendData.tick === 'update' ? 'Edit Vc' : 'Add Vc'}
                 </h1>
                 <div className="flex">
                     <button
@@ -256,7 +256,7 @@ const KolsForm = () => {
                         className="mx-2 py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600"
                         onClick={formik.handleSubmit}
                     >
-                        {sendData.tick === 'update' ? 'Confirm Changes' : 'Add Kol'}
+                        {sendData.tick === 'update' ? 'Confirm Changes' : 'Add Vc'}
                     </button>
                 </div>
             </div>
@@ -273,9 +273,9 @@ const KolsForm = () => {
 
             <hr className="my-5 border-gray-300" />
             <form onSubmit={formik.handleSubmit}>
-                {/* Kol Name Input */}
+                {/* Patner Name Input */}
                 <div className="mb-4">
-                    <label className="block text-sm font-medium mb-1">Kol Name</label>
+                    <label className="block text-sm font-medium mb-1">Vc Name</label>
                     <input
                         type="text"
                         name="name"
@@ -414,7 +414,7 @@ const KolsForm = () => {
                 <div className='w-full flex justify-between items-center gap-5'>
                     {/* Icon File Upload */}
                     <div className='flex justify-start items-center gap-3'>
-                        <label className="block text-sm font-medium mb-1">Kol Icon</label>
+                        <label className="block text-sm font-medium mb-1">Vc Icon</label>
                         <div className='flex gap-2 mt-3'>
                             <div>
                                 <input
@@ -443,7 +443,7 @@ const KolsForm = () => {
 
                     {/* Logo File Upload */}
                     <div className='flex justify-end items-center gap-3'>
-                        <label className="block text-sm font-medium mb-1">Kol Logo</label>
+                        <label className="block text-sm font-medium mb-1">Vc Logo</label>
                         <div className='flex gap-2 mt-3'>
                             <div>
                                 <input
@@ -475,4 +475,4 @@ const KolsForm = () => {
     );
 };
 
-export default KolsForm;
+export default VcFrom;

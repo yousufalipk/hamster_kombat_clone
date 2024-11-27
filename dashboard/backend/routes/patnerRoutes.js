@@ -11,12 +11,12 @@ const {
 
 // Patners routes
 
-router.route('/fetch-patner').post(fetchPatners);
+router.route('/fetch-patner').get(fetchPatners);
 
 router.route('/add-patner').post(addPatner);
 
 router.route('/update-patner').post(updatePatner);
 
-router.route('/remove-patner').post(removePatner);
+router.route('/remove-patner').delete(removePatner);
 
 module.exports = router;

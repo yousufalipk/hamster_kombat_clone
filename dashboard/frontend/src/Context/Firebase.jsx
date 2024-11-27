@@ -516,7 +516,7 @@ export const FirebaseProvider = (props) => {
 
     const fetchPathners = async () => {
         try {
-            const response = await axios.post(`${apiUrl}/patners/fetch-patner`);
+            const response = await axios.get(`${apiUrl}/patners/fetch-patner`);
             if (response.data.status === 'success') {
                 setPatners(response.data.patners);
             } else {
@@ -536,6 +536,22 @@ export const FirebaseProvider = (props) => {
                     name: data.icon.name,
                     data: data.icon.data,
                     contentType: data.icon.contentType,
+                },
+                logo: {
+                    name: data.logo.name,
+                    data: data.logo.data,
+                    contentType: data.logo.contentType,
+                },
+                fromColor: data.fromColor,
+                toColor: data.toColor,
+                numberOfLevel: data.numberOfLevel,
+                baseValues: {
+                    baseCost: data.baseCost,
+                    baseCpm: data.baseCpm
+                },
+                multipliers: {
+                    costMultiplier: data.costMultiplier,
+                    cpmMultiplier: data.cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -553,12 +569,28 @@ export const FirebaseProvider = (props) => {
     const updatePatner = async (data, id) => {
         try {
             const response = await axios.post(`${apiUrl}/patners/update-patner`, {
-                id: id,
+                patnerId: id,
                 name: data.name,
                 icon: {
                     name: data.icon.name,
                     data: data.icon.data,
                     contentType: data.icon.contentType,
+                },
+                logo: {
+                    name: data.logo.name,
+                    data: data.logo.data,
+                    contentType: data.logo.contentType,
+                },
+                fromColor: data.fromColor,
+                toColor: data.toColor,
+                numberOfLevel: data.numberOfLevel,
+                baseValues: {
+                    baseCost: data.baseCost,
+                    baseCpm: data.baseCpm
+                },
+                multipliers: {
+                    costMultiplier: data.costMultiplier,
+                    cpmMultiplier: data.cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -575,8 +607,10 @@ export const FirebaseProvider = (props) => {
 
     const deletePatner = async (id) => {
         try {
-            const response = await axios.post(`${apiUrl}/patners/remove-patner`, {
-                patnerId: id
+            const response = await axios.delete(`${apiUrl}/patners/remove-patner`, {
+                data: {
+                    patnerId: id
+                }
             });
 
             if (response.data.status === 'success') {
@@ -595,9 +629,9 @@ export const FirebaseProvider = (props) => {
 
     const fetchVcs = async () => {
         try {
-            const response = await axios.post(`${apiUrl}/vcs/fetch-vc`);
+            const response = await axios.get(`${apiUrl}/vcs/fetch-vc`);
             if (response.data.status === 'success') {
-                setPatners(response.data.patners);
+                setVcs(response.data.vcs);
             } else {
                 console.log(response.data.message);
             }
@@ -615,6 +649,22 @@ export const FirebaseProvider = (props) => {
                     name: data.icon.name,
                     data: data.icon.data,
                     contentType: data.icon.contentType,
+                },
+                logo: {
+                    name: data.logo.name,
+                    data: data.logo.data,
+                    contentType: data.logo.contentType,
+                },
+                fromColor: data.fromColor,
+                toColor: data.toColor,
+                numberOfLevel: data.numberOfLevel,
+                baseValues: {
+                    baseCost: data.baseCost,
+                    baseCpm: data.baseCpm
+                },
+                multipliers: {
+                    costMultiplier: data.costMultiplier,
+                    cpmMultiplier: data.cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -632,12 +682,28 @@ export const FirebaseProvider = (props) => {
     const updateVc = async (data, id) => {
         try {
             const response = await axios.post(`${apiUrl}/vcs/update-vc`, {
-                id: id,
+                vcId: id,
                 name: data.name,
                 icon: {
                     name: data.icon.name,
                     data: data.icon.data,
                     contentType: data.icon.contentType,
+                },
+                logo: {
+                    name: data.logo.name,
+                    data: data.logo.data,
+                    contentType: data.logo.contentType,
+                },
+                fromColor: data.fromColor,
+                toColor: data.toColor,
+                numberOfLevel: data.numberOfLevel,
+                baseValues: {
+                    baseCost: data.baseCost,
+                    baseCpm: data.baseCpm
+                },
+                multipliers: {
+                    costMultiplier: data.costMultiplier,
+                    cpmMultiplier: data.cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -654,12 +720,14 @@ export const FirebaseProvider = (props) => {
 
     const deleteVc = async (id) => {
         try {
-            const response = await axios.post(`${apiUrl}/vcs/remove-vc`, {
-                vcId: id
+            const response = await axios.delete(`${apiUrl}/vcs/remove-vc`, {
+                data: {
+                    vcId: id
+                }
             });
 
             if (response.data.status === 'success') {
-                setPatners((prevPatner) => prevPatner.filter((patner) => patner._id !== id));
+                setVcs((prevPatner) => prevPatner.filter((patner) => patner._id !== id));
                 return ({ success: true, mess: response.data.message });
             } else {
                 return ({ success: false, mess: response.data.message });

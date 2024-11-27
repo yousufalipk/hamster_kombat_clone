@@ -78,6 +78,26 @@ const SideBar = () => {
                 >
                   Manage Kols
                 </Link>
+                <hr className='border-1 border-[gray] w-4/5 mx-auto' />
+                <Link
+                  onClick={() => {
+                    setPage('patners');
+                  }}
+                  className={`w-full py-5 px-10 ${[page === 'patners' && 'text-bluebtn']}`}
+                  to='/manage-patners'
+                >
+                  Manage Patners
+                </Link>
+                <hr className='border-1 border-[gray] w-4/5 mx-auto' />
+                <Link
+                  onClick={() => {
+                    setPage('vcs');
+                  }}
+                  className={`w-full py-5 px-10 ${[page === 'vcs' && 'text-bluebtn']}`}
+                  to='/manage-vcs'
+                >
+                  Manage Vcs
+                </Link>
               </>
             ) : (
               <>

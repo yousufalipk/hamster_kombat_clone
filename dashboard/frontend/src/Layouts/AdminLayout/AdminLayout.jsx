@@ -17,6 +17,14 @@ import ProjectTasksPage from '../../Components/ProjectTasks/ProjectTasks';
 import ManageKolsPage from '../../Pages/ManageKols/ManageKols';
 import KolsForm from '../../Components/Forms/KolsForm/KolsForm';
 
+//Manage Patners
+import ManagePatnersPage from '../../Pages/ManagePatner/ManagePatner';
+import PatnerForm from '../../Components/Forms/PatnersForm/PatnersForm';
+
+//Manage Vc's
+import ManageVcsPage from '../../Pages/ManageVcs/ManageVcs';
+import VcsForm from '../../Components/Forms/VcsForm/VcsForm';
+
 import UserProtected from '../../Components/Protected/UserProtected';
 
 const AdminLayout = () => {
@@ -44,6 +52,14 @@ const AdminLayout = () => {
             {/* Manage Kols */}
             <Route path='/manage-kols' element={<UserProtected ><ManageKolsPage /></UserProtected>} />
             <Route path='/kols-form' element={<UserProtected ><KolsForm /></UserProtected>} />
+
+            {/* Manage Kols */}
+            <Route path='/manage-patners' element={<UserProtected ><ManagePatnersPage /></UserProtected>} />
+            <Route path='/patners-form' element={<UserProtected ><PatnerForm /></UserProtected>} />
+
+            {/* Manage Vcs */}
+            <Route path='/manage-vcs' element={<UserProtected ><ManageVcsPage /></UserProtected>} />
+            <Route path='/vcs-form' element={<UserProtected ><VcsForm /></UserProtected>} />
           </Routes>
         </div>
       </div>
