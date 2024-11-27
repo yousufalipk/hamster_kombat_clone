@@ -91,6 +91,6 @@ const vcsSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-const vcs = mongoose.model('Vcs', vcsSchema, 'VcsSchema');
+const vcs = mongoose.model('Vcs', vcsSchema, 'vcs');
 
 module.exports = vcs;

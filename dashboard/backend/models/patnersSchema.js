@@ -91,6 +91,6 @@ const patnersSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-const patners = mongoose.model('Patners', patnersSchema, 'patnersSchema');
+const patners = mongoose.model('Patners', patnersSchema, 'patners');
 
 module.exports = patners;

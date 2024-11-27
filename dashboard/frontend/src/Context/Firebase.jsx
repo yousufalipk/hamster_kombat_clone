@@ -633,6 +633,7 @@ export const FirebaseProvider = (props) => {
         try {
             const response = await axios.get(`${apiUrl}/vcs/fetch-vc`);
             if (response.data.status === 'success') {
+                console.log("VCS", response.data.vcs);
                 setVcs(response.data.vcs);
             } else {
                 console.log(response.data.message);

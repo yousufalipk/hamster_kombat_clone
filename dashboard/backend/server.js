@@ -48,18 +48,40 @@ app.listen(PORT, () => {
 
 const updateRandomCardStatus = async () => {
     try {
-        await Promise.all([
-            ProjectModel.updateMany({}, { card: false }),
-            KolsModel.updateMany({}, { card: false }),
-            PatnersModel.updateMany({}, { card: false }),
-            VcModel.updateMany({}, { card: false }),
+        const previousCardCollaborators = await Promise.all([
+            ProjectModel.find({ card: true }, { _id: 1 }),
+            KolsModel.find({ card: true }, { _id: 1 }),
+            PatnersModel.find({ card: true }, { _id: 1 }),
+            VcModel.find({ card: true }, { _id: 1 }),
         ]);
-        console.log('Set all card values to false.');
 
-        const projects = await ProjectModel.find({}, { _id: 1, createdAt: 1 }).lean();
-        const kols = await KolsModel.find({}, { _id: 1, createdAt: 1 }).lean();
-        const partners = await PatnersModel.find({}, { _id: 1, createdAt: 1 }).lean();
-        const vcs = await VcModel.find({}, { _id: 1, createdAt: 1 }).lean();
+        const previousCardIds = previousCardCollaborators.flat().map(doc => doc._id);
+
+        await Promise.all([
+            ProjectModel.updateMany({ card: true }, { card: false }),
+            KolsModel.updateMany({ card: true }, { card: false }),
+            PatnersModel.updateMany({ card: true }, { card: false }),
+            VcModel.updateMany({ card: true }, { card: false }),
+        ]);
+
+        console.log('Reset previous card statuses.');
+
+        const projects = await ProjectModel.find(
+            { _id: { $nin: previousCardIds } },
+            { _id: 1, createdAt: 1 }
+        ).lean();
+        const kols = await KolsModel.find(
+            { _id: { $nin: previousCardIds } },
+            { _id: 1, createdAt: 1 }
+        ).lean();
+        const partners = await PatnersModel.find(
+            { _id: { $nin: previousCardIds } },
+            { _id: 1, createdAt: 1 }
+        ).lean();
+        const vcs = await VcModel.find(
+            { _id: { $nin: previousCardIds } },
+            { _id: 1, createdAt: 1 }
+        ).lean();
 
         const projectsWithType = projects.map(doc => ({ ...doc, type: 'project' }));
         const kolsWithType = kols.map(doc => ({ ...doc, type: 'kol' }));
@@ -78,7 +100,7 @@ const updateRandomCardStatus = async () => {
             .slice(0, 10);
 
         if (recentTenCollaborators.length === 0) {
-            console.log('No collaborators found.');
+            console.log('No collaborators found for selection.');
             return;
         }
 
@@ -105,6 +127,8 @@ const updateRandomCardStatus = async () => {
 
         await Promise.all(updatePromises);
 
+        console.log('Random card status update completed.');
+
     } catch (error) {
         console.error('Error updating random card status:', error);
     }
@@ -112,7 +136,7 @@ const updateRandomCardStatus = async () => {
 
 
 cron.schedule(
-    '20 0 * * *',
+    '28 0 * * *',
     async () => {
         await updateRandomCardStatus();
     },
