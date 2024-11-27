@@ -6,7 +6,7 @@ const DailyComboCard = () => {
     const navigate = useNavigate();
     const { } = useFirebase();
 
-    const [recentTenCollaborators, setRecentTenCollaboratos] = useState(null); s
+    const [recentTenCollaborators, setRecentTenCollaboratos] = useState(null);
 
     const handleToogleComboCard = async (projectId) => {
 
