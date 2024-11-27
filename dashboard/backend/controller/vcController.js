@@ -1,4 +1,4 @@
-const VcsModel = require('../models/patnersSchema');
+const VcsModel = require('../models/vcSchema');
 
 exports.fetchVcs = async (req, res) => {
     try {
