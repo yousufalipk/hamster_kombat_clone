@@ -304,7 +304,7 @@ const ManageProjects = () => {
                                                 className={`px-6 py-4 border-b border-gray-200 text-center ${cls.card ? 'text-green-500' : 'text-red-500'
                                                     }`}
                                             >
-                                                {cls.card ? 'Active' : 'In-Active'}
+                                                {cls.card ? 'Enabled' : 'Disabled'}
                                             </td>
                                             <td
                                                 className={`px-6 py-4 border-b border-gray-200 text-center`}

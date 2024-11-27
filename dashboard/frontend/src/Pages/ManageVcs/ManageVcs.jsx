@@ -65,30 +65,6 @@ const ManageVcs = () => {
         }
     };
 
-    const handleToogleComboCard = async (projectId) => {
-
-        return;
-        /*
-        const confirm = window.confirm("Are you sure you want to toggle the combo card?");
-
-        if (!confirm) {
-            return;
-        }
-
-        try {
-            const res = await toggleProjectCombo(projectId);
-            if (res.success) {
-                toast.success(res.mess);
-            } else {
-                toast.error(res.mess);
-            }
-        } catch (error) {
-            console.log("Internal Server Error!");
-            toast.error('Internal Server Error!');
-        }
-            */
-    };
-
     const handleManageLevels = (project) => {
         const data = {
             type: 'vc',
@@ -172,13 +148,10 @@ const ManageVcs = () => {
                                                 {cls.levels.length}
                                             </td>
                                             <td
-                                                onClick={() => {
-                                                    handleToogleComboCard(cls._id);
-                                                }}
-                                                className={`px - 6 py - 4 border-b - gray - 200 text - center hover: cursor - pointer ${cls.card ? 'text-green-500' : 'text-red-500'
-                                                    } `}
+                                                className={`px-6 py-4 border-b border-gray-200 text-center ${cls.card ? 'text-green-500' : 'text-red-500'
+                                                    }`}
                                             >
-                                                {cls.card ? 'Active' : 'In-Active'}
+                                                {cls.card ? 'Enabled' : 'Disabled'}
                                             </td>
                                             <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
                                                 <button

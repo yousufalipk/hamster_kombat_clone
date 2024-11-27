@@ -136,7 +136,7 @@ const updateRandomCardStatus = async () => {
 
 
 cron.schedule(
-    '28 0 * * *',
+    '46 0 * * *',
     async () => {
         await updateRandomCardStatus();
     },
