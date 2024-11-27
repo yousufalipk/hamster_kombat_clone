@@ -104,8 +104,13 @@ const ManageProjects = () => {
     };
 
     const handleManageLevels = (project) => {
-        setSendData(project);
-        navigate('/project-levels');
+        const data = {
+            type: 'project',
+            data: project,
+            link: '/manage-projects'
+        }
+        setSendData(data);
+        navigate('/levels');
     }
 
     const handleManageTasks = (project) => {

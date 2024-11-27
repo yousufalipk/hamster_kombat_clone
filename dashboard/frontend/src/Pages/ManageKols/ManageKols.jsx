@@ -26,12 +26,20 @@ const ManageKols = () => {
         }, 200);
     }
 
-    const handleUpdateKol = (id, name, icon) => {
+    const handleUpdateKol = (kol) => {
         setSendData({
             tick: 'update',
-            id: id,
-            name: name,
-            icon: icon
+            id: kol._id,
+            name: kol.name,
+            icon: kol.icon,
+            logo: kol.logo,
+            fromColor: kol.fromColor,
+            toColor: kol.toColor,
+            numberOfLevel: kol.numberOfLevel,
+            baseCost: kol.baseValues.baseCost,
+            baseCpm: kol.baseValues.baseCpm,
+            costMultiplier: kol.multipliers.costMultiplier,
+            cpmMultiplier: kol.multipliers.cpmMultiplier
         });
         setTimeout(() => {
             navigate(`/kols-form`)
@@ -82,8 +90,13 @@ const ManageKols = () => {
     };
 
     const handleManageLevels = (project) => {
-        setSendData(project);
-        navigate('/project-levels');
+        const data = {
+            type: 'kols',
+            data: project,
+            link: '/manage-kols'
+        }
+        setSendData(data);
+        navigate('/levels');
     }
 
     return (
@@ -110,7 +123,10 @@ const ManageKols = () => {
                         <tr>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Sr.no</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Name</th>
+                            <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">From Color</th>
+                            <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">To Color</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Icon</th>
+                            <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Logo</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Max Level</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Combo Card</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Delete</th>
@@ -134,8 +150,23 @@ const ManageKols = () => {
                                             <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
                                                 {cls.name}
                                             </td>
+                                            <td className='px-6 py-4 border-b border-gray-200'>
+                                                <div
+                                                    style={{ backgroundColor: cls.fromColor }}
+                                                    className="w-6 h-6 rounded-full mx-auto"
+                                                ></div>
+                                            </td>
+                                            <td className='px-6 py-4 border-b border-gray-200'>
+                                                <div
+                                                    style={{ backgroundColor: cls.toColor }}
+                                                    className="w-6 h-6 rounded-full mx-auto"
+                                                ></div>
+                                            </td>
                                             <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
                                                 <img src={`data: image / jpeg; base64, ${cls.icon.data} `} alt="icon_img" width={40} />
+                                            </td>
+                                            <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
+                                                <img src={`data: image / jpeg; base64, ${cls.logo.data} `} alt="icon_img" width={40} />
                                             </td>
                                             <td className='px-6 py-4 border-b border-gray-200 text-center'>
                                                 {cls.levels.length}
@@ -144,7 +175,7 @@ const ManageKols = () => {
                                                 onClick={() => {
                                                     handleToogleComboCard(cls._id);
                                                 }}
-                                                className={`px - 6 py - 4 border - b border - gray - 200 text - center hover: cursor - pointer ${cls.card ? 'text-green-500' : 'text-red-500'
+                                                className={`px - 6 py - 4 border-b - gray - 200 text - center hover: cursor - pointer ${cls.card ? 'text-green-500' : 'text-red-500'
                                                     } `}
                                             >
                                                 {cls.card ? 'Active' : 'In-Active'}
@@ -161,11 +192,7 @@ const ManageKols = () => {
                                                 <button
                                                     className="p-2"
                                                     onClick={() =>
-                                                        handleUpdateKol(
-                                                            cls._id,
-                                                            cls.name,
-                                                            cls.icon
-                                                        )
+                                                        handleUpdateKol(cls)
                                                     }
                                                 >
                                                     <FaRegEdit className="text-bluebtn w-5 h-5 hover:text-gray-500" />

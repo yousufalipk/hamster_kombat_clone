@@ -96,10 +96,10 @@ const KOLS = () => {
 										</div>
 										{/* body */}
 										<div className="flex">
-												<img
-													src={img2}
-													alt='Coin-Icon'
-												/>
+											<img
+												src={img2}
+												alt='Coin-Icon'
+											/>
 											<div className="text-xs font-thin text-gray-300">
 												<span className="mr-2 font-semibold text-xs">+{coin}</span>
 												Coin Per Minute

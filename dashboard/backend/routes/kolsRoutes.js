@@ -11,12 +11,12 @@ const {
 
 // Kols routes
 
-router.route('/fetch-kol').post(fetchKols);
+router.route('/fetch-kol').get(fetchKols);
 
 router.route('/add-kol').post(addKols);
 
 router.route('/update-kol').post(updateKols);
 
-router.route('/remove-kol').post(removeKols);
+router.route('/remove-kol').delete(removeKols);
 
 module.exports = router;

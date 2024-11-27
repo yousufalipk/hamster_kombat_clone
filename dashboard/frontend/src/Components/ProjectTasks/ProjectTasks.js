@@ -11,7 +11,6 @@ import { FaRegEdit } from "react-icons/fa";
 const ProjectTasks = () => {
     const {
         sendData,
-        fetchProjectTasks,
         projectTasks,
         setProjectTasks,
         addProjectTask,
@@ -20,20 +19,13 @@ const ProjectTasks = () => {
     } = useFirebase();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        setProjectTasks(sendData.tasks);
+    }, [])
+
     const [addLevelPopup, setAddLevelPopup] = useState(false);
     const [updateLevelPopup, setUpdateLevelPopup] = useState(false);
     const [updateTask, setUpdateTask] = useState(null);
-
-    useEffect(() => {
-        if (sendData) {
-            if (!projectTasks) {
-                fetchProjectTasks(sendData._id);
-            }
-        } else {
-            setProjectTasks(null);
-            navigate('/manage-projects');
-        }
-    }, [sendData, projectTasks]);
 
     const formik = useFormik({
         initialValues: {

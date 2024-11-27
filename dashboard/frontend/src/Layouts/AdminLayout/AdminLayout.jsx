@@ -6,11 +6,12 @@ import SideBar from '../../Components/SideBar/SideBar';
 import HomePage from '../../Pages/HomePage/HomePage';
 
 
+import LevelsTablePage from '../../Components/LevelsTable/LevelsTable';
+
 //Manage Project 
 import ManageProjectsPage from '../../Pages/ManageProjects/ManageProjects';
 import ProjectsForm from '../../Components/Forms/ProjectsForm/ProjectsForm';
 import ProjectTasksPage from '../../Components/ProjectTasks/ProjectTasks';
-import PorjectLevelsPage from '../../Components/ProjectLevels/ProjectLevels';
 
 //Manage Kols
 import ManageKolsPage from '../../Pages/ManageKols/ManageKols';
@@ -31,11 +32,13 @@ const AdminLayout = () => {
         <div className='w-[80vw] h-[100vh] overflow-y-scroll p-10 z-10'>
           <Routes>
             <Route path='*' element={<HomePage />} />
+
+            <Route path='/levels' element={<UserProtected ><LevelsTablePage /></UserProtected>} />
+
             {/* Manage Projects */}
             <Route path='/manage-projects' element={<UserProtected ><ManageProjectsPage /></UserProtected>} />
             <Route path='/project-form' element={<UserProtected ><ProjectsForm /></UserProtected>} />
             <Route path='/project-tasks' element={<UserProtected ><ProjectTasksPage /></UserProtected>} />
-            <Route path='/project-levels' element={<UserProtected ><PorjectLevelsPage /></UserProtected>} />
 
 
             {/* Manage Kols */}

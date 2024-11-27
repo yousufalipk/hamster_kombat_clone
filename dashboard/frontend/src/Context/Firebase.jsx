@@ -213,43 +213,7 @@ export const FirebaseProvider = (props) => {
         }
     };
 
-    function logFieldTypes(obj) {
-        for (const key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                if (typeof obj[key] === 'object' && obj[key] !== null) {
-                    console.log(`${key}: object`);
-                    logFieldTypes(obj[key]);  // Recursively log types for nested objects
-                } else {
-                    console.log(`${key}: ${typeof obj[key]}`);
-                }
-            }
-        }
-    }
-
     const updateProject = async (data, id) => {
-        const data1 = {
-            projectId: id,
-            name: data.name,
-            icon: {
-                name: data.icon.name,
-                data: data.icon.data,
-                contentType: data.icon.contentType,
-            },
-            fromColor: data.fromColor,
-            toColor: data.toColor,
-            numberOfLevel: data.numberOfLevel,
-            baseValues: {
-                baseCost: data.baseCost,
-                baseReward: data.baseReward,
-                baseCpm: data.baseCpm
-            },
-            multipliers: {
-                costMultiplier: data.costMultiplier,
-                rewardMultiplier: data.rewardMultiplier,
-                cpmMultiplier: data.cpmMultiplier
-            }
-        };
-        logFieldTypes(data1);
         try {
             const response = await axios.post(`${apiUrl}/project/update`, {
                 projectId: id,
@@ -439,7 +403,7 @@ export const FirebaseProvider = (props) => {
 
     const fetchKols = async () => {
         try {
-            const response = await axios.post(`${apiUrl}/kols/fetch-kol`);
+            const response = await axios.get(`${apiUrl}/kols/fetch-kol`);
             if (response.data.status === 'success') {
                 setKols(response.data.kols);
             } else {
@@ -459,6 +423,22 @@ export const FirebaseProvider = (props) => {
                     name: data.icon.name,
                     data: data.icon.data,
                     contentType: data.icon.contentType,
+                },
+                logo: {
+                    name: data.logo.name,
+                    data: data.logo.data,
+                    contentType: data.logo.contentType,
+                },
+                fromColor: data.fromColor,
+                toColor: data.toColor,
+                numberOfLevel: data.numberOfLevel,
+                baseValues: {
+                    baseCost: data.baseCost,
+                    baseCpm: data.baseCpm
+                },
+                multipliers: {
+                    costMultiplier: data.costMultiplier,
+                    cpmMultiplier: data.cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -476,12 +456,28 @@ export const FirebaseProvider = (props) => {
     const updateKol = async (data, id) => {
         try {
             const response = await axios.post(`${apiUrl}/kols/update-kol`, {
-                id: id,
+                kolId: id,
                 name: data.name,
                 icon: {
                     name: data.icon.name,
                     data: data.icon.data,
                     contentType: data.icon.contentType,
+                },
+                logo: {
+                    name: data.logo.name,
+                    data: data.logo.data,
+                    contentType: data.logo.contentType,
+                },
+                fromColor: data.fromColor,
+                toColor: data.toColor,
+                numberOfLevel: data.numberOfLevel,
+                baseValues: {
+                    baseCost: data.baseCost,
+                    baseCpm: data.baseCpm
+                },
+                multipliers: {
+                    costMultiplier: data.costMultiplier,
+                    cpmMultiplier: data.cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -498,8 +494,10 @@ export const FirebaseProvider = (props) => {
 
     const deleteKol = async (id) => {
         try {
-            const response = await axios.post(`${apiUrl}/kols/remove-kol`, {
-                kolId: id
+            const response = await axios.delete(`${apiUrl}/kols/remove-kol`, {
+                data: {
+                    kolId: id
+                }
             });
 
             if (response.data.status === 'success') {

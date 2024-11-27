@@ -6,18 +6,17 @@ const ProjectLevels = () => {
     const {
         sendData,
         setSendData,
-        setProjectLevels
     } = useFirebase();
     const navigate = useNavigate();
 
     const handleBack = () => {
         setSendData(null);
-        navigate('/manage-projects');
+        navigate(sendData.link);
     };
 
     let sortedLevels;
-    if (sendData.levels) {
-        sortedLevels = sendData.levels.slice().sort((a, b) => b.level + a.level);
+    if (sendData.data.levels) {
+        sortedLevels = sendData.data.levels.slice().sort((a, b) => b.level + a.level);
     }
 
     return (
@@ -25,7 +24,7 @@ const ProjectLevels = () => {
             {sendData && (
                 <div className="w-full h-full flex flex-col justify-start items-center">
                     <div className="w-full flex flex-row justify-between items-center mb-5 px-18">
-                        <h1 className="font-bold text-left text-xl">{sendData.name} Levels</h1>
+                        <h1 className="font-bold text-left text-xl">{sendData.data.name} Levels</h1>
                         <div className="flex">
                             <button
                                 className="mx-2 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600"
@@ -42,7 +41,11 @@ const ProjectLevels = () => {
                                 <tr>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Level No</th>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Upgrade Cost</th>
-                                    <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Reward</th>
+                                    {sendData.type === 'project' && (
+                                        <>
+                                            <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Reward</th>
+                                        </>
+                                    )}
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Coin's Per Minute</th>
                                 </tr>
                             </thead>
@@ -58,9 +61,11 @@ const ProjectLevels = () => {
                                                 <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">
                                                     {cls.cost}
                                                 </td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">
-                                                    {cls.reward}
-                                                </td>
+                                                {sendData.type === 'project' && (
+                                                    <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">
+                                                        {cls.reward}
+                                                    </td>
+                                                )}
                                                 <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">
                                                     {cls.cpm}
                                                 </td>
