@@ -806,7 +806,10 @@ export const FirebaseProvider = (props) => {
             updateVc,
             deleteVc,
             setVcs,
-            vcs
+            vcs,
+
+            fetchTwoComboCards,
+            twoComboCards
         }}>
             {props.children}
         </FirebaseContext.Provider>
