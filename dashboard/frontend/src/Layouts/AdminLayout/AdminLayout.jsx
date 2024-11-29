@@ -28,6 +28,9 @@ import VcsForm from '../../Components/Forms/VcsForm/VcsForm';
 //Daily Combo Card
 import DailyComboCardPage from '../../Pages/DailyComboCard/DailyComboCard';
 
+//Manage Tasks
+import ManageTasksPage from '../../Pages/ManageTasks/ManageTasks';
+
 import UserProtected from '../../Components/Protected/UserProtected';
 
 const AdminLayout = () => {
@@ -66,6 +69,9 @@ const AdminLayout = () => {
 
             {/* Daily Combo Card */}
             <Route path='/daily-combo-card' element={<UserProtected ><DailyComboCardPage /></UserProtected>} />
+
+            {/* Manage Tasks */}
+            <Route path='/manage-tasks' element={<UserProtected ><ManageTasksPage /></UserProtected>} />
           </Routes>
         </div>
       </div>

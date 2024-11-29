@@ -40,7 +40,10 @@ const VcFrom = () => {
                 .matches(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid HEX color'),
             icon: Yup.mixed().required('An icon file is required'),
             logo: Yup.mixed().required('An logo file is required'),
-            numberOfLevel: Yup.mixed().required('Number of Level is required!'),
+            numberOfLevel: Yup.mixed()
+                .required('Number of Level is required!')
+                .min(10, 'Number of Level must be at least 10!')
+                .max(50, 'Number of Level must be at most 50!'),
             baseCost: Yup.number()
                 .required('Base cost is required!')
                 .min(0, 'Base cost cannot be negative!'),

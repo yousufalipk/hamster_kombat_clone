@@ -33,7 +33,7 @@ const SideBar = () => {
 
   return (
     <>
-      <div className='fixed top-0 left-0 w-[20vw] h-[100vh] flex flex-col justify-between bg-transparent backdrop-blur-3xl'>
+      <div className='fixed top-0 left-0 w-[20vw] h-[100vh] overflow-y-scroll overflow-x-hidden custom-scrollbar flex flex-col justify-between bg-transparent backdrop-blur-3xl'>
         {/* Logo */}
         <div className='flex flex-col items-center mt-4'>
           <Link to='/'>
@@ -97,6 +97,16 @@ const SideBar = () => {
                   to='/manage-vcs'
                 >
                   Manage Vcs
+                </Link>
+                <hr className='border-1 border-[gray] w-4/5 mx-auto' />
+                <Link
+                  onClick={() => {
+                    setPage('manageTasks');
+                  }}
+                  className={`w-full py-5 px-10 ${[page === 'manageTasks' && 'text-bluebtn']}`}
+                  to='/manage-tasks'
+                >
+                  Manage Tasks
                 </Link>
                 <hr className='border-1 border-[gray] w-4/5 mx-auto' />
                 <Link

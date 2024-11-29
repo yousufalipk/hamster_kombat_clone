@@ -36,6 +36,10 @@ export const FirebaseProvider = (props) => {
 
     const [twoComboCards, setTwoComboCards] = useState([]);
 
+    const [socialTasks, setSocialTasks] = useState([]);
+
+    const [dailyTasks, setDailyTasks] = useState([]);
+
     const refreshAuth = async () => {
         try {
             const refreshToken = localStorage.getItem('refreshToken');
@@ -181,6 +185,13 @@ export const FirebaseProvider = (props) => {
     }
 
     const createProject = async (data) => {
+        const numberOfLevel = parseInt(data.numberOfLevel, 10);
+        const baseCost = parseInt(data.baseCost, 10);
+        const baseReward = parseInt(data.baseReward, 10);
+        const baseCpm = parseInt(data.baseCpm, 10);
+        const costMultiplier = parseInt(data.costMultiplier, 10);
+        const rewardMultiplier = parseInt(data.rewardMultiplier, 10);
+        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/project/create`, {
                 name: data.name,
@@ -191,16 +202,16 @@ export const FirebaseProvider = (props) => {
                 },
                 fromColor: data.fromColor,
                 toColor: data.toColor,
-                numberOfLevel: data.numberOfLevel,
+                numberOfLevel: numberOfLevel,
                 baseValues: {
-                    baseCost: data.baseCost,
-                    baseReward: data.baseReward,
-                    baseCpm: data.baseCpm
+                    baseCost: baseCost,
+                    baseReward: baseReward,
+                    baseCpm: baseCpm
                 },
                 multipliers: {
-                    costMultiplier: data.costMultiplier,
-                    rewardMultiplier: data.rewardMultiplier,
-                    cpmMultiplier: data.cpmMultiplier
+                    costMultiplier: costMultiplier,
+                    rewardMultiplier: rewardMultiplier,
+                    cpmMultiplier: cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -216,6 +227,13 @@ export const FirebaseProvider = (props) => {
     };
 
     const updateProject = async (data, id) => {
+        const numberOfLevel = parseInt(data.numberOfLevel, 10);
+        const baseCost = parseInt(data.baseCost, 10);
+        const baseReward = parseInt(data.baseReward, 10);
+        const baseCpm = parseInt(data.baseCpm, 10);
+        const costMultiplier = parseInt(data.costMultiplier, 10);
+        const rewardMultiplier = parseInt(data.rewardMultiplier, 10);
+        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/project/update`, {
                 projectId: id,
@@ -227,16 +245,16 @@ export const FirebaseProvider = (props) => {
                 },
                 fromColor: data.fromColor,
                 toColor: data.toColor,
-                numberOfLevel: data.numberOfLevel,
+                numberOfLevel: numberOfLevel,
                 baseValues: {
-                    baseCost: data.baseCost,
-                    baseReward: data.baseReward,
-                    baseCpm: data.baseCpm
+                    baseCost: baseCost,
+                    baseReward: baseReward,
+                    baseCpm: baseCpm
                 },
                 multipliers: {
-                    costMultiplier: data.costMultiplier,
-                    rewardMultiplier: data.rewardMultiplier,
-                    cpmMultiplier: data.cpmMultiplier
+                    costMultiplier: costMultiplier,
+                    rewardMultiplier: rewardMultiplier,
+                    cpmMultiplier: cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -418,6 +436,11 @@ export const FirebaseProvider = (props) => {
     }
 
     const createKol = async (data) => {
+        const numberOfLevel = parseInt(data.numberOfLevel, 10);
+        const baseCost = parseInt(data.baseCost, 10);
+        const baseCpm = parseInt(data.baseCpm, 10);
+        const costMultiplier = parseInt(data.costMultiplier, 10);
+        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/kols/add-kol`, {
                 name: data.name,
@@ -433,14 +456,14 @@ export const FirebaseProvider = (props) => {
                 },
                 fromColor: data.fromColor,
                 toColor: data.toColor,
-                numberOfLevel: data.numberOfLevel,
+                numberOfLevel: numberOfLevel,
                 baseValues: {
-                    baseCost: data.baseCost,
-                    baseCpm: data.baseCpm
+                    baseCost: baseCost,
+                    baseCpm: baseCpm
                 },
                 multipliers: {
-                    costMultiplier: data.costMultiplier,
-                    cpmMultiplier: data.cpmMultiplier
+                    costMultiplier: costMultiplier,
+                    cpmMultiplier: cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -456,6 +479,11 @@ export const FirebaseProvider = (props) => {
     };
 
     const updateKol = async (data, id) => {
+        const numberOfLevel = parseInt(data.numberOfLevel, 10);
+        const baseCost = parseInt(data.baseCost, 10);
+        const baseCpm = parseInt(data.baseCpm, 10);
+        const costMultiplier = parseInt(data.costMultiplier, 10);
+        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/kols/update-kol`, {
                 kolId: id,
@@ -472,14 +500,14 @@ export const FirebaseProvider = (props) => {
                 },
                 fromColor: data.fromColor,
                 toColor: data.toColor,
-                numberOfLevel: data.numberOfLevel,
+                numberOfLevel: numberOfLevel,
                 baseValues: {
-                    baseCost: data.baseCost,
-                    baseCpm: data.baseCpm
+                    baseCost: baseCost,
+                    baseCpm: baseCpm
                 },
                 multipliers: {
-                    costMultiplier: data.costMultiplier,
-                    cpmMultiplier: data.cpmMultiplier
+                    costMultiplier: costMultiplier,
+                    cpmMultiplier: cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -531,6 +559,11 @@ export const FirebaseProvider = (props) => {
     }
 
     const createPatner = async (data) => {
+        const numberOfLevel = parseInt(data.numberOfLevel, 10);
+        const baseCost = parseInt(data.baseCost, 10);
+        const baseCpm = parseInt(data.baseCpm, 10);
+        const costMultiplier = parseInt(data.costMultiplier, 10);
+        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/patners/add-patner`, {
                 name: data.name,
@@ -546,14 +579,14 @@ export const FirebaseProvider = (props) => {
                 },
                 fromColor: data.fromColor,
                 toColor: data.toColor,
-                numberOfLevel: data.numberOfLevel,
+                numberOfLevel: numberOfLevel,
                 baseValues: {
-                    baseCost: data.baseCost,
-                    baseCpm: data.baseCpm
+                    baseCost: baseCost,
+                    baseCpm: baseCpm
                 },
                 multipliers: {
-                    costMultiplier: data.costMultiplier,
-                    cpmMultiplier: data.cpmMultiplier
+                    costMultiplier: costMultiplier,
+                    cpmMultiplier: cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -569,6 +602,11 @@ export const FirebaseProvider = (props) => {
     };
 
     const updatePatner = async (data, id) => {
+        const numberOfLevel = parseInt(data.numberOfLevel, 10);
+        const baseCost = parseInt(data.baseCost, 10);
+        const baseCpm = parseInt(data.baseCpm, 10);
+        const costMultiplier = parseInt(data.costMultiplier, 10);
+        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/patners/update-patner`, {
                 patnerId: id,
@@ -585,14 +623,14 @@ export const FirebaseProvider = (props) => {
                 },
                 fromColor: data.fromColor,
                 toColor: data.toColor,
-                numberOfLevel: data.numberOfLevel,
+                numberOfLevel: numberOfLevel,
                 baseValues: {
-                    baseCost: data.baseCost,
-                    baseCpm: data.baseCpm
+                    baseCost: baseCost,
+                    baseCpm: baseCpm
                 },
                 multipliers: {
-                    costMultiplier: data.costMultiplier,
-                    cpmMultiplier: data.cpmMultiplier
+                    costMultiplier: costMultiplier,
+                    cpmMultiplier: cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -645,6 +683,11 @@ export const FirebaseProvider = (props) => {
     }
 
     const createVc = async (data) => {
+        const numberOfLevel = parseInt(data.numberOfLevel, 10);
+        const baseCost = parseInt(data.baseCost, 10);
+        const baseCpm = parseInt(data.baseCpm, 10);
+        const costMultiplier = parseInt(data.costMultiplier, 10);
+        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/vcs/add-vc`, {
                 name: data.name,
@@ -660,14 +703,14 @@ export const FirebaseProvider = (props) => {
                 },
                 fromColor: data.fromColor,
                 toColor: data.toColor,
-                numberOfLevel: data.numberOfLevel,
+                numberOfLevel: numberOfLevel,
                 baseValues: {
-                    baseCost: data.baseCost,
-                    baseCpm: data.baseCpm
+                    baseCost: baseCost,
+                    baseCpm: baseCpm
                 },
                 multipliers: {
-                    costMultiplier: data.costMultiplier,
-                    cpmMultiplier: data.cpmMultiplier
+                    costMultiplier: costMultiplier,
+                    cpmMultiplier: cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -683,6 +726,11 @@ export const FirebaseProvider = (props) => {
     };
 
     const updateVc = async (data, id) => {
+        const numberOfLevel = parseInt(data.numberOfLevel, 10);
+        const baseCost = parseInt(data.baseCost, 10);
+        const baseCpm = parseInt(data.baseCpm, 10);
+        const costMultiplier = parseInt(data.costMultiplier, 10);
+        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/vcs/update-vc`, {
                 vcId: id,
@@ -699,14 +747,14 @@ export const FirebaseProvider = (props) => {
                 },
                 fromColor: data.fromColor,
                 toColor: data.toColor,
-                numberOfLevel: data.numberOfLevel,
+                numberOfLevel: numberOfLevel,
                 baseValues: {
-                    baseCost: data.baseCost,
-                    baseCpm: data.baseCpm
+                    baseCost: baseCost,
+                    baseCpm: baseCpm
                 },
                 multipliers: {
-                    costMultiplier: data.costMultiplier,
-                    cpmMultiplier: data.cpmMultiplier
+                    costMultiplier: costMultiplier,
+                    cpmMultiplier: cpmMultiplier
                 }
             });
             if (response.data.status === 'success') {
@@ -756,6 +804,113 @@ export const FirebaseProvider = (props) => {
         }
     }
 
+    //Tasks Function 
+
+    const fetchSocialTasks = async () => {
+        try {
+            const res = await axios.get(`${apiUrl}/task/fetch-social`);
+            if (res.data.status === 'success') {
+                console.log("social Takss", res.data.socialTasks);
+                setSocialTasks(res.data.socialTasks);
+            }
+        } catch (error) {
+            console.log("Error fetching social tasks");
+            return ({ success: false, mess: "Internal Server Error!" });
+        }
+    }
+
+    const fetchDailyTasks = async () => {
+        try {
+            const res = await axios.get(`${apiUrl}/task/fetch-daily`);
+            if (res.data.status === 'success') {
+                console.log("Daily Takss", res.data.dailyTasks);
+                setDailyTasks(res.data.dailyTasks);
+            }
+        } catch (error) {
+            console.log("Error fetching daily tasks");
+            return ({ success: false, mess: "Internal Server Error!" });
+        }
+    }
+
+    const addTask = async (taskType, iconType, title, link, reward) => {
+        try {
+            const res = await axios.post(`${apiUrl}/task/create`, {
+                taskType: taskType,
+                iconType: iconType,
+                title: title,
+                link: link,
+                reward: reward
+            });
+            if (res.data.status === 'success') {
+                if (taskType === 'social') {
+                    await fetchSocialTasks();
+                } else {
+                    await fetchDailyTasks();
+                }
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error' })
+        }
+    }
+
+    const updateTask = async (task, taskType, iconType, title, link, reward) => {
+        try {
+            if (task.taskType != taskType) {
+                if (task.taskType === 'social') {
+                    setSocialTasks(prevTasks => prevTasks.filter(t => t._id !== task._id));
+                } else {
+                    setDailyTasks(prevTasks => prevTasks.filter(t => t._id !== task._id));
+                }
+            }
+            const res = await axios.post(`${apiUrl}/task/update`, {
+                taskId: task._id,
+                newTaskType: taskType,
+                newTaskIconType: iconType,
+                newTaskTitle: title,
+                newTaskLink: link,
+                newTasksReward: reward
+            });
+            if (res.data.status === 'success') {
+                await fetchSocialTasks();
+                await fetchDailyTasks();
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error' })
+        }
+    }
+
+    const removeTask = async (taskId, iconType) => {
+        console.log("Deleting Tasks", taskId, iconType);
+        try {
+            const res = await axios.delete(`${apiUrl}/task/remove`, {
+                data: {
+                    taskId: taskId,
+                }
+            });
+            console.log("res", res.data);
+            if (res.data.status === 'success') {
+                if (iconType === 'social') {
+                    await fetchSocialTasks();
+                } else {
+                    await fetchDailyTasks();
+                }
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
 
     return (
         <FirebaseContext.Provider value={{
@@ -810,7 +965,16 @@ export const FirebaseProvider = (props) => {
             vcs,
 
             fetchTwoComboCards,
-            twoComboCards
+            twoComboCards,
+
+            fetchSocialTasks,
+            fetchDailyTasks,
+            addTask,
+            updateTask,
+            removeTask,
+            socialTasks,
+            dailyTasks
+
         }}>
             {props.children}
         </FirebaseContext.Provider>

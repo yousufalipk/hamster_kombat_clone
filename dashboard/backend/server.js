@@ -8,8 +8,8 @@ const projectRoutes = require('./routes/projectRoutes');
 const patnerRoutes = require('./routes/patnerRoutes');
 const kolsRoutes = require('./routes/kolsRoutes');
 const vcRoutes = require('./routes/vsRoutes');
+const taskRoutes = require('./routes/tasksRoute');
 
-const cron = require('node-cron');
 const ProjectModel = require('./models/projectSchema');
 const KolsModel = require('./models/kolsSchema');
 const PatnersModel = require('./models/patnersSchema');
@@ -41,10 +41,12 @@ app.use('/project', projectRoutes);
 app.use('/patners', patnerRoutes);
 app.use('/kols', kolsRoutes);
 app.use('/vcs', vcRoutes);
+app.use('/task', taskRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
 });
+
 app.get('/random-card-status-update', async (req, res) => {
     try {
         const previousCardCollaborators = await Promise.all([
@@ -119,16 +121,3 @@ app.get('/random-card-status-update', async (req, res) => {
         });
     }
 });
-
-/*
-cron.schedule(
-    '15 1 * * *',
-    async () => {
-        await updateRandomCardStatus();
-    },
-    {
-        timezone: 'Asia/Karachi',
-        scheduled: true,
-    }
-);
-*/

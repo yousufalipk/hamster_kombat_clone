@@ -2,16 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    color: white;
+body {
+  color: white;
 }
 
 /* For Webkit Browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-    display: none; /* Hide scrollbar */
+  display: none;
+  /* Hide scrollbar */
+}
+
+/* For Firefox */
+html {
+  scrollbar-width: none;
+  /* Hide scrollbar */
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: #dba211 transparent;
+  /* Thumb color and transparent track */
+
+  /* For WebKit browsers */
+  &::-webkit-scrollbar {
+    width: 8px;
   }
-  
-  /* For Firefox */
-  html {
-    scrollbar-width: none; /* Hide scrollbar */
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #dba211;
+    /* Thumb color (yellow) */
+    border-radius: 4px;
+    /* Set thumb height */
   }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    /* Makes the track transparent */
+  }
+
+  /* Hide the up and down buttons */
+  &::-webkit-scrollbar-button {
+    display: none;
+    /* Hides the scroll buttons */
+  }
+}
