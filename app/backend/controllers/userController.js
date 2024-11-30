@@ -545,91 +545,58 @@ exports.fetchUserProjects = async (req, res) => {
     try {
         const { userId } = req.body;
 
-        const projects = await ProjectModel.find();
-        if (projects.length === 0) {
-            return res.status(200).json({
-                status: 'failed',
-                message: 'Projects not found!'
-            });
-        }
-
         const user = await UserModel.findById(userId);
         if (!user) {
-            return res.status(200).json({
+            return res.status(404).json({
                 status: 'failed',
-                message: 'User not found!'
+                message: 'User not found'
             });
         }
 
-        // Organizing projects into the required categories
-        const responseProjects = {
+        const projects = await ProjectModel.find({}, '_id name fromColor toColor tgeDate').lean();
+
+        const categorizedProjects = {
             current: [],
             tge: [],
             missed: []
         };
 
-        for (const project of projects) {
-            const userProject = user.projects?.find(up => up.projectId.toString() === project._id.toString());
-            const currentLevel = userProject ? userProject.level : 0;
+        const now = new Date();
 
-            const maxLevel = project.levels.length - 1;
-            const nextUpgradeCost = currentLevel < maxLevel ? project.levels[currentLevel]?.cost : null;
-            const nextReward = currentLevel < maxLevel ? project.levels[currentLevel]?.reward : null;
-            const nextCpm = currentLevel < maxLevel ? project.levels[currentLevel]?.cpm : null;
+        const response = projects.map(project => {
+            const userProject = user.projects.find(up => up._id && up._id.equals(project._id));
+            const userWallet = user.wallet.find(w => w._id && w._id.equals(project._id));
 
-            const tasks = project.tasks.map(task => {
-                const cleanedTask = {
-                    _id: task._id,
-                    title: task.title,
-                    reward: task.reward,
-                    iconType: task.iconType,
-                    link: task.link
-                };
-
-                return {
-                    ...cleanedTask,
-                    status: userProject?.tasks?.includes(task._id.toString()) ? 'completed' : 'incomplete'
-                };
-            });
-
-            const projectData = {
-                projectId: project._id,
-                name: project.name,
-                toColor: project.toColor,
-                fromColor: project.fromColor,
-                userLevel: currentLevel,
-                nextUpgradeCost,
-                nextReward,
-                nextCpm,
-                tasks
+            const enrichedProject = {
+                ...project,
+                userData: userProject ? {
+                    level: userProject.level,
+                } : null,
+                walletData: userWallet ? {
+                    balance: userWallet.balance,
+                } : null,
             };
 
-            const now = new Date();
-
-            if (!project.tgeDate || project.tgeDate > now) {
-                responseProjects.current.push(projectData);
-            } else if (project.tgeDate <= now) {
-                responseProjects.tge.push(projectData);
+            if (!project.tgeDate || new Date(project.tgeDate) > now) {
+                categorizedProjects.current.push(enrichedProject);
+            } else if (project.tgeDate && new Date(project.tgeDate) <= now) {
+                if (enrichedProject.userData) {
+                    categorizedProjects.tge.push(enrichedProject);
+                } else {
+                    categorizedProjects.missed.push(enrichedProject);
+                }
             }
 
-            if (currentLevel === 0) {
-                responseProjects.missed.push(projectData);
-            }
-        }
+            return enrichedProject;
+        });
 
-        // Return response in the desired format
-        return res.status(200).json({
+        res.status(200).json({
             status: 'success',
-            message: 'Projects found!',
-            projects: responseProjects
+            projects: categorizedProjects
         });
-
     } catch (error) {
-        console.error("Internal Server Error!", error);
-        return res.status(500).json({
-            status: 'failed',
-            message: 'Internal Server Error!'
-        });
+        console.error('Error fetching projects:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -647,10 +614,14 @@ exports.upgradeUserProjectLevel = async (req, res) => {
             });
         }
 
+        if (project.tgeDate && new Date(project.tgeDate) < new Date()) {
+            return res.status(400).json({ message: 'Token Generation Event Started!' });
+        }
+
         let userProject = user.projects?.find(up => up._id.toString() === projectId);
 
         const maxLevel = project.levels.length - 1;
-        const currentLevel = (userProject?.level !== undefined && userProject?.level !== null) ? userProject?.level : null;
+        const currentLevel = userProject ? userProject.level : undefined;
 
         if (currentLevel >= maxLevel) {
             return res.status(200).json({
@@ -659,7 +630,11 @@ exports.upgradeUserProjectLevel = async (req, res) => {
             });
         }
 
-        let customIndex = currentLevel !== undefined ? currentLevel + 1 : 0;
+        let customIndex = 0;
+        console.log('Current Level', currentLevel);
+        if (currentLevel !== undefined) {
+            customIndex = currentLevel + 1;
+        }
 
         const levelCost = project.levels[customIndex]?.cost;
         const levelReward = project.levels[customIndex]?.reward;
@@ -703,6 +678,19 @@ exports.upgradeUserProjectLevel = async (req, res) => {
                 level: 0
             }
             user.projects.push(projectData);
+        }
+
+        if (project.card) {
+            console.log("Combo Card Active!");
+            if (user.comboCards.length <= 1) {
+                if (user.comboCards.some(card => card.projectId.toString() === project._id.toString())) {
+                } else {
+                    const data = {
+                        projectId: project._id
+                    };
+                    user.comboCards.push(data);
+                }
+            }
         }
 
         await user.save();

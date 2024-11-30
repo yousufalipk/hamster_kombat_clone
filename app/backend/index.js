@@ -84,3 +84,45 @@ app.use('/user', user);
 app.get('/', (req, res) => {
     res.send("Panda Tap backend is running correctly!");
 });
+
+app.get('/reset-users-combo-cards', async (req, res) => {
+    const batchSize = 1000;
+    let skip = 0;
+
+    try {
+        while (true) {
+            const users = await UserModel.find({})
+                .skip(skip)
+                .limit(batchSize);
+
+            if (users.length === 0) break;
+
+            const bulkOps = users.map(user => {
+                const update = { $set: { comboCards: [] } };
+
+                if (user.comboCards.length === 2) {
+                    update.$inc = { balance: 400000 };
+                }
+
+                return {
+                    updateOne: {
+                        filter: { _id: user._id },
+                        update: update
+                    }
+                };
+            });
+
+            if (bulkOps.length > 0) {
+                await UserModel.bulkWrite(bulkOps);
+            }
+
+            skip += batchSize;
+            console.log(`Processed ${skip} users...`);
+        }
+
+        res.send('User balance update completed successfully.');
+    } catch (error) {
+        console.error('Error during user balance update:', error);
+        res.status(500).send('Error during user balance update.');
+    }
+});

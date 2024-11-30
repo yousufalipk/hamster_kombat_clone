@@ -143,7 +143,13 @@ const userSchema = new mongoose.Schema({
     ],
     patners: [
 
-    ]
+    ],
+    comboCards: [{
+        projectId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Project'
+        }
+    }]
 }, { timestamps: true });
 
 const UserModel = mongoose.model('User', userSchema);
