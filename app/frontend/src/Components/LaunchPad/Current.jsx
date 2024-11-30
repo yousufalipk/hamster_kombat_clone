@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/index';
 
@@ -97,7 +97,7 @@ const Card = ({ name, logo1, logo2, balance, level, bgColor }) => (
 
 const Current = () => {
 
-	const { setSendTokenData } = useUser();
+	const { setSendTokenData, projects, fetchProjects } = useUser();
 
 	const navigate = useNavigate();
 
@@ -106,14 +106,24 @@ const Current = () => {
 		navigate('/token');
 	}
 
+	useEffect(() => {
+		if (!projects) {
+			fetchProjects()
+		}
+	}, [])
+
+	useEffect(() => {
+		console.log("Projects ", projects);
+	}, [projects])
+
 	return (
 		<>
 			<div className='grid grid-cols-2 gap-3 h-[37vh]'>
 				{cards.map((card) => {
 					return (
-						<div 
-							onClick={()=>handleCardClick(card)}	
-						> 
+						<div
+							onClick={() => handleCardClick(card)}
+						>
 							<Card
 								key={card.id}
 								name={card.name}

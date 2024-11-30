@@ -9,7 +9,11 @@ const {
     toggleUnlimitedTapsStatus,
     claimDailyRewards,
     checkPremium,
-
+    fetchUserProjects,
+    upgradeUserProjectLevel,
+    fetchKols,
+    fetchVcs,
+    fetchPatners,
     storeErrorLog,
     test
 } = require('../controllers/userController');
@@ -30,6 +34,11 @@ router.route('/refill-energy').post(refillEnergy);
 router.route('/claim-daily-reward').post(claimDailyRewards);
 router.route('/check-premium').post(checkPremium);
 router.route('/fetch-leaderboard').post(fetchTopUsersForAllLevels);
+router.route('/fetch-user-projects').post(fetchUserProjects);
+router.route('/upgrade-project-level').post(upgradeUserProjectLevel);
+router.route('/fetch-kols').get(fetchKols);
+router.route('/fetch-vcs').get(fetchVcs);
+router.route('/fetch-patners').get(fetchPatners);
 
 
 

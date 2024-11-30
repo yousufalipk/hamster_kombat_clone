@@ -114,7 +114,36 @@ const userSchema = new mongoose.Schema({
     ],
     profilePic: {
         type: String,
-    }
+    },
+    wallet: [{
+        projectId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'projects'
+        },
+        balance: {
+            type: Number,
+            default: 0
+        }
+    }],
+    projects: [{
+        projectId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'projects'
+        },
+        level: {
+            type: Number,
+            default: null
+        }
+    }],
+    kols: [
+
+    ],
+    vcs: [
+
+    ],
+    patners: [
+
+    ]
 }, { timestamps: true });
 
 const UserModel = mongoose.model('User', userSchema);

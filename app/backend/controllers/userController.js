@@ -1,4 +1,8 @@
 const UserModel = require('../models/userModel');
+const ProjectModel = require('../models/projectSchema');
+const KolModel = require('../models/kolsSchema');
+const PatnerModel = require('../models/patnersSchema');
+const VcModel = require('../models/vcSchema');
 const { TELEGRAM_BOT_TOKEN } = require('../config/env');
 const { Telegraf } = require("telegraf");
 const { getIo, userSocketMap } = require('../utils/socketHelper');
@@ -536,6 +540,258 @@ exports.checkPremium = async (req, res) => {
         });
     }
 };
+
+exports.fetchUserProjects = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const projects = await ProjectModel.find();
+        if (projects.length === 0) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Projects not found!'
+            });
+        }
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            });
+        }
+
+        // Organizing projects into the required categories
+        const responseProjects = {
+            current: [],
+            tge: [],
+            missed: []
+        };
+
+        for (const project of projects) {
+            const userProject = user.projects?.find(up => up.projectId.toString() === project._id.toString());
+            const currentLevel = userProject ? userProject.level : 0;
+
+            const maxLevel = project.levels.length - 1;
+            const nextUpgradeCost = currentLevel < maxLevel ? project.levels[currentLevel]?.cost : null;
+            const nextReward = currentLevel < maxLevel ? project.levels[currentLevel]?.reward : null;
+            const nextCpm = currentLevel < maxLevel ? project.levels[currentLevel]?.cpm : null;
+
+            const tasks = project.tasks.map(task => {
+                const cleanedTask = {
+                    _id: task._id,
+                    title: task.title,
+                    reward: task.reward,
+                    iconType: task.iconType,
+                    link: task.link
+                };
+
+                return {
+                    ...cleanedTask,
+                    status: userProject?.tasks?.includes(task._id.toString()) ? 'completed' : 'incomplete'
+                };
+            });
+
+            const projectData = {
+                projectId: project._id,
+                name: project.name,
+                toColor: project.toColor,
+                fromColor: project.fromColor,
+                userLevel: currentLevel,
+                nextUpgradeCost,
+                nextReward,
+                nextCpm,
+                tasks
+            };
+
+            const now = new Date();
+
+            if (!project.tgeDate || project.tgeDate > now) {
+                responseProjects.current.push(projectData);
+            } else if (project.tgeDate <= now) {
+                responseProjects.tge.push(projectData);
+            }
+
+            if (currentLevel === 0) {
+                responseProjects.missed.push(projectData);
+            }
+        }
+
+        // Return response in the desired format
+        return res.status(200).json({
+            status: 'success',
+            message: 'Projects found!',
+            projects: responseProjects
+        });
+
+    } catch (error) {
+        console.error("Internal Server Error!", error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        });
+    }
+};
+
+exports.upgradeUserProjectLevel = async (req, res) => {
+    try {
+        const { userId, projectId } = req.body;
+
+        const user = await UserModel.findById(userId);
+        const project = await ProjectModel.findById(projectId);
+
+        if (!user || !project) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User or project not found!'
+            });
+        }
+
+        let userProject = user.projects?.find(up => up._id.toString() === projectId);
+
+        const maxLevel = project.levels.length - 1;
+        const currentLevel = (userProject?.level !== undefined && userProject?.level !== null) ? userProject?.level : null;
+
+        if (currentLevel >= maxLevel) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Project is already at the maximum level!'
+            });
+        }
+
+        let customIndex = currentLevel !== undefined ? currentLevel + 1 : 0;
+
+        const levelCost = project.levels[customIndex]?.cost;
+        const levelReward = project.levels[customIndex]?.reward;
+        const levelCpm = project.levels[customIndex]?.cpm;
+
+        if (!levelCost || !levelReward || !levelCpm) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Invalid level data!'
+            });
+        }
+
+        if (user.balance < levelCost) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Insufficient balance to upgrade project level!',
+                upgradeCost: levelCost
+            });
+        }
+
+
+
+        user.balance -= levelCost;
+        user.coinsPerMinute.value += levelCpm;
+
+        const projectWallet = user.wallet?.find(w => w._id.toString() === projectId);
+        if (projectWallet) {
+            projectWallet.balance += levelReward;
+        } else {
+            user.wallet.push({
+                _id: projectId,
+                balance: levelReward
+            });
+        }
+
+        if (userProject) {
+            userProject.level = userProject.level + 1;
+        } else {
+            const projectData = {
+                _id: projectId,
+                level: 0
+            }
+            user.projects.push(projectData);
+        }
+
+        await user.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Project level upgraded successfully!',
+            balance: user.balance,
+            cpm: user.coinsPerMinute.value,
+            wallet: user.wallet,
+            projects: user.projects
+        });
+    } catch (error) {
+        console.error('Internal Server Error', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        });
+    }
+};
+
+exports.fetchKols = async (req, res) => {
+    try {
+        const kols = await ProjectModel.find();
+        if (kols.length === 0) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Kols not found!'
+            });
+        }
+        return res.status(200).json({
+            status: 'success',
+            message: 'Kols found!',
+            kols: kols
+        });
+    } catch (error) {
+        console.log("Internal Server Error!");
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
+
+exports.fetchVcs = async (req, res) => {
+    try {
+        const vcs = await ProjectModel.find();
+        if (vcs.length === 0) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Vcs not found!'
+            });
+        }
+        return res.status(200).json({
+            status: 'success',
+            message: 'Vcs found!',
+            vcs: vcs
+        });
+    } catch (error) {
+        console.log("Internal Server Error!");
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
+
+exports.fetchPatners = async (req, res) => {
+    try {
+        const patners = await ProjectModel.find();
+        if (patners.length === 0) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Patners not found!'
+            });
+        }
+        return res.status(200).json({
+            status: 'success',
+            message: 'Patners found!',
+            patners: patners
+        });
+    } catch (error) {
+        console.log("Internal Server Error!");
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
 
 exports.test = async (req, res) => {
     try {

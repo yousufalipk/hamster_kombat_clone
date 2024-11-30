@@ -67,6 +67,14 @@ export const UserProvider = (props) => {
 
     const [tgeToggle, setTgeToggle] = useState('launchpad');
 
+    const [projects, setProjects] = useState();
+
+    const [kols, setKols] = useState();
+
+    const [vcs, setVcs] = useState();
+
+    const [patners, setPatners] = useState();
+
     useEffect(() => {
         if (!userId) {
             initializeUser();
@@ -413,6 +421,66 @@ export const UserProvider = (props) => {
         }
     }
 
+    const fetchProjects = async () => {
+        try {
+            const res = await axios.get(`${apiUrl}/user/fetch-projects`);
+            if (res.data.status === 'success') {
+                setProjects(res.data.projects);
+                return ({ success: true, mess: 'Projects fetched succesfuly!' });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: "Internal Server Error!" });
+        }
+    }
+
+    const fetchKols = async () => {
+        try {
+            const res = await axios.get(`${apiUrl}/user/fetch-kols`);
+            if (res.data.status === 'success') {
+                setKols(res.data.projects);
+                return ({ success: true, mess: 'Kols fetched succesfuly!' });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: "Internal Server Error!" });
+        }
+    }
+
+    const fetchPatners = async () => {
+        try {
+            const res = await axios.get(`${apiUrl}/user/fetch-patners`);
+            if (res.data.status === 'success') {
+                setPatners(res.data.patners);
+                return ({ success: true, mess: 'Patners fetched succesfuly!' });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: "Internal Server Error!" });
+        }
+    }
+
+    const fetchVcs = async () => {
+        try {
+            const res = await axios.get(`${apiUrl}/user/fetch-vcs`);
+            if (res.data.status === 'success') {
+                setVcs(res.data.vcs);
+                return ({ success: true, mess: 'Projects fetched succesfuly!' });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!", error);
+            return ({ success: false, mess: "Internal Server Error!" });
+        }
+    }
+
     return (
         <UserContext.Provider value={{
             initializeUser,
@@ -465,7 +533,10 @@ export const UserProvider = (props) => {
             topUsers,
             fetchLeaderboardUsers,
             loader,
-            setLoader
+            setLoader,
+
+            projects,
+            fetchProjects
         }}>
             {props.children}
         </UserContext.Provider>
