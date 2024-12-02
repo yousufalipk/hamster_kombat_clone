@@ -3,6 +3,7 @@ import MIcon from "../../assets/MIcon.png";
 import Coin from "../../assets/BigCoinIcon.svg";
 import Gamefi from "../../assets/GamefiIcon.png";
 import { useUser } from '../../context/index';
+import { LuLoader2 } from "react-icons/lu";
 
 import PopUp from '../PopUp/popup1';
 
@@ -64,7 +65,7 @@ const initialCards = [
 const TGE = () => {
 	const [cards, setCards] = useState(initialCards);
 
-	const { isModalOpen, setModalOpen, setSendData, tgeProjects } = useUser();
+	const { isModalOpen, setModalOpen, setSendData, tgeProjects, projectLoader } = useUser();
 
 	const handleToggleChange = (id, toggleValue) => {
 		setModalOpen(true);
@@ -149,6 +150,16 @@ const TGE = () => {
 			</div>
 		</div>
 	);
+
+	if (projectLoader) {
+		return (
+			<>
+				<div className="h-[33vh] w-full flex justify-center items-center">
+					<LuLoader2 className="animate-spin w-20 h-20 text-white" />
+				</div>
+			</>
+		)
+	}
 
 	return (
 		<>

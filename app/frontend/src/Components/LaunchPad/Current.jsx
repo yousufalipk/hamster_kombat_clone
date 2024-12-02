@@ -6,6 +6,7 @@ import MIcon from "../../assets/MIcon.png";
 import Coin from "../../assets/BigCoinIcon.svg";
 import Tonfish from "../../assets/TonfishIcon.png";
 import Gamefi from "../../assets/GamefiIcon.png";
+import { LuLoader2 } from "react-icons/lu";
 
 const cards = [
 	{
@@ -101,7 +102,7 @@ const Card = ({ name, logo1, logo2, balance, level, fromColor, toColor }) => (
 
 const Current = () => {
 
-	const { setSendTokenData, currentProjects, tgeProjects, missedProjects, fetchProjects } = useUser();
+	const { setSendTokenData, currentProjects, tgeProjects, missedProjects, fetchProjects, projectLoader } = useUser();
 
 	const navigate = useNavigate();
 
@@ -115,6 +116,16 @@ const Current = () => {
 			fetchProjects()
 		}
 	}, [])
+
+	if (projectLoader) {
+		return (
+			<>
+				<div className="h-[33vh] w-full flex justify-center items-center">
+					<LuLoader2 className="animate-spin w-20 h-20 text-white" />
+				</div>
+			</>
+		)
+	}
 
 	return (
 		<>

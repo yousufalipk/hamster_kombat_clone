@@ -67,6 +67,8 @@ export const UserProvider = (props) => {
 
     const [tgeToggle, setTgeToggle] = useState('launchpad');
 
+    const [projectLoader, setProjectLoader] = useState(null);
+
     const [tgeProjects, setTgeProjects] = useState();
 
     const [currentProjects, setCurrentProjects] = useState();
@@ -427,6 +429,7 @@ export const UserProvider = (props) => {
 
     const fetchProjects = async () => {
         try {
+            setProjectLoader(true);
             const res = await axios.post(`${apiUrl}/user/fetch-user-projects`, {
                 userId: userId
             });
@@ -435,6 +438,7 @@ export const UserProvider = (props) => {
                 setTgeProjects(res.data.projects.tge);
                 setMissedProjects(res.data.projects.missed)
                 return ({ success: true, mess: 'projects fetched succesfuly!' });
+                setProjectLoader(false);
             } else {
                 return ({ success: false, mess: 'Error Fetching Projects!' });
             }
@@ -618,7 +622,7 @@ export const UserProvider = (props) => {
             loader,
             setLoader,
 
-
+            projectLoader,
             currentProjects,
             tgeProjects,
             missedProjects,
