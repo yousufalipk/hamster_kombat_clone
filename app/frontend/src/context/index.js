@@ -67,7 +67,7 @@ export const UserProvider = (props) => {
 
     const [tgeToggle, setTgeToggle] = useState('launchpad');
 
-    const [projectLoader, setProjectLoader] = useState(null);
+    const [projectLoader, setProjectLoader] = useState(false);
 
     const [tgeProjects, setTgeProjects] = useState();
 
@@ -437,8 +437,8 @@ export const UserProvider = (props) => {
                 setCurrentProjects(res.data.projects.current);
                 setTgeProjects(res.data.projects.tge);
                 setMissedProjects(res.data.projects.missed)
-                return ({ success: true, mess: 'projects fetched succesfuly!' });
                 setProjectLoader(false);
+                return ({ success: true, mess: 'projects fetched succesfuly!' });
             } else {
                 return ({ success: false, mess: 'Error Fetching Projects!' });
             }
