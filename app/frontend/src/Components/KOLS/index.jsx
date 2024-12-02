@@ -15,11 +15,8 @@ const data = [
 	{
 		id: 1,
 		name: "Vitali Batim",
-		img1: BigCoin,
-		img2: LittleCoin,
-		img3: AngleIcon,
-		img4: Panda1,
-		img5: StarFish,
+		logo: Panda1,
+		icon: StarFish,
 		amount: "20K",
 		coin: 60,
 		level: 10,
@@ -31,8 +28,8 @@ const data = [
 		img1: BigCoin,
 		img2: LittleCoin,
 		img3: AngleIcon,
-		img4: Panda2,
-		img5: Star2,
+		logo: Panda2,
+		icon: Star2,
 		amount: 500,
 		coin: 10,
 		level: 0,
@@ -41,11 +38,8 @@ const data = [
 	{
 		id: 3,
 		name: "Wise Adive",
-		img1: BigCoin,
-		img2: LittleCoin,
-		img3: AngleIcon,
-		img4: Panda3,
-		img5: Dollar,
+		logo: Panda3,
+		icon: Dollar,
 		amount: "20K",
 		coin: 60,
 		level: 10,
@@ -68,11 +62,8 @@ const KOLS = () => {
 				{data.map((values) => {
 					const {
 						id,
-						img1,
-						img2,
-						img3,
-						img4,
-						img5,
+						logo,
+						icon,
 						name,
 						amount,
 						coin,
@@ -107,7 +98,7 @@ const KOLS = () => {
 										{/* body */}
 										<div className="flex">
 											<img
-												src={img2}
+												src={LittleCoin}
 												alt='Coin-Icon'
 											/>
 											<div className="text-xs font-thin text-gray-300">
@@ -118,7 +109,7 @@ const KOLS = () => {
 										{/* upgrade button */}
 										<div className="mt-2 flex items-center justify-center gap-2 rounded-[18px] w-fit px-3 py-1 bg-[#FFF] text-black">
 											<img
-												src={img3}
+												src={AngleIcon}
 												alt='Angle-icon'
 												width='5'
 											/>
@@ -130,7 +121,7 @@ const KOLS = () => {
 									<div className="right w-1/2">
 										<div className="flex justify-end gap-1">
 											<img
-												src={img1}
+												src={BigCoin}
 												alt='Coin-Icon'
 												width="15"
 											/>
@@ -139,14 +130,14 @@ const KOLS = () => {
 										<div className="flex">
 											<div className="w-3/5 flex justify-end items-end h-[10vh]">
 												<img
-													src={img4}
+													src={logo}
 													alt=''
 													width='85'
 												/>
 											</div>
 											<div className="w-2/5 flex justify-end items-end h-[10vh]">
 												<img
-													src={img5}
+													src={icon}
 													alt=''
 													width='85'
 												/>

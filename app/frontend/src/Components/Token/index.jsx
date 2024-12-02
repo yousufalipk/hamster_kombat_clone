@@ -12,14 +12,13 @@ import Telegram from "../../assets/telegramIcon.png";
 import Youtube from "../../assets/youtubeIcon.png";
 
 const Token = () => {
-	const { sendTokenData, isModalOpen, setModalOpen, currentRank, balance } = useUser();
+	const { sendTokenData, isModalOpen, setModalOpen, currentRank } = useUser();
 
 	const navigate = useNavigate();
 
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 
 	useEffect(() => {
-		console.log(typeof staticUser);
 		if (staticUser === 'false') {
 			const tg = window.Telegram.WebApp;
 
@@ -38,13 +37,6 @@ const Token = () => {
 	const handleTokenBuy = () => {
 		setModalOpen(true);
 	}
-
-	const user = {
-		level: 10,
-		balance: 500,
-		reward: "+20",
-		cpm: 60,
-	};
 
 	const data = [
 		{
@@ -66,10 +58,6 @@ const Token = () => {
 			amount: "50,000 MFI",
 		},
 	];
-
-	useEffect(() => {
-		console.log("SendTokenData", sendTokenData);
-	}, [sendTokenData])
 
 	return (
 		<>
@@ -134,7 +122,7 @@ const Token = () => {
 													/>
 												</div>
 												<div className='text-[#FFF] text-[29.043px]'>
-													{balance}
+													{sendTokenData.userData.nextLevelCost}
 												</div>
 											</div>
 										</div>
@@ -151,7 +139,7 @@ const Token = () => {
 													/>
 												</div>
 												<div className='text-[#FFF] text-[15px] font-normal border border-r-white border-t-0 border-b-0 border-l-0 pr-3'>
-													<p>{user.reward} MEMEFI</p>
+													<p>{sendTokenData.userData.nextLevelReward} MEMEFI</p>
 												</div>
 											</div>
 											<div className='text-[#FFF] font-normal pl-3'>
@@ -163,7 +151,7 @@ const Token = () => {
 														/>
 													</div>
 													<div className='text-[11.655px]'>
-														<p>+{user.cpm}</p>
+														<p>+{sendTokenData.userData.nextLevelCpm}</p>
 													</div>
 												</div>
 												<div className='text-[10.595px]'>Coins Per Minute</div>

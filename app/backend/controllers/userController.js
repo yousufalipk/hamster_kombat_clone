@@ -552,7 +552,7 @@ exports.fetchUserProjects = async (req, res) => {
             });
         }
 
-        const projects = await ProjectModel.find({}, '_id name fromColor toColor tgeDate icon').lean();
+        const projects = await ProjectModel.find({}, '_id name fromColor toColor tgeDate icon levels').lean();
 
         const categorizedProjects = {
             current: [],
@@ -566,10 +566,24 @@ exports.fetchUserProjects = async (req, res) => {
             const userProject = user.projects.find(up => up._id && up._id.equals(project._id));
             const userWallet = user.wallet.find(w => w._id && w._id.equals(project._id));
 
+
+            let customIndex = 0;
+            const currentLevel = userProject?.level || null;
+            if (currentLevel !== undefined) {
+                customIndex = currentLevel + 1;
+            }
+
+            const levelCost = project.levels[customIndex]?.cost || 'max';
+            const levelReward = project.levels[customIndex]?.reward || 'max';
+            const levelCpm = project.levels[customIndex]?.cpm || 'max';
+
             const enrichedProject = {
                 ...project,
                 userData: userProject ? {
-                    level: userProject.level,
+                    level: userProject.level + 1,
+                    nextLevelCost: levelCost,
+                    nextLevelReward: levelReward,
+                    nextLevelCpm: levelCpm
                 } : null,
                 walletData: userWallet ? {
                     balance: userWallet.balance,

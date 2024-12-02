@@ -113,7 +113,7 @@ const MissedProjects = () => {
 							logo1={project.icon.data}
 							logo2={Coin}
 							balance={project.walletData?.balance || 0}
-							level={project.userData?.level + 1 || 0}
+							level={project.userData?.level || 0}
 							fromColor={project.fromColor}
 							toColor={project.toColor}
 						/>
