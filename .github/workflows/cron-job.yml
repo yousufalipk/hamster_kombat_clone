@@ -12,6 +12,10 @@ jobs:
       - name: Log the current time (for debugging)
         run: date
 
-      - name: Trigger Vercel API
+      - name: Trigger (New Combo Card Daily)
         run: |
           curl -X GET https://panda-tap-dashboard-backend.vercel.app/random-card-status-update
+
+      - name: Trigger User Combo Cards Daily (400k Reward)
+        run: |
+          curl -X GET https://panda-tap-backend-production.up.railway.app/reset-users-combo-cards
