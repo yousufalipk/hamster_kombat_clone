@@ -106,8 +106,8 @@ const Current = () => {
 
 	const navigate = useNavigate();
 
-	const handleCardClick = (card) => {
-		setSendTokenData(card);
+	const handleCardClick = (project) => {
+		setSendTokenData(project);
 		navigate('/token');
 	}
 

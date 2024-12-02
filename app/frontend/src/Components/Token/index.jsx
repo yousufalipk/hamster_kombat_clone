@@ -67,6 +67,10 @@ const Token = () => {
 		},
 	];
 
+	useEffect(() => {
+		console.log("SendTokenData", sendTokenData);
+	}, [sendTokenData])
+
 	return (
 		<>
 			<>
@@ -85,28 +89,32 @@ const Token = () => {
 									<div className='mx-auto flex items-center gap-2 px-4 py-2 rounded-[25.93px] bg-[#191922]'>
 										<div className=''>
 											<img
-												src={sendTokenData.logo1}
+												src={`data:image/jpeg;base64,${sendTokenData.icon.data}`}
 												alt='M-Icon'
+												width={30}
 											/>
 										</div>
 										<div className='text-[#FFF] text-[20.823px] font-medium'>
-											<p>{sendTokenData.balance}</p>
+											<p>{sendTokenData.walletData.balance}</p>
 										</div>
 									</div>
 								</div>
 								{/* Card */}
 								<div
 									onClick={() => handleTokenBuy()}
-									className={`${sendTokenData.bgColor} rounded-[14px]`}
+									className=" rounded-[14px]"
+									style={{
+										background: `linear-gradient(to left, ${sendTokenData.fromColor}, ${sendTokenData.toColor})`,
+									}}
 								>
 									<div className=''>
 										<div className='flex justify-between border px-4 py-3 border-b-white border-t-0 border-r-0 border-l-0'>
 											<div className='flex items-center gap-4'>
 												<div className=''>
 													<img
-														className='w-[60px] h-[60px]'
-														src={sendTokenData.logo1}
-														alt='BigCoin-Icon'
+														src={`data:image/jpeg;base64,${sendTokenData.icon.data}`}
+														alt='M-Icon'
+														width={50}
 													/>
 												</div>
 												<div className='text-[#FFF] font-medium'>
