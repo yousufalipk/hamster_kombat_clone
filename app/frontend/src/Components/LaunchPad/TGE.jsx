@@ -6,6 +6,8 @@ import { useUser } from '../../context/index';
 
 import PopUp from '../PopUp/popup1';
 
+let tgeToggle = 'launchpad';
+
 const initialCards = [
 	{
 		id: 1,
@@ -62,28 +64,32 @@ const initialCards = [
 const TGE = () => {
 	const [cards, setCards] = useState(initialCards);
 
-	const { isModalOpen, setModalOpen, setSendData } = useUser();
+	const { isModalOpen, setModalOpen, setSendData, tgeProjects } = useUser();
 
 	const handleToggleChange = (id, toggleValue) => {
 		setModalOpen(true);
 		cards?.forEach((card) => {
 			if (card.id === id) {
-				card.tgeToggle = toggleValue; 
+				card.tgeToggle = toggleValue;
 				setSendData(card);
 			}
 		});
 	};
 
 	// Card Component
-	const Card = ({ id, name, logo1, logo2, balance, level, bgColor, tgeToggle }) => (
-		<div className={`h-[17vh] px-3 py-2 rounded-[20px] text-[#FFF] ${bgColor}`}>
+	const Card = ({ id, name, logo1, logo2, balance, level, fromColor, toColor, tgeToggle }) => (
+		<div className="h-[17vh] px-3 py-2 rounded-[20px] text-[#FFF]"
+			style={{
+				background: `linear-gradient(to left, ${fromColor}, ${toColor})`,
+			}}
+		>
 			<div className='flex justify-between items-center mt-2'>
 				<div className='text-sm font-semibold'>
 					<p>{name}</p>
 				</div>
 				<div className=''>
 					<img
-						src={logo1}
+						src={`data:image/jpeg;base64,${logo1}`}
 						alt={`${name}-Icon`}
 						width="25"
 					/>
@@ -146,17 +152,33 @@ const TGE = () => {
 
 	return (
 		<>
-			{isModalOpen && (
-				<PopUp />
+			{tgeProjects ? (
+				<div>
+					{isModalOpen && (
+						<PopUp />
+					)}
+					<div className='grid grid-cols-2 gap-2 h-[37vh]'>
+						{tgeProjects.map((project, index) => (
+							<Card
+								key={index}
+								id={project._id}
+								name={project.name}
+								logo1={project.icon.data}
+								logo2={Coin}
+								balance={project.walletData?.balance || 0}
+								level={project.userData?.level + 1 || 0}
+								fromColor={project.fromColor}
+								toColor={project.toColor}
+								tgeToggle={tgeToggle}
+							/>
+						))}
+					</div>
+				</div>
+			) : (
+				<div className="h-[33vh] w-full flex justify-center items-center text-white">
+					<span className="text-xl font-semibold">No projects!</span>
+				</div>
 			)}
-			<div className='grid grid-cols-2 gap-2 h-[37vh]'>
-				{cards.map((card) => (
-					<Card
-						key={card.id}
-						{...card}
-					/>
-				))}
-			</div>
 		</>
 	);
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import AngleIcon from "../../assets/BlackAngle.svg";
@@ -8,6 +8,9 @@ import Panda4 from "../../assets/Panda4.png";
 import StarFish from "../../assets/StarFishIcon.svg";
 import Dollar from "../../assets/Dollar.svg";
 import CIcon from "../../assets/CIcon.svg";
+
+import { toast } from 'react-toastify';
+import { useUser } from "../../context";
 
 const data = [
 	{
@@ -52,6 +55,23 @@ const data = [
 ];
 
 const VCS = () => {
+	const { vcs, fetchVcs, upgradeVcLevel, } = useUser();
+
+	useEffect(() => {
+		if (!vcs) {
+			fetchVcs();
+		}
+	}, [])
+
+	const handleUpgradeLevel = async () => {
+		const res = await upgradeVcLevel();
+		if (res.success) {
+			toast.success(res.mess);
+		} else {
+			toast.error(res.mess);
+		}
+	}
+
 	return (
 		<>
 			<div className='h-[45vh] overflow-scroll'>
@@ -96,10 +116,10 @@ const VCS = () => {
 										</div>
 										{/* body */}
 										<div className="flex">
-												<img
-													src={img2}
-													alt='Coin-Icon'
-												/>
+											<img
+												src={img2}
+												alt='Coin-Icon'
+											/>
 											<div className="text-xs font-thin text-gray-300">
 												<span className="mr-2 font-semibold text-xs">+{coin}</span>
 												Coin Per Minute

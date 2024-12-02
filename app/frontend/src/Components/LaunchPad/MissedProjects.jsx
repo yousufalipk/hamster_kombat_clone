@@ -1,8 +1,9 @@
 import React from "react";
 import Tonfish from "../../assets/TonfishIcon.png";
 import Coin from "../../assets/BigCoinIcon.svg";
+import { useUser } from "../../context";
 
-const cards =	[
+const cards = [
 	{
 		id: 1,
 		name: "Tonfish",
@@ -51,15 +52,19 @@ const cards =	[
 ];
 
 
-const Card = ({ name, logo1, logo2, balance, level, bgColor }) => (
-	<div className={`h-[17vh] px-4 py-2 rounded-[20px] text-[#FFF] ${bgColor}`}>
+const Card = ({ name, logo1, logo2, balance, level, toColor, fromColor }) => (
+	<div className="h-[17vh] px-4 py-2 rounded-[20px] text-[#FFF]"
+		style={{
+			background: `linear-gradient(to left, ${fromColor}, ${toColor})`,
+		}}
+	>
 		<div className='flex justify-between items-center mt-2'>
 			<div className='text-sm font-semibold'>
 				<p>{name}</p>
 			</div>
 			<div className=''>
 				<img
-					src={logo1}
+					src={`data:image/jpeg;base64,${logo1}`}
 					alt={`${name}-Icon`}
 					width="25"
 				/>
@@ -83,21 +88,31 @@ const Card = ({ name, logo1, logo2, balance, level, bgColor }) => (
 );
 
 const MissedProjects = () => {
+	const { missedProjects } = useUser();
+
 	return (
 		<>
-			<div className='grid grid-cols-2 gap-3 h-[37vh]'>
-				{cards.map((card) => (
-					<Card
-						key={card.id}
-						name={card.name}
-						logo1={card.logo1}
-						logo2={card.logo2}
-						balance={card.balance}
-						level={card.level}
-						bgColor={card.bgColor}
-					/>
-				))}
-			</div>
+			{MissedProjects ? (
+				<div className='grid grid-cols-2 gap-3 h-[37vh]'>
+					{missedProjects.map((project, index) => (
+						<Card
+							key={index}
+							id={project._id}
+							name={project.name}
+							logo1={project.icon.data}
+							logo2={Coin}
+							balance={project.walletData?.balance || 0}
+							level={project.userData?.level + 1 || 0}
+							fromColor={project.fromColor}
+							toColor={project.toColor}
+						/>
+					))}
+				</div>
+			) : (
+				<div className="h-[33vh] w-full flex justify-center items-center text-white">
+					<span className="text-xl font-semibold">No projects!</span>
+				</div>
+			)}
 		</>
 	);
 };

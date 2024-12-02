@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import AngleIcon from "../../assets/BlackAngle.svg";
@@ -8,6 +8,8 @@ import Panda3 from "../../assets/Panda3.png";
 import StarFish from "../../assets/StarFishIcon.svg";
 import Star2 from "../../assets/Star2.svg";
 import Dollar from "../../assets/Dollar.svg";
+
+import { useUser } from '../../context/index';
 
 const data = [
 	{
@@ -52,6 +54,14 @@ const data = [
 ];
 
 const KOLS = () => {
+	const { fetchKols, upgradeKolsLevel, kols } = useUser();
+
+	useEffect(() => {
+		if (!kols) {
+			fetchKols();
+		}
+	}, [])
+
 	return (
 		<>
 			<div className='h-[45vh] overflow-scroll'>

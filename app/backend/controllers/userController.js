@@ -552,7 +552,7 @@ exports.fetchUserProjects = async (req, res) => {
             });
         }
 
-        const projects = await ProjectModel.find({}, '_id name fromColor toColor tgeDate').lean();
+        const projects = await ProjectModel.find({}, '_id name fromColor toColor tgeDate icon').lean();
 
         const categorizedProjects = {
             current: [],

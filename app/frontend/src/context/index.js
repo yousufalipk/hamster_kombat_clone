@@ -425,10 +425,10 @@ export const UserProvider = (props) => {
         }
     }
 
-    const fetchProjects = async (id) => {
+    const fetchProjects = async () => {
         try {
             const res = await axios.post(`${apiUrl}/user/fetch-user-projects`, {
-                userId: id
+                userId: userId
             });
             if (res.data.status === 'success') {
                 setCurrentProjects(res.data.projects.current);
@@ -444,10 +444,10 @@ export const UserProvider = (props) => {
         }
     }
 
-    const upgradeProjectLevel = async (id, projectId) => {
+    const upgradeProjectLevel = async (projectId) => {
         try {
             const res = await axios.post(`${apiUrl}/user/fetch-user-projects`, {
-                userId: id,
+                userId: userId,
                 projectId: projectId
             });
             if (res.data.status === 'success') {
@@ -462,10 +462,10 @@ export const UserProvider = (props) => {
         }
     }
 
-    const fetchKols = async (id) => {
+    const fetchKols = async () => {
         try {
             const res = await axios.post(`${apiUrl}/user/fetch-user-kols`, {
-                userId: id
+                userId: userId
             });
             if (res.data.status === 'success') {
                 setKols(res.data.response);
@@ -479,10 +479,10 @@ export const UserProvider = (props) => {
         }
     }
 
-    const upgradeKolsLevel = async (id, kolId) => {
+    const upgradeKolsLevel = async (kolId) => {
         try {
             const res = await axios.post(`${apiUrl}/user/upgrade-kol-level`, {
-                userId: id,
+                userId: userId,
                 kolId: kolId
             });
             if (res.data.status === 'success') {
@@ -496,10 +496,10 @@ export const UserProvider = (props) => {
         }
     }
 
-    const fetchPatners = async (id) => {
+    const fetchPatners = async () => {
         try {
             const res = await axios.post(`${apiUrl}/user/fetch-user-patners`, {
-                userId: id
+                userId: userId
             });
             if (res.data.status === 'success') {
                 setPatners(res.data.response);
@@ -513,10 +513,10 @@ export const UserProvider = (props) => {
         }
     }
 
-    const upgradePatnerLevel = async (id, patnerId) => {
+    const upgradePatnerLevel = async (patnerId) => {
         try {
             const res = await axios.post(`${apiUrl}/user/upgrade-patner-level`, {
-                userId: id,
+                userId: userId,
                 patnerId: patnerId
             });
             if (res.data.status === 'success') {
@@ -530,10 +530,10 @@ export const UserProvider = (props) => {
         }
     }
 
-    const fetchVcs = async (id) => {
+    const fetchVcs = async () => {
         try {
             const res = await axios.post(`${apiUrl}/user/fetch-user-vcs`, {
-                userId: id
+                userId: userId
             });
             if (res.data.status === 'success') {
                 setVcs(res.data.response);
@@ -547,10 +547,10 @@ export const UserProvider = (props) => {
         }
     }
 
-    const upgradeVcLevel = async (id, vcId) => {
+    const upgradeVcLevel = async (vcId) => {
         try {
             const res = await axios.post(`${apiUrl}/user/upgrade-vc-level`, {
-                userId: id,
+                userId: userId,
                 vcId: vcId
             });
             if (res.data.status === 'success') {
@@ -563,8 +563,6 @@ export const UserProvider = (props) => {
             return ({ success: false, mess: 'Internal Server Error!' });
         }
     }
-
-
 
     return (
         <UserContext.Provider value={{
@@ -620,15 +618,22 @@ export const UserProvider = (props) => {
             loader,
             setLoader,
 
+
+            currentProjects,
+            tgeProjects,
+            missedProjects,
             fetchProjects,
             upgradeProjectLevel,
 
+            kols,
             fetchKols,
             upgradeKolsLevel,
 
+            patners,
             fetchPatners,
             upgradePatnerLevel,
 
+            vcs,
             fetchVcs,
             upgradeVcLevel,
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import AngleIcon from "../../assets/BlackAngle.svg";
@@ -8,6 +8,9 @@ import Panda4 from "../../assets/Panda4.png";
 import StarFish from "../../assets/StarFishIcon.svg";
 import Star2 from "../../assets/Star2.svg";
 import CIcon from "../../assets/CIcon.svg";
+
+import { useUser } from "../../context";
+
 const data = [
 	{
 		id: 1,
@@ -51,6 +54,15 @@ const data = [
 ];
 
 const Partners = () => {
+
+	const { patners, fetchPatners, upgradePatnerLevel } = useUser();
+
+	useEffect(() => {
+		if (!patners) {
+			fetchPatners();
+		}
+	}, [])
+
 	return (
 		<>
 			<div className='h-[45vh] overflow-scroll'>
@@ -95,10 +107,10 @@ const Partners = () => {
 										</div>
 										{/* body */}
 										<div className="flex">
-												<img
-													src={img2}
-													alt='Coin-Icon'
-												/>
+											<img
+												src={img2}
+												alt='Coin-Icon'
+											/>
 											<div className="text-xs font-thin text-gray-300">
 												<span className="mr-2 font-semibold text-xs">+{coin}</span>
 												Coin Per Minute

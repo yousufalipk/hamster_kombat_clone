@@ -64,15 +64,19 @@ const cards = [
 	},
 ];
 
-const Card = ({ name, logo1, logo2, balance, level, bgColor }) => (
-	<div className={`h-[17vh] px-4 py-2 rounded-[20px] text-[#FFF] ${bgColor}`}>
+const Card = ({ name, logo1, logo2, balance, level, fromColor, toColor }) => (
+	<div className={"h-[17vh] px-4 py-2 rounded-[20px] text-[#FFF]"}
+		style={{
+			background: `linear-gradient(to left, ${fromColor}, ${toColor})`,
+		}}
+	>
 		<div className='flex justify-between items-center mt-2'>
 			<div className='text-sm font-semibold'>
 				<p>{name}</p>
 			</div>
 			<div className=''>
 				<img
-					src={logo1}
+					src={`data:image/jpeg;base64,${logo1}`}
 					alt={`${name}-Icon`}
 					width="25"
 				/>
@@ -97,7 +101,7 @@ const Card = ({ name, logo1, logo2, balance, level, bgColor }) => (
 
 const Current = () => {
 
-	const { setSendTokenData, projects, fetchProjects } = useUser();
+	const { setSendTokenData, currentProjects, tgeProjects, missedProjects, fetchProjects } = useUser();
 
 	const navigate = useNavigate();
 
@@ -107,37 +111,40 @@ const Current = () => {
 	}
 
 	useEffect(() => {
-		if (!projects) {
+		if (!currentProjects && !tgeProjects && !missedProjects) {
 			fetchProjects()
 		}
 	}, [])
 
-	useEffect(() => {
-		console.log("Projects ", projects);
-	}, [projects])
-
 	return (
 		<>
-			<div className='grid grid-cols-2 gap-3 h-[37vh]'>
-				{cards.map((card, index) => {
-					return (
-						<div
-							key={index}
-							onClick={() => handleCardClick(card)}
-						>
-							<Card
-								key={card.id}
-								name={card.name}
-								logo1={card.logo1}
-								logo2={card.logo2}
-								balance={card.balance}
-								level={card.level}
-								bgColor={card.bgColor}
-							/>
-						</div>
-					)
-				})}
-			</div>
+			{currentProjects ? (
+				<div className='grid grid-cols-2 gap-3 h-[37vh]'>
+					{currentProjects?.map((project, index) => {
+						return (
+							<div
+								key={index}
+								onClick={() => handleCardClick(project)}
+							>
+								<Card
+									key={project.id}
+									name={project.name}
+									logo1={project.icon.data}
+									logo2={Coin}
+									balance={project.walletData?.balance || 0}
+									level={project.userData?.level + 1 || 0}
+									fromColor={project.fromColor}
+									toColor={project.toColor}
+								/>
+							</div>
+						)
+					})}
+				</div>
+			) : (
+				<div className="h-[33vh] w-full flex justify-center items-center text-white">
+					<span className="text-xl font-semibold">No projects!</span>
+				</div>
+			)}
 		</>
 	);
 };

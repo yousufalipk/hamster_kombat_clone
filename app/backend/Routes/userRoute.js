@@ -42,15 +42,15 @@ router.route('/check-premium').post(checkPremium);
 router.route('/fetch-leaderboard').post(fetchTopUsersForAllLevels);
 router.route('/fetch-user-projects').post(fetchUserProjects);
 router.route('/upgrade-project-level').post(upgradeUserProjectLevel);
-router.route('/fetch-kols').get(fetchKols);
+router.route('/fetch-kols').post(fetchKols);
 router.route('/fetch-user-kols').post(fetchUserKols);
 router.route('/upgrade-kol-level').post(upgradeUserKolLevel);
-router.route('/fetch-vcs').get(fetchVcs);
+router.route('/fetch-vcs').post(fetchVcs);
 router.route('/fetch-user-vcs').post(fetchUserVcs);
 router.route('/upgrade-vc-level').post(upgradeUserVcLevel);
-router.route('/fetch-patners').get(fetchPatners);
-router.route('/fetch-user-patners').get(fetchUserPatners);
-router.route('/upgrade-patner-level').get(upgradeUserPatnerLevel);
+router.route('/fetch-patners').post(fetchPatners);
+router.route('/fetch-user-patners').post(fetchUserPatners);
+router.route('/upgrade-patner-level').post(upgradeUserPatnerLevel);
 
 // Test
 router.route('/test').post(test);
