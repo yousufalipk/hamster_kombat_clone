@@ -135,19 +135,39 @@ const userSchema = new mongoose.Schema({
             default: null
         }
     }],
-    kols: [
-
-    ],
-    vcs: [
-
-    ],
-    patners: [
-
-    ],
-    comboCards: [{
-        projectId: {
+    kols: [{
+        kolId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Project'
+            ref: 'kols'
+        },
+        level: {
+            type: Number,
+            default: null
+        }
+    }],
+    vcs: [{
+        vcId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'vcs'
+        },
+        level: {
+            type: Number,
+            default: null
+        }
+    }],
+    patners: [{
+        PatnerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'patners'
+        },
+        level: {
+            type: Number,
+            default: null
+        }
+    }],
+    comboCards: [{
+        cardId: {
+            type: mongoose.Schema.Types.ObjectId,
         }
     }]
 }, { timestamps: true });

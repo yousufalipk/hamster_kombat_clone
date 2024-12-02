@@ -16,18 +16,23 @@ const Token = () => {
 
 	const navigate = useNavigate();
 
+	const staticUser = process.env.REACT_APP_STATIC_USER;
+
 	useEffect(() => {
-		const tg = window.Telegram.WebApp;
+		console.log(typeof staticUser);
+		if (staticUser === 'false') {
+			const tg = window.Telegram.WebApp;
 
-		tg.BackButton.show();
-		tg.BackButton.onClick(() => {
-			navigate("/hammer");
-		});
+			tg.BackButton.show();
+			tg.BackButton.onClick(() => {
+				navigate("/hammer");
+			});
 
-		return () => {
-			tg.BackButton.hide();
-			tg.BackButton.offClick();
-		};
+			return () => {
+				tg.BackButton.hide();
+				tg.BackButton.offClick();
+			};
+		}
 	}, [navigate]);
 
 	const handleTokenBuy = () => {

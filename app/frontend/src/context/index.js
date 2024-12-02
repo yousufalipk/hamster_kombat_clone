@@ -67,7 +67,11 @@ export const UserProvider = (props) => {
 
     const [tgeToggle, setTgeToggle] = useState('launchpad');
 
-    const [projects, setProjects] = useState();
+    const [tgeProjects, setTgeProjects] = useState();
+
+    const [currentProjects, setCurrentProjects] = useState();
+
+    const [missedProjects, setMissedProjects] = useState();
 
     const [kols, setKols] = useState();
 
@@ -421,65 +425,146 @@ export const UserProvider = (props) => {
         }
     }
 
-    const fetchProjects = async () => {
+    const fetchProjects = async (id) => {
         try {
-            const res = await axios.get(`${apiUrl}/user/fetch-projects`);
+            const res = await axios.post(`${apiUrl}/user/fetch-user-projects`, {
+                userId: id
+            });
             if (res.data.status === 'success') {
-                setProjects(res.data.projects);
-                return ({ success: true, mess: 'Projects fetched succesfuly!' });
+                setCurrentProjects(res.data.projects.current);
+                setTgeProjects(res.data.projects.tge);
+                setMissedProjects(res.data.projects.missed)
+                return ({ success: true, mess: 'projects fetched succesfuly!' });
             } else {
-                return ({ success: false, mess: res.data.message });
+                return ({ success: false, mess: 'Error Fetching Projects!' });
             }
         } catch (error) {
             console.log("Internal Server Error!", error);
-            return ({ success: false, mess: "Internal Server Error!" });
+            return ({ success: false, mess: 'Internal Server Error!' });
         }
     }
 
-    const fetchKols = async () => {
+    const upgradeProjectLevel = async (id, projectId) => {
         try {
-            const res = await axios.get(`${apiUrl}/user/fetch-kols`);
+            const res = await axios.post(`${apiUrl}/user/fetch-user-projects`, {
+                userId: id,
+                projectId: projectId
+            });
             if (res.data.status === 'success') {
-                setKols(res.data.projects);
-                return ({ success: true, mess: 'Kols fetched succesfuly!' });
+                await fetchProjects();
+                return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
             }
         } catch (error) {
             console.log("Internal Server Error!", error);
-            return ({ success: false, mess: "Internal Server Error!" });
+            return ({ success: false, mess: 'Internal Server Error!' });
         }
     }
 
-    const fetchPatners = async () => {
+    const fetchKols = async (id) => {
         try {
-            const res = await axios.get(`${apiUrl}/user/fetch-patners`);
+            const res = await axios.post(`${apiUrl}/user/fetch-user-kols`, {
+                userId: id
+            });
             if (res.data.status === 'success') {
-                setPatners(res.data.patners);
-                return ({ success: true, mess: 'Patners fetched succesfuly!' });
+                setKols(res.data.response);
+                return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
             }
         } catch (error) {
-            console.log("Internal Server Error!", error);
-            return ({ success: false, mess: "Internal Server Error!" });
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
         }
     }
 
-    const fetchVcs = async () => {
+    const upgradeKolsLevel = async (id, kolId) => {
         try {
-            const res = await axios.get(`${apiUrl}/user/fetch-vcs`);
+            const res = await axios.post(`${apiUrl}/user/upgrade-kol-level`, {
+                userId: id,
+                kolId: kolId
+            });
             if (res.data.status === 'success') {
-                setVcs(res.data.vcs);
-                return ({ success: true, mess: 'Projects fetched succesfuly!' });
+                await fetchKols();
+                return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
             }
         } catch (error) {
-            console.log("Internal Server Error!", error);
-            return ({ success: false, mess: "Internal Server Error!" });
+            return ({ success: false, mess: 'Internal Server Error!' });
         }
     }
+
+    const fetchPatners = async (id) => {
+        try {
+            const res = await axios.post(`${apiUrl}/user/fetch-user-patners`, {
+                userId: id
+            });
+            if (res.data.status === 'success') {
+                setPatners(res.data.response);
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const upgradePatnerLevel = async (id, patnerId) => {
+        try {
+            const res = await axios.post(`${apiUrl}/user/upgrade-patner-level`, {
+                userId: id,
+                patnerId: patnerId
+            });
+            if (res.data.status === 'success') {
+                await fetchPatners();
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const fetchVcs = async (id) => {
+        try {
+            const res = await axios.post(`${apiUrl}/user/fetch-user-vcs`, {
+                userId: id
+            });
+            if (res.data.status === 'success') {
+                setVcs(res.data.response);
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const upgradeVcLevel = async (id, vcId) => {
+        try {
+            const res = await axios.post(`${apiUrl}/user/upgrade-vc-level`, {
+                userId: id,
+                vcId: vcId
+            });
+            if (res.data.status === 'success') {
+                await fetchVcs();
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+
 
     return (
         <UserContext.Provider value={{
@@ -535,8 +620,18 @@ export const UserProvider = (props) => {
             loader,
             setLoader,
 
-            projects,
-            fetchProjects
+            fetchProjects,
+            upgradeProjectLevel,
+
+            fetchKols,
+            upgradeKolsLevel,
+
+            fetchPatners,
+            upgradePatnerLevel,
+
+            fetchVcs,
+            upgradeVcLevel,
+
         }}>
             {props.children}
         </UserContext.Provider>

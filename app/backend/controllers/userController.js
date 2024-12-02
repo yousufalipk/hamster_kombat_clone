@@ -34,7 +34,6 @@ const multitapValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 const day = [0, 1, 2, 3, 4, 5, 6];
 const reward = [500, 1000, 1500, 2000, 2500, 3000, 3500];
 
-
 /* Notes ---------
     Saving current date ===   const currentDate = new Date();
     date format === const date = '2024-10-26T06:16:10.638Z';
@@ -586,7 +585,6 @@ exports.fetchUserProjects = async (req, res) => {
                     categorizedProjects.missed.push(enrichedProject);
                 }
             }
-
             return enrichedProject;
         });
 
@@ -596,7 +594,10 @@ exports.fetchUserProjects = async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching projects:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({
+            status: 'failed',
+            message: 'Internal server error'
+        });
     }
 };
 
@@ -681,12 +682,11 @@ exports.upgradeUserProjectLevel = async (req, res) => {
         }
 
         if (project.card) {
-            console.log("Combo Card Active!");
             if (user.comboCards.length <= 1) {
-                if (user.comboCards.some(card => card.projectId.toString() === project._id.toString())) {
+                if (user.comboCards.some(card => card.cardId.toString() === project._id.toString())) {
                 } else {
                     const data = {
-                        projectId: project._id
+                        cardId: project._id
                     };
                     user.comboCards.push(data);
                 }
@@ -735,6 +735,139 @@ exports.fetchKols = async (req, res) => {
     }
 }
 
+exports.fetchUserKols = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User not found'
+            });
+        }
+
+        const kols = await KolModel.find({}, '_id name fromColor toColor tgeDate').lean();
+
+        const response = kols.map(kol => {
+            const userKol = user.kols.find(up => up._id && up._id.equals(kol._id));
+
+            const enrichedProject = {
+                ...kol,
+                userData: userKol ? {
+                    level: userKol.level,
+                } : null,
+            };
+            return enrichedProject;
+        });
+
+        res.status(200).json({
+            status: 'success',
+            response: response
+        });
+    } catch (error) {
+        console.log("Internal Server Error!", error);
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
+
+exports.upgradeUserKolLevel = async (req, res) => {
+    try {
+        const { userId, kolId } = req.body;
+
+        const user = await UserModel.findById(userId);
+        const kol = await KolModel.findById(kolId);
+
+        if (!user || !kol) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User or kol not found!'
+            });
+        }
+
+        let userKol = user.kols?.find(up => up._id.toString() === kolId);
+
+        const maxLevel = kol.levels.length - 1;
+        const currentLevel = userKol ? userKol.level : undefined;
+
+        if (currentLevel >= maxLevel) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Kol is already at the maximum level!'
+            });
+        }
+
+        let customIndex = 0;
+        if (currentLevel !== undefined) {
+            customIndex = currentLevel + 1;
+        }
+
+        const levelCost = kol.levels[customIndex]?.cost;
+        const levelCpm = kol.levels[customIndex]?.cpm;
+
+        if (!levelCost || !levelCpm) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Invalid level data!'
+            });
+        }
+
+        if (user.balance < levelCost) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Insufficient balance to upgrade kol level!',
+                upgradeCost: levelCost
+            });
+        }
+
+
+
+        user.balance -= levelCost;
+        user.coinsPerMinute.value += levelCpm;
+
+        if (userKol) {
+            userKol.level = userKol.level + 1;
+        } else {
+            const kolData = {
+                _id: kolId,
+                level: 0
+            }
+            user.kols.push(kolData);
+        }
+
+        if (kol.card) {
+            if (user.comboCards.length <= 1) {
+                if (user.comboCards.some(card => card.cardId.toString() === kol._id.toString())) {
+                } else {
+                    const data = {
+                        cardId: kol._id
+                    };
+                    user.comboCards.push(data);
+                }
+            }
+        }
+
+        await user.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Kol level upgraded successfully!',
+            balance: user.balance,
+            cpm: user.coinsPerMinute.value,
+            kols: user.kols
+        });
+    } catch (error) {
+        console.error('Internal Server Error', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        });
+    }
+};
+
 exports.fetchVcs = async (req, res) => {
     try {
         const vcs = await ProjectModel.find();
@@ -758,6 +891,139 @@ exports.fetchVcs = async (req, res) => {
     }
 }
 
+exports.fetchUserVcs = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User not found'
+            });
+        }
+
+        const vcs = await VcModel.find({}, '_id name fromColor toColor tgeDate').lean();
+
+        const response = vcs.map(vc => {
+            const userVc = user.vcs.find(up => up._id && up._id.equals(vc._id));
+
+            const enrichedProject = {
+                ...vc,
+                userData: userVc ? {
+                    level: userVc.level,
+                } : null,
+            };
+            return enrichedProject;
+        });
+
+        res.status(200).json({
+            status: 'success',
+            response: response
+        });
+    } catch (error) {
+        console.log("Internal Server Error!", error);
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
+
+exports.upgradeUserVcLevel = async (req, res) => {
+    try {
+        const { userId, vcId } = req.body;
+
+        const user = await UserModel.findById(userId);
+        const vc = await VcModel.findById(vcId);
+
+        if (!user || !vc) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User or vc not found!'
+            });
+        }
+
+        let userVc = user.vcs?.find(up => up._id.toString() === vcId);
+
+        const maxLevel = vc.levels.length - 1;
+        const currentLevel = userVc ? userVc.level : undefined;
+
+        if (currentLevel >= maxLevel) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Vc is already at the maximum level!'
+            });
+        }
+
+        let customIndex = 0;
+        if (currentLevel !== undefined) {
+            customIndex = currentLevel + 1;
+        }
+
+        const levelCost = vc.levels[customIndex]?.cost;
+        const levelCpm = vc.levels[customIndex]?.cpm;
+
+        if (!levelCost || !levelCpm) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Invalid level data!'
+            });
+        }
+
+        if (user.balance < levelCost) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Insufficient balance to upgrade vc level!',
+                upgradeCost: levelCost
+            });
+        }
+
+
+
+        user.balance -= levelCost;
+        user.coinsPerMinute.value += levelCpm;
+
+        if (userVc) {
+            userVc.level = userVc.level + 1;
+        } else {
+            const vcData = {
+                _id: vcId,
+                level: 0
+            }
+            user.vcs.push(vcData);
+        }
+
+        if (vc.card) {
+            if (user.comboCards.length <= 1) {
+                if (user.comboCards.some(card => card.cardId.toString() === vc._id.toString())) {
+                } else {
+                    const data = {
+                        cardId: vc._id
+                    };
+                    user.comboCards.push(data);
+                }
+            }
+        }
+
+        await user.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Vc level upgraded successfully!',
+            balance: user.balance,
+            cpm: user.coinsPerMinute.value,
+            vcs: user.vcs
+        });
+    } catch (error) {
+        console.error('Internal Server Error', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        });
+    }
+};
+
 exports.fetchPatners = async (req, res) => {
     try {
         const patners = await ProjectModel.find();
@@ -780,6 +1046,140 @@ exports.fetchPatners = async (req, res) => {
         })
     }
 }
+
+exports.fetchUserPatners = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User not found'
+            });
+        }
+
+        const patners = await PatnerModel.find({}, '_id name fromColor toColor tgeDate').lean();
+
+        const response = patners.map(patner => {
+            const userPatner = user.patners.find(up => up._id && up._id.equals(patner._id));
+
+            const enrichedProject = {
+                ...patner,
+                userData: userPatner ? {
+                    level: userPatner.level,
+                } : null,
+            };
+            return enrichedProject;
+        });
+
+        res.status(200).json({
+            status: 'success',
+            response: response
+        });
+    } catch (error) {
+        console.log("Internal Server Error!", error);
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
+
+exports.upgradeUserPatnerLevel = async (req, res) => {
+    try {
+        const { userId, patnerId } = req.body;
+
+        const user = await UserModel.findById(userId);
+        const patner = await PatnerModel.findById(patnerId);
+
+        if (!user || !patner) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User or patner not found!'
+            });
+        }
+
+        let userPatner = user.patners?.find(up => up._id.toString() === patnerId);
+
+        const maxLevel = patner.levels.length - 1;
+        const currentLevel = userPatner ? userPatner.level : undefined;
+
+        if (currentLevel >= maxLevel) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Patner is already at the maximum level!'
+            });
+        }
+
+        let customIndex = 0;
+        if (currentLevel !== undefined) {
+            customIndex = currentLevel + 1;
+        }
+
+        const levelCost = patner.levels[customIndex]?.cost;
+        const levelCpm = patner.levels[customIndex]?.cpm;
+
+        if (!levelCost || !levelCpm) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Invalid level data!'
+            });
+        }
+
+        if (user.balance < levelCost) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Insufficient balance to upgrade patner level!',
+                upgradeCost: levelCost
+            });
+        }
+
+
+
+        user.balance -= levelCost;
+        user.coinsPerMinute.value += levelCpm;
+
+        if (userPatner) {
+            userPatner.level = userPatner.level + 1;
+        } else {
+            const patnerData = {
+                _id: patnerId,
+                level: 0
+            }
+            user.patners.push(patnerData);
+        }
+
+        if (patner.card) {
+            if (user.comboCards.length <= 1) {
+                if (user.comboCards.some(card => card.cardId.toString() === patner._id.toString())) {
+                } else {
+                    const data = {
+                        cardId: patner._id
+                    };
+                    user.comboCards.push(data);
+                }
+            }
+        }
+
+        await user.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Vc level upgraded successfully!',
+            balance: user.balance,
+            cpm: user.coinsPerMinute.value,
+            patners: user.patners
+        });
+    } catch (error) {
+        console.error('Internal Server Error', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        });
+    }
+};
+
 
 exports.test = async (req, res) => {
     try {

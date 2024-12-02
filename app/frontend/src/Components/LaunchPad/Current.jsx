@@ -119,9 +119,10 @@ const Current = () => {
 	return (
 		<>
 			<div className='grid grid-cols-2 gap-3 h-[37vh]'>
-				{cards.map((card) => {
+				{cards.map((card, index) => {
 					return (
 						<div
+							key={index}
 							onClick={() => handleCardClick(card)}
 						>
 							<Card

@@ -12,8 +12,14 @@ const {
     fetchUserProjects,
     upgradeUserProjectLevel,
     fetchKols,
+    fetchUserKols,
+    upgradeUserKolLevel,
     fetchVcs,
+    fetchUserVcs,
+    upgradeUserVcLevel,
     fetchPatners,
+    fetchUserPatners,
+    upgradeUserPatnerLevel,
     storeErrorLog,
     test
 } = require('../controllers/userController');
@@ -37,10 +43,14 @@ router.route('/fetch-leaderboard').post(fetchTopUsersForAllLevels);
 router.route('/fetch-user-projects').post(fetchUserProjects);
 router.route('/upgrade-project-level').post(upgradeUserProjectLevel);
 router.route('/fetch-kols').get(fetchKols);
+router.route('/fetch-user-kols').post(fetchUserKols);
+router.route('/upgrade-kol-level').post(upgradeUserKolLevel);
 router.route('/fetch-vcs').get(fetchVcs);
+router.route('/fetch-user-vcs').post(fetchUserVcs);
+router.route('/upgrade-vc-level').post(upgradeUserVcLevel);
 router.route('/fetch-patners').get(fetchPatners);
-
-
+router.route('/fetch-user-patners').get(fetchUserPatners);
+router.route('/upgrade-patner-level').get(upgradeUserPatnerLevel);
 
 // Test
 router.route('/test').post(test);
