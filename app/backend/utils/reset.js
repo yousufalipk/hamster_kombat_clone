@@ -62,3 +62,14 @@ exports.resetDailyRewards = (user) => {
 
     return user;
 }
+
+exports.resetComboCards = (user) => {
+    const now = new Date();
+
+    user.comboCards = user.comboCards.filter(card => {
+        const cardDate = new Date(card.timestamp);
+        return cardDate >= now;
+    });
+
+    return user;
+};

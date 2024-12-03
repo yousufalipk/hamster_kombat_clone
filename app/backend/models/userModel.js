@@ -168,6 +168,22 @@ const userSchema = new mongoose.Schema({
     comboCards: [{
         cardId: {
             type: mongoose.Schema.Types.ObjectId,
+        },
+        name: {
+            type: String,
+        },
+        fromColor: {
+            type: String,
+        },
+        toColor: {
+            type: String,
+        },
+        icon: {
+            type: String,
+        },
+        timestamp: {
+            type: Date,
+            default: Date.now
         }
     }]
 }, { timestamps: true });

@@ -16,7 +16,8 @@ const {
 } = require('../utils/index');
 const {
     resetBoosters,
-    resetDailyRewards
+    resetDailyRewards,
+    resetComboCards
 } = require('../utils/reset');
 const {
     getCoinsPerMinute
@@ -132,14 +133,15 @@ exports.initializeUser = async (req, res) => {
             });
             isUser = await isUser.save();
         } else {
-            let res1, res2, res3;
+            let res1, res2, res3, res4;
             res1 = resetBoosters(isUser);
             res2 = resetDailyRewards(res1);
+            res3 = resetComboCards(res2);
 
             if (isUser.coinsPerMinute.value !== 0) {
-                res3 = await getCoinsPerMinute(res2);
-                await res3.save();
-                isUser = res3;
+                res4 = await getCoinsPerMinute(res3);
+                await res4.save();
+                isUser = res4;
             } else {
                 await res2.save();
                 isUser = res2;
@@ -698,11 +700,19 @@ exports.upgradeUserProjectLevel = async (req, res) => {
         if (project.card) {
             if (user.comboCards.length <= 1) {
                 if (user.comboCards.some(card => card.cardId.toString() === project._id.toString())) {
+                    console.log("Combo card already claimed!");
                 } else {
                     const data = {
-                        cardId: project._id
+                        cardId: project._id,
+                        name: project.name,
+                        fromColor: project.fromColor,
+                        toColor: project.toColor,
+                        icon: project.icon.data
                     };
                     user.comboCards.push(data);
+                    if (user.comboCards.length === 1) {
+                        user.balance += 400000;
+                    }
                 }
             }
         }
