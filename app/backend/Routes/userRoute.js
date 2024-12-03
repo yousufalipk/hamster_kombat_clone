@@ -11,7 +11,6 @@ const {
     checkPremium,
     fetchUserProjects,
     upgradeUserProjectLevel,
-    fetchKols,
     fetchUserKols,
     upgradeUserKolLevel,
     fetchVcs,
@@ -42,7 +41,6 @@ router.route('/check-premium').post(checkPremium);
 router.route('/fetch-leaderboard').post(fetchTopUsersForAllLevels);
 router.route('/fetch-user-projects').post(fetchUserProjects);
 router.route('/upgrade-project-level').post(upgradeUserProjectLevel);
-router.route('/fetch-kols').post(fetchKols);
 router.route('/fetch-user-kols').post(fetchUserKols);
 router.route('/upgrade-kol-level').post(upgradeUserKolLevel);
 router.route('/fetch-vcs').post(fetchVcs);

@@ -736,29 +736,6 @@ exports.upgradeUserProjectLevel = async (req, res) => {
     }
 };
 
-exports.fetchKols = async (req, res) => {
-    try {
-        const kols = await ProjectModel.find();
-        if (kols.length === 0) {
-            return res.status(200).json({
-                status: 'failed',
-                message: 'Kols not found!'
-            });
-        }
-        return res.status(200).json({
-            status: 'success',
-            message: 'Kols found!',
-            kols: kols
-        });
-    } catch (error) {
-        console.log("Internal Server Error!");
-        return res.status(200).json({
-            status: 'failed',
-            message: 'Internal Server Error!'
-        })
-    }
-}
-
 exports.fetchUserKols = async (req, res) => {
     try {
         const { userId } = req.body;
@@ -771,15 +748,27 @@ exports.fetchUserKols = async (req, res) => {
             });
         }
 
-        const kols = await KolModel.find({}, '_id name fromColor toColor tgeDate').lean();
+        const kols = await KolModel.find({}, '_id name fromColor toColor tgeDate icon logo levels').lean();
 
         const response = kols.map(kol => {
             const userKol = user.kols.find(up => up._id && up._id.equals(kol._id));
 
+            let customIndex = 0;
+            const currentLevel = userKol?.level || null;
+            if (currentLevel !== undefined) {
+                customIndex = currentLevel + 1;
+            }
+
+            const levelCost = kol.levels[customIndex]?.cost || 'max';
+            const levelCpm = kol.levels[customIndex]?.cpm || 'max';
+
+
             const enrichedProject = {
                 ...kol,
                 userData: userKol ? {
-                    level: userKol.level,
+                    level: userKol.level + 1,
+                    nextLevelCost: levelCost,
+                    nextLevelCpm: levelCpm
                 } : null,
             };
             return enrichedProject;

@@ -154,12 +154,12 @@ const Token = () => {
 								</div>
 							</div>
 						)}
-						<div className='bg-[#060611] p-4 h-[100vh] overflow-scroll border-2'>
+						<div className='bg-[#060611] p-4 w-full h-[100vh] overflow-scroll overflow-x-hidden'>
 							<div className='flex items-center gap-4'>
 								<div className='text-[#FFF] text-[18px] font-semibold'>{sendTokenData.name}</div>
 							</div>
 							{/* Upper Portion */}
-							<div className='pt-10'>
+							<div className='pt-5'>
 								<div className='flex py-3'>
 									<div className='mx-auto flex items-center gap-2 px-4 py-2 rounded-[25.93px] bg-[#191922]'>
 										<div className=''>
