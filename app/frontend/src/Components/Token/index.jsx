@@ -6,9 +6,20 @@ import { useNavigate } from 'react-router-dom';
 
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
-import Twitter from "../../assets/twitterIcon.png";
-import Telegram from "../../assets/telegramIcon.png";
-import Youtube from "../../assets/youtubeIcon.png";
+
+import popupLine from "../../assets/token/popupLine.svg";
+
+import Twitter from "../../assets/token/twitter.svg";
+import Telegram from "../../assets/token/telegram.svg";
+import Youtube from "../../assets/token/youtube.svg";
+import Fishlogo from "../../assets/token/fishlogo 1.svg";
+import cardbg from "../../assets/token/tokencardbg.svg";
+import loadcoin from "../../assets/token/loadcoin.svg";
+import arrow from "../../assets/token/arrow.svg";
+import lineCard from "../../assets/token/cardLine.svg";
+
+import TopLine from '../../assets/token/lines/top_line.png';
+import BottomLine from '../../assets/token/lines/bottom_line.png';
 
 const Token = () => {
 	const { sendTokenData, isModalOpen, setModalOpen, upgradeProjectLevel, balance } = useUser();
@@ -91,175 +102,244 @@ const Token = () => {
 				{sendTokenData && (
 					<>
 						{isModalOpen && (
-							<div
-								onClick={handleCancel}
-								className='fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-80 overflow-hidden'>
-								<div className='fixed bottom-0 h-[40vh] w-screen'>
-									<div className="absolute -inset-1 h-[40vh] bg-[#23a7ff] rounded-[35px]"></div>
-									<div className="absolute -inset-2 h-[40vh] bg-[#23a7ff] blur rounded-[50px]"></div>
-									<div className='w-screen bg-[#1B1B27] h-[40vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
-										{/* Main Body */}
-										<div className='mb-5 px-2'>
-
-											<div className='flex relative justify-center'>
-												{/* logo */}
-												<div className='w-fit pt-2'>
-													<div
-														style={{
-															borderRadius: '100%',
-															transform: 'translateZ(0)',
-															filter: 'drop-shadow(0 0 15px rgba(255, 176, 0, 0.35))',
-														}}
-													>
-														<img
-															src={`data:image/jpeg;base64,${sendTokenData.icon.data}`}
-															alt='M-Icon'
-															width='60'
+							<>
+								{/* New Popup */}
+								<div
+									onClick={handleCancel}
+									className='fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-80 overflow-hidden'>
+									<div className='fixed bottom-0 h-[50vh] w-screen'>
+										<div className="absolute -inset-1 h-[50vh] bg-[#23a7ff] rounded-[35px]"></div>
+										<div className="absolute -inset-2 h-[50vh] bg-[#23a7ff] blur rounded-[50px]"></div>
+										<div className='w-screen bg-[#06060E] h-[50vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+											{/* Main Body */}
+											<div className='mb-5 px-2'>
+												<div className='flex relative justify-center'>
+													<div className='w-fit pt-2'>
+														<div
 															style={{
-																borderRadius: '12px',
+																borderRadius: '100%',
+																transform: 'translateZ(0)',
+																filter: 'drop-shadow(0 0 15px rgba(255, 176, 0, 0.35))',
 															}}
-														/>
+														>
+															<img
+																src={`data:image/jpeg;base64,${sendTokenData.icon.data}`}
+																alt='token_Icon'
+																width='60'
+																style={{
+																	borderRadius: '12px',
+																}}
+															/>
+														</div>
 													</div>
 												</div>
-											</div>
-											{/* popup title */}
-											<div className='flex justify-center mt-1'>
-												<h1 className='text-sm font-medium'>{sendTokenData.name}</h1>
-											</div>
-											{/* description */}
-											<div className='my-2'>
-												<p className='text-center font-thin text-xs'>
-													You will get +{sendTokenData?.userData?.nextLevelReward || sendTokenData.levels[0].reward} coins of {sendTokenData.name} coins against {sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost} pandatop coins.
-												</p>
-											</div>
-											<div className='flex justify-center gap-2'>
-												<img
-													src={LittleCoin}
-													alt="Little coin"
-												/>
-												<span className='text-xs'>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData.levels[0].cpm} CPM</span>
-											</div>
-											{/* action buttons */}
-											<div className='flex gap-4 mt-3 justify-center p-2'>
-												<button
-													className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
-													onClick={() => (handleProjectUpgrade())}
-												>
-													Confirm
-												</button>
-											</div>
-										</div>
+												{/* popup title */}
+												<div className='flex justify-center mt-1'>
+													<h1 className='text-sm font-medium'>{sendTokenData.name}</h1>
+												</div>
+												{/* description */}
+												<div className='my-2'>
+													<p className='text-center font-thin text-xs'>
+														You will get +{sendTokenData?.userData?.nextLevelReward || sendTokenData.levels[0].reward} coins of {sendTokenData.name} coins against {sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost} pandatop coins.
+													</p>
+												</div>
+												<div className='text-center text-[#FF9500] font-semibold'>
+													<p>level {sendTokenData?.userData?.level || 0}</p>
 
+												</div>
+												<div className='flex justify-center mt-3 gap-4'>
+													<div className='flex justify-center items-center gap-1'>
+														<img
+															src={LittleCoin}
+															alt="Little coin"
+															className='w-5'
+														/>
+														<span className='text-sm'>+{sendTokenData?.userData?.nextLevelReward || sendTokenData.levels[0].reward} {sendTokenData.name.match(/[A-Z]/g)?.join('')}</span>
+													</div>
+													<div className=' gap-2'>
+														<span className='text-xs font-thin'>coins per minute</span>
+														<div className='flex'>
+															<img
+																src={LittleCoin}
+																alt="Little coin"
+															/>
+															<p>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData.levels[0].cpm}</p>
+														</div>
+													</div>
+												</div>
+												<div className='mt-2'>
+													<img src={popupLine} alt="" />
+												</div>
+												<div className='mt-2 flex justify-center items-center'>
+													<img
+														src={LittleCoin}
+														alt="Little coin"
+														className='w-10 h-10'
+													/>
+													<span className='text-[#FF9500] text-xl'>{sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost}</span>
+												</div>
+
+												{/* action buttons */}
+												<div className='flex gap-4 justify-center p-2'>
+
+													<button
+														className='w-1/3 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+														onClick={() => (handleProjectUpgrade())}
+													>
+														Confirm
+													</button>
+												</div>
+											</div>
+
+										</div>
 									</div>
 								</div>
-							</div>
+							</>
 						)}
-
 
 						<div className='bg-[#060611] p-4 w-full h-[100vh] overflow-scroll overflow-x-hidden'>
 							<div className='flex items-center gap-4'>
 								<div className='text-[#FFF] text-[18px] font-semibold'>{sendTokenData.name}</div>
 							</div>
-							{/* Upper Portion */}
-							<div className='pt-5'>
-								<div className='flex py-3'>
-									<div className='mx-auto flex items-center gap-2 px-4 py-2 rounded-[25.93px] bg-[#191922]'>
-										<div className=''>
-											<img
-												src={`data:image/jpeg;base64,${sendTokenData.icon.data}`}
-												alt='M-Icon'
-												width={30}
-											/>
-										</div>
-										<div className='text-[#FFF] text-[20.823px] font-medium'>
-											<p>{sendTokenData?.walletData?.balance || 0}</p>
+
+							{/* New Upper Portion */}
+							<div>
+								<div className="pt-10">
+									{/* Card Header */}
+									<div className="flex py-3 absolute top-0 right-0">
+										<div
+											className={`mx-auto flex items-center gap-2 px-4 rounded-[25.93px]`}
+										>
+											<div className="text-white flex justify-center items-center gap-2 ">
+												<img src={LittleCoin} alt="Coin-Icon" className="" />
+												{balance}
+											</div>
 										</div>
 									</div>
-								</div>
-								{/* Card */}
-								<button
-									onClick={() => handleTokenBuy(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost)}
-									disabled={processing || sendTokenData?.userData?.nextLevelCost === 'max'}
-									className=" rounded-[14px]"
-									style={{
-										background: `linear-gradient(to left, ${sendTokenData.fromColor}, ${sendTokenData.toColor})`,
-									}}
-								>
-									<div className=''>
-										<div className='flex justify-between border px-4 py-3 border-b-white border-t-0 border-r-0 border-l-0'>
-											<div className='flex items-center gap-4'>
-												<div className=''>
+
+
+									{/* Main Card */}
+									<div
+										style={{
+											position: "relative",
+											padding: "2px",
+											background:
+												`linear-gradient(to right, ${sendTokenData?.fromColor}90, ${sendTokenData?.toColor}90,${sendTokenData?.fromColor}90,${sendTokenData?.toColor}90)`,
+											borderRadius: "16px",
+											clipPath:
+												"polygon(0 18%, 1% 32%, 1% 68%, 0 82%, 0 100%, 100% 100%, 100% 82%, 99% 68%, 99% 32%, 100% 18%, 100% 0, 0 0)",
+										}}
+										className="card-container"
+										onClick={() => handleTokenBuy(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost)}
+										disabled={processing || sendTokenData?.userData?.nextLevelCost === 'max'}
+									>
+										<div
+											style={{
+												position: "relative",
+												background: `linear-gradient(to bottom, ${sendTokenData?.fromColor}, ${sendTokenData?.toColor})`,
+												borderRadius: "14px",
+												clipPath:
+													"polygon(0 18%, 1% 32%, 1% 68%, 0 82%, 0 100%, 100% 100%, 100% 82%, 99% 68%, 99% 32%, 100% 18%, 100% 0, 0 0)",
+											}}
+										>
+											<div className="absolute left-6 -top-4   ">
+												<div className=" relative ">
 													<img
-														src={`data:image/jpeg;base64,${sendTokenData.icon.data}`}
-														alt='M-Icon'
-														width={50}
+														src={cardbg}
+														alt=""
+														className="opacity-10 h-52 w-60  "
 													/>
-												</div>
-												<div className='text-[#FFF] font-medium'>
-													<div className='text-base pb-[6px]'>
-														<p>{sendTokenData.name}</p>
-													</div>
-													<div className='text-xs bg-black bg-opacity-30 w-fit p-1 rounded-[5px]'>
-														<p className=''>lvl {sendTokenData?.userData?.level || 0}</p>
+													<div className=" flex items-center justify-center  absolute top-20 right-16">
+														<p className="font-italianno text-8xl   text-slate-100 opacity-10">
+															{sendTokenData.name.charAt(0)}
+														</p>
 													</div>
 												</div>
 											</div>
-											{sendTokenData?.userData?.nextLevelCost !== 'max' && (
-												<>
-													<div className='flex items-center gap-2'>
-														<div className=''>
-															<img
-																src={BigCoin}
-																alt='Coin-Icon'
-															/>
-														</div>
-														<div className='text-[#FFF] text-[29.043px]'>
-															{sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost}
-														</div>
-													</div>
-												</>
-											)}
-										</div>
-
-										<div className="w-[90vw] h-[10vh]">
-											{sendTokenData?.userData?.nextLevelCost !== 'max' && (
-												<>
-													<div className='p-5 flex'>
-														<div className='flex items-center gap-2'>
-															<div className='text-[#FFF] text-lg font-normal'>
-																<p>Reward:</p>
-															</div>
-															<div className=''>
-																<img
-																	className='w-[20px] h-[20px]'
-																	src={BigCoin}
-																	alt='Coin-Icon'
-																/>
-															</div>
-															<div className='text-[#FFF] text-[15px] font-normal border border-r-white border-t-0 border-b-0 border-l-0 pr-3'>
-																<p>{sendTokenData?.userData?.nextLevelReward || sendTokenData.levels[0].reward} MEMEFI</p>
-															</div>
-														</div>
-														<div className='text-[#FFF] font-normal pl-3'>
-															<div className='flex items-center gap-1'>
-																<div className=''>
+											<div className={`rounded-[14px]`}>
+												<div className="justify-between ">
+													<div className="w-full">
+														<div className="text-xs  bg-opacity-30 w-full flex justify-between py-1 ">
+															<p
+																style={{
+																	background: `linear-gradient(to bottom, ${sendTokenData.fromColor}, ${sendTokenData.toColor})`
+																}}
+																className="text-base py-1 w-[16vw] bg-slate-900 text-center rounded-md text-white ml-1 mt-1"
+															>
+																lvl {sendTokenData?.userData?.level || 0}
+															</p>
+															<div className="text-[#FFF] flex items-center mr-10 gap-1">
+																<span>
 																	<img
 																		src={LittleCoin}
-																		alt='Coin-Icon'
+																		alt="Coin-Icon"
+																		className=" w-10 h-8"
 																	/>
-																</div>
-																<div className='text-[11.655px]'>
-																	<p>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData.levels[0].cpm}</p>
+																</span>
+																<p className="text-xl">
+																	{sendTokenData?.userData?.nextLevelCost || sendTokenData?.levels[0]?.cost}
+																</p>
+															</div>
+														</div>
+														<div
+															className={`flex justify-between items-center  py-3 `}
+														>
+															<div className="flex items-center gap-2 ml-8 mt-3">
+																<img
+																	className="w-[50px] h-[50px]"
+																	src={`data:image/jpeg;base64,${sendTokenData.icon.data}`}
+																	alt="BigCoin-Icon"
+																/>
+																<div className="text-xl text-white">
+																	<p>{sendTokenData.name}</p>
 																</div>
 															</div>
-															<div className='text-[10.595px]'>Coins Per Minute</div>
+															<div className=" items-center mr-8">
+																<p className="text-[#F39E09] font-semibold">
+																	Balance
+																</p>
+																<div className="flex gap-2">
+																	<img src={BigCoin} alt="Coin-Icon" />
+																	<p className="text-white">
+																		{sendTokenData?.walletData?.balance || 0}
+																		<span className="text-xs">TF</span>
+																	</p>
+
+																	<p></p>
+																</div>
+															</div>
+														</div>
+														<div className="absolute bottom-20 ">
+															<img src={lineCard} alt="" className="w-full" />
 														</div>
 													</div>
-												</>
-											)}
+
+													<div className="p-5 flex justify-between w-full">
+														<div className="text-[#FFF] font-normal gap-2 flex items-center w-[60%]">
+															<div className="text-md">Coins Per Minute</div>
+															<div>
+																<img src={loadcoin} alt="" />
+															</div>
+															<div className="text-xl text-[#FF8F00] font-medium">
+																<p>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData?.levels[0]?.cpm}</p>
+															</div>
+														</div>
+														<div className="w-[40%] flex items-center gap-2 border justify-center border-[#5B5B5B] rounded-xl py-1">
+															<img
+																className=" h-[20px]"
+																src={BigCoin}
+																alt="Coin-Icon"
+															/>
+															<div className="text-[#FFF] text-[15px] font-normal ">
+																<p> + {sendTokenData?.userData?.nextLevelReward || sendTokenData?.levels[0]?.reward} {sendTokenData.name.match(/[A-Z]/g)?.join('')}</p>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
-								</button>
+								</div>
 							</div>
 
 							{/* Tasks Section */}
