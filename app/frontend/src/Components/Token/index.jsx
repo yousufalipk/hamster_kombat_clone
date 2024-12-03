@@ -116,7 +116,7 @@ const Token = () => {
 											{/* description */}
 											<div className='my-2'>
 												<p className='text-center font-thin text-xs'>
-													You will get +{sendTokenData.userData.nextLevelReward} coins of {sendTokenData.name} coins against {sendTokenData.userData.nextLevelCost} pandatop coins.
+													You will get +{sendTokenData?.userData?.nextLevelReward || sendTokenData.levels[0].reward} coins of {sendTokenData.name} coins against {sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost} pandatop coins.
 												</p>
 											</div>
 											<div className='flex justify-center gap-2'>
@@ -124,7 +124,7 @@ const Token = () => {
 													src={LittleCoin}
 													alt="Little coin"
 												/>
-												<span className='text-xs'>+{sendTokenData.userData.nextLevelCpm} CPM</span>
+												<span className='text-xs'>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData.levels[0].cpm} CPM</span>
 											</div>
 											{/* action buttons */}
 											<div className='flex gap-4 mt-3 justify-center p-2'>
@@ -157,7 +157,7 @@ const Token = () => {
 											/>
 										</div>
 										<div className='text-[#FFF] text-[20.823px] font-medium'>
-											<p>{sendTokenData.walletData.balance}</p>
+											<p>{sendTokenData?.walletData?.balance || 0}</p>
 										</div>
 									</div>
 								</div>
@@ -184,7 +184,7 @@ const Token = () => {
 														<p>{sendTokenData.name}</p>
 													</div>
 													<div className='text-xs bg-black bg-opacity-30 w-fit p-1 rounded-[5px]'>
-														<p className=''>lvl {sendTokenData.userData.level}</p>
+														<p className=''>lvl {sendTokenData?.userData?.level || 0}</p>
 													</div>
 												</div>
 											</div>
@@ -196,7 +196,7 @@ const Token = () => {
 													/>
 												</div>
 												<div className='text-[#FFF] text-[29.043px]'>
-													{sendTokenData.userData.nextLevelCost}
+													{sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost}
 												</div>
 											</div>
 										</div>
@@ -213,7 +213,7 @@ const Token = () => {
 													/>
 												</div>
 												<div className='text-[#FFF] text-[15px] font-normal border border-r-white border-t-0 border-b-0 border-l-0 pr-3'>
-													<p>{sendTokenData.userData.nextLevelReward} MEMEFI</p>
+													<p>{sendTokenData?.userData?.nextLevelReward || sendTokenData.levels[0].reward} MEMEFI</p>
 												</div>
 											</div>
 											<div className='text-[#FFF] font-normal pl-3'>
@@ -225,7 +225,7 @@ const Token = () => {
 														/>
 													</div>
 													<div className='text-[11.655px]'>
-														<p>+{sendTokenData.userData.nextLevelCpm}</p>
+														<p>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData.levels[0].cpm}</p>
 													</div>
 												</div>
 												<div className='text-[10.595px]'>Coins Per Minute</div>

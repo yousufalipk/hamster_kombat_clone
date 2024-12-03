@@ -2,68 +2,9 @@ import React, { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/index';
 
-import MIcon from "../../assets/MIcon.png";
 import Coin from "../../assets/BigCoinIcon.svg";
-import Tonfish from "../../assets/TonfishIcon.png";
-import Gamefi from "../../assets/GamefiIcon.png";
 import { LuLoader2 } from "react-icons/lu";
 
-const cards = [
-	{
-		id: 1,
-		name: "MemeFi",
-		logo1: MIcon,
-		logo2: Coin,
-		balance: 203659461,
-		level: 10,
-		bgColor: "memefi-bg",
-	},
-	{
-		id: 2,
-		name: "Tonfish",
-		logo1: Tonfish,
-		logo2: Coin,
-		balance: "0.00",
-		level: 0,
-		bgColor: "tonfish-bg",
-	},
-	{
-		id: 3,
-		name: "Gamefi",
-		logo1: Gamefi,
-		logo2: Coin,
-		balance: 96584123,
-		level: 19,
-		bgColor: "gamefi1-bg",
-	},
-	{
-		id: 4,
-		name: "Gamefi",
-		logo1: Gamefi,
-		logo2: Coin,
-		balance: 96584123,
-		level: 19,
-		bgColor: "gamefi2-bg",
-	},
-	{
-		id: 4,
-		name: "Gamefi",
-		logo1: Gamefi,
-		logo2: Coin,
-		balance: 96584123,
-		level: 19,
-		bgColor: "gamefi2-bg",
-	},
-	{
-		id: 4,
-		name: "Gamefi",
-		logo1: Gamefi,
-		logo2: Coin,
-		balance: 96584123,
-		level: 19,
-		bgColor: "gamefi2-bg",
-	},
-];
 
 const Card = ({ name, logo1, logo2, balance, level, fromColor, toColor }) => (
 	<div className={"h-[17vh] px-4 py-2 rounded-[20px] text-[#FFF]"}
