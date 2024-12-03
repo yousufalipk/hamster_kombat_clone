@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Tonfish from "../../assets/TonfishIcon.png";
 import Coin from "../../assets/BigCoinIcon.svg";
 import { useUser } from "../../context";
@@ -103,7 +103,7 @@ const MissedProjects = () => {
 
 	return (
 		<>
-			{MissedProjects ? (
+			{missedProjects.length > 0 ? (
 				<div className='grid grid-cols-2 gap-3 h-[37vh]'>
 					{missedProjects.map((project, index) => (
 						<Card

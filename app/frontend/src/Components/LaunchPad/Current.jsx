@@ -70,7 +70,7 @@ const Current = () => {
 
 	return (
 		<>
-			{currentProjects ? (
+			{currentProjects.length > 0 ? (
 				<div className='grid grid-cols-2 gap-3 h-[37vh]'>
 					{currentProjects?.map((project, index) => {
 						return (

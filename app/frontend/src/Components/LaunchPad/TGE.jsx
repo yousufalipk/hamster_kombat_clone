@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MIcon from "../../assets/MIcon.png";
 import Coin from "../../assets/BigCoinIcon.svg";
 import Gamefi from "../../assets/GamefiIcon.png";
@@ -163,7 +163,7 @@ const TGE = () => {
 
 	return (
 		<>
-			{tgeProjects ? (
+			{tgeProjects.length > 0 ? (
 				<div>
 					{isModalOpen && (
 						<PopUp />
