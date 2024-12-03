@@ -69,6 +69,8 @@ export const UserProvider = (props) => {
 
     const [projectLoader, setProjectLoader] = useState(false);
 
+    const [kolsLoader, setKolsLoader] = useState(false);
+
     const [tgeProjects, setTgeProjects] = useState();
 
     const [currentProjects, setCurrentProjects] = useState();
@@ -470,11 +472,13 @@ export const UserProvider = (props) => {
 
     const fetchKols = async () => {
         try {
+            setKolsLoader(true);
             const res = await axios.post(`${apiUrl}/user/fetch-user-kols`, {
                 userId: userId
             });
             if (res.data.status === 'success') {
                 setKols(res.data.response);
+                setKolsLoader(false);
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
