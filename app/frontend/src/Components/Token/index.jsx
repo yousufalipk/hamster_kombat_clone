@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { toast } from 'react-toastify';
 import { useUser } from '../../context/index';
@@ -11,7 +11,9 @@ import Telegram from "../../assets/telegramIcon.png";
 import Youtube from "../../assets/youtubeIcon.png";
 
 const Token = () => {
-	const { sendTokenData, isModalOpen, setModalOpen, upgradeProjectLevel } = useUser();
+	const { sendTokenData, isModalOpen, setModalOpen, upgradeProjectLevel, balance } = useUser();
+
+	const [processing, setProcessing] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -33,7 +35,12 @@ const Token = () => {
 		}
 	}, [navigate]);
 
-	const handleTokenBuy = () => {
+	const handleTokenBuy = (upgradeCost) => {
+		if (upgradeCost > balance) {
+			toast.error('Insufficient Balance!');
+			return;
+		}
+		setProcessing(true);
 		setModalOpen(true);
 	}
 
@@ -42,12 +49,18 @@ const Token = () => {
 	}
 
 	const handleProjectUpgrade = async () => {
-		const res = await upgradeProjectLevel(sendTokenData._id);
-		navigate('/hammer');
-		if (res.success) {
-			toast.success(res.mess);
-		} else {
-			toast.error(res.mess);
+		try {
+			const res = await upgradeProjectLevel(sendTokenData._id);
+			if (res.success) {
+				navigate('/hammer');
+				toast.success(res.mess);
+			} else {
+				toast.error(res.mess);
+			}
+		} catch (error) {
+			console.log('Internal Server Error!');
+		} finally {
+			setProcessing(false);
 		}
 	}
 
@@ -141,7 +154,7 @@ const Token = () => {
 								</div>
 							</div>
 						)}
-						<div className='bg-[#060611] p-4 h-[100vh] overflow-hidden'>
+						<div className='bg-[#060611] p-4 h-[100vh] overflow-scroll border-2'>
 							<div className='flex items-center gap-4'>
 								<div className='text-[#FFF] text-[18px] font-semibold'>{sendTokenData.name}</div>
 							</div>
@@ -162,8 +175,9 @@ const Token = () => {
 									</div>
 								</div>
 								{/* Card */}
-								<div
-									onClick={() => handleTokenBuy()}
+								<button
+									onClick={() => handleTokenBuy(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost)}
+									disabled={processing}
 									className=" rounded-[14px]"
 									style={{
 										background: `linear-gradient(to left, ${sendTokenData.fromColor}, ${sendTokenData.toColor})`,
@@ -232,11 +246,11 @@ const Token = () => {
 											</div>
 										</div>
 									</div>
-								</div>
+								</button>
 							</div>
 
 							{/* Tasks Section */}
-							<div className='h-[60vh] px-1 pt-4 overflow-scroll'>
+							<div className='px-1 pt-4'>
 								{/* Heading 1 */}
 								<div>
 									<p className='text-[#9595A9] text-[15px] font-medium'>
