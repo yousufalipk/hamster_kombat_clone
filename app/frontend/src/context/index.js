@@ -493,6 +493,8 @@ export const UserProvider = (props) => {
             });
             if (res.data.status === 'success') {
                 await fetchKols();
+                setBalance(res.data.balance);
+                setCoinsPerMinute(res.data.cpm);
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
