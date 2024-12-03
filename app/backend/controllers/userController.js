@@ -1194,7 +1194,6 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
     }
 };
 
-
 exports.test = async (req, res) => {
     try {
         const { error } = req.body;

@@ -450,12 +450,14 @@ export const UserProvider = (props) => {
 
     const upgradeProjectLevel = async (projectId) => {
         try {
-            const res = await axios.post(`${apiUrl}/user/fetch-user-projects`, {
+            const res = await axios.post(`${apiUrl}/user/upgrade-project-level`, {
                 userId: userId,
                 projectId: projectId
             });
             if (res.data.status === 'success') {
                 await fetchProjects();
+                setBalance(res.data.balance);
+                setCoinsPerMinute(res.data.cpm);
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });

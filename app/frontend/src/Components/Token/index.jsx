@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 
+import { toast } from 'react-toastify';
 import { useUser } from '../../context/index';
 import { useNavigate } from 'react-router-dom';
-
-import PopUp from '../../Components/PopUp/popup2';
 
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
@@ -12,7 +11,7 @@ import Telegram from "../../assets/telegramIcon.png";
 import Youtube from "../../assets/youtubeIcon.png";
 
 const Token = () => {
-	const { sendTokenData, isModalOpen, setModalOpen, currentRank } = useUser();
+	const { sendTokenData, isModalOpen, setModalOpen, upgradeProjectLevel } = useUser();
 
 	const navigate = useNavigate();
 
@@ -36,6 +35,20 @@ const Token = () => {
 
 	const handleTokenBuy = () => {
 		setModalOpen(true);
+	}
+
+	const handleCancel = () => {
+		setModalOpen(false);
+	}
+
+	const handleProjectUpgrade = async () => {
+		const res = await upgradeProjectLevel(sendTokenData._id);
+		navigate('/hammer');
+		if (res.success) {
+			toast.success(res.mess);
+		} else {
+			toast.error(res.mess);
+		}
 	}
 
 	const data = [
@@ -65,7 +78,68 @@ const Token = () => {
 				{sendTokenData && (
 					<>
 						{isModalOpen && (
-							<PopUp />
+							<div
+								onClick={handleCancel}
+								className='fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-80 overflow-hidden'>
+								<div className='fixed bottom-0 h-[40vh] w-screen'>
+									<div className="absolute -inset-1 h-[40vh] bg-[#23a7ff] rounded-[35px]"></div>
+									<div className="absolute -inset-2 h-[40vh] bg-[#23a7ff] blur rounded-[50px]"></div>
+									<div className='w-screen bg-[#1B1B27] h-[40vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+										{/* Main Body */}
+										<div className='mb-5 px-2'>
+
+											<div className='flex relative justify-center'>
+												{/* logo */}
+												<div className='w-fit pt-2'>
+													<div
+														style={{
+															borderRadius: '100%',
+															transform: 'translateZ(0)',
+															filter: 'drop-shadow(0 0 15px rgba(255, 176, 0, 0.35))',
+														}}
+													>
+														<img
+															src={`data:image/jpeg;base64,${sendTokenData.icon.data}`}
+															alt='M-Icon'
+															width='60'
+															style={{
+																borderRadius: '12px',
+															}}
+														/>
+													</div>
+												</div>
+											</div>
+											{/* popup title */}
+											<div className='flex justify-center mt-1'>
+												<h1 className='text-sm font-medium'>{sendTokenData.name}</h1>
+											</div>
+											{/* description */}
+											<div className='my-2'>
+												<p className='text-center font-thin text-xs'>
+													You will get +{sendTokenData.userData.nextLevelReward} coins of {sendTokenData.name} coins against {sendTokenData.userData.nextLevelCost} pandatop coins.
+												</p>
+											</div>
+											<div className='flex justify-center gap-2'>
+												<img
+													src={LittleCoin}
+													alt="Little coin"
+												/>
+												<span className='text-xs'>+{sendTokenData.userData.nextLevelCpm} CPM</span>
+											</div>
+											{/* action buttons */}
+											<div className='flex gap-4 mt-3 justify-center p-2'>
+												<button
+													className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+													onClick={() => (handleProjectUpgrade())}
+												>
+													Confirm
+												</button>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
 						)}
 						<div className='bg-[#060611] p-4 h-[100vh] overflow-hidden'>
 							<div className='flex items-center gap-4'>
@@ -110,7 +184,7 @@ const Token = () => {
 														<p>{sendTokenData.name}</p>
 													</div>
 													<div className='text-xs bg-black bg-opacity-30 w-fit p-1 rounded-[5px]'>
-														<p className=''>lvl {currentRank}</p>
+														<p className=''>lvl {sendTokenData.userData.level}</p>
 													</div>
 												</div>
 											</div>
