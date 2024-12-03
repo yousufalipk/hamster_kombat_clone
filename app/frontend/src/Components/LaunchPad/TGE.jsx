@@ -163,7 +163,7 @@ const TGE = () => {
 
 	return (
 		<>
-			{tgeProjects.length > 0 ? (
+			{tgeProjects?.length > 0 ? (
 				<div>
 					{isModalOpen && (
 						<PopUp />
