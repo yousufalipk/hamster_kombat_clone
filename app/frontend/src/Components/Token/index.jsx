@@ -154,6 +154,8 @@ const Token = () => {
 								</div>
 							</div>
 						)}
+
+
 						<div className='bg-[#060611] p-4 w-full h-[100vh] overflow-scroll overflow-x-hidden'>
 							<div className='flex items-center gap-4'>
 								<div className='text-[#FFF] text-[18px] font-semibold'>{sendTokenData.name}</div>
@@ -177,7 +179,7 @@ const Token = () => {
 								{/* Card */}
 								<button
 									onClick={() => handleTokenBuy(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost)}
-									disabled={processing}
+									disabled={processing || sendTokenData?.userData?.nextLevelCost === 'max'}
 									className=" rounded-[14px]"
 									style={{
 										background: `linear-gradient(to left, ${sendTokenData.fromColor}, ${sendTokenData.toColor})`,
@@ -202,48 +204,59 @@ const Token = () => {
 													</div>
 												</div>
 											</div>
-											<div className='flex items-center gap-2'>
-												<div className=''>
-													<img
-														src={BigCoin}
-														alt='Coin-Icon'
-													/>
-												</div>
-												<div className='text-[#FFF] text-[29.043px]'>
-													{sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost}
-												</div>
-											</div>
+											{sendTokenData?.userData?.nextLevelCost !== 'max' && (
+												<>
+													<div className='flex items-center gap-2'>
+														<div className=''>
+															<img
+																src={BigCoin}
+																alt='Coin-Icon'
+															/>
+														</div>
+														<div className='text-[#FFF] text-[29.043px]'>
+															{sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost}
+														</div>
+													</div>
+												</>
+											)}
 										</div>
-										<div className='p-5 flex'>
-											<div className='flex items-center gap-2'>
-												<div className='text-[#FFF] text-lg font-normal'>
-													<p>Reward:</p>
-												</div>
-												<div className=''>
-													<img
-														className='w-[20px] h-[20px]'
-														src={BigCoin}
-														alt='Coin-Icon'
-													/>
-												</div>
-												<div className='text-[#FFF] text-[15px] font-normal border border-r-white border-t-0 border-b-0 border-l-0 pr-3'>
-													<p>{sendTokenData?.userData?.nextLevelReward || sendTokenData.levels[0].reward} MEMEFI</p>
-												</div>
-											</div>
-											<div className='text-[#FFF] font-normal pl-3'>
-												<div className='flex items-center gap-1'>
-													<div className=''>
-														<img
-															src={LittleCoin}
-															alt='Coin-Icon'
-														/>
+
+										<div className="w-[90vw] h-[10vh]">
+											{sendTokenData?.userData?.nextLevelCost !== 'max' && (
+												<>
+													<div className='p-5 flex'>
+														<div className='flex items-center gap-2'>
+															<div className='text-[#FFF] text-lg font-normal'>
+																<p>Reward:</p>
+															</div>
+															<div className=''>
+																<img
+																	className='w-[20px] h-[20px]'
+																	src={BigCoin}
+																	alt='Coin-Icon'
+																/>
+															</div>
+															<div className='text-[#FFF] text-[15px] font-normal border border-r-white border-t-0 border-b-0 border-l-0 pr-3'>
+																<p>{sendTokenData?.userData?.nextLevelReward || sendTokenData.levels[0].reward} MEMEFI</p>
+															</div>
+														</div>
+														<div className='text-[#FFF] font-normal pl-3'>
+															<div className='flex items-center gap-1'>
+																<div className=''>
+																	<img
+																		src={LittleCoin}
+																		alt='Coin-Icon'
+																	/>
+																</div>
+																<div className='text-[11.655px]'>
+																	<p>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData.levels[0].cpm}</p>
+																</div>
+															</div>
+															<div className='text-[10.595px]'>Coins Per Minute</div>
+														</div>
 													</div>
-													<div className='text-[11.655px]'>
-														<p>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData.levels[0].cpm}</p>
-													</div>
-												</div>
-												<div className='text-[10.595px]'>Coins Per Minute</div>
-											</div>
+												</>
+											)}
 										</div>
 									</div>
 								</button>

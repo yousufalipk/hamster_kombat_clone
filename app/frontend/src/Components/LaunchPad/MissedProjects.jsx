@@ -103,7 +103,7 @@ const MissedProjects = () => {
 
 	return (
 		<>
-			{missedProjects.length > 0 ? (
+			{missedProjects?.length > 0 ? (
 				<div className='grid grid-cols-2 gap-3 h-[37vh]'>
 					{missedProjects.map((project, index) => (
 						<Card

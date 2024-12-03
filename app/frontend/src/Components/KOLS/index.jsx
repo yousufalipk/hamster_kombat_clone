@@ -147,53 +147,96 @@ const KOLS = () => {
 												{/* head */}
 												<div className="flex gap-2">
 													<div className="text-[12px]">{kol.name}</div>
-													<div
-														className="px-2 rounded-xl text-[8px]"
-														style={{
-															background: `linear-gradient(to left, ${kol.fromColor}, ${kol.toColor})`,
-														}}
-													>
-														lvl {kol?.userData?.level || 0}
-													</div>
+													{kol?.userData?.level || 0 === 'max' ? (
+														<>
+															<div
+																className="px-2 rounded-xl text-[8px]"
+																style={{
+																	background: `linear-gradient(to left, ${kol.fromColor}, ${kol.toColor})`,
+																}}
+															>
+
+																lvl MAX
+															</div>
+														</>
+													) : (
+														<>
+															<div
+																className="px-2 rounded-xl text-[8px]"
+																style={{
+																	background: `linear-gradient(to left, ${kol.fromColor}, ${kol.toColor})`,
+																}}
+															>
+
+																lvl {kol?.userData?.level || 0}
+															</div>
+														</>
+													)}
 												</div>
 												{/* body */}
+
 												<div className="flex">
-													<img
-														src={LittleCoin}
-														alt='Coin-Icon'
-													/>
-													<div className="text-xs font-thin text-gray-300">
-														<span className="mr-2 font-semibold text-xs">+{kol.userData?.nextLevelCpm || kol.levels[0].cpm}</span>
-														Coin Per Minute
-													</div>
+													{kol?.userData?.level || 0 === 'max' ? (
+														<>
+
+														</>
+													) : (
+														<>
+															<img
+																src={LittleCoin}
+																alt='Coin-Icon'
+															/>
+															<div className="text-xs font-thin text-gray-300">
+																<span className="mr-2 font-semibold text-xs">+{kol.userData?.nextLevelCpm || kol.levels[0].cpm}</span>
+																Coin Per Minute
+															</div>
+														</>
+													)}
 												</div>
 												{/* upgrade button */}
-												<div className="mt-2 flex items-center justify-center gap-2 rounded-[18px] w-fit px-3 py-1 bg-[#FFF] text-black">
-													<img
-														src={AngleIcon}
-														alt='Angle-icon'
-														width='5'
-													/>
-													<button
-														className="text-xs font-thin"
-														onClick={() => handleUpgrade(kol, kol?.userData?.nextLevelCost || kol.levels[0].cost)}
-														disabled={processing}
-													>
-														Upgrade
-													</button>
-												</div>
+												{kol?.userData?.level || 0 === 'max' ? (
+													<>
+
+													</>
+												)
+													: (
+														<>
+															<div className="mt-2 flex items-center justify-center gap-2 rounded-[18px] w-fit px-3 py-1 bg-[#FFF] text-black">
+																<img
+																	src={AngleIcon}
+																	alt='Angle-icon'
+																	width='5'
+																/>
+																<button
+																	className="text-xs font-thin"
+																	onClick={() => handleUpgrade(kol, kol?.userData?.nextLevelCost || kol.levels[0].cost)}
+																	disabled={processing}
+																>
+																	Upgrade
+																</button>
+															</div>
+														</>
+													)}
 											</div>
 
 											{/* right section */}
 											<div className="right w-1/2">
-												<div className="flex justify-end gap-1">
-													<img
-														src={BigCoin}
-														alt='Coin-Icon'
-														width="15"
-													/>
-													<div className="text-sm">{kol.userData?.nextLevelCost || kol.levels[0].cost}</div>
-												</div>
+												{kol?.userData?.level || 0 === 'max' ? (
+													<>
+
+													</>
+												) : (
+													<>
+														<div className="flex justify-end gap-1">
+															<img
+																src={BigCoin}
+																alt='Coin-Icon'
+																width="15"
+															/>
+															<div className="text-sm">{kol.userData?.nextLevelCost || kol.levels[0].cost}</div>
+														</div>
+													</>
+												)}
 												<div className="flex">
 													<div className="w-3/5 flex justify-end items-end h-[10vh]">
 														<img
@@ -224,7 +267,8 @@ const KOLS = () => {
 						<span className="text-xl font-semibold">No projects!</span>
 					</div>
 				</>
-			)}
+			)
+			}
 		</>
 	);
 };
