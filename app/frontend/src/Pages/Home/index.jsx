@@ -277,6 +277,20 @@ const Home = () => {
 		*/
 	];
 
+	const formatCoins = (coinsPerMinute) => {
+		if (coinsPerMinute < 1e3) {
+			return coinsPerMinute.toString();
+		} else if (coinsPerMinute < 1e6) {
+			return (coinsPerMinute / 1e3).toFixed(1) + "k";
+		} else if (coinsPerMinute < 1e9) {
+			return (coinsPerMinute / 1e6).toFixed(1) + "M";
+		} else if (coinsPerMinute < 1e12) {
+			return (coinsPerMinute / 1e9).toFixed(1) + "B";
+		} else {
+			return (coinsPerMinute / 1e12).toFixed(1) + "T";
+		}
+	}
+
 	const handleUnlimitedTaps = async () => {
 		try {
 			const res = await unlimitedTapsUpgrade();
@@ -487,15 +501,6 @@ const Home = () => {
 								</div>
 							</div>
 
-							{/*
-						<p className="text-white">
-							Tap Balance: {tapBalance}
-						</p>
-
-						<p className="text-white">
-							Balance: {balance}
-						</p>
-						*/}
 
 							{/* Coins Details & Bot Image */}
 							<div className="min-h-[56vh] flex flex-col justify-center items-center">
@@ -508,7 +513,7 @@ const Home = () => {
 												<img className="pl-3" src={LittleCoin} alt="Coin-Icon" />
 											</div>
 											<div className="text-[#FFF] text-[11.655px] font-medium">
-												<p>+{coinsPerMinute}M</p>
+												<p>+{formatCoins(coinsPerMinute)}</p>
 											</div>
 										</div>
 										<div className="flex justify-center items-center gap-1 pl-1">
