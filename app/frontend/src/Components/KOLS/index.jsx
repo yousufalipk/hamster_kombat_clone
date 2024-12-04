@@ -54,7 +54,7 @@ const KOLS = () => {
 		}
 	}
 
-	if (kolsLoader) {
+	if (kolsLoader || processing) {
 		return (
 			<>
 				<div className="h-[33vh] w-full flex justify-center items-center">
@@ -129,6 +129,7 @@ const KOLS = () => {
 							</div>
 						</div>
 					)}
+
 					<div className='h-[45vh] overflow-scroll'>
 						{kols.map((kol, index) => {
 							return (
@@ -147,7 +148,7 @@ const KOLS = () => {
 												{/* head */}
 												<div className="flex gap-2">
 													<div className="text-[12px]">{kol.name}</div>
-													{kol?.userData?.level || 0 === 'max' ? (
+													{kol?.userData?.level >= kol?.levels?.length ? (
 														<>
 															<div
 																className="px-2 rounded-xl text-[8px]"
@@ -176,7 +177,7 @@ const KOLS = () => {
 												{/* body */}
 
 												<div className="flex">
-													{kol?.userData?.level || 0 === 'max' ? (
+													{kol?.userData?.level >= kol?.levels?.length ? (
 														<>
 
 														</>
@@ -194,7 +195,7 @@ const KOLS = () => {
 													)}
 												</div>
 												{/* upgrade button */}
-												{kol?.userData?.level || 0 === 'max' ? (
+												{kol?.userData?.level >= kol?.levels?.length ? (
 													<>
 
 													</>
@@ -221,7 +222,7 @@ const KOLS = () => {
 
 											{/* right section */}
 											<div className="right w-1/2">
-												{kol?.userData?.level || 0 === 'max' ? (
+												{kol?.userData?.level >= kol?.levels?.length ? (
 													<>
 
 													</>

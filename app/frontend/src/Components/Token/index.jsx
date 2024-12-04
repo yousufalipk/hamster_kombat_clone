@@ -93,6 +93,18 @@ const Token = () => {
 		},
 	];
 
+	const darkenColor = (color, percent) => {
+		let r = parseInt(color.slice(1, 3), 16);
+		let g = parseInt(color.slice(3, 5), 16);
+		let b = parseInt(color.slice(5, 7), 16);
+
+		r = Math.floor(r * (1 - percent));
+		g = Math.floor(g * (1 - percent));
+		b = Math.floor(b * (1 - percent));
+
+		return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1).toUpperCase()}`;
+	};
+
 	if (processing) {
 		return (
 			<>
@@ -226,7 +238,7 @@ const Token = () => {
 
 
 									{/* Main Card */}
-									<div
+									<button
 										style={{
 											position: "relative",
 											padding: "2px",
@@ -236,7 +248,7 @@ const Token = () => {
 											clipPath:
 												"polygon(0 18%, 1% 32%, 1% 68%, 0 82%, 0 100%, 100% 100%, 100% 82%, 99% 68%, 99% 32%, 100% 18%, 100% 0, 0 0)",
 										}}
-										className="card-container"
+										className="card-container w-full h-full"
 										onClick={() => handleTokenBuy(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost)}
 										disabled={processing || sendTokenData?.userData?.nextLevelCost === 'max'}
 									>
@@ -309,15 +321,34 @@ const Token = () => {
 																	<img src={BigCoin} alt="Coin-Icon" />
 																	<p className="text-white">
 																		{sendTokenData?.walletData?.balance || 0}
-																		<span className="text-xs">TF</span>
+																		<span className="text-xs">{sendTokenData.name.match(/[A-Z]/g)?.join('')}</span>
 																	</p>
 
 																	<p></p>
 																</div>
 															</div>
 														</div>
-														<div className="absolute bottom-20 ">
-															<img src={lineCard} alt="" className="w-full" />
+														<div className="absolute -bottom-1 opacity-50">
+															<svg width="90vw" height="20vh" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+																{/* Vertical */}
+																<line
+																	x1="550"
+																	y1="100"
+																	x2="550"
+																	y2="-30"
+																	stroke={darkenColor(sendTokenData.fromColor, 0.5)}
+																	stroke-width="4"
+																/>
+																{/* Horizontal */}
+																<line
+																	x1="100"
+																	y1="100"
+																	x2="750"
+																	y2="100"
+																	stroke={darkenColor(sendTokenData.toColor, 0.5)}
+																	stroke-width="4"
+																/>
+															</svg>
 														</div>
 													</div>
 
@@ -345,7 +376,7 @@ const Token = () => {
 												</div>
 											</div>
 										</div>
-									</div>
+									</button>
 								</div>
 							</div>
 

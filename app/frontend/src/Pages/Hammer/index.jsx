@@ -15,10 +15,6 @@ const Hammer = () => {
 	const { comboCards } = useUser();
 	const [activeItem, setActiveItem] = useState(null);
 
-	useEffect(() => {
-		console.log("ComboCards", comboCards);
-	}, [])
-
 	const handleClick = (item) => {
 		setActiveItem(item);
 	};
