@@ -53,7 +53,7 @@ const Hammer = () => {
 						<div className='h-[20vh] flex gap-5 justify-center items-center pt-5'>
 
 							{/* Card 1 */}
-							{comboCards.length === 1 ? (
+							{comboCards.length > 0 ? (
 								<>
 									<div
 										style={{
@@ -90,7 +90,7 @@ const Hammer = () => {
 								<>
 									<div
 										style={{
-											background: `linear-gradient(to bottom, ${comboCards[1]?.fromColor}, ${comboCards[2]?.toColor})`
+											background: `linear-gradient(to bottom, ${comboCards[1]?.fromColor}, ${comboCards[1]?.toColor})`
 										}}
 										className="w-[22vw] h-[13vh] rounded-xl border-gradient flex flex-col justify-center items-center"
 									>
