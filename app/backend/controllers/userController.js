@@ -928,7 +928,7 @@ exports.fetchUserVcs = async (req, res) => {
             });
         }
 
-        const vcs = await VcModel.find({}, '_id name fromColor toColor tgeDate').lean();
+        const vcs = await VcModel.find({}, '_id name fromColor toColor tgeDate icon logo levels').lean();
 
         const response = vcs.map(vc => {
             const userVc = user.vcs.find(up => up._id && up._id.equals(vc._id));
@@ -1020,13 +1020,21 @@ exports.upgradeUserVcLevel = async (req, res) => {
         }
 
         if (vc.card) {
-            if (user.comboCards.length <= 1) {
+            if (user.comboCards.length <= 2) {
                 if (user.comboCards.some(card => card.cardId.toString() === vc._id.toString())) {
+                    console.log("Combo card already claimed!");
                 } else {
                     const data = {
-                        cardId: vc._id
+                        cardId: vc._id,
+                        name: vc.name,
+                        fromColor: vc.fromColor,
+                        toColor: vc.toColor,
+                        icon: vc.icon.data
                     };
                     user.comboCards.push(data);
+                    if (user.comboCards.length === 1) {
+                        user.balance += 400000;
+                    }
                 }
             }
         }
@@ -1084,7 +1092,7 @@ exports.fetchUserPatners = async (req, res) => {
             });
         }
 
-        const patners = await PatnerModel.find({}, '_id name fromColor toColor tgeDate').lean();
+        const patners = await PatnerModel.find({}, '_id name fromColor toColor tgeDate icon logo levels').lean();
 
         const response = patners.map(patner => {
             const userPatner = user.patners.find(up => up._id && up._id.equals(patner._id));
@@ -1176,13 +1184,21 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
         }
 
         if (patner.card) {
-            if (user.comboCards.length <= 1) {
+            if (user.comboCards.length <= 2) {
                 if (user.comboCards.some(card => card.cardId.toString() === patner._id.toString())) {
+                    console.log("Combo card already claimed!");
                 } else {
                     const data = {
-                        cardId: patner._id
+                        cardId: patner._id,
+                        name: patner.name,
+                        fromColor: patner.fromColor,
+                        toColor: patner.toColor,
+                        icon: patner.icon.data
                     };
                     user.comboCards.push(data);
+                    if (user.comboCards.length === 1) {
+                        user.balance += 400000;
+                    }
                 }
             }
         }
@@ -1194,7 +1210,8 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
             message: 'Vc level upgraded successfully!',
             balance: user.balance,
             cpm: user.coinsPerMinute.value,
-            patners: user.patners
+            patners: user.patners,
+            comboCards: user.comboCards
         });
     } catch (error) {
         console.error('Internal Server Error', error);

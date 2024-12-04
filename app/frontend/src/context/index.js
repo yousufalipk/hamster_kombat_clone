@@ -541,6 +541,9 @@ export const UserProvider = (props) => {
             });
             if (res.data.status === 'success') {
                 await fetchPatners();
+                setBalance(res.data.balance);
+                setCoinsPerMinute(res.data.cpm);
+                setComboCards(res.data.comboCards);
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -575,6 +578,9 @@ export const UserProvider = (props) => {
             });
             if (res.data.status === 'success') {
                 await fetchVcs();
+                setBalance(res.data.balance);
+                setCoinsPerMinute(res.data.cpm);
+                setComboCards(res.data.comboCards);
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });

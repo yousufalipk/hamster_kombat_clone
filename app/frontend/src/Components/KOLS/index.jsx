@@ -4,7 +4,7 @@ import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import AngleIcon from "../../assets/BlackAngle.svg";
 import { LuLoader2 } from "react-icons/lu";
 import { toast } from 'react-toastify';
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useUser } from '../../context/index';
 
@@ -265,7 +265,7 @@ const KOLS = () => {
 			) : (
 				<>
 					<div className="h-[33vh] w-full flex justify-center items-center text-white">
-						<span className="text-xl font-semibold">No projects!</span>
+						<span className="text-xl font-semibold">No Kols!</span>
 					</div>
 				</>
 			)
