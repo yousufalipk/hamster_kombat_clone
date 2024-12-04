@@ -262,7 +262,7 @@ const Token = () => {
 											}}
 											className="card-container w-full h-[29vh]"
 										>
-											<div className="absolute left-6 -top-4   ">
+											<div className="absolute left-4 -top-3">
 												<div className=" relative ">
 													<img
 														src={cardbg}
@@ -277,7 +277,7 @@ const Token = () => {
 												</div>
 											</div>
 											<div className={`rounded-[14px]`}>
-												<div className="justify-between ">
+												<div className="justify-between">
 													<div className="w-full">
 														<div className="text-xs  bg-opacity-30 w-full flex justify-between py-1 ">
 															<p
@@ -305,11 +305,11 @@ const Token = () => {
 															)}
 														</div>
 														<div
-															className={`flex justify-between items-center  py-3 `}
+															className={`flex justify-between items-center`}
 														>
-															<div className="flex items-center gap-2 ml-8 mt-3">
+															<div className="flex items-center gap-2 ml-8 mt-6">
 																<img
-																	className="w-[50px] h-[50px]"
+																	className="w-[40px] h-[40px]"
 																	src={`data:image/jpeg;base64,${sendTokenData.icon.data}`}
 																	alt="BigCoin-Icon"
 																/>
@@ -332,7 +332,7 @@ const Token = () => {
 																</div>
 															</div>
 														</div>
-														<div className="absolute bottom-1 opacity-50">
+														<div className="absolute bottom-5 opacity-50">
 															<svg width="90vw" height="20vh" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
 																{/* Vertical */}
 																<line
@@ -357,11 +357,11 @@ const Token = () => {
 													</div>
 
 													{sendTokenData?.userData?.nextLevelCost !== 'max' && (
-														<div className="p-5 flex justify-between w-full">
-															<div className="text-[#FFF] font-normal gap-2 flex items-center w-[60%]">
-																<div className="text-md">Coins Per Minute</div>
+														<div className="px-5 mt-4 flex justify-between w-full">
+															<div className="text-[#FFF] text-xs font-normal gap-2 flex items-center w-[60%]">
+																<div>Coins Per Minute</div>
 																<div>
-																	<img src={loadcoin} alt="" />
+																	<img src={loadcoin} alt="" width={12} />
 																</div>
 																<div className="text-xl text-[#FF8F00] font-medium">
 																	<p>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData?.levels[0]?.cpm}</p>
@@ -369,11 +369,11 @@ const Token = () => {
 															</div>
 															<div className="w-[40%] flex items-center gap-2 border justify-center border-[#5B5B5B] rounded-xl py-1">
 																<img
-																	className=" h-[20px]"
+																	width={15}
 																	src={BigCoin}
 																	alt="Coin-Icon"
 																/>
-																<div className="text-[#FFF] text-[15px] font-normal ">
+																<div className="text-[#FFF] text-[15px] font-normal text-xs ">
 																	<p> + {sendTokenData?.userData?.nextLevelReward || sendTokenData?.levels[0]?.reward} {sendTokenData.name.match(/[A-Z]/g)?.join('')}</p>
 																</div>
 															</div>
@@ -381,6 +381,74 @@ const Token = () => {
 													)}
 												</div>
 											</div>
+										</div>
+										<div className="absolute -bottom-4 right-0 overflow-hidden">
+											<svg width="50vw" height="20vh" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+												<line
+													x1="550"
+													y1="135"
+													x2="625"
+													y2="135"
+													stroke={darkenColor(sendTokenData.toColor, 0.5)}
+													stroke-width="12"
+												/>
+												<line
+													x1="655"
+													y1="180"
+													x2="620"
+													y2="135"
+													stroke={darkenColor(sendTokenData.fromColor, 0.5)}
+													stroke-width="12"
+												/>
+												<line
+													x1="650"
+													y1="180"
+													x2="800"
+													y2="180"
+													stroke={darkenColor(sendTokenData.toColor, 0.5)}
+													stroke-width="12"
+												/>
+												<line
+													x1="720"
+													y1="230"
+													x2="800"
+													y2="230"
+													stroke={darkenColor(sendTokenData.toColor, 0.5)}
+													stroke-width="12"
+												/>
+												<line
+													x1="680"
+													y1="280"
+													x2="720"
+													y2="230"
+													stroke={darkenColor(sendTokenData.fromColor, 0.5)}
+													stroke-width="12"
+												/>
+												<line
+													x1="550"
+													y1="280"
+													x2="680"
+													y2="280"
+													stroke={darkenColor(sendTokenData.toColor, 0.5)}
+													stroke-width="12"
+												/>
+												<line
+													x1="550"
+													y1="280"
+													x2="520"
+													y2="230"
+													stroke={darkenColor(sendTokenData.fromColor, 0.5)}
+													stroke-width="12"
+												/>
+												<line
+													x1="450"
+													y1="230"
+													x2="525"
+													y2="230"
+													stroke={darkenColor(sendTokenData.toColor, 0.5)}
+													stroke-width="12"
+												/>
+											</svg>
 										</div>
 									</button>
 								</div>
