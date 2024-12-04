@@ -726,7 +726,8 @@ exports.upgradeUserProjectLevel = async (req, res) => {
             balance: user.balance,
             cpm: user.coinsPerMinute.value,
             wallet: user.wallet,
-            projects: user.projects
+            projects: user.projects,
+            comboCards: user.comboCards
         });
     } catch (error) {
         console.error('Internal Server Error', error);
@@ -880,7 +881,8 @@ exports.upgradeUserKolLevel = async (req, res) => {
             message: 'Kol level upgraded successfully!',
             balance: user.balance,
             cpm: user.coinsPerMinute.value,
-            kols: user.kols
+            kols: user.kols,
+            comboCards: user.comboCards
         });
     } catch (error) {
         console.error('Internal Server Error', error);

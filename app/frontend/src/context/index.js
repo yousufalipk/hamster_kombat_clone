@@ -1,12 +1,15 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { io } from "socket.io-client";
+import { useNavigate } from 'react-router-dom';
 
 const UserContext = createContext(null);
 
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = (props) => {
+
+    const navigate = useNavigate();
 
     const staticUser = process.env.REACT_APP_STATIC_USER;
 
@@ -208,8 +211,6 @@ export const UserProvider = (props) => {
                     setBalance(res.data.user.balance);
                     setCoinsPerMinute(res.data.user.coinsPerMinute.value);
                     setReferrals(res.data.user.referrals);
-
-                    console.log("res", res.data.user);
                     setComboCards(res.data.user.comboCards);
 
                     // Daily Reward 
@@ -273,8 +274,8 @@ export const UserProvider = (props) => {
 
                     setMultitapLevel(res.data.user.multitaps.level);
                     setAddCoins(res.data.user.multitaps.value);
-
                     setLevelPercentage(percentage);
+                    navigate('/');
                 }
             } else {
                 setLoaderErrorMes({
@@ -465,6 +466,7 @@ export const UserProvider = (props) => {
                 await fetchProjects();
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
+                setComboCards(res.data.comboCards);
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -504,6 +506,7 @@ export const UserProvider = (props) => {
                 await fetchKols();
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
+                setComboCards(res.data.comboCards);
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });

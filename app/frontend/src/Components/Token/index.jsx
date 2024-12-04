@@ -12,14 +12,11 @@ import popupLine from "../../assets/token/popupLine.svg";
 import Twitter from "../../assets/token/twitter.svg";
 import Telegram from "../../assets/token/telegram.svg";
 import Youtube from "../../assets/token/youtube.svg";
-import Fishlogo from "../../assets/token/fishlogo 1.svg";
 import cardbg from "../../assets/token/tokencardbg.svg";
 import loadcoin from "../../assets/token/loadcoin.svg";
-import arrow from "../../assets/token/arrow.svg";
 import lineCard from "../../assets/token/cardLine.svg";
 
-import TopLine from '../../assets/token/lines/top_line.png';
-import BottomLine from '../../assets/token/lines/bottom_line.png';
+import { LuLoader2 } from "react-icons/lu";
 
 const Token = () => {
 	const { sendTokenData, isModalOpen, setModalOpen, upgradeProjectLevel, balance } = useUser();
@@ -51,7 +48,6 @@ const Token = () => {
 			toast.error('Insufficient Balance!');
 			return;
 		}
-		setProcessing(true);
 		setModalOpen(true);
 	}
 
@@ -61,9 +57,9 @@ const Token = () => {
 
 	const handleProjectUpgrade = async () => {
 		try {
+			setProcessing(true);
 			const res = await upgradeProjectLevel(sendTokenData._id);
 			if (res.success) {
-				navigate('/hammer');
 				toast.success(res.mess);
 			} else {
 				toast.error(res.mess);
@@ -72,6 +68,7 @@ const Token = () => {
 			console.log('Internal Server Error!');
 		} finally {
 			setProcessing(false);
+			navigate('/hammer');
 		}
 	}
 
@@ -95,6 +92,16 @@ const Token = () => {
 			amount: "50,000 MFI",
 		},
 	];
+
+	if (processing) {
+		return (
+			<>
+				<div className="h-[100vh] w-[100vw] flex justify-center items-center">
+					<LuLoader2 className="animate-spin w-20 h-20 text-white" />
+				</div>
+			</>
+		)
+	}
 
 	return (
 		<>
