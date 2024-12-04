@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 import QuestionMark from "../../assets/questionMark.png";
-import BackGround from "../../assets/BackGround.svg";
 import TimerIcon from "../../assets/TimerIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
+
+import { useUser } from "../../context";
 
 import LaunchPad from "../../Components/LaunchPad/index";
 import KOLS from "../../Components/KOLS/index";
@@ -11,7 +12,12 @@ import Partners from "../../Components/Partners/index";
 import VCs from "../../Components/VC's/index";
 
 const Hammer = () => {
+	const { comboCards } = useUser();
 	const [activeItem, setActiveItem] = useState(null);
+
+	useEffect(() => {
+		console.log("ComboCards", comboCards);
+	}, [])
 
 	const handleClick = (item) => {
 		setActiveItem(item);
@@ -45,28 +51,72 @@ const Hammer = () => {
 					<div className='bg-[#0C0C0C] h-[30vh] relative rounded-b-[26px]'>
 						{/* Two Cards */}
 						<div className='h-[20vh] flex gap-5 justify-center items-center pt-5'>
+
 							{/* Card 1 */}
-							<div className="bg-[#1b1b27] px-3 py-4 rounded-xl border-gradient">
-								{/* gray circle */}
-								<div className="bg-[#444444] rounded-full flex justify-center items-center px-4 py-2">
-									<img
-										style={{ width: '30px', height: '45px' }}
-										src={QuestionMark}
-										alt='QuestionMark-Icon'
-									/>
-								</div>
-							</div>
+							{comboCards.length === 1 ? (
+								<>
+									<div
+										style={{
+											background: `linear-gradient(to bottom, ${comboCards[0]?.fromColor}, ${comboCards[0]?.toColor})`
+										}}
+										className="w-[22vw] h-[13vh] rounded-xl border-gradient flex flex-col justify-center items-center"
+									>
+										<img
+											src={`data:image/jpeg;base64,${comboCards[0].icon}`}
+											alt="icon"
+											width={50}
+											height={50}
+										/>
+										<span className="text-white font-semibold">{comboCards[0].name}</span>
+									</div>
+								</>
+							) : (
+								<>
+									<div className="bg-[#1b1b27] w-[22vw] h-[13vh]  rounded-xl border-gradient flex justify-center items-center">
+										{/* gray circle */}
+										<div className="bg-[#444444] rounded-full flex justify-center items-center px-4 py-2">
+											<img
+												style={{ width: '30px', height: '45px' }}
+												src={QuestionMark}
+												alt='QuestionMark-Icon'
+											/>
+										</div>
+									</div>
+								</>
+							)}
+
 							{/* Card 2 */}
-							<div className="bg-[#1b1b27] px-3 py-4 rounded-xl border-gradient">
-								{/* gray circle */}
-								<div className="bg-[#444444] rounded-full flex justify-center items-center px-4 py-2">
-									<img
-										style={{ width: '30px', height: '45px' }}
-										src={QuestionMark}
-										alt='QuestionMark-Icon'
-									/>
-								</div>
-							</div>
+							{comboCards.length === 2 ? (
+								<>
+									<div
+										style={{
+											background: `linear-gradient(to bottom, ${comboCards[1]?.fromColor}, ${comboCards[2]?.toColor})`
+										}}
+										className="w-[22vw] h-[13vh] rounded-xl border-gradient flex flex-col justify-center items-center"
+									>
+										<img
+											src={`data:image/jpeg;base64,${comboCards[1].icon}`}
+											alt="icon"
+											width={50}
+											height={50}
+										/>
+										<span className="text-white font-semibold">{comboCards[1].name}</span>
+									</div>
+								</>
+							) : (
+								<>
+									<div className="bg-[#1b1b27] w-[22vw] h-[13vh]  rounded-xl border-gradient flex justify-center items-center">
+										{/* gray circle */}
+										<div className="bg-[#444444] rounded-full flex justify-center items-center px-4 py-2">
+											<img
+												style={{ width: '30px', height: '45px' }}
+												src={QuestionMark}
+												alt='QuestionMark-Icon'
+											/>
+										</div>
+									</div>
+								</>
+							)}
 						</div>
 
 						{/* Daily Combo Reward */}

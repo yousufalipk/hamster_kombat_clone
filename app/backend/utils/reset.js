@@ -68,7 +68,7 @@ exports.resetComboCards = (user) => {
 
     user.comboCards = user.comboCards.filter(card => {
         const cardDate = new Date(card.timestamp);
-        return cardDate >= now;
+        return cardDate >= now || cardDate.toDateString() === now.toDateString();
     });
 
     return user;

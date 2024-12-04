@@ -83,6 +83,8 @@ export const UserProvider = (props) => {
 
     const [patners, setPatners] = useState();
 
+    const [comboCards, setComboCards] = useState([]);
+
     useEffect(() => {
         if (!userId) {
             initializeUser();
@@ -206,6 +208,9 @@ export const UserProvider = (props) => {
                     setBalance(res.data.user.balance);
                     setCoinsPerMinute(res.data.user.coinsPerMinute.value);
                     setReferrals(res.data.user.referrals);
+
+                    console.log("res", res.data.user);
+                    setComboCards(res.data.user.comboCards);
 
                     // Daily Reward 
                     setClaimed(res.data.user.dailyReward.claimed);
@@ -648,6 +653,8 @@ export const UserProvider = (props) => {
             vcs,
             fetchVcs,
             upgradeVcLevel,
+
+            comboCards,
 
         }}>
             {props.children}
