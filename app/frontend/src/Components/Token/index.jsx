@@ -248,7 +248,7 @@ const Token = () => {
 											clipPath:
 												"polygon(0 18%, 1% 32%, 1% 68%, 0 82%, 0 100%, 100% 100%, 100% 82%, 99% 68%, 99% 32%, 100% 18%, 100% 0, 0 0)",
 										}}
-										className="card-container w-full h-full"
+										className="card-container w-full h-[30vh]"
 										onClick={() => handleTokenBuy(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost)}
 										disabled={processing || sendTokenData?.userData?.nextLevelCost === 'max'}
 									>
@@ -260,6 +260,7 @@ const Token = () => {
 												clipPath:
 													"polygon(0 18%, 1% 32%, 1% 68%, 0 82%, 0 100%, 100% 100%, 100% 82%, 99% 68%, 99% 32%, 100% 18%, 100% 0, 0 0)",
 											}}
+											className="card-container w-full h-[29vh]"
 										>
 											<div className="absolute left-6 -top-4   ">
 												<div className=" relative ">
@@ -285,20 +286,23 @@ const Token = () => {
 																}}
 																className="text-base py-1 w-[16vw] bg-slate-900 text-center rounded-md text-white ml-1 mt-1"
 															>
-																lvl {sendTokenData?.userData?.level || 0}
+																{sendTokenData?.userData?.nextLevelCost !== 'max' ? (`lvl ${sendTokenData?.userData?.level || 0}`) : ('Max')}
 															</p>
-															<div className="text-[#FFF] flex items-center mr-10 gap-1">
-																<span>
-																	<img
-																		src={LittleCoin}
-																		alt="Coin-Icon"
-																		className=" w-10 h-8"
-																	/>
-																</span>
-																<p className="text-xl">
-																	{sendTokenData?.userData?.nextLevelCost || sendTokenData?.levels[0]?.cost}
-																</p>
-															</div>
+
+															{sendTokenData?.userData?.nextLevelCost !== 'max' && (
+																<div className="text-[#FFF] flex items-center mr-10 gap-1">
+																	<span>
+																		<img
+																			src={LittleCoin}
+																			alt="Coin-Icon"
+																			className=" w-10 h-8"
+																		/>
+																	</span>
+																	<p className="text-xl">
+																		{sendTokenData?.userData?.nextLevelCost || sendTokenData?.levels[0]?.cost}
+																	</p>
+																</div>
+															)}
 														</div>
 														<div
 															className={`flex justify-between items-center  py-3 `}
@@ -352,27 +356,29 @@ const Token = () => {
 														</div>
 													</div>
 
-													<div className="p-5 flex justify-between w-full">
-														<div className="text-[#FFF] font-normal gap-2 flex items-center w-[60%]">
-															<div className="text-md">Coins Per Minute</div>
-															<div>
-																<img src={loadcoin} alt="" />
+													{sendTokenData?.userData?.nextLevelCost !== 'max' && (
+														<div className="p-5 flex justify-between w-full">
+															<div className="text-[#FFF] font-normal gap-2 flex items-center w-[60%]">
+																<div className="text-md">Coins Per Minute</div>
+																<div>
+																	<img src={loadcoin} alt="" />
+																</div>
+																<div className="text-xl text-[#FF8F00] font-medium">
+																	<p>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData?.levels[0]?.cpm}</p>
+																</div>
 															</div>
-															<div className="text-xl text-[#FF8F00] font-medium">
-																<p>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData?.levels[0]?.cpm}</p>
+															<div className="w-[40%] flex items-center gap-2 border justify-center border-[#5B5B5B] rounded-xl py-1">
+																<img
+																	className=" h-[20px]"
+																	src={BigCoin}
+																	alt="Coin-Icon"
+																/>
+																<div className="text-[#FFF] text-[15px] font-normal ">
+																	<p> + {sendTokenData?.userData?.nextLevelReward || sendTokenData?.levels[0]?.reward} {sendTokenData.name.match(/[A-Z]/g)?.join('')}</p>
+																</div>
 															</div>
 														</div>
-														<div className="w-[40%] flex items-center gap-2 border justify-center border-[#5B5B5B] rounded-xl py-1">
-															<img
-																className=" h-[20px]"
-																src={BigCoin}
-																alt="Coin-Icon"
-															/>
-															<div className="text-[#FFF] text-[15px] font-normal ">
-																<p> + {sendTokenData?.userData?.nextLevelReward || sendTokenData?.levels[0]?.reward} {sendTokenData.name.match(/[A-Z]/g)?.join('')}</p>
-															</div>
-														</div>
-													</div>
+													)}
 												</div>
 											</div>
 										</div>
