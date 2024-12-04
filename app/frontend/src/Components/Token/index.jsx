@@ -328,7 +328,7 @@ const Token = () => {
 																</div>
 															</div>
 														</div>
-														<div className="absolute -bottom-1 opacity-50">
+														<div className="absolute bottom-1 opacity-50">
 															<svg width="90vw" height="20vh" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
 																{/* Vertical */}
 																<line
