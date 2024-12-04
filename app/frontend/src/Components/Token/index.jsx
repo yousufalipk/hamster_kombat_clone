@@ -332,16 +332,16 @@ const Token = () => {
 															<svg width="90vw" height="20vh" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
 																{/* Vertical */}
 																<line
-																	x1="550"
+																	x1="500"
 																	y1="100"
-																	x2="550"
+																	x2="500"
 																	y2="-30"
 																	stroke={darkenColor(sendTokenData.fromColor, 0.5)}
 																	stroke-width="4"
 																/>
 																{/* Horizontal */}
 																<line
-																	x1="100"
+																	x1="60"
 																	y1="100"
 																	x2="750"
 																	y2="100"
