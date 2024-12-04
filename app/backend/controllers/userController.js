@@ -698,7 +698,7 @@ exports.upgradeUserProjectLevel = async (req, res) => {
         }
 
         if (project.card) {
-            if (user.comboCards.length <= 1) {
+            if (user.comboCards.length <= 2) {
                 if (user.comboCards.some(card => card.cardId.toString() === project._id.toString())) {
                     console.log("Combo card already claimed!");
                 } else {
