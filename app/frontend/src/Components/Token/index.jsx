@@ -168,7 +168,7 @@ const Token = () => {
 															}}
 														>
 															<img
-																src={`data:image/jpeg;base64,${sendTokenData.icon.data}`}
+																src={`data:image/jpeg;base64,${token.project.icon.data}`}
 																alt='token_Icon'
 																width='60'
 																style={{
@@ -180,17 +180,16 @@ const Token = () => {
 												</div>
 												{/* popup title */}
 												<div className='flex justify-center mt-1'>
-													<h1 className='text-sm font-medium'>{sendTokenData.name}</h1>
+													<h1 className='text-sm font-medium'>{token.project.name}</h1>
 												</div>
 												{/* description */}
 												<div className='my-2'>
 													<p className='text-center font-thin text-xs'>
-														You will get +{sendTokenData?.userData?.nextLevelReward || sendTokenData.levels[0].reward} coins of {sendTokenData.name} coins against {sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost} pandatop coins.
+														You will get +{token.userData.nextLevelReward} coins of {token.project.name} coins against {token.userData.nextLevelCost} pandatop coins.
 													</p>
 												</div>
 												<div className='text-center text-[#FF9500] font-semibold'>
-													<p>level {sendTokenData?.userData?.level || 0}</p>
-
+													<p>level {token.userData.level}</p>
 												</div>
 												<div className='flex justify-center mt-3 gap-4'>
 													<div className='flex justify-center items-center gap-1'>
@@ -199,7 +198,7 @@ const Token = () => {
 															alt="Little coin"
 															className='w-5'
 														/>
-														<span className='text-sm'>+{sendTokenData?.userData?.nextLevelReward || sendTokenData.levels[0].reward} {sendTokenData.name.match(/[A-Z]/g)?.join('')}</span>
+														<span className='text-sm'>+{token.userData.nextLevelReward} {token.name.match(/[A-Z]/g)?.join('')}</span>
 													</div>
 													<div className=' gap-2'>
 														<span className='text-xs font-thin'>coins per minute</span>
@@ -208,7 +207,7 @@ const Token = () => {
 																src={LittleCoin}
 																alt="Little coin"
 															/>
-															<p>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData.levels[0].cpm}</p>
+															<p>+{token.userData.nextLevelCpm}</p>
 														</div>
 													</div>
 												</div>
@@ -221,18 +220,18 @@ const Token = () => {
 														alt="Little coin"
 														className='w-10 h-10'
 													/>
-													<span className='text-[#FF9500] text-xl'>{sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost}</span>
+													<span className='text-[#FF9500] text-xl'>{token.userData.nextLevelCost}</span>
 												</div>
 
 												{/* action buttons */}
 												<div className='flex gap-4 justify-center p-2'>
 
 													<button
-														disabled={buttonLoading || processing || token.userData.userLevel === 'max' || (sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost) > balance}
+														disabled={buttonLoading || processing || token.userData.userLevel === 'max' || (token.userData.nextLevelCost || token.project.levels[0].cost) > balance}
 														className='w-1/2 py-1 px-3 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm flex justify-center items-center'
-														onClick={() => (handleProjectUpgrade(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost))}
+														onClick={() => (handleProjectUpgrade())}
 													>
-														{(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost) > balance ? (
+														{(token?.userData?.nextLevelCost || token.levels[0].cost) > balance ? (
 															'Insufficient Balance'
 														) : (
 															<>
