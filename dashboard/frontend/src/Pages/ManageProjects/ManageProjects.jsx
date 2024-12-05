@@ -43,6 +43,8 @@ const ManageProjects = () => {
             icon: project.icon,
             fromColor: project.fromColor,
             toColor: project.toColor,
+            lineFromColor: project.lineFromColor,
+            lineToColor: project.lineToColor,
             numberOfLevel: project.numberOfLevel,
             baseCost: project.baseValues.baseCost,
             baseReward: project.baseValues.baseReward,
@@ -252,6 +254,8 @@ const ManageProjects = () => {
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Icon</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">From Color</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">To Color</th>
+                            <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Line From Color</th>
+                            <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Line To Color</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Max Level</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">No. Tasks</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Combo Card</th>
@@ -291,6 +295,18 @@ const ManageProjects = () => {
                                             <td className='px-6 py-4 border-b border-gray-200'>
                                                 <div
                                                     style={{ backgroundColor: cls.toColor }}
+                                                    className="w-6 h-6 rounded-full mx-auto"
+                                                ></div>
+                                            </td>
+                                            <td className='px-6 py-4 border-b border-gray-200'>
+                                                <div
+                                                    style={{ backgroundColor: cls.lineFromColor }}
+                                                    className="w-6 h-6 rounded-full mx-auto"
+                                                ></div>
+                                            </td>
+                                            <td className='px-6 py-4 border-b border-gray-200'>
+                                                <div
+                                                    style={{ backgroundColor: cls.lineToColor }}
                                                     className="w-6 h-6 rounded-full mx-auto"
                                                 ></div>
                                             </td>
