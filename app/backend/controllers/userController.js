@@ -554,7 +554,7 @@ exports.fetchUserProjects = async (req, res) => {
             });
         }
 
-        const projects = await ProjectModel.find({}, '_id name fromColor toColor tgeDate icon levels').lean();
+        const projects = await ProjectModel.find({}, '_id name fromColor toColor lineToColor lineFromColor tgeDate icon levels').lean();
 
         const categorizedProjects = {
             current: [],
