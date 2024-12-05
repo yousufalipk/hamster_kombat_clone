@@ -245,7 +245,7 @@ const Token = () => {
 											clipPath:
 												" polygon(0 0, 0 21%, 2% 35%, 2% 65%, 0 79%, 0 100%, 100% 100%, 100% 79%, 98% 65%, 98% 35%, 100% 21%, 100% 0)",
 										}}
-										className="card-container w-full h-[35vh]"
+										className="card-container w-full h-[28vh]"
 										onClick={() => handleTokenBuy(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost)}
 										disabled={processing || sendTokenData?.userData?.nextLevelCost === 'max'}
 									>
@@ -257,7 +257,7 @@ const Token = () => {
 												clipPath:
 													" polygon(0 0, 0 21%, 2% 35%, 2% 65%, 0 79%, 0 100%, 100% 100%, 100% 79%, 98% 65%, 98% 35%, 100% 21%, 100% 0)",
 											}}
-											className="card-container w-full h-[34.5vh]"
+											className="card-container w-full h-[27.5vh]"
 										>
 											<div className="absolute left-10 -top-3">
 												<div className=" relative flex justify-end items-center w-[40vw] h-[30vh]">
@@ -330,8 +330,8 @@ const Token = () => {
 																</div>
 															</div>
 														</div>
-														<div className="absolute bottom-24 left-5">
-															<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 464.94 93.53" width={360} height={100}>
+														<div className="absolute bottom-20 left-5">
+															<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 464.94 93.53" width={280} height={100}>
 																<defs>
 																	<linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="0%">
 																		<stop offset="0%" style={{ stopColor: sendTokenData?.fromColor, stopOpacity: 1 }} />
@@ -354,7 +354,7 @@ const Token = () => {
 													</div>
 
 													{sendTokenData?.userData?.nextLevelCost !== 'max' && (
-														<div className="px-5 mt-12 flex justify-between w-full">
+														<div className="px-5 mt-5 flex justify-between w-full">
 															<div className="text-[#FFF] text-xs font-normal gap-2 flex items-center w-[60%]">
 																<div>Coins Per Minute</div>
 																<div>
@@ -379,8 +379,8 @@ const Token = () => {
 												</div>
 											</div>
 										</div>
-										<div className="absolute -bottom-4 right-0.5 overflow-hidden">
-											<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 284.32 101.81" width="100" height="100">
+										<div className="absolute bottom-0 right-0.5 overflow-hidden">
+											<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 284.32 101.81" width="70" height="70">
 												<defs>
 													<linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
 														<stop offset="0%" style={{ stopColor: sendTokenData?.lineFromColor, stopOpacity: 1 }} />
