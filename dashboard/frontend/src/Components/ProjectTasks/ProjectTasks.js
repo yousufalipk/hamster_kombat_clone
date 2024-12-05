@@ -29,12 +29,14 @@ const ProjectTasks = () => {
 
     const formik = useFormik({
         initialValues: {
+            taskType: updateTask ? updateTask.taskType : '',
             iconType: updateTask ? updateTask.iconType : '',
             title: updateTask ? updateTask.title : '',
             link: updateTask ? updateTask.link : '',
             reward: updateTask ? updateTask.reward : ''
         },
         validationSchema: Yup.object({
+            taskType: Yup.string().required('Task Type is required!'),
             iconType: Yup.string().required('Task Type is required!'),
             title: Yup.string().required('Title is required!'),
             link: Yup.string().required('Link is required!'),
@@ -46,10 +48,10 @@ const ProjectTasks = () => {
                 let res;
                 if (updateTask) {
                     // Update Task
-                    res = await updateProjectTask(sendData._id, updateTask._id, values.iconType, values.title, values.link, values.reward);
+                    res = await updateProjectTask(sendData._id, updateTask._id, values.taskType, values.iconType, values.title, values.link, values.reward);
                 } else {
                     // Add Task
-                    res = await addProjectTask(sendData._id, values.iconType, values.title, values.link, values.reward);
+                    res = await addProjectTask(sendData._id, values.taskType, values.iconType, values.title, values.link, values.reward);
                 }
 
                 if (res.success) {
@@ -122,6 +124,7 @@ const ProjectTasks = () => {
                             <thead>
                                 <tr>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">SR.No</th>
+                                    <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Task Type</th>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Icon Type</th>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Title</th>
                                     <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Link</th>
@@ -135,6 +138,7 @@ const ProjectTasks = () => {
                                     {projectTasks.map((cls, i) => (
                                         <tr key={cls._id}>
                                             <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{i + 1}</td>
+                                            <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.taskType}</td>
                                             <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.iconType}</td>
                                             <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.title}</td>
                                             <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.link}</td>
@@ -188,6 +192,22 @@ const ProjectTasks = () => {
                             onSubmit={formik.handleSubmit}
                             className="w-full flex flex-col justify-center items-start gap-2 px-20"
                         >
+                            <label className="block text-sm font-medium mb-1">Task Type</label>
+                            <select
+                                className={`text-black border rounded-md p-2 w-full bg-gray-300 ${formik.errors.taskType && formik.touched.taskType ? 'border-red-500' : ''}`}
+                                id='taskType'
+                                name='taskType'
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.taskType}
+                            >
+                                <option value='' disabled>Select Type</option>
+                                <option value='social'>Social</option>
+                                <option value='daily'>Daily</option>
+                            </select>
+                            {formik.errors.taskType && formik.touched.taskType && (
+                                <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.taskType}</p>
+                            )}
                             <label className="block text-sm font-medium mb-1">Icon Type</label>
                             <select
                                 className={`text-black border rounded-md p-2 w-full bg-gray-300 ${formik.errors.iconType && formik.touched.iconType ? 'border-red-500' : ''}`}

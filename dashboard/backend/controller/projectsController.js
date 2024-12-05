@@ -303,7 +303,7 @@ exports.fetchProjectTasks = async (req, res) => {
 
 exports.addProjectTask = async (req, res) => {
     try {
-        const { projectId, iconType, title, link, reward } = req.body;
+        const { projectId, taskType, iconType, title, link, reward } = req.body;
 
         const project = await ProjectModel.findById(projectId);
 
@@ -316,6 +316,7 @@ exports.addProjectTask = async (req, res) => {
 
         const taskData = {
             iconType: iconType,
+            taskType: taskType,
             title: title,
             link: link,
             reward: reward,
@@ -386,7 +387,7 @@ exports.removeProjectTask = async (req, res) => {
 
 exports.updateProjectTask = async (req, res) => {
     try {
-        const { projectId, taskId, newIconType, newTitle, newLink, newReward } = req.body;
+        const { projectId, taskId, newTaskType, newIconType, newTitle, newLink, newReward } = req.body;
 
 
         console.log("New Link", newLink);
@@ -416,6 +417,7 @@ exports.updateProjectTask = async (req, res) => {
             });
         }
 
+        taskToUpdate.taskType = newTaskType;
         taskToUpdate.iconType = newIconType;
         taskToUpdate.title = newTitle;
         taskToUpdate.reward = newReward;

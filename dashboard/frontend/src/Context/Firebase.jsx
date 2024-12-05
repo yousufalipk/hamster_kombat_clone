@@ -341,10 +341,11 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    const addProjectTask = async (projectId, iconType, title, link, reward) => {
+    const addProjectTask = async (projectId, taskType, iconType, title, link, reward) => {
         try {
             const res = await axios.post(`${apiUrl}/project/add-project-task`, {
                 projectId: projectId,
+                taskType: taskType,
                 iconType: iconType,
                 title: title,
                 link: link,
@@ -380,11 +381,12 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    const updateProjectTask = async (projectId, taskId, newIconType, newTitle, newLink, newReward) => {
+    const updateProjectTask = async (projectId, taskId, newTaskType, newIconType, newTitle, newLink, newReward) => {
         try {
             const res = await axios.post(`${apiUrl}/project/update-project-task`, {
                 projectId: projectId,
                 taskId: taskId,
+                newTaskType: newTaskType,
                 newIconType: newIconType,
                 newTitle: newTitle,
                 newLink: newLink,

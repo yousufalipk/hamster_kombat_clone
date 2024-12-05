@@ -19,16 +19,11 @@ import loadcoin from "../../assets/token/loadcoin.svg";
 const Token = () => {
 	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails } = useUser();
 
-
 	const [isModalOpen, setModalOpen] = useState(false);
 	const [processing, setProcessing] = useState(true);
 	const [buttonLoading, setButtonLoading] = useState(false);
 	const [token, setToken] = useState();
 	const [dots, setDots] = useState('');
-
-	useEffect(() => {
-		console.log("is Modal open", isModalOpen);
-	}, [isModalOpen])
 
 	useEffect(() => {
 		let interval;
@@ -57,11 +52,6 @@ const Token = () => {
 	useEffect(() => {
 		fetchData();
 	}, [sendTokenData]);
-
-	useEffect(() => {
-		console.log("Token", token);
-	}, [token])
-
 
 	const navigate = useNavigate();
 
@@ -198,7 +188,7 @@ const Token = () => {
 															alt="Little coin"
 															className='w-5'
 														/>
-														<span className='text-sm'>+{token.userData.nextLevelReward} {token.name.match(/[A-Z]/g)?.join('')}</span>
+														<span className='text-sm'>+{token.userData.nextLevelReward} {token.project.name.match(/[A-Z]/g)?.join('')}</span>
 													</div>
 													<div className=' gap-2'>
 														<span className='text-xs font-thin'>coins per minute</span>
@@ -227,18 +217,26 @@ const Token = () => {
 												<div className='flex gap-4 justify-center p-2'>
 
 													<button
-														disabled={buttonLoading || processing || token.userData.userLevel === 'max' || (token.userData.nextLevelCost || token.project.levels[0].cost) > balance}
+														disabled={buttonLoading || processing || token.userData.userLevel === 'max' || (token.userData.nextLevelCost) > balance}
 														className='w-1/2 py-1 px-3 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm flex justify-center items-center'
 														onClick={() => (handleProjectUpgrade())}
 													>
-														{(token?.userData?.nextLevelCost || token.levels[0].cost) > balance ? (
-															'Insufficient Balance'
+														{token.userData.userLevel === 'max' ? (
+															<>
+																MAX
+															</>
 														) : (
 															<>
-																{buttonLoading ? (
-																	<span className="h-6 font-bold">
-																		{dots}
-																	</span>) : 'Confirm'}
+																{(token?.userData?.nextLevelCost) > balance ? (
+																	'Insufficient Balance'
+																) : (
+																	<>
+																		{buttonLoading ? (
+																			<span className="h-6 font-bold">
+																				{dots}
+																			</span>) : 'Confirm'}
+																	</>
+																)}
 															</>
 														)}
 													</button>

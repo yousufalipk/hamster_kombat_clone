@@ -93,6 +93,10 @@ const projectsSchema = new mongoose.Schema({
     },
     tasks: [
         {
+            taskType: {
+                type: String,
+                default: null
+            },
             iconType: {
                 type: String,
                 default: null
