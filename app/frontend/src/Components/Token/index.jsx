@@ -15,12 +15,30 @@ import Youtube from "../../assets/token/youtube.svg";
 import cardbg from "../../assets/token/tokencardbg.svg";
 import loadcoin from "../../assets/token/loadcoin.svg";
 
-import { LuLoader2 } from "react-icons/lu";
-
 const Token = () => {
-	const { sendTokenData, isModalOpen, setModalOpen, upgradeProjectLevel, balance } = useUser();
+	const { sendTokenData, isModalOpen, setModalOpen, upgradeProjectLevel, balance, fetchUserProjectDetails } = useUser();
 
 	const [processing, setProcessing] = useState(false);
+	const [token, setToken] = useState();
+
+	const fetchData = async () => {
+		if (!token) {
+			const res = await fetchUserProjectDetails(sendTokenData._id);
+			if (res.success) {
+				setToken(res.data);
+			}
+		}
+	}
+
+
+	useEffect(() => {
+		fetchData();
+	}, [sendTokenData]);
+
+	useEffect(() => {
+		console.log("Token", token);
+	}, [token])
+
 
 	const navigate = useNavigate();
 
@@ -57,7 +75,8 @@ const Token = () => {
 		}
 		try {
 			setProcessing(true);
-			const res = await upgradeProjectLevel(sendTokenData._id);
+			console.log("sendTokendata._id", token.project._id);
+			const res = await upgradeProjectLevel(token.project._id);
 			if (res.success) {
 				toast.success(res.mess);
 			} else {
@@ -67,7 +86,10 @@ const Token = () => {
 			console.log('Internal Server Error!');
 		} finally {
 			setProcessing(false);
-			navigate('/hammer');
+			const res = await fetchUserProjectDetails(token.project._id);
+			if (res.success) {
+				setToken(res.data);
+			}
 		}
 	}
 
@@ -92,21 +114,10 @@ const Token = () => {
 		},
 	];
 
-
-	if (processing) {
-		return (
-			<>
-				<div className="h-[100vh] w-[100vw] flex justify-center items-center">
-					<LuLoader2 className="animate-spin w-20 h-20 text-white" />
-				</div>
-			</>
-		)
-	}
-
 	return (
 		<>
 			<>
-				{sendTokenData && (
+				{sendTokenData && token && (
 					<>
 						{isModalOpen && (
 							<>
@@ -206,7 +217,7 @@ const Token = () => {
 
 						<div className='bg-[#060611] p-4 w-full h-[100vh] overflow-scroll overflow-x-hidden'>
 							<div className='flex items-center gap-4'>
-								<div className='text-[#FFF] text-[18px] font-semibold'>{sendTokenData.name}</div>
+								<div className='text-[#FFF] text-[18px] font-semibold'>{token.project.name}</div>
 							</div>
 
 							{/* New Upper Portion */}
@@ -229,19 +240,19 @@ const Token = () => {
 											position: "relative",
 											padding: "2px",
 											background:
-												`linear-gradient(to bottom, ${sendTokenData?.toColor},${sendTokenData?.fromColor})`,
+												`linear-gradient(to bottom, ${token.project.toColor},${token.project.fromColor})`,
 											borderRadius: "16px",
 											clipPath:
 												" polygon(0 0, 0 21%, 2% 35%, 2% 65%, 0 79%, 0 100%, 100% 100%, 100% 79%, 98% 65%, 98% 35%, 100% 21%, 100% 0)",
 										}}
 										className="card-container w-full h-[28vh]"
 										onClick={() => handleTokenBuy()}
-										disabled={processing || sendTokenData?.userData?.nextLevelCost === 'max'}
+										disabled={processing || token.userData.userLevel === 'max'}
 									>
 										<div
 											style={{
 												position: "relative",
-												background: `linear-gradient(to bottom, ${sendTokenData?.fromColor}, ${sendTokenData?.toColor})`,
+												background: `linear-gradient(to bottom, ${token.project.fromColor}, ${token.project.toColor})`,
 												borderRadius: "14px",
 												clipPath:
 													" polygon(0 0, 0 21%, 2% 35%, 2% 65%, 0 79%, 0 100%, 100% 100%, 100% 79%, 98% 65%, 98% 35%, 100% 21%, 100% 0)",
@@ -257,7 +268,7 @@ const Token = () => {
 													/>
 													<div className=" flex items-center justify-center absolute">
 														<p className="font-italianno text-[6rem]   text-slate-100 opacity-10">
-															{sendTokenData.name.charAt(0)}
+															{token.project.name.charAt(0)}
 														</p>
 													</div>
 												</div>
@@ -272,10 +283,10 @@ const Token = () => {
 																}}
 																className="text-base py-1 w-[10vw] bg-slate-900 text-center rounded-md text-white ml-1 mt-1"
 															>
-																{sendTokenData?.userData?.nextLevelCost !== 'max' ? (`lvl ${sendTokenData?.userData?.level || 0}`) : ('Max')}
+																{token.userData.userLevel !== 'max' ? (`lvl ${token.userData.userLevel || 0}`) : ('Max')}
 															</p>
 
-															{sendTokenData?.userData?.nextLevelCost !== 'max' && (
+															{token.userData.userLevel !== 'max' && (
 																<div className="text-[#FFF] flex items-center mr-10 gap-1">
 																	<span>
 																		<img
@@ -285,7 +296,7 @@ const Token = () => {
 																		/>
 																	</span>
 																	<p className="text-xl">
-																		{sendTokenData?.userData?.nextLevelCost || sendTokenData?.levels[0]?.cost}
+																		{token.userData.nextLevelCost}
 																	</p>
 																</div>
 															)}
@@ -297,22 +308,22 @@ const Token = () => {
 															<div className="flex items-center gap-2 ml-8 mt-6">
 																<img
 																	className="w-[40px] h-[40px]"
-																	src={`data:image/jpeg;base64,${sendTokenData.icon.data}`}
+																	src={`data:image/jpeg;base64,${token.project.icon.data}`}
 																	alt="BigCoin-Icon"
 																/>
 																<div className="text-xl text-white">
-																	<p>{sendTokenData.name}</p>
+																	<p>{token.project.name}</p>
 																</div>
 															</div>
-															<div className=" items-center mr-8">
+															<div className=" items-center mr-5">
 																<p className="text-[#F39E09] font-semibold">
 																	Balance
 																</p>
 																<div className="flex gap-2">
 																	<img src={BigCoin} alt="Coin-Icon" />
 																	<p className="text-white">
-																		{sendTokenData?.walletData?.balance || 0}
-																		<span className="text-xs">{sendTokenData.name.match(/[A-Z]/g)?.join('')}</span>
+																		{token.userData.walletBalance || 0}
+																		<span className="text-xs">{token.project.name.match(/[A-Z]/g)?.join('')}</span>
 																	</p>
 
 																	<p></p>
@@ -323,8 +334,8 @@ const Token = () => {
 															<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 464.94 93.53" width={280} height={100}>
 																<defs>
 																	<linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="0%">
-																		<stop offset="0%" style={{ stopColor: sendTokenData?.fromColor, stopOpacity: 1 }} />
-																		<stop offset="100%" style={{ stopColor: sendTokenData?.toColor, stopOpacity: 1 }} />
+																		<stop offset="0%" style={{ stopColor: token.project.fromColor, stopOpacity: 1 }} />
+																		<stop offset="100%" style={{ stopColor: token.project.toColor, stopOpacity: 1 }} />
 																	</linearGradient>
 																</defs>
 																<polyline
@@ -342,7 +353,7 @@ const Token = () => {
 														</div>
 													</div>
 
-													{sendTokenData?.userData?.nextLevelCost !== 'max' && (
+													{token.userData.userLevel !== 'max' && (
 														<div className="px-5 mt-5 flex justify-between w-full">
 															<div className="text-[#FFF] text-xs font-normal gap-2 flex items-center w-[60%]">
 																<div>Coins Per Minute</div>
@@ -350,7 +361,7 @@ const Token = () => {
 																	<img src={loadcoin} alt="" width={12} />
 																</div>
 																<div className="text-xl text-[#FF8F00] font-medium">
-																	<p>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData?.levels[0]?.cpm}</p>
+																	<p>+{token?.userData?.nextLevelCpm}</p>
 																</div>
 															</div>
 															<div className="w-[40%] flex items-center gap-2 border justify-center border-[#fff9f9] rounded-xl py-1">
@@ -360,7 +371,7 @@ const Token = () => {
 																	alt="Coin-Icon"
 																/>
 																<div className="text-[#FFF] text-[15px] font-normal text-xs ">
-																	<p> + {sendTokenData?.userData?.nextLevelReward || sendTokenData?.levels[0]?.reward} {sendTokenData.name.match(/[A-Z]/g)?.join('')}</p>
+																	<p> + {token?.userData?.nextLevelReward} {token.project.name.match(/[A-Z]/g)?.join('')}</p>
 																</div>
 															</div>
 														</div>
@@ -372,8 +383,8 @@ const Token = () => {
 											<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 284.32 101.81" width="70" height="50">
 												<defs>
 													<linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-														<stop offset="0%" style={{ stopColor: sendTokenData?.lineFromColor, stopOpacity: 1 }} />
-														<stop offset="100%" style={{ stopColor: sendTokenData?.lineToColor, stopOpacity: 1 }} />
+														<stop offset="0%" style={{ stopColor: token.project.lineFromColor, stopOpacity: 1 }} />
+														<stop offset="100%" style={{ stopColor: token.project.lineToColor, stopOpacity: 1 }} />
 													</linearGradient>
 													<style>
 														{`
@@ -382,7 +393,7 @@ const Token = () => {
 																stroke: url(#gradient1);
 																stroke-width: 3px;
 																stroke-miterlimit: 10;
-																filter: drop-shadow(0px 0px 5px ${sendTokenData?.fromColor});
+																filter: drop-shadow(0px 0px 5px ${token.project.fromColor});
 															}
 														`}
 													</style>

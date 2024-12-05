@@ -554,7 +554,7 @@ exports.fetchUserProjects = async (req, res) => {
             });
         }
 
-        const projects = await ProjectModel.find({}, '_id name fromColor toColor lineToColor lineFromColor tgeDate icon levels').lean();
+        const projects = await ProjectModel.find({}, '_id name fromColor toColor tgeDate icon levels').lean();
 
         const categorizedProjects = {
             current: [],
@@ -734,6 +734,81 @@ exports.upgradeUserProjectLevel = async (req, res) => {
         return res.status(500).json({
             status: 'failed',
             message: 'Internal Server Error'
+        });
+    }
+};
+
+exports.userProjectDetails = async (req, res) => {
+    try {
+        const { userId, projectId } = req.body;
+
+        if (!userId || !projectId) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'User ID and Project ID are required.',
+            });
+        }
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User not found!',
+            });
+        }
+
+        const project = await ProjectModel.findById(projectId);
+        if (!project) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'Project not found!',
+            });
+        }
+
+        let userLevel = null;
+        const userProject = user.projects.find((p) => p._id.toString() === projectId);
+        if (userProject) {
+            userLevel = userProject.level || 0;
+        }
+
+        let nextLevelCost = 0, nextLevelReward = 0, nextLevelCpm = 0;
+
+        if (userLevel !== null && userLevel < project.levels.length - 1) {
+            const nextLevel = project.levels[userLevel + 1];
+            nextLevelCost = nextLevel.cost || 0;
+            nextLevelReward = nextLevel.reward || 0;
+            nextLevelCpm = nextLevel.cpm || 0;
+        } else if (userLevel === null && project.levels.length > 0) {
+            const firstLevel = project.levels[0];
+            nextLevelCost = firstLevel.cost || 0;
+            nextLevelReward = firstLevel.reward || 0;
+            nextLevelCpm = firstLevel.cpm || 0;
+        }
+
+        const displayUserLevel =
+            userLevel === project.levels.length - 1 ? 'max' : userLevel === null ? null : userLevel;
+
+        const wallet = user.wallet.find((w) => w._id.toString() === projectId);
+        const walletBalance = wallet ? wallet.balance : 0;
+
+        const userData = {
+            userLevel: displayUserLevel === 'max' ? displayUserLevel : displayUserLevel + 1,
+            walletBalance,
+            nextLevelCost,
+            nextLevelReward,
+            nextLevelCpm,
+        };
+
+        return res.status(200).json({
+            status: 'success',
+            userData: userData,
+            project: project
+        });
+    } catch (error) {
+        console.error('Internal Server Error:', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error',
         });
     }
 };

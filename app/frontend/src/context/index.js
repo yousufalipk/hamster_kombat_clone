@@ -477,6 +477,23 @@ export const UserProvider = (props) => {
         }
     }
 
+    const fetchUserProjectDetails = async (projectId) => {
+        try {
+            const response = await axios.post(`${apiUrl}/user/fetch-projects-details`, {
+                userId: userId,
+                projectId: projectId
+            });
+            if (response.data.status === 'success') {
+                return ({ success: true, data: response.data });
+            } else {
+                return ({ success: false, data: response.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, data: 'Internal Server Error!' });
+        }
+    }
+
     const fetchKols = async () => {
         try {
             setKolsLoader(true);
@@ -649,6 +666,7 @@ export const UserProvider = (props) => {
             tgeProjects,
             missedProjects,
             fetchProjects,
+            fetchUserProjectDetails,
             upgradeProjectLevel,
 
             kols,
