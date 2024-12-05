@@ -933,10 +933,24 @@ exports.fetchUserVcs = async (req, res) => {
         const response = vcs.map(vc => {
             const userVc = user.vcs.find(up => up._id && up._id.equals(vc._id));
 
+
+            let customIndex = 0;
+            const currentLevel = userVc?.level || null;
+            if (currentLevel !== undefined) {
+                customIndex = currentLevel + 1;
+            }
+
+            const levelCost = vc.levels[customIndex]?.cost || 'max';
+            const levelReward = vc.levels[customIndex]?.reward || 'max';
+            const levelCpm = vc.levels[customIndex]?.cpm || 'max';
+
             const enrichedProject = {
                 ...vc,
                 userData: userVc ? {
-                    level: userVc.level,
+                    level: userVc.level + 1,
+                    nextLevelCost: levelCost,
+                    nextLevelReward: levelReward,
+                    nextLevelCpm: levelCpm
                 } : null,
             };
             return enrichedProject;
@@ -1097,10 +1111,24 @@ exports.fetchUserPatners = async (req, res) => {
         const response = patners.map(patner => {
             const userPatner = user.patners.find(up => up._id && up._id.equals(patner._id));
 
+            let customIndex = 0;
+            const currentLevel = userPatner?.level || null;
+            if (currentLevel !== undefined) {
+                customIndex = currentLevel + 1;
+            }
+
+            const levelCost = patner.levels[customIndex]?.cost || 'max';
+            const levelReward = patner.levels[customIndex]?.reward || 'max';
+            const levelCpm = patner.levels[customIndex]?.cpm || 'max';
+
+
             const enrichedProject = {
                 ...patner,
                 userData: userPatner ? {
-                    level: userPatner.level,
+                    level: userPatner.level + 1,
+                    nextLevelCost: levelCost,
+                    nextLevelReward: levelReward,
+                    nextLevelCpm: levelCpm
                 } : null,
             };
             return enrichedProject;
@@ -1207,7 +1235,7 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
 
         return res.status(200).json({
             status: 'success',
-            message: 'Vc level upgraded successfully!',
+            message: 'Patner level upgraded successfully!',
             balance: user.balance,
             cpm: user.coinsPerMinute.value,
             patners: user.patners,

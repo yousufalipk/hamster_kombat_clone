@@ -24,9 +24,6 @@ const Hammer = () => {
 		setActiveItem("Launch Pad");
 	}, [])
 
-	const bonus = {
-		total: 25951748,
-	};
 
 	const timer = {
 		time: "23:18:33",
@@ -49,7 +46,7 @@ const Hammer = () => {
 						<div className='h-[20vh] flex gap-5 justify-center items-center pt-5'>
 
 							{/* Card 1 */}
-							{comboCards.length > 0 ? (
+							{comboCards?.length > 0 ? (
 								<>
 									<div
 										style={{
@@ -82,7 +79,7 @@ const Hammer = () => {
 							)}
 
 							{/* Card 2 */}
-							{comboCards.length === 2 ? (
+							{comboCards?.length === 2 ? (
 								<>
 									<div
 										style={{

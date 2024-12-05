@@ -50,7 +50,7 @@ app.listen(PORT, () => {
 app.get('/random-card-status-update', async (req, res) => {
     try {
         const previousCardCollaborators = await Promise.all([
-            ProjectModel.find({ card: true }, { _id: 1 }),
+            ProjectModel.find({ card: true, tgeDate: null }, { _id: 1 }),
             KolsModel.find({ card: true }, { _id: 1 }),
             PatnersModel.find({ card: true }, { _id: 1 }),
             VcModel.find({ card: true }, { _id: 1 })
