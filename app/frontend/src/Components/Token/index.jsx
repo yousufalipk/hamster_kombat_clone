@@ -260,7 +260,7 @@ const Token = () => {
 											className="card-container w-full h-[34.5vh]"
 										>
 											<div className="absolute left-10 -top-3">
-												<div className=" relative flex justify-end items-center w-[12vw] h-[30vh]">
+												<div className=" relative flex justify-end items-center w-[40vw] h-[30vh]">
 													<img
 														src={cardbg}
 														alt=""
