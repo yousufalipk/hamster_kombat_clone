@@ -234,20 +234,18 @@ const Token = () => {
 											</div>
 										</div>
 									</div>
-
-
-									{/* Main Card */}
+									{/* Card */}
 									<button
 										style={{
 											position: "relative",
 											padding: "2px",
 											background:
-												`linear-gradient(to right, ${sendTokenData?.fromColor}90, ${sendTokenData?.toColor}90,${sendTokenData?.fromColor}90,${sendTokenData?.toColor}90)`,
+												`linear-gradient(to bottom, ${sendTokenData?.toColor},${sendTokenData?.fromColor})`,
 											borderRadius: "16px",
 											clipPath:
-												"polygon(0 18%, 1% 32%, 1% 68%, 0 82%, 0 100%, 100% 100%, 100% 82%, 99% 68%, 99% 32%, 100% 18%, 100% 0, 0 0)",
+												" polygon(0 0, 0 21%, 2% 35%, 2% 65%, 0 79%, 0 100%, 100% 100%, 100% 79%, 98% 65%, 98% 35%, 100% 21%, 100% 0)",
 										}}
-										className="card-container w-full h-[30vh]"
+										className="card-container w-full h-[35vh]"
 										onClick={() => handleTokenBuy(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost)}
 										disabled={processing || sendTokenData?.userData?.nextLevelCost === 'max'}
 									>
@@ -257,19 +255,19 @@ const Token = () => {
 												background: `linear-gradient(to bottom, ${sendTokenData?.fromColor}, ${sendTokenData?.toColor})`,
 												borderRadius: "14px",
 												clipPath:
-													"polygon(0 18%, 1% 32%, 1% 68%, 0 82%, 0 100%, 100% 100%, 100% 82%, 99% 68%, 99% 32%, 100% 18%, 100% 0, 0 0)",
+													" polygon(0 0, 0 21%, 2% 35%, 2% 65%, 0 79%, 0 100%, 100% 100%, 100% 79%, 98% 65%, 98% 35%, 100% 21%, 100% 0)",
 											}}
-											className="card-container w-full h-[29vh]"
+											className="card-container w-full h-[34.5vh]"
 										>
-											<div className="absolute left-4 -top-3">
-												<div className=" relative ">
+											<div className="absolute left-10 -top-3">
+												<div className=" relative flex justify-end items-center w-[12vw] h-[30vh]">
 													<img
 														src={cardbg}
 														alt=""
-														className="opacity-10 h-52 w-60  "
+														className="opacity-10"
 													/>
-													<div className=" flex items-center justify-center  absolute top-20 right-16">
-														<p className="font-italianno text-8xl   text-slate-100 opacity-10">
+													<div className=" flex items-center justify-center absolute">
+														<p className="font-italianno text-[6rem]   text-slate-100 opacity-10">
 															{sendTokenData.name.charAt(0)}
 														</p>
 													</div>
@@ -278,12 +276,12 @@ const Token = () => {
 											<div className={`rounded-[14px]`}>
 												<div className="justify-between">
 													<div className="w-full">
-														<div className="text-xs  bg-opacity-30 w-full flex justify-between py-1 ">
+														<div className="text-xs  bg-opacity-30 w-full flex justify-between py-1">
 															<p
 																style={{
-																	background: `linear-gradient(to bottom, ${sendTokenData.fromColor}, ${sendTokenData.toColor})`
+																	background: `linear-gradient(to bottom, #00B2FF, #2226FF)`
 																}}
-																className="text-base py-1 w-[16vw] bg-slate-900 text-center rounded-md text-white ml-1 mt-1"
+																className="text-base py-1 w-[10vw] bg-slate-900 text-center rounded-md text-white ml-1 mt-1"
 															>
 																{sendTokenData?.userData?.nextLevelCost !== 'max' ? (`lvl ${sendTokenData?.userData?.level || 0}`) : ('Max')}
 															</p>
@@ -303,6 +301,7 @@ const Token = () => {
 																</div>
 															)}
 														</div>
+
 														<div
 															className={`flex justify-between items-center`}
 														>
@@ -331,32 +330,31 @@ const Token = () => {
 																</div>
 															</div>
 														</div>
-														<div className="absolute bottom-5 opacity-50">
-															<svg width="90vw" height="20vh" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
-																{/* Vertical */}
-																<line
-																	x1="500"
-																	y1="100"
-																	x2="500"
-																	y2="-30"
-																	stroke={darkenColor(sendTokenData.fromColor, 0.5)}
-																	stroke-width="4"
-																/>
-																{/* Horizontal */}
-																<line
-																	x1="60"
-																	y1="100"
-																	x2="750"
-																	y2="100"
-																	stroke={darkenColor(sendTokenData.toColor, 0.5)}
-																	stroke-width="4"
+														<div className="absolute bottom-24 left-5">
+															<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 464.94 93.53" width={360} height={100}>
+																<defs>
+																	<linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="0%">
+																		<stop offset="0%" style={{ stopColor: sendTokenData?.fromColor, stopOpacity: 1 }} />
+																		<stop offset="100%" style={{ stopColor: sendTokenData?.toColor, stopOpacity: 1 }} />
+																	</linearGradient>
+																</defs>
+																<polyline
+																	className="cls-1"
+																	points="0 92.53 464.94 92.53 310.98 92.53 310.98 0"
+																	style={{
+																		stroke: 'url(#gradientStroke)',
+																		fill: 'none',
+																		strokeWidth: '1',
+																		strokeLinejoin: 'miter',
+																		strokeLinecap: 'butt',
+																	}}
 																/>
 															</svg>
 														</div>
 													</div>
 
 													{sendTokenData?.userData?.nextLevelCost !== 'max' && (
-														<div className="px-5 mt-4 flex justify-between w-full">
+														<div className="px-5 mt-12 flex justify-between w-full">
 															<div className="text-[#FFF] text-xs font-normal gap-2 flex items-center w-[60%]">
 																<div>Coins Per Minute</div>
 																<div>
@@ -366,7 +364,7 @@ const Token = () => {
 																	<p>+{sendTokenData?.userData?.nextLevelCpm || sendTokenData?.levels[0]?.cpm}</p>
 																</div>
 															</div>
-															<div className="w-[40%] flex items-center gap-2 border justify-center border-[#5B5B5B] rounded-xl py-1">
+															<div className="w-[40%] flex items-center gap-2 border justify-center border-[#fff9f9] rounded-xl py-1">
 																<img
 																	width={15}
 																	src={BigCoin}
@@ -381,72 +379,27 @@ const Token = () => {
 												</div>
 											</div>
 										</div>
-										<div className="absolute -bottom-4 right-0 overflow-hidden">
-											<svg width="50vw" height="20vh" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
-												<line
-													x1="550"
-													y1="135"
-													x2="625"
-													y2="135"
-													stroke={darkenColor(sendTokenData.toColor, 0.5)}
-													stroke-width="12"
-												/>
-												<line
-													x1="655"
-													y1="180"
-													x2="620"
-													y2="135"
-													stroke={darkenColor(sendTokenData.fromColor, 0.5)}
-													stroke-width="12"
-												/>
-												<line
-													x1="650"
-													y1="180"
-													x2="800"
-													y2="180"
-													stroke={darkenColor(sendTokenData.toColor, 0.5)}
-													stroke-width="12"
-												/>
-												<line
-													x1="720"
-													y1="230"
-													x2="800"
-													y2="230"
-													stroke={darkenColor(sendTokenData.toColor, 0.5)}
-													stroke-width="12"
-												/>
-												<line
-													x1="680"
-													y1="280"
-													x2="720"
-													y2="230"
-													stroke={darkenColor(sendTokenData.fromColor, 0.5)}
-													stroke-width="12"
-												/>
-												<line
-													x1="550"
-													y1="280"
-													x2="680"
-													y2="280"
-													stroke={darkenColor(sendTokenData.toColor, 0.5)}
-													stroke-width="12"
-												/>
-												<line
-													x1="550"
-													y1="280"
-													x2="520"
-													y2="230"
-													stroke={darkenColor(sendTokenData.fromColor, 0.5)}
-													stroke-width="12"
-												/>
-												<line
-													x1="450"
-													y1="230"
-													x2="525"
-													y2="230"
-													stroke={darkenColor(sendTokenData.toColor, 0.5)}
-													stroke-width="12"
-												/>
+										<div className="absolute -bottom-4 right-0.5 overflow-hidden">
+											<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 284.32 101.81" width="100" height="100">
+												<defs>
+													<linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+														<stop offset="0%" style={{ stopColor: sendTokenData?.lineFromColor, stopOpacity: 1 }} />
+														<stop offset="100%" style={{ stopColor: sendTokenData?.lineToColor, stopOpacity: 1 }} />
+													</linearGradient>
+													<style>
+														{`
+															.cls-1 {
+																fill: none;
+																stroke: url(#gradient1);
+																stroke-width: 3px;
+																stroke-miterlimit: 10;
+																filter: drop-shadow(0px 0px 5px ${sendTokenData?.fromColor});
+															}
+														`}
+													</style>
+												</defs>
+												<polyline className="cls-1" points="284.32 30.61 140.94 30.61 111.06 1.5 34.32 1.5" />
+												<polyline className="cls-1" points="284.32 73.5 210.64 73.5 180.77 100.31 83.49 100.31 59.74 73.5 0 73.5" />
 											</svg>
 										</div>
 									</button>

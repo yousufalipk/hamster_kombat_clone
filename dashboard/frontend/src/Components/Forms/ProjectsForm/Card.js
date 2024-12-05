@@ -13,10 +13,6 @@ const Card = ({
     name,
     icon
 }) => {
-    console.log("From Color", fromColor);
-    console.log("To Color", toColor);
-    console.log("Name", name);
-    console.log("Icon", icon);
 
     return (
         <>
@@ -127,7 +123,6 @@ const Card = ({
                                             </linearGradient>
                                         </defs>
                                         <polyline
-                                            className="cls-1"
                                             points="0 92.53 464.94 92.53 310.98 92.53 310.98 0"
                                             style={{
                                                 stroke: 'url(#gradientStroke)',
@@ -179,7 +174,7 @@ const Card = ({
                                         stroke: url(#gradient1);
                                         stroke-width: 3px;
                                         stroke-miterlimit: 10;
-                                        filter: drop-shadow(0px 0px 5px ${fromColor});
+                                        filter: drop-shadow(0px 0px 10px ${fromColor});
                                     }
                                 `}
                             </style>
