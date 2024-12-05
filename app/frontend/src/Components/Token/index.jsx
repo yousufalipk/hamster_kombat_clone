@@ -42,11 +42,7 @@ const Token = () => {
 		}
 	}, [navigate]);
 
-	const handleTokenBuy = (upgradeCost) => {
-		if (upgradeCost > balance) {
-			toast.error('Insufficient Balance!');
-			return;
-		}
+	const handleTokenBuy = () => {
 		setModalOpen(true);
 	}
 
@@ -54,7 +50,11 @@ const Token = () => {
 		setModalOpen(false);
 	}
 
-	const handleProjectUpgrade = async () => {
+	const handleProjectUpgrade = async (upgradeCost) => {
+		if (upgradeCost > balance) {
+			toast.error('Insufficient Balance!');
+			return;
+		}
 		try {
 			setProcessing(true);
 			const res = await upgradeProjectLevel(sendTokenData._id);
@@ -92,17 +92,6 @@ const Token = () => {
 		},
 	];
 
-	const darkenColor = (color, percent) => {
-		let r = parseInt(color.slice(1, 3), 16);
-		let g = parseInt(color.slice(3, 5), 16);
-		let b = parseInt(color.slice(5, 7), 16);
-
-		r = Math.floor(r * (1 - percent));
-		g = Math.floor(g * (1 - percent));
-		b = Math.floor(b * (1 - percent));
-
-		return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1).toUpperCase()}`;
-	};
 
 	if (processing) {
 		return (
@@ -202,7 +191,7 @@ const Token = () => {
 
 													<button
 														className='w-1/3 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
-														onClick={() => (handleProjectUpgrade())}
+														onClick={() => (handleProjectUpgrade(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost))}
 													>
 														Confirm
 													</button>
@@ -246,7 +235,7 @@ const Token = () => {
 												" polygon(0 0, 0 21%, 2% 35%, 2% 65%, 0 79%, 0 100%, 100% 100%, 100% 79%, 98% 65%, 98% 35%, 100% 21%, 100% 0)",
 										}}
 										className="card-container w-full h-[28vh]"
-										onClick={() => handleTokenBuy(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost)}
+										onClick={() => handleTokenBuy()}
 										disabled={processing || sendTokenData?.userData?.nextLevelCost === 'max'}
 									>
 										<div
@@ -330,7 +319,7 @@ const Token = () => {
 																</div>
 															</div>
 														</div>
-														<div className="absolute bottom-20 left-5">
+														<div className="absolute bottom-16 left-5">
 															<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 464.94 93.53" width={280} height={100}>
 																<defs>
 																	<linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -380,7 +369,7 @@ const Token = () => {
 											</div>
 										</div>
 										<div className="absolute bottom-0 right-0.5 overflow-hidden">
-											<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 284.32 101.81" width="70" height="70">
+											<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 284.32 101.81" width="70" height="50">
 												<defs>
 													<linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
 														<stop offset="0%" style={{ stopColor: sendTokenData?.lineFromColor, stopOpacity: 1 }} />
