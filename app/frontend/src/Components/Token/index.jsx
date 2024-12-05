@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import { useUser } from '../../context/index';
 import { useNavigate } from 'react-router-dom';
+import { LuLoader2 } from "react-icons/lu";
 
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
@@ -16,16 +17,38 @@ import cardbg from "../../assets/token/tokencardbg.svg";
 import loadcoin from "../../assets/token/loadcoin.svg";
 
 const Token = () => {
-	const { sendTokenData, isModalOpen, setModalOpen, upgradeProjectLevel, balance, fetchUserProjectDetails } = useUser();
+	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails } = useUser();
 
-	const [processing, setProcessing] = useState(false);
+
+	const [isModalOpen, setModalOpen] = useState(false);
+	const [processing, setProcessing] = useState(true);
+	const [buttonLoading, setButtonLoading] = useState(false);
 	const [token, setToken] = useState();
+	const [dots, setDots] = useState('');
+
+	useEffect(() => {
+		console.log("is Modal open", isModalOpen);
+	}, [isModalOpen])
+
+	useEffect(() => {
+		let interval;
+		if (buttonLoading) {
+			interval = setInterval(() => {
+				setDots(prev => (prev.length < 4 ? prev + '.' : ''));
+			}, 300);
+		} else {
+			setDots('');
+		}
+
+		return () => clearInterval(interval);
+	}, [buttonLoading]);
 
 	const fetchData = async () => {
 		if (!token) {
 			const res = await fetchUserProjectDetails(sendTokenData._id);
 			if (res.success) {
 				setToken(res.data);
+				setProcessing(false);
 			}
 		}
 	}
@@ -64,18 +87,14 @@ const Token = () => {
 		setModalOpen(true);
 	}
 
+
 	const handleCancel = () => {
 		setModalOpen(false);
 	}
 
-	const handleProjectUpgrade = async (upgradeCost) => {
-		if (upgradeCost > balance) {
-			toast.error('Insufficient Balance!');
-			return;
-		}
+	const handleProjectUpgrade = async () => {
 		try {
-			setProcessing(true);
-			console.log("sendTokendata._id", token.project._id);
+			setButtonLoading(true);
 			const res = await upgradeProjectLevel(token.project._id);
 			if (res.success) {
 				toast.success(res.mess);
@@ -85,11 +104,11 @@ const Token = () => {
 		} catch (error) {
 			console.log('Internal Server Error!');
 		} finally {
-			setProcessing(false);
 			const res = await fetchUserProjectDetails(token.project._id);
 			if (res.success) {
 				setToken(res.data);
 			}
+			setButtonLoading(false);
 		}
 	}
 
@@ -117,14 +136,22 @@ const Token = () => {
 	return (
 		<>
 			<>
+				{processing && (
+					<div className="h-[100vh] w-[100vw] z-50 bg-black opacity-50 flex justify-center items-center">
+						<LuLoader2 className="animate-spin w-20 h-20 text-white" />
+					</div>
+				)}
 				{sendTokenData && token && (
 					<>
 						{isModalOpen && (
 							<>
 								{/* New Popup */}
 								<div
-									onClick={handleCancel}
 									className='fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-80 overflow-hidden'>
+									<div
+										onClick={() => handleCancel()}
+										className="w-full h-[50vh] absolute top-0">
+									</div>
 									<div className='fixed bottom-0 h-[50vh] w-screen'>
 										<div className="absolute -inset-1 h-[50vh] bg-[#23a7ff] rounded-[35px]"></div>
 										<div className="absolute -inset-2 h-[50vh] bg-[#23a7ff] blur rounded-[50px]"></div>
@@ -201,10 +228,20 @@ const Token = () => {
 												<div className='flex gap-4 justify-center p-2'>
 
 													<button
-														className='w-1/3 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+														disabled={buttonLoading || processing || token.userData.userLevel === 'max' || (sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost) > balance}
+														className='w-1/2 py-1 px-3 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm flex justify-center items-center'
 														onClick={() => (handleProjectUpgrade(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost))}
 													>
-														Confirm
+														{(sendTokenData?.userData?.nextLevelCost || sendTokenData.levels[0].cost) > balance ? (
+															'Insufficient Balance'
+														) : (
+															<>
+																{buttonLoading ? (
+																	<span className="h-6 font-bold">
+																		{dots}
+																	</span>) : 'Confirm'}
+															</>
+														)}
 													</button>
 												</div>
 											</div>
@@ -247,7 +284,6 @@ const Token = () => {
 										}}
 										className="card-container w-full h-[28vh]"
 										onClick={() => handleTokenBuy()}
-										disabled={processing || token.userData.userLevel === 'max'}
 									>
 										<div
 											style={{
@@ -281,7 +317,7 @@ const Token = () => {
 																style={{
 																	background: `linear-gradient(to bottom, #00B2FF, #2226FF)`
 																}}
-																className="text-base py-1 w-[10vw] bg-slate-900 text-center rounded-md text-white ml-1 mt-1"
+																className="text-base py-1 w-[15vw] bg-slate-900 text-center rounded-md text-white ml-1 mt-1"
 															>
 																{token.userData.userLevel !== 'max' ? (`lvl ${token.userData.userLevel || 0}`) : ('Max')}
 															</p>

@@ -62,8 +62,6 @@ export const UserProvider = (props) => {
 
     const [loaderErrorMes, setLoaderErrorMes] = useState(null);
 
-    const [isModalOpen, setModalOpen] = useState(false);
-
     const [sendData, setSendData] = useState(false);
 
     const [sendTokenData, setSendTokenData] = useState(false);
@@ -610,8 +608,6 @@ export const UserProvider = (props) => {
     return (
         <UserContext.Provider value={{
             initializeUser,
-            isModalOpen,
-            setModalOpen,
             sendData,
             setSendData,
             tgeToggle,
