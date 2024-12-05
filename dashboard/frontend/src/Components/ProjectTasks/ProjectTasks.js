@@ -119,6 +119,7 @@ const ProjectTasks = () => {
                         </div>
                     </div>
                     <hr className="my-5 border-gray-300 w-full" />
+                    <h1 className='text-lg font-thin text-gray-300 italic'>Note: For type update please refresh after updating for latest data!</h1>
                     <div className="mx-2 my-10">
                         <table className="min-w-full bg-transparent border-collapse border border-gray-200">
                             <thead>
