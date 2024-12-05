@@ -267,6 +267,7 @@ const ManageTasks = () => {
                                 <option value='twitter'>Twitter</option>
                                 <option value='telegram'>Telegram</option>
                                 <option value='youtube'>Youtube</option>
+                                <option value='instagram'>Instagram</option>
                             </select>
                             {formik.errors.iconType && formik.touched.iconType && (
                                 <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.iconType}</p>
