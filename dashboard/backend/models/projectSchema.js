@@ -27,6 +27,14 @@ const projectsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    lineFromColor: {
+        type: String,
+        required: true,
+    },
+    lineToColor: {
+        type: String,
+        required: true,
+    },
     numberOfLevel: {
         type: Number,
         default: 0

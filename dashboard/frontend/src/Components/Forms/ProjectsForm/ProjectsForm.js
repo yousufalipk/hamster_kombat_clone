@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { useFirebase } from '../../../Context/Firebase';
 import CoinImage from '../../../Assets/coin.svg';
 
+import Card from './Card';
+
 const ProjectForm = () => {
     const { createProject, updateProject, sendData } = useFirebase();
     const navigate = useNavigate();
@@ -18,6 +20,8 @@ const ProjectForm = () => {
             name: sendData?.name || '',
             fromColor: sendData?.fromColor || '#dba211',
             toColor: sendData?.toColor || '#dba211',
+            lineFromColor: sendData?.lineFromColor || '#dba211',
+            lineToColor: sendData?.lineToColor || '#dba211',
             icon: sendData?.icon || null,
             numberOfLevel: sendData?.numberOfLevel || '',
             baseCost: sendData?.baseCost || '',
@@ -36,6 +40,12 @@ const ProjectForm = () => {
                 .matches(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid HEX color'),
             toColor: Yup.string()
                 .required('To Color is required')
+                .matches(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid HEX color'),
+            lineFromColor: Yup.string()
+                .required('Line from Color is required')
+                .matches(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid HEX color'),
+            lineToColor: Yup.string()
+                .required('Line to Color is required')
                 .matches(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid HEX color'),
             icon: Yup.mixed().required('An icon file is required'),
             numberOfLevel: Yup.number()
@@ -121,48 +131,6 @@ const ProjectForm = () => {
         navigate('/manage-projects');
     };
 
-
-    const Card = ({ name, icon, fromColor, toColor }) => {
-        return (
-            <div
-                className={`w-[24vw] h-[29vh] p-5 rounded-3xl text-white`}
-                style={{
-                    background: `linear-gradient(to left, ${fromColor}, ${toColor})`,
-                }}
-            >
-                <div className="flex justify-between items-center">
-                    <div className="text-sm font-semibold">
-                        <p className='text-2xl font-semibold'>{name || 'no_name'}</p>
-                    </div>
-                    {!icon ? (
-                        <div className="h-full ml-2 flex justify-center text-center items-center shadow-xl p-5 rounded-3xl">
-                            No Image
-                        </div>
-                    ) : (
-                        <div>
-                            <img
-                                src={`data:image/jpeg;base64,${icon.data}`}
-                                alt={name ? `${name}-img` : "Image"}
-                                width={70}
-                            />
-                        </div>
-                    )}
-                </div>
-                <div className="mt-2 flex items-center gap-2 text-[18.519px] font-normal">
-                    <div>
-                        <img src={CoinImage} alt="Coin-Icon" width="17" />
-                    </div>
-                    <div className="text-[16px]">100000</div>
-                </div>
-                <div
-                    className="mt-2 text-[8px] font-medium bg-[rgba(0,0,0,0.3)] w-fit p-1 rounded-[5px]"
-                >
-                    <p className="opacity-100">lvl 0</p>
-                </div>
-            </div>
-        );
-    };
-
     return (
         <div className="p-4">
             <div className="flex flex-row justify-between items-center mb-5">
@@ -186,12 +154,14 @@ const ProjectForm = () => {
                 </div>
             </div>
 
-            <div className='w-full flex justify-center items-center'>
+            <div className='w-[28vw] h-[35vh] flex justify-center items-center mx-auto'>
                 <Card
-                    name={formik.values.name}
-                    icon={formik.values.icon}
                     fromColor={formik.values.fromColor}
                     toColor={formik.values.toColor}
+                    lineFromColor={formik.values.lineFromColor}
+                    lineToColor={formik.values.lineToColor}
+                    name={formik.values.name}
+                    icon={formik.values.icon}
                 />
             </div>
 
@@ -243,6 +213,38 @@ const ProjectForm = () => {
                     />
                     {formik.errors.toColor && formik.touched.toColor && (
                         <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.toColor}</p>
+                    )}
+                </div>
+
+                {/* Line From Color Picker */}
+                <div className="mb-4">
+                    <label className="block text-sm font-medium mb-1">Zig Zag From Color</label>
+                    <input
+                        type="color"
+                        name="lineFromColor"
+                        className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.lineFromColor && formik.touched.lineFromColor ? 'border-red-500' : ''}`}
+                        value={formik.values.lineFromColor}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    {formik.errors.lineFromColor && formik.touched.lineFromColor && (
+                        <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.lineFromColor}</p>
+                    )}
+                </div>
+
+                {/* Line To Color Picker */}
+                <div className="mb-4">
+                    <label className="block text-sm font-medium mb-1">Zig Zag To Color</label>
+                    <input
+                        type="color"
+                        name="lineToColor"
+                        className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.lineToColor && formik.touched.lineToColor ? 'border-red-500' : ''}`}
+                        value={formik.values.lineToColor}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    {formik.errors.lineToColor && formik.touched.lineToColor && (
+                        <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.lineToColor}</p>
                     )}
                 </div>
 

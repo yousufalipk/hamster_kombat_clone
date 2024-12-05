@@ -72,15 +72,15 @@ const PopUpTGE = () => {
                         </div>
                         {/* action buttons */}
                         <div className='flex gap-4 mt-3'>
-                            <button 
+                            <button
                                 className='w-1/2 p-2 bg-[#242434] rounded-lg text-sm'
-                                onClick={()=>(handleConfirm())}
+                                onClick={() => (handleConfirm())}
                             >
                                 Cancel
                             </button>
-                            <button 
-                                className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm' 
-                                onClick={()=>(handleCancel())}
+                            <button
+                                className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+                                onClick={() => (handleCancel())}
                             >
                                 Confirm
                             </button>

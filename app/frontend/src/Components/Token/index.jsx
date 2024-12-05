@@ -14,7 +14,6 @@ import Telegram from "../../assets/token/telegram.svg";
 import Youtube from "../../assets/token/youtube.svg";
 import cardbg from "../../assets/token/tokencardbg.svg";
 import loadcoin from "../../assets/token/loadcoin.svg";
-import lineCard from "../../assets/token/cardLine.svg";
 
 import { LuLoader2 } from "react-icons/lu";
 

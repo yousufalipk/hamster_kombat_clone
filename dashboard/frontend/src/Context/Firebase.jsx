@@ -1,12 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from 'axios';
-
+import { useNavigate } from "react-router-dom";
 
 const FirebaseContext = createContext(null);
 
 export const useFirebase = () => useContext(FirebaseContext);
 
 export const FirebaseProvider = (props) => {
+
+    const navigate = useNavigate();
 
     const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -75,6 +77,7 @@ export const FirebaseProvider = (props) => {
         const refreshToken = localStorage.getItem('refreshToken');
         if (refreshToken) {
             refreshAuth();
+            navigate('/');
         }
     }, []);
 
@@ -202,6 +205,8 @@ export const FirebaseProvider = (props) => {
                 },
                 fromColor: data.fromColor,
                 toColor: data.toColor,
+                lineFromColor: data.lineFromColor,
+                lineToColor: data.lineToColor,
                 numberOfLevel: numberOfLevel,
                 baseValues: {
                     baseCost: baseCost,
@@ -245,6 +250,8 @@ export const FirebaseProvider = (props) => {
                 },
                 fromColor: data.fromColor,
                 toColor: data.toColor,
+                lineFromColor: data.lineFromColor,
+                lineToColor: data.lineToColor,
                 numberOfLevel: numberOfLevel,
                 baseValues: {
                     baseCost: baseCost,

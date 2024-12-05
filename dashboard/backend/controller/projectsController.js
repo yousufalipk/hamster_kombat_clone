@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 
 exports.createProject = async (req, res) => {
     try {
-        const { name, icon, fromColor, toColor, numberOfLevel, baseValues, multipliers } = req.body;
+        const { name, icon, fromColor, toColor, lineFromColor, lineToColor, numberOfLevel, baseValues, multipliers } = req.body;
 
         if (
             !name || !icon || !icon.name || !icon.data || !icon.contentType ||
-            !fromColor || !toColor || !numberOfLevel || !baseValues ||
+            !fromColor || !toColor || !lineFromColor || !lineToColor || !numberOfLevel || !baseValues ||
             !baseValues.baseCost || !baseValues.baseReward || !baseValues.baseCpm ||
             !multipliers || !multipliers.costMultiplier || !multipliers.rewardMultiplier || !multipliers.cpmMultiplier
         ) {
@@ -63,6 +63,8 @@ exports.createProject = async (req, res) => {
             },
             fromColor,
             toColor,
+            lineFromColor,
+            lineToColor,
             levels,
             numberOfLevel: numberOfLevel,
             baseValues: {
@@ -164,11 +166,11 @@ exports.fetchProjects = async (req, res) => {
 
 exports.updateProject = async (req, res) => {
     try {
-        const { projectId, name, icon, fromColor, toColor, numberOfLevel, baseValues, multipliers } = req.body;
+        const { projectId, name, icon, fromColor, toColor, lineToColor, lineFromColor, numberOfLevel, baseValues, multipliers } = req.body;
 
         if (
             !name || !icon || !icon.name || !icon.data || !icon.contentType ||
-            !fromColor || !toColor || !numberOfLevel || !baseValues ||
+            !fromColor || !toColor || !lineToColor || !lineFromColor || !numberOfLevel || !baseValues ||
             !baseValues.baseCost || !baseValues.baseReward || !baseValues.baseCpm ||
             !multipliers || !multipliers.costMultiplier || !multipliers.rewardMultiplier || !multipliers.cpmMultiplier
         ) {
@@ -231,6 +233,8 @@ exports.updateProject = async (req, res) => {
         };
         project.fromColor = fromColor;
         project.toColor = toColor;
+        project.lineToColor = lineToColor;
+        project.lineFromColor = lineFromColor;
         project.levels = levels;
         project.numberOfLevel = numberOfLevel;
         project.baseValues = {
