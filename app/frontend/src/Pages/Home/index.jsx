@@ -80,6 +80,8 @@ const Home = () => {
 
 	// 4 Boosters Popup States 
 
+	const [popupClosing, setPopupClosing] = useState(false);
+
 	const [energyPopup, setEnergyPopup] = useState(false);
 	const [multitapsPopup, setMultitapsPopup] = useState(false);
 	const [unlimitedTapsPopup, setUnlimitedTapsPopup] = useState(false);
@@ -174,6 +176,7 @@ const Home = () => {
 		}
 		else if (data.id === 2) {
 			setDailyRewardPopup(true);
+			setPopupClosing(false);
 		}
 		else if (data.id === 3) {
 			navigate('/');
@@ -890,10 +893,11 @@ const Home = () => {
 						{dailyRewardPopup && (
 							<>
 								<div
-									className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end"
 									style={{
-										animation: "openPopup 0.7s ease-in-out",
+										animation: `${popupClosing ? "fadeOut" : "fadeIn"
+											} 0.5s ease-in-out forwards`,
 									}}
+									className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end"
 								>
 									<div className="relative bg-[#06060E] w-[100vw] h-[80vh] rounded-t-3xl p-4 text-white">
 										<div className="absolute left-0 -top-10">
@@ -1002,7 +1006,13 @@ const Home = () => {
 											</button>
 										</div>
 										<div className="absolute top-4 right-5">
-											<button onClick={() => setDailyRewardPopup(false)}>
+											<button onClick={() => {
+												setPopupClosing(true);
+												setTimeout(() => {
+													setDailyRewardPopup(false);
+													setPopupClosing(false);
+												}, 500);
+											}}>
 												<img src={close} alt="" width={25} />
 											</button>
 										</div>

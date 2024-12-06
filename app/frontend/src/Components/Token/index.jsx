@@ -10,6 +10,7 @@ import LittleCoin from "../../assets/LittleCoinIcon.svg";
 
 import popupLine from "../../assets/token/popupLine.svg";
 
+import arrow from '../../assets/token/arrow.svg';
 import Twitter from "../../assets/token/twitter.svg";
 import Telegram from "../../assets/token/telegram.svg";
 import Youtube from "../../assets/token/youtube.svg";
@@ -99,6 +100,7 @@ const Token = () => {
 				setToken(res.data);
 			}
 			setButtonLoading(false);
+			setModalOpen(false);
 		}
 	}
 
@@ -137,7 +139,10 @@ const Token = () => {
 							<>
 								{/* New Popup */}
 								<div
-									className='fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-80 overflow-hidden'>
+									style={{
+										animation: "openPopup 0.7s ease-in-out",
+									}}
+									className='popup-overlay fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-80 overflow-hidden'>
 									<div
 										onClick={() => handleCancel()}
 										className="w-full h-[50vh] absolute top-0">
@@ -440,14 +445,11 @@ const Token = () => {
 							</div>
 
 							{/* Tasks Section */}
-							<div className='px-1 pt-4'>
+							<div className="h-[60vh] px-4 pt-4 overflow-scroll border-t-2 mt-5 rounded-tl-[30px] rounded-tr-[30px] border-[#0099FF] shadow-[#0099ff92]  shadow-lg  ">
 								{/* Heading 1 */}
 								<div>
-									<p className='text-[#9595A9] text-[15px] font-medium'>
-										Pandatop News
-									</p>
+									<p className="text-[#9595A9] text-lg ">Daily Task</p>
 								</div>
-
 								{/* Pandatop News Cards */}
 								<div>
 									{data.map((values) => {
@@ -455,35 +457,40 @@ const Token = () => {
 										return (
 											<div
 												key={id}
-												className='bg-[#1b1b27] text-[#FFF] text-base font-medium flex justify-between items-center border border-[#666666] rounded-[14px] gap-4 py-1 px-3 my-3'>
-
-												<div className="flex gap-3 justify-center items-center py-1">
+												className="bg-[#1B1B27] text-white   flex justify-between items-center border border-[#0099FF] rounded-[14px] gap-4 py-2 px-3 my-3 "
+											>
+												<div className="flex gap-3 justify-center items-center py-1 w-full">
 													{/* Icon */}
-													<div className='flex flex-shrink-0'>
+													<div className="flex flex-shrink-0 ">
 														<img
 															src={img}
-															alt='Icons'
-															width="40"
+															alt="Icons"
+															width="60"
+															className=""
 														/>
 													</div>
 													{/* Name */}
-													<div className='flex flex-shrink-0 text-[14px]'>{name}</div>
+													<div className="flex justify-between items-center w-full">
+														<div>
+															<div className="flex   text-lg">{name}</div>
+															<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
+																<img src={BigCoin} alt="" className="h-4 w-5" />
+																<span>+{amount}</span>
+															</div>
+														</div>
+														<div>
+															<img src={arrow} alt="" />
+														</div>
+													</div>
 												</div>
-
 												{/* White Box */}
-												<div className="bg-white text-black py-1 px-2 rounded-md text-[15px]">
-													{amount}
-												</div>
 											</div>
 										);
 									})}
 								</div>
-
 								{/* Heading 2 */}
-								<div className='pt-3'>
-									<p className='text-[#9595A9] text-[15px] font-medium'>
-										Social Media
-									</p>
+								<div className="pt-3">
+									<p className="text-[#9595A9] text-lg ">Social Media</p>
 								</div>
 								{/* Social Media Cards */}
 								<div>
@@ -492,25 +499,28 @@ const Token = () => {
 										return (
 											<div
 												key={id}
-												className='bg-[#1b1b27] text-[#FFF] text-base font-medium flex justify-between items-center border border-[#666666] rounded-[14px] gap-4 py-1 px-3 my-3'>
-
-												<div className="flex gap-3 justify-center items-center py-1">
-													{/* Icon */}
-													<div className='flex flex-shrink-0'>
-														<img
-															src={img}
-															alt='Icons'
-															width="40"
-														/>
+												className="bg-[#1B1B27] text-white   flex justify-between items-center border border-[#0099FF] rounded-[14px] gap-4 py-2 px-3 my-3 "
+											>
+												<div className="flex gap-3 justify-center items-center py-1 w-full ">
+													<div className="flex flex-shrink-0">
+														<img src={img} alt="Icons" width="40" />
 													</div>
-													{/* Name */}
-													<div className='flex flex-shrink-0 text-[14px]'>{name}</div>
+													<div className="flex justify-between items-center w-full">
+														<div>
+															<div className="flex   text-lg">{name}</div>
+															<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
+																<img src={BigCoin} alt="" className="h-4 w-5" />
+																<span>+{amount}</span>
+															</div>
+														</div>
+														<div>
+															<button className="bg-white  rounded-md text-black px-6 mt-8 font-medium">
+																JOIN{" "}
+															</button>
+														</div>
+													</div>
 												</div>
-
 												{/* White Box */}
-												<div className="bg-white text-black py-1 px-2 rounded-md text-[15px]">
-													{amount}
-												</div>
 											</div>
 										);
 									})}
