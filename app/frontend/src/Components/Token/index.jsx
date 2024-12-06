@@ -8,23 +8,57 @@ import { LuLoader2 } from "react-icons/lu";
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
 
+import linbottle from '../../assets/token/LineBottle.svg'
+import closebutton from "../../assets/token/closebutton.svg"
+
 import popupLine from "../../assets/token/popupLine.svg";
 
+import Twitter from '../../assets/token/twitter.svg';
+import Telegram from '../../assets/token/telegram.svg';
+import Youtube from '../../assets/token/youtube.svg';
+import Instagram from '../../assets/token/instagram.svg';
+
 import arrow from '../../assets/token/arrow.svg';
-import Twitter from "../../assets/token/twitter.svg";
-import Telegram from "../../assets/token/telegram.svg";
-import Youtube from "../../assets/token/youtube.svg";
 import cardbg from "../../assets/token/tokencardbg.svg";
 import loadcoin from "../../assets/token/loadcoin.svg";
 
 const Token = () => {
-	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails } = useUser();
+	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask } = useUser();
 
 	const [isModalOpen, setModalOpen] = useState(false);
 	const [processing, setProcessing] = useState(true);
 	const [buttonLoading, setButtonLoading] = useState(false);
 	const [token, setToken] = useState();
 	const [dots, setDots] = useState('');
+	const [dailyTasks, setDailyTasks] = useState([]);
+	const [socialTasks, setSocialTasks] = useState([]);
+	const [selectedTask, setSelectedTask] = useState(null);
+	const [taskPopUp, setTaskPopup] = useState(false);
+	const [popupClosing, setPopupClosing] = useState(false);
+	const [timeDifference, setTimeDifference] = useState(0);
+
+	useEffect(() => {
+		console.log("Selected Task", selectedTask);
+	}, [selectedTask])
+
+	const iconMapping = {
+		twitter: Twitter,
+		telegram: Telegram,
+		youtube: Youtube,
+		instagram: Instagram,
+	};
+
+	const buttonText = {
+		twitter: "Follow",
+		telegram: "Join",
+		youtube: "Subscribe",
+		instagram: "Follow",
+	};
+
+	useEffect(() => {
+		console.log("Social Tasks", socialTasks);
+		console.log("Daily Tasks", dailyTasks);
+	}, [socialTasks, dailyTasks]);
 
 	useEffect(() => {
 		let interval;
@@ -35,7 +69,6 @@ const Token = () => {
 		} else {
 			setDots('');
 		}
-
 		return () => clearInterval(interval);
 	}, [buttonLoading]);
 
@@ -45,10 +78,16 @@ const Token = () => {
 			if (res.success) {
 				setToken(res.data);
 				setProcessing(false);
+				const allTasks = res.data.project.tasks;
+				setDailyTasks(allTasks.filter(task => task.taskType === "daily"));
+				setSocialTasks(allTasks.filter(task => task.taskType === "social"));
 			}
 		}
 	}
 
+	useEffect(() => {
+		console.log("Selected Task", selectedTask);
+	}, [selectedTask])
 
 	useEffect(() => {
 		fetchData();
@@ -78,7 +117,6 @@ const Token = () => {
 		setModalOpen(true);
 	}
 
-
 	const handleCancel = () => {
 		setModalOpen(false);
 	}
@@ -101,6 +139,39 @@ const Token = () => {
 			}
 			setButtonLoading(false);
 			setModalOpen(false);
+		}
+	}
+
+	const handleClaimTask = async () => {
+		try {
+			if (!selectedTask?.claimedStatus) {
+				setSelectedTask((prevTask) => ({
+					...prevTask,
+					claimedStatus: true,
+				}));
+				window.open(selectedTask.link, '_blank');
+				return;
+			}
+			const res = await claimProjectTask(token.project._id, selectedTask._id);
+			if (res.success) {
+				if (res.data.claimedStatus === 'pending') {
+					setTimeDifference(30);
+				}
+				const res2 = await fetchUserProjectDetails(token.project._id);
+				if (res2.success) {
+					setToken(res2.data);
+					const updatedTask = res2.data.project.tasks.find((t) => t._id === selectedTask._id);
+					if (updatedTask) {
+						setSelectedTask(updatedTask);
+					}
+				}
+				toast.success(res.mess);
+			} else {
+				toast.error(res.mess);
+			}
+		} catch (error) {
+			console.log("Internal Server Error!", error);
+			toast.error('Internal Server Error!');
 		}
 	}
 
@@ -135,9 +206,9 @@ const Token = () => {
 				)}
 				{sendTokenData && token && (
 					<>
+						{/* Upgrade Level Popup */}
 						{isModalOpen && (
 							<>
-								{/* New Popup */}
 								<div
 									style={{
 										animation: "openPopup 0.7s ease-in-out",
@@ -247,7 +318,90 @@ const Token = () => {
 													</button>
 												</div>
 											</div>
+										</div>
+									</div>
+								</div>
+							</>
+						)}
 
+						{/* Task Popup */}
+
+						{taskPopUp && selectedTask && (
+							<>
+								<div
+									style={{
+										animation: `${popupClosing ? "fadeOut" : "fadeIn"
+											} 0.5s ease-in-out forwards`,
+									}}
+									className="popup-overlay fixed  w-[100vw] h-[100vh] inset-0 z-50 flex justify-center items-end bg-black bg-opacity-80 overflow-hidden"
+								>
+									<div
+										style={{
+											animation: `${popupClosing ? "closePopup" : "openPopup"
+												} 0.5s ease-in-out forwards`,
+										}}
+									>
+										<div className="relative bg-[#06060E] w-[100vw] rounded-t-[30px]  text-white">
+											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
+											<div className="flex flex-col items-center relative">
+												<div className="absolute top-3 right-7"
+													onClick={() => {
+														setPopupClosing(true);
+														setTimeout(() => {
+															setTaskPopup(false);
+															setPopupClosing(false);
+														}, 500);
+													}}
+												>
+													<img src={closebutton} alt="" />
+												</div>
+												<div className="h-1 w-16 bg-[#D9D9D9] rounded-md  mt-2 opacity-70"></div>
+												<div className="flex justify-center flex-col items-center gap-2 mt-3">
+													<img src={iconMapping[selectedTask.iconType]} alt="icon" />
+												</div>
+												<div className="text-xl text-white mt-3">
+													<p>{selectedTask.title}</p>
+												</div>
+												<div className="mt-5">
+													<button
+														onClick={() => {
+															window.open(selectedTask.link, '_blank');
+														}}
+														className="bg-white py-2 rounded-md text-black px-6 font-medium"
+													>
+														{buttonText[selectedTask.iconType]}
+													</button>
+												</div>
+												{selectedTask.claimedStatus === 'pending' && (
+													<div className="text-gray-200 text-sm px-5 text-center mt-4">
+														Please wait {timeDifference} minutes for moderation check to claim the prize
+													</div>
+												)}
+												<div className="mt-5">
+													<p className="border border-[#242434] py-1  rounded-md text-[#FF8F00] px-6 text-lg font-medium">
+														{selectedTask.reward} {token.project.name.match(/[A-Z]/g)?.join('')}
+													</p>
+												</div>
+												{selectedTask.claimedStatus !== 'claimed' && (
+													<>
+														<div className="text-center text-md flex flex-col mt-5 ">
+															<img src={linbottle} alt="" />
+														</div>
+														<div className="flex w-full mt-3 items-center justify-center gap-4 z-40 mb-4 px-3">
+															<button
+																onClick={() => {
+																	handleClaimTask(selectedTask);
+																}}
+																disabled={selectedTask.claimedStatus === 'pending'}
+																className={`w-full py-2 bg-gradient-to-b from-[#00B2FF] to-[#2226FF] text-white font-bold rounded-md ${selectedTask.claimedStatus === 'pending' ? 'filter grayscale' : ''}`}
+															>
+																Check
+															</button>
+														</div>
+													</>
+												)}
+											</div>
 										</div>
 									</div>
 								</div>
@@ -451,80 +605,111 @@ const Token = () => {
 									<p className="text-[#9595A9] text-lg ">Daily Task</p>
 								</div>
 								{/* Pandatop News Cards */}
-								<div>
-									{data.map((values) => {
-										const { id, img, name, amount } = values;
-										return (
-											<div
-												key={id}
-												className="bg-[#1B1B27] text-white   flex justify-between items-center border border-[#0099FF] rounded-[14px] gap-4 py-2 px-3 my-3 "
-											>
-												<div className="flex gap-3 justify-center items-center py-1 w-full">
-													{/* Icon */}
-													<div className="flex flex-shrink-0 ">
-														<img
-															src={img}
-															alt="Icons"
-															width="60"
-															className=""
-														/>
-													</div>
-													{/* Name */}
-													<div className="flex justify-between items-center w-full">
-														<div>
-															<div className="flex   text-lg">{name}</div>
-															<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
-																<img src={BigCoin} alt="" className="h-4 w-5" />
-																<span>+{amount}</span>
-															</div>
+								{dailyTasks.length > 0 && (
+									<div>
+										{dailyTasks.map((task, index) => {
+											return (
+												<div
+													onClick={() => {
+														setTaskPopup(true);
+														setSelectedTask(task);
+														console.log('task', task);
+														if (task.claimedStatus === 'pending') {
+															console.log("I am running!!!");
+															const currentTime = new Date();
+															const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
+															const remaningMin = 30 - Math.floor(timeDifference);
+															if (remaningMin <= 0) {
+																setSelectedTask((prevTask) => ({
+																	...prevTask,
+																	claimedStatus: true,
+																}));
+															}
+															setTimeDifference(30 - Math.floor(timeDifference));
+														}
+													}}
+													key={index}
+													className="bg-[#1B1B27] text-white   flex justify-between items-center border border-[#0099FF] rounded-[14px] gap-4 py-2 px-3 my-3 "
+												>
+													<div className="flex gap-3 justify-center items-center py-1 w-full">
+														{/* Icon */}
+														<div className="flex flex-shrink-0 ">
+															<img src={iconMapping[task.iconType]} alt="icon" width={40} height={40} />
 														</div>
-														<div>
-															<img src={arrow} alt="" />
+														{/* Name */}
+														<div className="flex justify-between items-center w-full">
+															<div>
+																<div className="flex text-md">{task.title}</div>
+																<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
+																	<img src={BigCoin} alt="" className="h-4 w-5" />
+																	<span className="text-sm">+{task.reward}</span>
+																</div>
+															</div>
+															<div>
+																<img src={arrow} alt="arrow" width={15} />
+															</div>
 														</div>
 													</div>
 												</div>
-												{/* White Box */}
-											</div>
-										);
-									})}
-								</div>
+											);
+										})}
+									</div>
+								)}
 								{/* Heading 2 */}
-								<div className="pt-3">
+								<div>
 									<p className="text-[#9595A9] text-lg ">Social Media</p>
 								</div>
-								{/* Social Media Cards */}
-								<div>
-									{data.map((values) => {
-										const { id, img, name, amount } = values;
-										return (
-											<div
-												key={id}
-												className="bg-[#1B1B27] text-white   flex justify-between items-center border border-[#0099FF] rounded-[14px] gap-4 py-2 px-3 my-3 "
-											>
-												<div className="flex gap-3 justify-center items-center py-1 w-full ">
-													<div className="flex flex-shrink-0">
-														<img src={img} alt="Icons" width="40" />
-													</div>
-													<div className="flex justify-between items-center w-full">
-														<div>
-															<div className="flex   text-lg">{name}</div>
-															<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
-																<img src={BigCoin} alt="" className="h-4 w-5" />
-																<span>+{amount}</span>
-															</div>
+								{/* Pandatop News Cards */}
+								{socialTasks.length > 0 && (
+									<div>
+										{socialTasks.map((task, index) => {
+											return (
+												<div
+													onClick={() => {
+														setTaskPopup(true);
+														setSelectedTask(task);
+														console.log('task', task);
+														if (task.claimedStatus === 'pending') {
+															console.log("I am running!!!");
+															const currentTime = new Date();
+															const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
+															const remaningMin = 30 - Math.floor(timeDifference);
+															if (remaningMin <= 0) {
+																setSelectedTask((prevTask) => ({
+																	...prevTask,
+																	claimedStatus: true,
+																}));
+															}
+															setTimeDifference(30 - Math.floor(timeDifference));
+														}
+													}}
+													key={index}
+													className="bg-[#1B1B27] text-white   flex justify-between items-center border border-[#0099FF] rounded-[14px] gap-4 py-2 px-3 my-3 "
+												>
+													<div className="flex gap-3 justify-center items-center py-1 w-full">
+														{/* Icon */}
+														<div className="flex flex-shrink-0 ">
+															<img src={iconMapping[task.iconType]} alt="icon" width={40} height={40} />
 														</div>
-														<div>
-															<button className="bg-white  rounded-md text-black px-6 mt-8 font-medium">
-																JOIN{" "}
-															</button>
+														{/* Name */}
+														<div className="flex justify-between items-center w-full">
+															<div>
+																<div className="flex text-md">{task.title}</div>
+																<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
+																	<img src={BigCoin} alt="" className="h-4 w-5" />
+																	<span className="text-sm">+{task.reward}</span>
+																</div>
+															</div>
+															<div>
+																<img src={arrow} alt="arrow" width={15} />
+															</div>
 														</div>
 													</div>
 												</div>
-												{/* White Box */}
-											</div>
-										);
-									})}
-								</div>
+											);
+										})}
+									</div>
+								)}
 							</div>
 						</div>
 					</>

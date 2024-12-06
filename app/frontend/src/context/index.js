@@ -603,6 +603,24 @@ export const UserProvider = (props) => {
         }
     }
 
+    const claimProjectTask = async (projectId, taskId) => {
+        try {
+            const res = await axios.post(`${apiUrl}/user/claim-project-task`, {
+                userId: userId,
+                projectId: projectId,
+                taskId: taskId,
+            });
+            if (res.data.status === 'success') {
+                return ({ success: true, mess: res.data.message, data: res.data });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!");
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
     return (
         <UserContext.Provider value={{
             initializeUser,
@@ -662,6 +680,7 @@ export const UserProvider = (props) => {
             fetchProjects,
             fetchUserProjectDetails,
             upgradeProjectLevel,
+            claimProjectTask,
 
             kols,
             fetchKols,

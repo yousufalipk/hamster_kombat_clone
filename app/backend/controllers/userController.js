@@ -795,13 +795,18 @@ exports.userOneProjectDetails = async (req, res) => {
         let updatedTasks = [];
         if (project.tasks && project.tasks.length > 0) {
             updatedTasks = project.tasks.map((task) => {
-
                 const userTask = userProject?.tasks?.find((t) => t.taskId.toString() === task._id.toString());
 
-                return {
+                let taskResponse = {
                     ...task._doc,
                     claimedStatus: userTask?.claimedStatus || false,
                 };
+
+                if (userTask?.claimedStatus === 'pending') {
+                    taskResponse.claimedDate = userTask.claimedDate;
+                }
+
+                return taskResponse;
             });
         }
 
@@ -814,7 +819,6 @@ exports.userOneProjectDetails = async (req, res) => {
             nextLevelReward,
             nextLevelCpm,
         };
-
 
         return res.status(200).json({
             status: 'success',
@@ -859,10 +863,8 @@ exports.claimProjectTask = async (req, res) => {
             });
         }
 
-        // Find user's project within their projects array
         let userProject = user.projects.find((p) => p._id.toString() === projectId);
 
-        // If user has no projects or no matching project is found, initialize the project with the task
         if (!userProject) {
             const newTask = {
                 taskId,
@@ -880,16 +882,16 @@ exports.claimProjectTask = async (req, res) => {
             await user.save();
 
             return res.status(200).json({
-                status: 'requested',
+                status: 'success',
                 message: 'Reward claim requested, comeback after 30 minutes. 1',
+                claimedStatus: 'pending',
+                claimedDate: newTask.claimedDate,
             });
         }
 
-        // Find user's task within the project
         let userTask = userProject.tasks.find((t) => t.taskId.toString() === taskId);
 
         if (!userTask) {
-            // Add task to the project if it doesn't exist
             userProject.tasks.push({
                 taskId,
                 claimedDate: new Date(),
@@ -899,16 +901,18 @@ exports.claimProjectTask = async (req, res) => {
             await user.save();
 
             return res.status(200).json({
-                status: 'requested',
+                status: 'success',
                 message: 'Reward claim requested, comeback after 30 minutes. 2',
+                claimedStatus: 'pending',
+                claimedDate: new Date(),
             });
         }
 
-        // Handle task with existing status
         if (userTask.claimedStatus === 'claimed') {
             return res.status(200).json({
-                status: 'alreadyClaimed',
+                status: 'failed',
                 message: 'Reward already claimed!',
+                claimedStatus: 'claimed',
             });
         } else if (userTask.claimedStatus === 'pending') {
             const currentTime = new Date();
@@ -916,8 +920,10 @@ exports.claimProjectTask = async (req, res) => {
 
             if (timeDifference < 30) {
                 return res.status(200).json({
-                    status: 'pending',
+                    status: 'success',
                     message: `Comeback after ${30 - Math.floor(timeDifference)} minutes!`,
+                    claimedStatus: 'pending',
+                    claimedDate: userTask.claimedDate,  // Send the claimed time
                 });
             } else {
                 // Update task status to claimed
@@ -939,8 +945,9 @@ exports.claimProjectTask = async (req, res) => {
                 await user.save();
 
                 return res.status(200).json({
-                    status: 'claimed',
+                    status: 'success',
                     message: 'Task successfully claimed!',
+                    claimedStatus: 'claimed',
                 });
             }
         }
@@ -949,6 +956,7 @@ exports.claimProjectTask = async (req, res) => {
         return res.status(500).json({
             status: 'failed',
             message: 'Internal Server Error',
+            claimedStatus: 'error',
         });
     }
 };
