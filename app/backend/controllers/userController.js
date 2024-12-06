@@ -738,7 +738,7 @@ exports.upgradeUserProjectLevel = async (req, res) => {
     }
 };
 
-exports.userProjectDetails = async (req, res) => {
+exports.userOneProjectDetails = async (req, res) => {
     try {
         const { userId, projectId } = req.body;
 
@@ -791,18 +791,37 @@ exports.userProjectDetails = async (req, res) => {
         const wallet = user.wallet.find((w) => w._id.toString() === projectId);
         const walletBalance = wallet ? wallet.balance : 0;
 
+        let updatedTasks = [];
+        if (project.tasks && project.tasks.length > 0) {
+            updatedTasks = project.tasks.map((task) => {
+                const userTask = userProject?.tasks?.find((t) => t.taskId === task._id.toString());
+                return {
+                    ...task._doc,
+                    claimedStatus: userTask?.claimedStatus || false,
+                };
+            });
+        }
+
         const userData = {
-            userLevel: displayUserLevel === 'max' ? displayUserLevel : displayUserLevel + 1,
+            userLevel: displayUserLevel === 'max'
+                ? 'max'
+                : (!displayUserLevel ? 0 : (displayUserLevel + 1)),
             walletBalance,
             nextLevelCost,
             nextLevelReward,
             nextLevelCpm,
         };
 
+
         return res.status(200).json({
             status: 'success',
-            userData: userData,
-            project: project
+            userData: {
+                ...userData,
+            },
+            project: {
+                ...project._doc,
+                tasks: updatedTasks,
+            },
         });
     } catch (error) {
         console.error('Internal Server Error:', error);
@@ -812,6 +831,117 @@ exports.userProjectDetails = async (req, res) => {
         });
     }
 };
+
+exports.claimProjectTask = async (req, res) => {
+    try {
+        const { userId, projectId, taskId } = req.body;
+
+        if (!userId || !projectId || !taskId) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User ID, Project ID, and Task ID are required.',
+            });
+        }
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!',
+            });
+        }
+
+        const project = await ProjectModel.findById(projectId);
+        if (!project) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Project not found!',
+            });
+        }
+
+        const projectTask = project.tasks.find((t) => t._id.toString() === taskId);
+        if (!projectTask) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Task not found in the project!',
+            });
+        }
+
+        let userProject = user.projects.find((p) => p._id.toString() === projectId);
+
+        if (!userProject) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User is not associated with this project!',
+            });
+        }
+
+        let userTask = userProject.tasks.find((t) => t.taskId === taskId);
+
+        if (!userTask) {
+            const timestamp = new Date();
+            userProject.tasks.push({
+                taskId,
+                claimedDate: timestamp,
+                claimedStatus: false,
+            });
+
+            await user.save();
+
+            return res.status(200).json({
+                status: 'success',
+                message: 'Reward claim requested. Please wait 30 minutes to fully claim this task.',
+                task: {
+                    taskId,
+                    claimedDate: timestamp,
+                    claimedStatus: false,
+                },
+                balance: user.balance,
+            });
+        }
+
+        const currentTime = new Date();
+        const timeDifference = (currentTime - new Date(userTask.claimedDate)) / (1000 * 60);
+
+        if (timeDifference < 30) {
+            return res.status(400).json({
+                status: 'failed',
+                message: `You need to wait ${30 - Math.floor(timeDifference)} minutes before claiming the task.`,
+            });
+        }
+
+        userTask.claimedStatus = true;
+
+        let walletEntry = user.wallet.find((w) => w._id.toString() === projectId);
+        if (walletEntry) {
+            walletEntry.balance += projectTask.reward || 0;
+        } else {
+            user.wallet.push({
+                projectId,
+                balance: projectTask.reward || 0,
+            });
+        }
+
+        await user.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Task successfully claimed!',
+            task: {
+                taskId,
+                claimedDate: userTask.claimedDate,
+                claimedStatus: true,
+            },
+            wallet: user.wallet,
+        });
+    } catch (error) {
+        console.error('Internal Server Error:', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error',
+        });
+    }
+}
 
 exports.fetchUserKols = async (req, res) => {
     try {

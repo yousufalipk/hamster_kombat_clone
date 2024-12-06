@@ -133,7 +133,21 @@ const userSchema = new mongoose.Schema({
         level: {
             type: Number,
             default: null
-        }
+        },
+        tasks: [{
+            taskId: {
+                type: String,
+                default: null
+            },
+            claimedDate: {
+                type: String,
+                default: null
+            },
+            claimedStatus: {
+                type: Boolean,
+                defauly: null
+            }
+        }]
     }],
     kols: [{
         kolId: {

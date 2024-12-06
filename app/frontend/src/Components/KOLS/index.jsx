@@ -66,7 +66,7 @@ const KOLS = () => {
 
 	return (
 		<>
-			{kols ? (
+			{kols.length > 0 ? (
 				<>
 					{isModalOpen && (
 						<div

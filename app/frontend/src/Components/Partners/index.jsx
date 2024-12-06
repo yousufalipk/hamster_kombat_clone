@@ -67,7 +67,7 @@ const Partners = () => {
 
 	return (
 		<>
-			{patners ? (
+			{patners.length > 0 ? (
 				<>
 
 					{isModalOpen && (

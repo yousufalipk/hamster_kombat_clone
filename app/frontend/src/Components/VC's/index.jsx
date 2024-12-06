@@ -66,7 +66,7 @@ const VCS = () => {
 
 	return (
 		<>
-			{vcs ? (
+			{vcs.length > 0 ? (
 				<>
 					{isModalOpen && (
 						<div

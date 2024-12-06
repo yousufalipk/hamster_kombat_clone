@@ -78,11 +78,11 @@ export const UserProvider = (props) => {
 
     const [missedProjects, setMissedProjects] = useState();
 
-    const [kols, setKols] = useState();
+    const [kols, setKols] = useState([]);
 
-    const [vcs, setVcs] = useState();
+    const [vcs, setVcs] = useState([]);
 
-    const [patners, setPatners] = useState();
+    const [patners, setPatners] = useState([]);
 
     const [comboCards, setComboCards] = useState([]);
 
@@ -134,10 +134,8 @@ export const UserProvider = (props) => {
         const diff = currentDate - input;
 
         if (diff <= oneDay) {
-            console.log("The date is within 1 day!");
             return true;
         } else {
-            console.log("The date is outside 1 day.");
             return false;
         }
     };
