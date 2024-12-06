@@ -144,8 +144,8 @@ const userSchema = new mongoose.Schema({
                 default: null
             },
             claimedStatus: {
-                type: Boolean,
-                defauly: null
+                type: String,
+                default: null
             }
         }]
     }],

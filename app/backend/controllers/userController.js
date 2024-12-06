@@ -632,7 +632,10 @@ exports.upgradeUserProjectLevel = async (req, res) => {
         }
 
         if (project.tgeDate && new Date(project.tgeDate) < new Date()) {
-            return res.status(400).json({ message: 'Token Generation Event Started!' });
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Token Generation Event Started!'
+            });
         }
 
         let userProject = user.projects?.find(up => up._id.toString() === projectId);
@@ -870,9 +873,35 @@ exports.claimProjectTask = async (req, res) => {
         let userProject = user.projects.find((p) => p._id.toString() === projectId);
 
         if (!userProject) {
+            const timestamp = new Date();
+            user.projects.push({
+                projectId,
+                level: null,
+                tasks: [
+                    {
+                        taskId,
+                        claimedDate: timestamp,
+                        claimedStatus: "pending",
+                    },
+                ],
+            });
+
+            await user.save();
+
             return res.status(200).json({
-                status: 'failed',
-                message: 'User is not associated with this project!',
+                status: 'requested',
+                message: 'Reward claim requested!',
+                project: {
+                    projectId,
+                    level: null,
+                    tasks: [
+                        {
+                            taskId,
+                            claimedDate: timestamp,
+                            claimedStatus: "pending",
+                        },
+                    ],
+                },
             });
         }
 
@@ -883,20 +912,19 @@ exports.claimProjectTask = async (req, res) => {
             userProject.tasks.push({
                 taskId,
                 claimedDate: timestamp,
-                claimedStatus: false,
+                claimedStatus: "pending",
             });
 
             await user.save();
 
             return res.status(200).json({
-                status: 'success',
-                message: 'Reward claim requested. Please wait 30 minutes to fully claim this task.',
+                status: 'requested',
+                message: 'Reward claim requested!',
                 task: {
                     taskId,
                     claimedDate: timestamp,
-                    claimedStatus: false,
+                    claimedStatus: "pending",
                 },
-                balance: user.balance,
             });
         }
 
@@ -904,15 +932,22 @@ exports.claimProjectTask = async (req, res) => {
         const timeDifference = (currentTime - new Date(userTask.claimedDate)) / (1000 * 60);
 
         if (timeDifference < 30) {
-            return res.status(400).json({
-                status: 'failed',
+            return res.status(200).json({
+                status: 'pending',
                 message: `You need to wait ${30 - Math.floor(timeDifference)} minutes before claiming the task.`,
+                task: {
+                    taskId,
+                    claimedDate: userTask.claimedDate,
+                    claimedStatus: userTask.claimedStatus,
+                },
             });
         }
 
-        userTask.claimedStatus = true;
+        userTask.claimedStatus = "claimed";
+        userTask.claimedDate = currentTime;
 
-        let walletEntry = user.wallet.find((w) => w._id.toString() === projectId);
+        let walletEntry = user.wallet.find((w) => w.projectId.toString() === projectId);
+
         if (walletEntry) {
             walletEntry.balance += projectTask.reward || 0;
         } else {
@@ -925,12 +960,12 @@ exports.claimProjectTask = async (req, res) => {
         await user.save();
 
         return res.status(200).json({
-            status: 'success',
+            status: 'claimed',
             message: 'Task successfully claimed!',
             task: {
                 taskId,
                 claimedDate: userTask.claimedDate,
-                claimedStatus: true,
+                claimedStatus: "claimed",
             },
             wallet: user.wallet,
         });
@@ -941,7 +976,7 @@ exports.claimProjectTask = async (req, res) => {
             message: 'Internal Server Error',
         });
     }
-}
+};
 
 exports.fetchUserKols = async (req, res) => {
     try {
