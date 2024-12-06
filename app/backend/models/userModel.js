@@ -136,7 +136,7 @@ const userSchema = new mongoose.Schema({
         },
         tasks: [{
             taskId: {
-                type: String,
+                type: mongoose.Schema.Types.ObjectId,
                 default: null
             },
             claimedDate: {

@@ -641,7 +641,7 @@ exports.upgradeUserProjectLevel = async (req, res) => {
         let userProject = user.projects?.find(up => up._id.toString() === projectId);
 
         const maxLevel = project.levels.length - 1;
-        const currentLevel = userProject ? userProject.level : undefined;
+        const currentLevel = userProject?.level ? userProject.level : undefined;
 
         if (currentLevel >= maxLevel) {
             return res.status(200).json({
@@ -651,7 +651,6 @@ exports.upgradeUserProjectLevel = async (req, res) => {
         }
 
         let customIndex = 0;
-        console.log('Current Level', currentLevel);
         if (currentLevel !== undefined) {
             customIndex = currentLevel + 1;
         }
@@ -690,8 +689,14 @@ exports.upgradeUserProjectLevel = async (req, res) => {
             });
         }
 
+        console.log("userProject", userProject?.level);
+
         if (userProject) {
-            userProject.level = userProject.level + 1;
+            if (userProject?.level || userProject.level === 0) {
+                userProject.level = userProject.level + 1;
+            } else {
+                userProject.level = 0;
+            }
         } else {
             const projectData = {
                 _id: projectId,
@@ -753,25 +758,18 @@ exports.userOneProjectDetails = async (req, res) => {
         }
 
         const user = await UserModel.findById(userId);
-        if (!user) {
-            return res.status(404).json({
-                status: 'failed',
-                message: 'User not found!',
-            });
-        }
-
         const project = await ProjectModel.findById(projectId);
-        if (!project) {
+        if (!user || !project) {
             return res.status(404).json({
                 status: 'failed',
-                message: 'Project not found!',
+                message: 'User or Project not found!',
             });
         }
 
         let userLevel = null;
         const userProject = user.projects.find((p) => p._id.toString() === projectId);
         if (userProject) {
-            userLevel = userProject.level || 0;
+            userLevel = userProject.level || null;
         }
 
         let nextLevelCost = 0, nextLevelReward = 0, nextLevelCpm = 0;
@@ -797,7 +795,9 @@ exports.userOneProjectDetails = async (req, res) => {
         let updatedTasks = [];
         if (project.tasks && project.tasks.length > 0) {
             updatedTasks = project.tasks.map((task) => {
-                const userTask = userProject?.tasks?.find((t) => t.taskId === task._id.toString());
+
+                const userTask = userProject?.tasks?.find((t) => t.taskId.toString() === task._id.toString());
+
                 return {
                     ...task._doc,
                     claimedStatus: userTask?.claimedStatus || false,
@@ -839,79 +839,60 @@ exports.claimProjectTask = async (req, res) => {
     try {
         const { userId, projectId, taskId } = req.body;
 
+        // Validate input
         if (!userId || !projectId || !taskId) {
-            return res.status(200).json({
+            return res.status(400).json({
                 status: 'failed',
                 message: 'User ID, Project ID, and Task ID are required.',
             });
         }
 
+        // Fetch user and project data
         const user = await UserModel.findById(userId);
-        if (!user) {
-            return res.status(200).json({
-                status: 'failed',
-                message: 'User not found!',
-            });
-        }
-
         const project = await ProjectModel.findById(projectId);
-        if (!project) {
-            return res.status(200).json({
+        const projectTask = project?.tasks.find((t) => t._id.toString() === taskId);
+
+        if (!user || !project || !projectTask) {
+            return res.status(404).json({
                 status: 'failed',
-                message: 'Project not found!',
+                message: 'User, Project, or Task not found!',
             });
         }
 
-        const projectTask = project.tasks.find((t) => t._id.toString() === taskId);
-        if (!projectTask) {
-            return res.status(200).json({
-                status: 'failed',
-                message: 'Task not found in the project!',
-            });
-        }
-
+        // Find user's project within their projects array
         let userProject = user.projects.find((p) => p._id.toString() === projectId);
 
+        // If user has no projects or no matching project is found, initialize the project with the task
         if (!userProject) {
-            const timestamp = new Date();
-            user.projects.push({
-                projectId,
-                level: null,
-                tasks: [
-                    {
-                        taskId,
-                        claimedDate: timestamp,
-                        claimedStatus: "pending",
-                    },
-                ],
-            });
+            const newTask = {
+                taskId,
+                claimedDate: new Date(),
+                claimedStatus: "pending",
+            };
 
+            const newProject = {
+                _id: projectId,
+                level: null,
+                tasks: [newTask],
+            };
+
+            user.projects.push(newProject);
             await user.save();
 
             return res.status(200).json({
                 status: 'requested',
-                message: 'Reward claim requested!',
-                project: {
-                    projectId,
-                    level: null,
-                    tasks: [
-                        {
-                            taskId,
-                            claimedDate: timestamp,
-                            claimedStatus: "pending",
-                        },
-                    ],
-                },
+                message: 'Reward claim requested, comeback after 30 minutes. 1',
             });
         }
 
-        let userTask = userProject.tasks.find((t) => t.taskId === taskId);
+        // Find user's task within the project
+        let userTask = userProject.tasks.find((t) => t.taskId.toString() === taskId);
 
         if (!userTask) {
-            const timestamp = new Date();
+            // Add task to the project if it doesn't exist
             userProject.tasks.push({
                 taskId,
-                claimedDate: timestamp,
+                claimedDate: new Date(),
                 claimedStatus: "pending",
             });
 
@@ -919,56 +900,50 @@ exports.claimProjectTask = async (req, res) => {
 
             return res.status(200).json({
                 status: 'requested',
-                message: 'Reward claim requested!',
-                task: {
-                    taskId,
-                    claimedDate: timestamp,
-                    claimedStatus: "pending",
-                },
+                message: 'Reward claim requested, comeback after 30 minutes. 2',
             });
         }
 
-        const currentTime = new Date();
-        const timeDifference = (currentTime - new Date(userTask.claimedDate)) / (1000 * 60);
-
-        if (timeDifference < 30) {
+        // Handle task with existing status
+        if (userTask.claimedStatus === 'claimed') {
             return res.status(200).json({
-                status: 'pending',
-                message: `You need to wait ${30 - Math.floor(timeDifference)} minutes before claiming the task.`,
-                task: {
-                    taskId,
-                    claimedDate: userTask.claimedDate,
-                    claimedStatus: userTask.claimedStatus,
-                },
+                status: 'alreadyClaimed',
+                message: 'Reward already claimed!',
             });
+        } else if (userTask.claimedStatus === 'pending') {
+            const currentTime = new Date();
+            const timeDifference = (currentTime - new Date(userTask.claimedDate)) / (1000 * 60);
+
+            if (timeDifference < 30) {
+                return res.status(200).json({
+                    status: 'pending',
+                    message: `Comeback after ${30 - Math.floor(timeDifference)} minutes!`,
+                });
+            } else {
+                // Update task status to claimed
+                userTask.claimedStatus = 'claimed';
+                userTask.claimedDate = currentTime;
+
+                const reward = projectTask.reward || 0;
+                let walletEntry = user.wallet.find((w) => w._id.toString() === projectId);
+
+                if (walletEntry) {
+                    walletEntry.balance += reward;
+                } else {
+                    user.wallet.push({
+                        _id: projectId,
+                        balance: reward,
+                    });
+                }
+
+                await user.save();
+
+                return res.status(200).json({
+                    status: 'claimed',
+                    message: 'Task successfully claimed!',
+                });
+            }
         }
-
-        userTask.claimedStatus = "claimed";
-        userTask.claimedDate = currentTime;
-
-        let walletEntry = user.wallet.find((w) => w.projectId.toString() === projectId);
-
-        if (walletEntry) {
-            walletEntry.balance += projectTask.reward || 0;
-        } else {
-            user.wallet.push({
-                projectId,
-                balance: projectTask.reward || 0,
-            });
-        }
-
-        await user.save();
-
-        return res.status(200).json({
-            status: 'claimed',
-            message: 'Task successfully claimed!',
-            task: {
-                taskId,
-                claimedDate: userTask.claimedDate,
-                claimedStatus: "claimed",
-            },
-            wallet: user.wallet,
-        });
     } catch (error) {
         console.error('Internal Server Error:', error);
         return res.status(500).json({
