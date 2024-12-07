@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route } from 'react-router-dom';
-import { LuLoader2 } from "react-icons/lu";
-
-import EllipseImg from './assets/root/ellipse.png';
+import CustomLoader from './Components/Loader/Loader';
 
 import Token from './Components/Token/index';
 import GamePage from './Pages/Game/Game';
@@ -19,7 +17,7 @@ const App = () => {
 		return (
 			<>
 				<div className="h-[100vh] w-[100vw] bg-black flex justify-center items-center">
-					<LuLoader2 className="animate-spin w-20 h-20 text-white" />
+					<CustomLoader />
 				</div>
 			</>
 		)

@@ -33,7 +33,7 @@
   position: absolute;
   content: "";
   inset: 0;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   pointer-events: none;
   padding: 1px;
   background: linear-gradient(135deg, #232323, #808080);

@@ -34,6 +34,8 @@ import rightbox from '../../assets/dailyreward/gift2.svg';
 import leftreward from '../../assets/dailyreward/leftReward.svg';
 import rightreward from '../../assets/dailyreward/rightReward.svg';
 
+import CommingSoon from '../../assets/root/comingSoon.svg';
+
 const Home = () => {
 
 	const energyUpgradeCost = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
@@ -44,11 +46,16 @@ const Home = () => {
 
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 
+	const getRandomName = () => {
+		const randomNames = ["John Doe", "Jane Smith", "Alex Johnson", "Chris Lee", "Taylor Brown"];
+		return randomNames[Math.floor(Math.random() * randomNames.length)];
+	};
+
 	const {
 		userId,
 		initializeUser,
 		userDataInitilized,
-		username,
+		firstName,
 		level,
 		currentRank,
 		levelPercentage,
@@ -266,8 +273,7 @@ const Home = () => {
 		{
 			id: 1,
 			img: DailyGamePlay,
-			data1: "Daily",
-			data2: "Game play",
+			data1: "Daily Game Play",
 			timer: "13:11:35",
 			isDone: false,
 			isCommingSoon: true,
@@ -275,8 +281,7 @@ const Home = () => {
 		{
 			id: 2,
 			img: DailyReward,
-			data1: "Daily",
-			data2: "Reward",
+			data1: "Daily Reward",
 			timer: "13:11:35",
 			isDone: claimed.includes(currentDay) ? true : false,
 			isCommingSoon: false,
@@ -284,8 +289,7 @@ const Home = () => {
 		{
 			id: 3,
 			img: DailyCombo,
-			data1: "Daily",
-			data2: "Combo",
+			data1: "Daily Combo",
 			timer: "02:33:48",
 			isDone: false,
 			isCommingSoon: true,
@@ -422,7 +426,7 @@ const Home = () => {
 												)}
 											</div>
 											<div className="pl-2 text-[#FFF]">
-												<p className="font-medium text-sm">{username}</p>
+												<p className="font-medium text-sm">{firstName || getRandomName()}</p>
 												<p className="flex font-normal text-sm -top-1">(Founder)</p>
 											</div>
 										</div>
@@ -456,7 +460,7 @@ const Home = () => {
 									</div>
 
 									{/* Cards */}
-									<div className="pt-6 flex justify-evenly items-center">
+									<div className="pt-8 flex justify-evenly items-center">
 										{cards.map((data) => {
 											const { id, img, data1, data2, isDone } = data;
 
@@ -464,12 +468,12 @@ const Home = () => {
 												<div
 													onClick={() => handleCardClick(data)}
 													key={id}
-													className="relative min-w-[20%]"
+													className="relative min-w-[25%]"
 												>
 													{data.isCommingSoon && (
 														<>
-															<div className="absolute -top-1 -right-1 px-1 py-1 z-50 text-white font-bold text-[6px] bg-blue-700 rounded-full">
-																Comming Soon
+															<div className="absolute top-0 -right-1 z-50">
+																<img src={CommingSoon} alt="comming_soon" />
 															</div>
 														</>
 													)}
@@ -483,29 +487,29 @@ const Home = () => {
 															</div>
 
 															{/* Main content */}
-															<div className="flex flex-col justify-center items-center p-2 h-20 bg-[#091e4b] rounded-[14px] gap-2">
-																<div className="h-3">
-																	<img src={img} alt="Logo" width="30" />
+															<div className={`flex flex-col justify-center items-center p-2 h-20 ${data.isCommingSoon ? `bg-[#1B1B27]` : `bg-[#162B58]`} rounded-[14px] gap-2`}>
+																<div className="h-[70%] flex justify-center items-center">
+																	<img src={img} alt="Logo" width="40" />
 																</div>
-																<div className="text-[#FFF] text-[10px] font-medium pt-4">
+																<div className="h-[30%] text-[#FFF] text-[10px] font-medium flex justify-center items-start">
 																	<div className="flex justify-center items-center">
-																		<p className="text-[8px]">{data1}</p>
+																		<p className={`text-[9px] ${data.isCommingSoon && `text-gray-400`}`}>{data1}</p>
 																	</div>
-																	<p className="text-[8px]">{data2}</p>
 																</div>
 															</div>
 														</div>
 													) : (
-														<div className={`relative py-[1px] px-[0.5px] rounded-[14px] overflow-hidden ${data.isCommingSoon && `opacity-60`}`}>
-															<div className="flex flex-col justify-center items-center p-2 h-20 bg-[#1B1B27] rounded-[14px] gap-2 border-gradient">
-																<div>
-																	<img src={img} alt="Logo" width="30" />
+														<div
+															className={`relative ${data.isCommingSoon ? `shadow-white shadow-inner` : `border border-[#0072FF] shadow-[0_0_12px_0px_rgba(0,114,255,0.5)]`}  rounded-[14px] overflow-hidden`}>
+															{/* Main content */}
+															<div className={`flex flex-col justify-center items-center p-2 h-20 ${data.isCommingSoon ? `bg-[#1B1B27]` : `bg-[#162B58]`} rounded-[14px] gap-2`}>
+																<div className="h-[70%] flex justify-center items-center">
+																	<img src={img} alt="Logo" width="40" />
 																</div>
-																<div className="text-[#FFF] text-[10px] font-medium">
+																<div className="h-[30%] text-[#FFF] text-[10px] font-medium flex justify-center items-start">
 																	<div className="flex justify-center items-center">
-																		<p className="text-[8px]">{data1}</p>
+																		<p className={`text-[9px] ${data.isCommingSoon && `text-gray-400`}`}>{data1}</p>
 																	</div>
-																	<p className='text-[8px]'>{data2}</p>
 																</div>
 															</div>
 														</div>
