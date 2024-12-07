@@ -10,10 +10,14 @@ import Footer from '../Components/Footer';
 
 import Rankings from '../Components/Rankings/index';
 
+import EllipseImg from '../assets/root/ellipse.png';
+
 const Layout = () => {
     return (
         <>
             <div className='relative h-full w-screen overflow-hidden z-20'>
+                <img src={EllipseImg} alt="grad" className='absolute' />
+                <img src={EllipseImg} alt="grad" className='absolute -bottom-72' />
                 <div>
                     <Routes>
                         <Route path="/" element={<Home />} />

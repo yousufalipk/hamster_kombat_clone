@@ -604,7 +604,7 @@ const Home = () => {
 												<div className="absolute z-20">
 													<img src={PandaCircleIcon} alt="Panda-circle" />
 												</div>
-												<div className="absolute z-50">
+												<div className="absolute z-40">
 													<img src={BigPanda} alt="Panda-Icon" className="bot-tap" />
 												</div>
 												<div className="absolute z-50 top-[60%] left-[37%]">

@@ -14,42 +14,6 @@
   background: linear-gradient(180deg, #00b2ff 0%, #2226ff 100%);
 }
 
-.memefi-bg {
-  background: linear-gradient(96deg, #f58300 6.27%, #cd6000 100%);
-}
-
-.tonfish-bg {
-  background: linear-gradient(96deg, #0077fc 6.27%, #002c5c 100%);
-}
-
-.gamefi1-bg {
-  background: linear-gradient(96deg, #202020 6.27%, #000 100%);
-}
-
-.gamefi2-bg {
-  background: linear-gradient(96deg, #06b657 6.27%, #00904b 100%);
-}
-
-.blue-grad {
-  background: linear-gradient(96deg, #0077fc 6.27%, #002c5c 100%);
-}
-
-.red-grad {
-  background: linear-gradient(96deg, #5b0002 6.27%, #a40003 100%);
-}
-
-.purple-grad {
-  background: linear-gradient(96deg, #4b00cf 6.27%, #290070 100%);
-}
-
-.yellow-grad {
-  background: linear-gradient(96deg, #c76a00 6.27%, #753700 100%);
-}
-
-.button-grad {
-  background: linear-gradient(180deg, #00b2ff 0%, #2226ff 100%);
-}
-
 .rank-number {
   position: absolute;
   top: 50%;

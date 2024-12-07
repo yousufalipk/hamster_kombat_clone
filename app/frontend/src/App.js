@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { Routes, Route } from 'react-router-dom';
 import { LuLoader2 } from "react-icons/lu";
 
+import EllipseImg from './assets/root/ellipse.png';
+
 import Token from './Components/Token/index';
 import GamePage from './Pages/Game/Game';
 
@@ -42,7 +44,7 @@ const App = () => {
 
 	return (
 		<>
-			<div className="h-screen w-screen bg-gradient-to-t from-[#1B1B27] to-black">
+			<div className="h-screen w-screen bg-[#060611]">
 				<Routes>
 					<Route path="/" element={<Layout />} />
 					<Route path="*" element={<Layout />} />
