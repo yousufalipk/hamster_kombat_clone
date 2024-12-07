@@ -399,7 +399,7 @@ const Home = () => {
 							<img
 								src={BackgroundImg}
 								alt="Background"
-								className="w-full h-full object-cover scale-[0.79] fixed top-[9vh]"
+								className="scale-150 object-cover fixed top-[30vh]"
 							/>
 						</div>
 
@@ -532,8 +532,8 @@ const Home = () => {
 								{/* Coins per minute & balance */}
 								<div className="flex items-center justify-start w-screen px-5 pt-6 h-[10vh]">
 									{/* Coins Per Minute */}
-									<div className="flex flex-col items-start gap-1">
-										<div className="flex justify-center items-center gap-1">
+									<div className="flex flex-col justify-center items-center gap-1">
+										<div className="flex justify-center items-center">
 											<div className="">
 												<img className="pl-3" src={LittleCoin} alt="Coin-Icon" />
 											</div>
@@ -545,7 +545,7 @@ const Home = () => {
 											<div className="">
 												<img src={InfoIcon} alt="Info-Icons" />
 											</div>
-											<div className="text-[#A4A4A4] text-[10.595px] font-medium">Coin Per Mine</div>
+											<div className="text-[#A4A4A4] text-[10.595px] font-medium">Coins Per Minute</div>
 										</div>
 									</div>
 
@@ -682,8 +682,8 @@ const Home = () => {
 								</div>
 
 								{/* Energy Section */}
-								<div className='flex w-screen mx-auto h-[5vh]'>
-									<div className='flex mx-auto'>
+								<div className='flex justify-center w-screen mx-auto h-[5vh] relative'>
+									<div className='flex mx-auto absolute -top-2'>
 										<div className='px-2'>
 											<img
 												src={FlashIcon}
