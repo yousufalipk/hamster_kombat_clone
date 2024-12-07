@@ -227,3 +227,15 @@ html {
     opacity: 0;
   }
 }
+
+.scale-up {
+  transform: scale(1.91);
+}
+
+.scale-down {
+  transform: scale(0.52);
+}
+
+.fade-out {
+  opacity: 0;
+}

@@ -92,10 +92,14 @@ export const UserProvider = (props) => {
         }
     }, [])
 
-
+    // Refill energy over time
     useEffect(() => {
+        const interval = setInterval(() => {
+            setEnergy(prevEnergy => Math.min(prevEnergy + 1, energyLimit));
+        }, 1000);
 
-    }, [balance]);
+        return () => clearInterval(interval);
+    }, [energy, setEnergy]);
 
     // Socket connection
     useEffect(() => {
@@ -226,13 +230,13 @@ export const UserProvider = (props) => {
                     // 4 boosters
                     if (res.data.user.unlimitedTaps.status = true) {
                         if (res.data.user.unlimitedTaps.lastClaimed) {
-                            const lastClaimed = new Date("2024-10-26T11:16:55.480Z");
+                            const lastClaimed = new Date(res.data.user.unlimitedTaps.lastClaimed);
                             const currentDate = new Date();
 
                             // Calculate the difference in milliseconds
                             const timeDifferenceInMilliseconds = currentDate.getTime() - lastClaimed.getTime();
 
-                            if (timeDifferenceInMilliseconds >= 120000) {
+                            if (timeDifferenceInMilliseconds >= 30000) {
                                 setDisableEnergy(false);
                                 const response = await axios.post(`${apiUrl}/user/toggle-unlimited-taps-status`, {
                                     userId: res.data.user._id
@@ -243,6 +247,7 @@ export const UserProvider = (props) => {
                                     console.log("Error updating state!");
                                 }
                             } else {
+                                setDisableEnergy(true);
                                 setTimeout(async () => {
                                     setDisableEnergy(false);
                                     const response = await axios.post(`${apiUrl}/user/toggle-unlimited-taps-status`, {
@@ -372,7 +377,6 @@ export const UserProvider = (props) => {
                     setDisableEnergy(true);
                     setAvaliableUnlimitedTaps((prevTaps) => prevTaps - 1);
                     setTimeout(async () => {
-                        console.log("Reseting status after 2 minutes!");
                         setDisableEnergy(false);
                         const res = await axios.post(`${apiUrl}/user/toggle-unlimited-taps-status`, {
                             userId: userId
@@ -382,7 +386,7 @@ export const UserProvider = (props) => {
                         } else {
                             console.log("Error updating state!");
                         }
-                    }, 120000)
+                    }, 30000)
                     return { success: true, mess: res.data.message };
                 } else {
                     return { success: false, mess: res.data.message };

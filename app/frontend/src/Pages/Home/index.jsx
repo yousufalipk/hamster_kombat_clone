@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from '../../context/index';
 import { toast } from 'react-toastify';
 
+import midAnimationCircle from '../../assets/animation/1.png';
+import finalAnimationCircle from '../../assets/animation/2.png';
+
 import BackgroundImg from '../../assets/background/bg.png';
 import DailyGamePlay from "../../assets/dailyGamePlayIcon.png";
 import DailyReward from "../../assets/dailyRewardIcon.png";
@@ -88,6 +91,27 @@ const Home = () => {
 	const [energyRefillPopup, setEnergyRefillPopup] = useState(false);
 	const [dailyRewardPopup, setDailyRewardPopup] = useState(false);
 
+	// Animation States
+	const [animationComplete, setAnimationComplete] = useState(false);
+	const scaleRef = useRef(null);
+	const fadeRef = useRef(null);
+
+	useEffect(() => {
+		if (disableEnergy) {
+			if (scaleRef.current && fadeRef.current) {
+				scaleRef.current.classList.add('scale-up');
+				fadeRef.current.classList.remove('fade-out');
+			}
+			setAnimationComplete(false);
+		} else {
+			if (scaleRef.current && fadeRef.current) {
+				scaleRef.current.classList.add('scale-down');
+				fadeRef.current.classList.add('fade-out');
+			}
+			setTimeout(() => setAnimationComplete(true), 1000);
+		}
+	}, [disableEnergy]);
+
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -153,15 +177,6 @@ const Home = () => {
 			navigator.vibrate(50);
 		}
 	};
-
-	// Refill energy over time
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setEnergy(prevEnergy => Math.min(prevEnergy + 1, energyLimit));
-		}, 1000);
-
-		return () => clearInterval(interval);
-	}, [energy, setEnergy]);
 
 	const handleRankings = () => {
 		navigate('/rankings');
@@ -299,7 +314,6 @@ const Home = () => {
 			const res = await unlimitedTapsUpgrade();
 
 			if (res.success) {
-				console.log("Unlimited tap's Enabled for 2 minutes!", res.mess);
 				setUnlimitedTapsPopup(false);
 				toast.success(res.mess);
 			} else {
@@ -561,13 +575,30 @@ const Home = () => {
 												</div>
 											))}
 											<div className="absoulte h-full w-full rounded-full overflow-hidden flex items-center justify-center">
-												<div className="absolute">
+												<div className={`absolute z-0 w-[100vw] animate-rotatePulse`}>
+													<img
+														src={finalAnimationCircle}
+														alt="final"
+														ref={fadeRef}
+														className="transition-opacity duration-1000"
+													/>
+												</div>
+
+												<div className={`absolute z-50`} ref={scaleRef}>
+													<img
+														src={midAnimationCircle}
+														alt="start_animation"
+														width={animationComplete ? 50 : 100}
+														className="transition-all duration-1000"
+													/>
+												</div>
+												<div className="absolute z-20">
 													<img src={PandaCircleIcon} alt="Panda-circle" />
 												</div>
-												<div className="absolute">
+												<div className="absolute z-50">
 													<img src={BigPanda} alt="Panda-Icon" className="bot-tap" />
 												</div>
-												<div className="absolute top-[60%] left-[37%]">
+												<div className="absolute z-50 top-[60%] left-[37%]">
 													<img src={TouchIcon} alt="Touch-Icon" />
 												</div>
 											</div>
@@ -674,7 +705,7 @@ const Home = () => {
 										}}
 									>
 										<div
-											className="relative bg-[#1B1B27] w-[100vw] rounded-t-3xl p-6 text-white">
+											className="relative bg-[#06060E] w-[100vw] h-[40vh] rounded-t-3xl p-6 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
@@ -806,7 +837,7 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[40vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[45vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
@@ -882,7 +913,7 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[40vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[45vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">

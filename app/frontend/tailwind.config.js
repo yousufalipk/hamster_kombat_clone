@@ -4,12 +4,31 @@ module.exports = {
 	theme: {
 		extend: {
 			backgroundImage: {
-				'custom-image1': "url('./assets/Footer/footer.png')", // Changed path to be relative
-				'custom-image2': "url('./assets/background/bg.png')", // Fixed typo in 'background'
-				'custom-image3': "url('./assets/game/game_bg.png')", // Fixed typo in 'background'
+				'custom-image1': "url('./assets/Footer/footer.png')",
+				'custom-image2': "url('./assets/background/bg.png')",
+				'custom-image3': "url('./assets/game/game_bg.png')",
 			},
 			boxShadow: {
 				'panda': 'rgba(0, 0, 0, 0.56) 0px 22px 70px 4px',
+			},
+			animation: {
+				rotatePulse: 'rotatePulse 3s linear infinite',
+			},
+			keyframes: {
+				rotatePulse: {
+					'0%': {
+						transform: 'rotate(0deg) scale(1)',
+						opacity: '1',
+					},
+					'50%': {
+						transform: 'rotate(-180deg) scale(1.1)',
+						opacity: '0.7',
+					},
+					'100%': {
+						transform: 'rotate(-360deg) scale(1)',
+						opacity: '1',
+					},
+				},
 			},
 		},
 	},

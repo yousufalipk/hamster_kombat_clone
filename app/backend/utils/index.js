@@ -1,3 +1,18 @@
+exports.check30sec = (inputDate) => {
+    const currentDate = new Date();
+    const thirtySeconds = 30 * 1000; // 30 seconds in milliseconds
+    const input = new Date(inputDate);
+    const diff = currentDate - input;
+
+    if (diff <= thirtySeconds) {
+        console.log("The date is within 30 seconds!");
+        return true;
+    } else {
+        console.log("The date is outside 30 seconds.");
+        return false;
+    }
+};
+
 exports.check1min = (inputDate) => {
     const currentDate = new Date();
     const oneMinute = 1 * 60 * 1000; // 1 minute in milliseconds

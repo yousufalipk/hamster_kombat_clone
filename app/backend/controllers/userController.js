@@ -10,6 +10,7 @@ const { getIo, userSocketMap } = require('../utils/socketHelper');
 const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 
 const {
+    check30sec,
     check2min,
     check1day,
     check2days,
@@ -289,7 +290,7 @@ exports.unlimitedTaps = async (req, res) => {
         if (user.unlimitedTaps.lastClaimed !== null) {
             const lastClaimed = user.unlimitedTaps.lastClaimed;
 
-            const alreadyBoosterEnabled = check2min(lastClaimed);
+            const alreadyBoosterEnabled = check30sec(lastClaimed);
 
             if (alreadyBoosterEnabled) {
                 return res.status(200).json({
@@ -309,7 +310,7 @@ exports.unlimitedTaps = async (req, res) => {
 
         return res.status(200).json({
             status: 'success',
-            message: 'Unlimited taps for 2 minutes!',
+            message: 'Unlimited taps for 30 Seconds!',
             remaining: user.unlimitedTaps.available
         })
     } catch (error) {
