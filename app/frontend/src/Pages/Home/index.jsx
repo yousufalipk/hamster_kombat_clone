@@ -479,7 +479,7 @@ const Home = () => {
 													)}
 													{isDone ? (
 														<div
-															className="relative border border-[#0072ff] rounded-[14px] overflow-hidden">
+															className="relative border border-[#23a7ff] rounded-[14px] overflow-hidden">
 															{/* Done sticker */}
 															<div className="absolute top-0 left-0 bg-[#0072ff] text-white font-bold text-[9px] py-1 px-3 transform -rotate-45 origin-top-left"
 																style={{ top: '37px', left: '-15px', width: '70px', height: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -500,7 +500,7 @@ const Home = () => {
 														</div>
 													) : (
 														<div
-															className={`relative ${data.isCommingSoon ? `shadow-white shadow-inner` : `border border-[#0072FF] shadow-[0_0_12px_0px_rgba(0,114,255,0.5)]`}  rounded-[14px] overflow-hidden`}>
+															className={`relative ${data.isCommingSoon ? `shadow-white shadow-inner` : `border border-[#23a7ff] shadow-[0_0_10px_0px_rgba(35, 167, 255, 1)]`}  rounded-[14px] overflow-hidden`}>
 															{/* Main content */}
 															<div className={`flex flex-col justify-center items-center p-2 h-20 ${data.isCommingSoon ? `bg-[#1B1B27]` : `bg-[#162B58]`} rounded-[14px] gap-2`}>
 																<div className="h-[70%] flex justify-center items-center">
