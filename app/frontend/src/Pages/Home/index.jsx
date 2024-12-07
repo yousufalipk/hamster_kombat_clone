@@ -97,6 +97,9 @@ const Home = () => {
 	const fadeRef = useRef(null);
 
 	useEffect(() => {
+		const handleAnimationEnd = () => {
+			setAnimationComplete(true);
+		};
 		if (disableEnergy) {
 			if (scaleRef.current && fadeRef.current) {
 				scaleRef.current.classList.add('scale-up');
@@ -107,9 +110,14 @@ const Home = () => {
 			if (scaleRef.current && fadeRef.current) {
 				scaleRef.current.classList.add('scale-down');
 				fadeRef.current.classList.add('fade-out');
+				scaleRef.current.addEventListener('animationend', handleAnimationEnd);
 			}
-			setTimeout(() => setAnimationComplete(true), 1000);
 		}
+		return () => {
+			if (scaleRef.current) {
+				scaleRef.current.removeEventListener('animationend', handleAnimationEnd);
+			}
+		};
 	}, [disableEnergy]);
 
 	const navigate = useNavigate();
@@ -575,21 +583,22 @@ const Home = () => {
 												</div>
 											))}
 											<div className="absoulte h-full w-full rounded-full overflow-hidden flex items-center justify-center">
-												<div className={`absolute z-0 w-[100vw] animate-rotatePulse`}>
+												{/* Animation Cards */}
+												<div className="absolute z-0 w-[100vw] animate-rotatePulse">
 													<img
 														src={finalAnimationCircle}
 														alt="final"
 														ref={fadeRef}
-														className="transition-opacity duration-1000"
+														className={`transition-opacity duration-1000 ${disableEnergy ? '' : 'fade-out'}`}
 													/>
 												</div>
 
-												<div className={`absolute z-50`} ref={scaleRef}>
+												<div className={`absolute z-30 ${disableEnergy ? 'scale-up' : 'scale-down'}`} ref={scaleRef}>
 													<img
 														src={midAnimationCircle}
 														alt="start_animation"
 														width={animationComplete ? 50 : 100}
-														className="transition-all duration-1000"
+														className="transition-all duration-5000"
 													/>
 												</div>
 												<div className="absolute z-20">
