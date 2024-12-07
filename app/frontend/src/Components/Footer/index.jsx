@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import HelmetIcon from "../../assets/HelmetIcon.svg";
 import BottleCapIcon from "../../assets/BottleCapIcon.svg";
-import LittlePandaIcon from "../../assets/littlePandaIcon.png";
+import LittlePandaIcon from "../../assets/footerPanda.svg";
 import HammerIcon from "../../assets/HammerIcon.svg";
 import GroupIcon from "../../assets/GroupIcon.svg";
 import LittlePandaBgIcon from "../../assets/LittlePandaBg.svg";
@@ -61,6 +61,7 @@ const Footer = () => {
                                             alt="Panda Icon"
                                             onClick={() => handleClick("Home", "/")}
                                             className="cursor-pointer z-10"
+                                            width={80}
                                         />
                                     ) : (
                                         <p
