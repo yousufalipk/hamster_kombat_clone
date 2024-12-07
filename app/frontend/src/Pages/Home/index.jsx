@@ -593,12 +593,12 @@ const Home = () => {
 													/>
 												</div>
 
-												<div className={`absolute z-30 ${disableEnergy ? 'scale-up' : 'scale-down'}`} ref={scaleRef}>
+												<div className={`absolute z-30 ${disableEnergy ? 'scale-up' : 'scale-down fade-out'}`} ref={scaleRef}>
 													<img
 														src={midAnimationCircle}
 														alt="start_animation"
 														width={animationComplete ? 50 : 100}
-														className="transition-all duration-5000"
+														className="transition-all duration-1000"
 													/>
 												</div>
 												<div className="absolute z-20">
