@@ -210,8 +210,8 @@ const InviteFriends = () => {
 					<div className="sticky bottom-0 w-screen">
 						<div className='flex gap-2 justify-start items-center text-[#FFF] text-base font-semibold'>
 							{/* Invite a friend */}
-							<div className='w-[57%] rounded-[10px] text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
-								<div className='flex items-center gap-3 p-2 justify-center'>
+							<div className='w-[57%] rounded-2xl border border-gray-500 text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
+								<div className='h-[7vh] flex items-center gap-3 p-2 justify-center'>
 									<div className=''>
 										<img
 											src={Invite}
@@ -227,8 +227,8 @@ const InviteFriends = () => {
 								</div>
 							</div>
 							{/* Copy Link */}
-							<div className='w-[32%] rounded-[14px] text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
-								<div className='flex items-center gap-1 p-2 justify-center'>
+							<div className='w-[32%] rounded-2xl border border-gray-500 text-center bg-gradient-to-t from-[#2226FF] to-[#00B2FF]'>
+								<div className='h-[7vh] flex items-center gap-1 p-2 justify-center'>
 									<img
 										src={Copy}
 										alt=''
