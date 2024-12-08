@@ -722,7 +722,7 @@ const Home = () => {
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
-												<div className="flex justify-end">
+												<div className="flex justify-start">
 													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
 														{`Avalibale ${avaliableUnlimitedTaps}`}
 													</span>
@@ -739,18 +739,17 @@ const Home = () => {
 												</div>
 												{/* action buttons */}
 												<div className='flex gap-4 justify-center mt-4'>
-													<button
-														className='w-1/2 p-2 bg-[#242434] rounded-lg text-sm'
-														onClick={() => {
+													<div className="absolute top-4 right-5">
+														<button onClick={() => {
 															setPopupClosing(true);
 															setTimeout(() => {
 																setUnlimitedTapsPopup(false);
 																setPopupClosing(false);
 															}, 500);
-														}}
-													>
-														Cancel
-													</button>
+														}}>
+															<img src={close} alt="" width={25} />
+														</button>
+													</div>
 													<button
 														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
 														onClick={() => {
@@ -788,7 +787,7 @@ const Home = () => {
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
-												<div className="flex justify-end">
+												<div className="flex justify-start">
 													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
 														{`Avalibale ${avaliableEnergyRefill}`}
 													</span>
@@ -805,18 +804,17 @@ const Home = () => {
 												</div>
 												{/* action buttons */}
 												<div className='flex gap-4 justify-center mt-4'>
-													<button
-														className='w-1/2 p-2 bg-[#242434] rounded-lg text-sm'
-														onClick={() => {
+													<div className="absolute top-4 right-5">
+														<button onClick={() => {
 															setPopupClosing(true);
 															setTimeout(() => {
 																setEnergyRefillPopup(false);
 																setPopupClosing(false);
 															}, 500);
-														}}
-													>
-														Cancel
-													</button>
+														}}>
+															<img src={close} alt="" width={25} />
+														</button>
+													</div>
 													<button
 														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
 														onClick={() => {
@@ -854,7 +852,7 @@ const Home = () => {
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
-												<div className="flex justify-end">
+												<div className="flex justify-start">
 													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
 														{energyLevel >= 9 ? ('Max') : (`Level ${energyLevel + 1}`)}
 													</span>
@@ -880,18 +878,17 @@ const Home = () => {
 												</div>
 												{/* action buttons */}
 												<div className='flex gap-4 justify-center mt-4'>
-													<button
-														className='w-1/2 p-2 bg-[#242434] rounded-lg text-sm'
-														onClick={() => {
+													<div className="absolute top-4 right-5">
+														<button onClick={() => {
 															setPopupClosing(true);
 															setTimeout(() => {
 																setEnergyPopup(false);
 																setPopupClosing(false);
 															}, 500);
-														}}
-													>
-														Cancel
-													</button>
+														}}>
+															<img src={close} alt="" width={25} />
+														</button>
+													</div>
 													<button
 														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
 														onClick={() => {
@@ -930,7 +927,7 @@ const Home = () => {
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
-												<div className="flex justify-end">
+												<div className="flex justify-start">
 													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
 														{multitapLevel >= 9 ? ('Max') : (`Level ${multitapLevel + 1}`)}
 													</span>
@@ -956,18 +953,17 @@ const Home = () => {
 												</div>
 												{/* action buttons */}
 												<div className='flex gap-4 justify-center mt-4'>
-													<button
-														className='w-1/2 p-2 bg-[#242434] rounded-lg text-sm'
-														onClick={() => {
+													<div className="absolute top-4 right-5">
+														<button onClick={() => {
 															setPopupClosing(true);
 															setTimeout(() => {
 																setMultitapsPopup(false);
 																setPopupClosing(false);
 															}, 500);
-														}}
-													>
-														Cancel
-													</button>
+														}}>
+															<img src={close} alt="" width={25} />
+														</button>
+													</div>
 													<button
 														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
 														onClick={() => {
