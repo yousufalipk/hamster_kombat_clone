@@ -47,7 +47,7 @@ const Token = () => {
 	const buttonText = {
 		twitter: "Follow",
 		telegram: "Join",
-		youtube: "Subscribe",
+		youtube: "Watch",
 		instagram: "Follow",
 	};
 
@@ -186,17 +186,41 @@ const Token = () => {
 							<>
 								<div
 									style={{
-										animation: "openPopup 0.7s ease-in-out",
+										animation: `${popupClosing ? "fadeOut" : "fadeIn"
+											} 0.5s ease-in-out forwards`,
 									}}
 									className='popup-overlay fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-80 overflow-hidden'>
 									<div
-										onClick={() => handleCancel()}
+										onClick={() => {
+											setPopupClosing(true);
+											setTimeout(() => {
+												setModalOpen(false);
+												setPopupClosing(false);
+											}, 500);
+										}}
 										className="w-full h-[50vh] absolute top-0">
 									</div>
-									<div className='fixed bottom-0 h-[50vh] w-screen'>
+									<div
+										style={{
+											animation: `${popupClosing ? "closePopup" : "openPopup"
+												} 0.5s ease-in-out forwards`,
+										}}
+										className='fixed bottom-0 h-[50vh] w-screen'>
 										<div className="absolute -inset-1 h-[50vh] bg-[#23a7ff] rounded-[35px]"></div>
 										<div className="absolute -inset-2 h-[50vh] bg-[#23a7ff] blur rounded-[50px]"></div>
-										<div className='w-screen bg-[#06060E] h-[50vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+										<div
+											className='w-screen bg-[#06060E] h-[50vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+											<div className="absolute top-3 right-7 z-20"
+												onClick={() => {
+													setPopupClosing(true);
+													setTimeout(() => {
+														setModalOpen(false);
+														setPopupClosing(false);
+													}, 500);
+												}}
+											>
+												<img src={closebutton} alt="" />
+											</div>
 											{/* Main Body */}
 											<div className='mb-5 px-2'>
 												<div className='flex relative justify-center'>
@@ -354,7 +378,13 @@ const Token = () => {
 													</div>
 												)}
 												<div className="mt-5">
-													<p className="border border-[#242434] py-1  rounded-md text-[#FF8F00] px-6 text-lg font-medium">
+													<p className="flex justify-center items-center gap-2 border border-[#242434] py-1  rounded-md text-[#FF8F00] px-6 text-lg font-medium">
+														<img
+															src={LittleCoin}
+															alt="Little coin"
+															width={25}
+															height={25}
+														/>
 														{selectedTask.reward} {token.project.name.match(/[A-Z]/g)?.join('')}
 													</p>
 												</div>
