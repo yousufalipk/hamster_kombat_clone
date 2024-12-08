@@ -33,6 +33,7 @@ export const UserProvider = (props) => {
     const [tapBalance, setTapBalance] = useState(0);
     const [coinsPerMinute, setCoinsPerMinute] = useState(0);
     const [referrals, setReferrals] = useState([]);
+    const [remaningTime, setRemaningTime] = useState(null);
 
     // 4 Boosters 
     const [disableEnergy, setDisableEnergy] = useState(false);
@@ -92,6 +93,19 @@ export const UserProvider = (props) => {
         }
     }, [])
 
+
+    // Reamning time updater
+    useEffect(() => {
+        setRemaningTime(calculateRemainingTime());
+
+        const interval = setInterval(() => {
+            const newTime = calculateRemainingTime();
+            setRemaningTime(newTime);
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     // Refill energy over time
     useEffect(() => {
         const interval = setInterval(() => {
@@ -142,6 +156,28 @@ export const UserProvider = (props) => {
         } else {
             return false;
         }
+    };
+
+    const calculateRemainingTime = () => {
+        const currentDate = new Date();
+        const nextMidnight = new Date(currentDate);
+
+        nextMidnight.setDate(currentDate.getDate() + 1);
+        nextMidnight.setHours(0, 0, 0, 0);
+
+        const diff = nextMidnight - currentDate;
+
+        if (diff <= 0) {
+            return "00:00:00";
+        }
+
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        return `${hours.toString().padStart(2, '0')}:${minutes
+            .toString()
+            .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     };
 
     /* 
@@ -685,6 +721,8 @@ export const UserProvider = (props) => {
             upgradeVcLevel,
 
             comboCards,
+
+            remaningTime,
 
         }}>
             {props.children}

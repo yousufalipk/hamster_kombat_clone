@@ -12,7 +12,7 @@ import Partners from "../../Components/Partners/index";
 import VCs from "../../Components/VC's/index";
 
 const Hammer = () => {
-	const { comboCards } = useUser();
+	const { comboCards, remaningTime } = useUser();
 	const [activeItem, setActiveItem] = useState(null);
 
 	const handleClick = (item) => {
@@ -127,7 +127,7 @@ const Hammer = () => {
 										/>
 									</div>
 									<div className='text-[#A5A5A5] text-xs font-normal'>
-										{timer.time}
+										{remaningTime}
 									</div>
 								</div>
 							</div>

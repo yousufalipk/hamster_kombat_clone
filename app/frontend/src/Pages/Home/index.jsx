@@ -81,7 +81,8 @@ const Home = () => {
 		currentDay,
 		tapBalance,
 		setTapBalance,
-		coinsPerMinute
+		coinsPerMinute,
+		remaningTime
 	} = useUser();
 
 	const [clicks, setClicks] = useState([]);
@@ -290,7 +291,7 @@ const Home = () => {
 			id: 1,
 			img: DailyGamePlay,
 			data1: "Daily Game Play",
-			timer: "13:11:35",
+			timer: "00:00:00",
 			isDone: false,
 			isCommingSoon: true,
 		},
@@ -306,7 +307,7 @@ const Home = () => {
 			id: 3,
 			img: DailyCombo,
 			data1: "Daily Combo",
-			timer: "02:33:48",
+			timer: "00:00:00",
 			isDone: false,
 			isCommingSoon: true,
 		},
@@ -489,7 +490,7 @@ const Home = () => {
 									{/* Cards */}
 									<div className="pt-8 flex justify-evenly items-center">
 										{cards.map((data) => {
-											const { id, img, data1, data2, isDone } = data;
+											const { id, img, data1, timer, isDone } = data;
 
 											return (
 												<div
@@ -505,53 +506,54 @@ const Home = () => {
 														</>
 													)}
 													{isDone ? (
-														<div
-															className="relative border border-[#23a7ff] rounded-[14px] overflow-hidden">
-															{/* Done sticker */}
-															<div className="absolute top-0 left-0 bg-[#0072ff] text-white font-bold text-[9px] py-1 px-3 transform -rotate-45 origin-top-left"
-																style={{ top: '37px', left: '-15px', width: '70px', height: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-																Done
-															</div>
+														<>
+															<div
+																className="relative border border-[#23a7ff] rounded-[14px] overflow-hidden">
+																{/* Done sticker */}
+																<div className="absolute top-0 left-0 bg-[#0072ff] text-white font-bold text-[9px] py-1 px-3 transform -rotate-45 origin-top-left"
+																	style={{ top: '37px', left: '-15px', width: '70px', height: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+																	Done
+																</div>
 
-															{/* Main content */}
-															<div className={`flex flex-col justify-center items-center p-2 h-20 ${data.isCommingSoon ? `bg-[#1B1B27]` : `bg-[#162B58]`} rounded-[14px] gap-2`}>
-																<div className="h-[70%] flex justify-center items-center">
-																	<img src={img} alt="Logo" width="40" />
-																</div>
-																<div className="h-[30%] text-[#FFF] text-[10px] font-medium flex justify-center items-start">
-																	<div className="flex justify-center items-center">
-																		<p className={`text-[9px] ${data.isCommingSoon && `text-gray-400`}`}>{data1}</p>
+																{/* Main content */}
+																<div className={`flex flex-col justify-center items-center p-2 h-20 ${data.isCommingSoon ? `bg-[#1B1B27]` : `bg-[#162B58]`} rounded-[14px] gap-2`}>
+																	<div className="h-[70%] flex justify-center items-center">
+																		<img src={img} alt="Logo" width="40" />
+																	</div>
+																	<div className="h-[30%] text-[#FFF] text-[10px] font-medium flex justify-center items-start">
+																		<div className="flex justify-center items-center">
+																			<p className={`text-[9px] ${data.isCommingSoon && `text-gray-400`}`}>{data1}</p>
+																		</div>
 																	</div>
 																</div>
 															</div>
-														</div>
+															<div className="text-white text-[10px] mt-3 flex justify-center items-center">
+																{remaningTime}
+															</div>
+														</>
 													) : (
-														<div
-															className={`relative ${data.isCommingSoon ? `shadow-white shadow-inner` : `border border-[#23a7ff] shadow-[0_0_10px_0px_rgba(35, 167, 255, 1)]`}  rounded-[14px] overflow-hidden`}>
-															{/* Main content */}
-															<div className={`flex flex-col justify-center items-center p-2 h-20 ${data.isCommingSoon ? `bg-[#1B1B27]` : `bg-[#162B58]`} rounded-[14px] gap-2`}>
-																<div className="h-[70%] flex justify-center items-center">
-																	<img src={img} alt="Logo" width="40" />
-																</div>
-																<div className="h-[30%] text-[#FFF] text-[10px] font-medium flex justify-center items-start">
-																	<div className="flex justify-center items-center">
-																		<p className={`text-[9px] ${data.isCommingSoon && `text-gray-400`}`}>{data1}</p>
+														<>
+															<div
+																className={`relative ${data.isCommingSoon ? `shadow-white shadow-inner` : `border border-[#23a7ff] shadow-[0_0_10px_0px_rgba(35, 167, 255, 1)]`}  rounded-[14px] overflow-hidden`}>
+																{/* Main content */}
+																<div className={`flex flex-col justify-center items-center p-2 h-20 ${data.isCommingSoon ? `bg-[#1B1B27]` : `bg-[#162B58]`} rounded-[14px] gap-2`}>
+																	<div className="h-[70%] flex justify-center items-center">
+																		<img src={img} alt="Logo" width="40" />
+																	</div>
+																	<div className="h-[30%] text-[#FFF] text-[10px] font-medium flex justify-center items-start">
+																		<div className="flex justify-center items-center">
+																			<p className={`text-[9px] ${data.isCommingSoon && `text-gray-400`}`}>{data1}</p>
+																		</div>
 																	</div>
 																</div>
 															</div>
-														</div>
+															<div className="text-white text-[10px] mt-3 flex justify-center items-center">
+																{remaningTime}
+															</div>
+														</>
 													)}
 												</div>
 											);
-										})}
-									</div>
-
-
-									{/* Timers */}
-									<div className="flex text-[#FFF] text-[10px] font-normal items-center justify-around pt-[2px] mr-1">
-										{cards.map((time) => {
-											const { id, timer } = time;
-											return <div key={id}>{timer}</div>;
 										})}
 									</div>
 								</div>
