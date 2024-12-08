@@ -64,11 +64,13 @@ exports.resetDailyRewards = (user) => {
 }
 
 exports.resetComboCards = (user) => {
-    const now = new Date();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     user.comboCards = user.comboCards.filter(card => {
         const cardDate = new Date(card.timestamp);
-        return cardDate >= now || cardDate.toDateString() === now.toDateString();
+        cardDate.setHours(0, 0, 0, 0);
+        return cardDate.getTime() === today.getTime();
     });
 
     return user;

@@ -58,29 +58,36 @@ exports.check1hour = (inputDate) => {
     }
 };
 
-
 exports.check1day = (inputDate) => {
     const currentDate = new Date();
-    const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
     const input = new Date(inputDate);
-    const diff = currentDate - input;
 
-    if (diff <= oneDay) {
-        console.log("The date is within 1 day!");
+    // Normalize both dates to midnight
+    currentDate.setHours(0, 0, 0, 0);
+    input.setHours(0, 0, 0, 0);
+
+    // Calculate the difference in days
+    const diffDays = Math.floor((currentDate - input) / (24 * 60 * 60 * 1000));
+
+    if (diffDays === 0) {
+        console.log("The date is within 1 day (same day)!");
         return true;
     } else {
-        console.log("The date is outside 1 day.");
+        console.log("The date is outside 1 day (different day).");
         return false;
     }
 };
 
 exports.check2days = (inputDate) => {
     const currentDate = new Date();
-    const twoDays = 2 * 24 * 60 * 60 * 1000; // 2 days in milliseconds
     const input = new Date(inputDate);
-    const diff = currentDate - input;
 
-    if (diff <= twoDays) {
+    currentDate.setHours(0, 0, 0, 0);
+    input.setHours(0, 0, 0, 0);
+
+    const diffDays = Math.floor((currentDate - input) / (24 * 60 * 60 * 1000));
+
+    if (diffDays >= 0 && diffDays <= 1) {
         console.log("The date is within 2 days!");
         return true;
     } else {
@@ -91,11 +98,14 @@ exports.check2days = (inputDate) => {
 
 exports.check1week = (inputDate) => {
     const currentDate = new Date();
-    const oneWeek = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
     const input = new Date(inputDate);
-    const diff = currentDate - input;
 
-    if (diff <= oneWeek) {
+    currentDate.setHours(0, 0, 0, 0);
+    input.setHours(0, 0, 0, 0);
+
+    const diffDays = Math.floor((currentDate - input) / (24 * 60 * 60 * 1000));
+
+    if (diffDays >= 0 && diffDays <= 6) {
         console.log("The date is within 1 week!");
         return true;
     } else {

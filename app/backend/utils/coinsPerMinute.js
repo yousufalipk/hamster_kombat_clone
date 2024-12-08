@@ -12,8 +12,6 @@ exports.getCoinsPerMinute = async (user) => {
         // Round off the difference
         const roundedDifferenceInMinutes = Math.round(differenceInMinutes);
 
-        console.log("Difference", roundedDifferenceInMinutes);
-
         let balanceToAdd;
 
         if (roundedDifferenceInMinutes > 60) {
