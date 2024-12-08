@@ -399,6 +399,7 @@ const Home = () => {
 
 
 	const handleDailyRewardClaim = async () => {
+		setButtonLoading(true);
 		const res = await claimDailyReward();
 		if (res.success) {
 			toast.success('Daily Reward Claimed Succesfuly!');
@@ -406,6 +407,7 @@ const Home = () => {
 		} else {
 			toast.error(res.mess);
 		}
+		setButtonLoading(false);
 	}
 
 	return (
