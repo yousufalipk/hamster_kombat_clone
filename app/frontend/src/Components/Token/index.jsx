@@ -383,7 +383,7 @@ const Token = () => {
 							</>
 						)}
 
-						<div className='bg-[#060611] px-4 w-full h-[100vh] overflow-scroll border-2'>
+						<div className='bg-[#060611] px-4 w-full h-[100vh] overflow-scroll'>
 							<div className='flex items-center gap-4'>
 								<div className='text-[#FFF] text-[18px] font-semibold'>{token.project.name}</div>
 							</div>
