@@ -338,6 +338,7 @@ const Home = () => {
 
 	const handleUnlimitedTaps = async () => {
 		try {
+			setButtonLoading(true);
 			const res = await unlimitedTapsUpgrade();
 
 			if (res.success) {
@@ -347,10 +348,11 @@ const Home = () => {
 				setUnlimitedTapsPopup(false);
 				toast.error(res.mess);
 			}
-
 		} catch (error) {
 			console.log("Error upgrading unlimited taps!", error);
 			toast.error("Internal Server Error!");
+		} finally {
+			setButtonLoading(false);
 		}
 	}
 
@@ -745,17 +747,17 @@ const Home = () => {
 													</span>
 												</div>
 												<div className="flex justify-center flex-col items-center gap-2">
-													<img src={JetPack} alt="battery" width={25} />
+													<img src={JetPack} alt="battery" width={35} />
 													<h1 className="text-lg font-bold text-center">
-														Unlimited Taps
+														Tap Booster
 													</h1>
 												</div>
 												<div className="text-center text-xs flex flex-col gap-4">
-													<p>For each boost you will get unlimited taps, energy will not be deduced.</p>
-													<p>∞ Taps per Boost</p>
+													<p>Tap as much as you can within 30 secs, energy will not be deducted.</p>
+													<p>X2 Unlimited Taps</p>
 												</div>
 												{/* action buttons */}
-												<div className='flex gap-4 justify-center mt-4'>
+												<div className='flex gap-4 justify-center mt-2'>
 													<div className="absolute top-4 right-5">
 														<button onClick={() => {
 															setPopupClosing(true);
@@ -768,14 +770,24 @@ const Home = () => {
 														</button>
 													</div>
 													<button
-														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+														className={`w-1/2 h-10 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm ${avaliableUnlimitedTaps === 0 && `grayscale`}`}
 														onClick={() => {
 															// Upgrade Unlimited Taps
 															handleUnlimitedTaps();
 														}}
 														disabled={avaliableUnlimitedTaps === 0 || buttonLoading}
 													>
-														{avaliableUnlimitedTaps === 0 ? ("Limit Reached!") : ('Confirm')}
+														{buttonLoading ? (
+															<span className="font-bold">
+																{dots}
+															</span>
+														) : (
+															avaliableUnlimitedTaps === 0 ? (
+																'Come back tomorrow'
+															) : (
+																'Confirm'
+															)
+														)}
 													</button>
 												</div>
 											</div>
@@ -1115,7 +1127,7 @@ const Home = () => {
 											{/* action buttons */}
 											<div className="flex gap-4 justify-center mt-8">
 												<button
-													className="px-3 p-2 bg-[#242434] rounded-xl text-sm z-50 border-b-4 border-b-[#191922] shadow-zinc-900"
+													className="h-10 px-3 p-2 bg-[#242434] rounded-xl text-sm z-50 border-b-4 border-b-[#191922] shadow-zinc-900"
 													onClick={handleDailyRewardClaim}
 													disabled={claimed.includes(currentDay) || buttonLoading}
 												>
