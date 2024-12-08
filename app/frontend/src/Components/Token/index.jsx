@@ -136,6 +136,7 @@ const Token = () => {
 	const handleClaimTask = async () => {
 		try {
 			if (!selectedTask?.claimedStatus) {
+				console.log('setting status to true!');
 				setSelectedTask((prevTask) => ({
 					...prevTask,
 					claimedStatus: true,
@@ -151,6 +152,9 @@ const Token = () => {
 				const res2 = await fetchUserProjectDetails(token.project._id);
 				if (res2.success) {
 					setToken(res2.data);
+					const allTasks = res2.data.project.tasks;
+					setDailyTasks(allTasks.filter(task => task.taskType === "daily"));
+					setSocialTasks(allTasks.filter(task => task.taskType === "social"));
 					const updatedTask = res2.data.project.tasks.find((t) => t._id === selectedTask._id);
 					if (updatedTask) {
 						setSelectedTask(updatedTask);
@@ -161,31 +165,10 @@ const Token = () => {
 				toast.error(res.mess);
 			}
 		} catch (error) {
-			console.log("Internal Server Error!", error);
-			toast.error('Internal Server Error!');
+			console.log("Internal Server Error", error);
+			toast.error('Internal Server Error! 2222');
 		}
 	}
-
-	const data = [
-		{
-			id: 1,
-			img: Twitter,
-			name: "Join X and get",
-			amount: "50,000MFI",
-		},
-		{
-			id: 2,
-			img: Telegram,
-			name: "Join TG and get",
-			amount: "50,000MFI",
-		},
-		{
-			id: 3,
-			img: Youtube,
-			name: "Subscribe YouTube",
-			amount: "50,000 MFI",
-		},
-	];
 
 	return (
 		<>
@@ -195,6 +178,7 @@ const Token = () => {
 						<LuLoader2 className="animate-spin w-20 h-20 text-white" />
 					</div>
 				)}
+
 				{sendTokenData && token && (
 					<>
 						{/* Upgrade Level Popup */}
@@ -399,12 +383,12 @@ const Token = () => {
 							</>
 						)}
 
-						<div className='bg-[#060611] p-4 w-full h-[100vh] overflow-scroll overflow-x-hidden'>
+						<div className='bg-[#060611] px-4 w-full h-[100vh] overflow-scroll border-2'>
 							<div className='flex items-center gap-4'>
 								<div className='text-[#FFF] text-[18px] font-semibold'>{token.project.name}</div>
 							</div>
 
-							{/* New Upper Portion */}
+							{/* Upper Card Portion */}
 							<div>
 								<div className="pt-10">
 									{/* Card Header */}
@@ -590,7 +574,7 @@ const Token = () => {
 							</div>
 
 							{/* Tasks Section */}
-							<div className="h-[60vh] px-4 pt-4 overflow-scroll border-t-2 mt-5 rounded-tl-[30px] rounded-tr-[30px] border-[#0099FF] shadow-[#0099ff92]  shadow-lg  ">
+							<div className="px-4 py-5 border-t-2 mt-5 rounded-tl-[30px] rounded-tr-[30px] border-[#0099FF] shadow-[#0099ff92]  shadow-lg  ">
 								{/* Heading 1 */}
 								<div>
 									<p className="text-[#9595A9] text-lg ">Daily Task</p>
@@ -604,9 +588,7 @@ const Token = () => {
 													onClick={() => {
 														setTaskPopup(true);
 														setSelectedTask(task);
-														console.log('task', task);
 														if (task.claimedStatus === 'pending') {
-															console.log("I am running!!!");
 															const currentTime = new Date();
 															const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
 															const remaningMin = 30 - Math.floor(timeDifference);
@@ -659,9 +641,7 @@ const Token = () => {
 													onClick={() => {
 														setTaskPopup(true);
 														setSelectedTask(task);
-														console.log('task', task);
 														if (task.claimedStatus === 'pending') {
-															console.log("I am running!!!");
 															const currentTime = new Date();
 															const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
 															const remaningMin = 30 - Math.floor(timeDifference);

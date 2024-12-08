@@ -565,9 +565,9 @@ const Home = () => {
 								{/* Coins per minute & balance */}
 								<div className="flex items-center justify-start w-screen px-5 pt-6 h-[10vh]">
 									{/* Coins Per Minute */}
-									<div
+									<button
 										onClick={() => { setCpmInfo(true) }}
-										className="z-50 flex flex-col justify-center items-center gap-1">
+										className="z-20 flex flex-col justify-center items-center gap-1">
 										<div className="flex justify-center items-center">
 											<div className="">
 												<img className="pl-3" src={LittleCoin} alt="Coin-Icon" />
@@ -582,7 +582,7 @@ const Home = () => {
 											</div>
 											<div className="text-[#A4A4A4] text-[10.595px] font-medium">Coins Per Minute</div>
 										</div>
-									</div>
+									</button>
 
 									{/* Balance */}
 									<div className="mx-10 flex justify-center items-center gap-1">
