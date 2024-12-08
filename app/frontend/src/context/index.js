@@ -199,84 +199,7 @@ export const UserProvider = (props) => {
                 });
 
                 if (res.data.status === 'success') {
-                    const percentage = (res.data.user.currentRank / 10) * 100;
-                    setUserId(res.data.user._id);
-                    setTelegramId(res.data.user.telegramId);
-                    setFirstName(res.data.user.firstName);
-                    setLastName(res.data.user.lastName);
-                    setUsername(res.data.user.username);
-                    setProfilePic(res.data.user.profilePic);
-                    setLevel(res.data.user.level);
-                    setCurrentRank(res.data.user.currentRank);
-                    setBalance(res.data.user.balance);
-                    setCoinsPerMinute(res.data.user.coinsPerMinute.value);
-                    setReferrals(res.data.user.referrals);
-                    setComboCards(res.data.user.comboCards);
-
-                    // Daily Reward 
-                    setClaimed(res.data.user.dailyReward.claimed);
-
-                    if (res.data.user.dailyReward.date) {
-                        const is1Day = check1day(res.data.user.dailyReward.date);
-                        if (is1Day) {
-                            setCurrentDay(res.data.user.dailyReward.day - 1);
-                        } else {
-                            setCurrentDay(res.data.user.dailyReward.day);
-                        }
-                    } else {
-                        setCurrentDay(res.data.user.dailyReward.day);
-                    }
-
-                    // 4 boosters
-                    if (res.data.user.unlimitedTaps.status = true) {
-                        if (res.data.user.unlimitedTaps.lastClaimed) {
-                            const lastClaimed = new Date(res.data.user.unlimitedTaps.lastClaimed);
-                            const currentDate = new Date();
-
-                            // Calculate the difference in milliseconds
-                            const timeDifferenceInMilliseconds = currentDate.getTime() - lastClaimed.getTime();
-
-                            if (timeDifferenceInMilliseconds >= 30000) {
-                                setDisableEnergy(false);
-                                const response = await axios.post(`${apiUrl}/user/toggle-unlimited-taps-status`, {
-                                    userId: res.data.user._id
-                                });
-                                if (response.data.status === 'success') {
-                                    console.log("Status updated succesfuly!");
-                                } else {
-                                    console.log("Error updating state!");
-                                }
-                            } else {
-                                setDisableEnergy(true);
-                                setTimeout(async () => {
-                                    setDisableEnergy(false);
-                                    const response = await axios.post(`${apiUrl}/user/toggle-unlimited-taps-status`, {
-                                        userId: res.data.user._id
-                                    });
-                                    if (response.data.status === 'success') {
-                                        console.log("Status updated succesfuly!");
-                                    } else {
-                                        console.log("Error updating state!");
-                                    }
-                                }, timeDifferenceInMilliseconds)
-                            }
-                        }
-                    } else {
-                        setDisableEnergy(res.data.user.unlimitedTaps.status);
-                    }
-
-                    setAvaliableUnlimitedTaps(res.data.user.unlimitedTaps.available);
-
-                    setAvaliableEnergyRefill(res.data.user.energyRefill.available);
-
-                    setEnergy(res.data.user.energy.limit);
-                    setEnergyLevel(res.data.user.energy.level);
-                    setEnergyLimit(res.data.user.energy.limit);
-
-                    setMultitapLevel(res.data.user.multitaps.level);
-                    setAddCoins(res.data.user.multitaps.value);
-                    setLevelPercentage(percentage);
-                    navigate('/');
+                    initilizeStates(res.data.user);
                 }
             } else {
                 setLoaderErrorMes({
@@ -293,6 +216,70 @@ export const UserProvider = (props) => {
         } finally {
             setUserDataInitlized(true);
             setLoader(false);
+        }
+    }
+
+    const initilizeStates = async (user) => {
+        try {
+            const percentage = (user.currentRank / 10) * 100;
+            setUserId(user._id);
+            setTelegramId(user.telegramId);
+            setFirstName(user.firstName);
+            setLastName(user.lastName);
+            setUsername(user.username);
+            setProfilePic(user.profilePic);
+            setLevel(user.level);
+            setCurrentRank(user.currentRank);
+            setBalance(user.balance);
+            setCoinsPerMinute(user.coinsPerMinute.value);
+            setReferrals(user.referrals);
+            setComboCards(user.comboCards);
+            setClaimed(user.dailyReward.claimed);
+            if (user.dailyReward.date) {
+                const is1Day = check1day(user.dailyReward.date);
+                if (is1Day) {
+                    setCurrentDay(user.dailyReward.day - 1);
+                } else {
+                    setCurrentDay(user.dailyReward.day);
+                }
+            } else {
+                setCurrentDay(user.dailyReward.day);
+            }
+            // 4 boosters
+            if (user.unlimitedTaps.status = true) {
+                if (user.unlimitedTaps.lastClaimed) {
+                    const lastClaimed = new Date(user.unlimitedTaps.lastClaimed);
+                    const currentDate = new Date();
+                    const timeDifferenceInMilliseconds = currentDate.getTime() - lastClaimed.getTime();
+                    if (timeDifferenceInMilliseconds >= 30000) {
+                        setDisableEnergy(false);
+                        await axios.post(`${apiUrl}/user/toggle-unlimited-taps-status`, {
+                            userId: user._id
+                        });
+                    } else {
+                        setDisableEnergy(true);
+                        setTimeout(async () => {
+                            setDisableEnergy(false);
+                            await axios.post(`${apiUrl}/user/toggle-unlimited-taps-status`, {
+                                userId: user._id
+                            });
+                        }, timeDifferenceInMilliseconds)
+                    }
+                }
+            } else {
+                setDisableEnergy(user.unlimitedTaps.status);
+            }
+            setAvaliableUnlimitedTaps(user.unlimitedTaps.available);
+            setAvaliableEnergyRefill(user.energyRefill.available);
+            setEnergy(user.energy.limit);
+            setEnergyLevel(user.energy.level);
+            setEnergyLimit(user.energy.limit);
+            setMultitapLevel(user.multitaps.level);
+            setAddCoins(user.multitaps.value);
+            setLevelPercentage(percentage);
+            navigate('/');
+        } catch (error) {
+            console.log('Error initializing states!');
         }
     }
 
@@ -405,6 +392,7 @@ export const UserProvider = (props) => {
             });
 
             if (res.data.status === 'success') {
+                initilizeStates(res.data.user);
                 return { success: true, mess: res.data.message };
             } else {
                 return { success: false, mess: res.data.message };
@@ -412,8 +400,6 @@ export const UserProvider = (props) => {
         } catch (error) {
             console.log("Error claiming daily reward", error);
             return ({ success: false, mess: 'Internal Server Error!' });
-        } finally {
-            initializeUser();
         }
     }
 

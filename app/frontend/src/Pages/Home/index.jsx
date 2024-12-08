@@ -98,10 +98,25 @@ const Home = () => {
 	const [energyRefillPopup, setEnergyRefillPopup] = useState(false);
 	const [dailyRewardPopup, setDailyRewardPopup] = useState(false);
 
+	const [dots, setDots] = useState('');
+	const [buttonLoading, setButtonLoading] = useState(false);
+
 	// Animation States
 	const [animationComplete, setAnimationComplete] = useState(false);
 	const scaleRef = useRef(null);
 	const fadeRef = useRef(null);
+
+	useEffect(() => {
+		let interval;
+		if (buttonLoading) {
+			interval = setInterval(() => {
+				setDots(prev => (prev.length < 4 ? prev + '.' : ''));
+			}, 300);
+		} else {
+			setDots('');
+		}
+		return () => clearInterval(interval);
+	}, [buttonLoading]);
 
 	useEffect(() => {
 		const handleAnimationEnd = () => {
@@ -756,7 +771,7 @@ const Home = () => {
 															// Upgrade Unlimited Taps
 															handleUnlimitedTaps();
 														}}
-														disabled={avaliableUnlimitedTaps === 0}
+														disabled={avaliableUnlimitedTaps === 0 || buttonLoading}
 													>
 														{avaliableUnlimitedTaps === 0 ? ("Limit Reached!") : ('Confirm')}
 													</button>
@@ -821,7 +836,7 @@ const Home = () => {
 															// Upgrade energy limit
 															handleEnergyRefill()
 														}}
-														disabled={avaliableEnergyRefill === 0}
+														disabled={avaliableEnergyRefill === 0 || buttonLoading}
 													>
 														{avaliableEnergyRefill === 0 ? ("Limit Reached!") : ('Confirm')}
 													</button>
@@ -895,7 +910,7 @@ const Home = () => {
 															// Upgrade energy limit
 															handleEnergyUpgrade()
 														}}
-														disabled={energyLevel >= 9}
+														disabled={energyLevel >= 9 || buttonLoading}
 													>
 														{energyLevel >= 9 ? ("Max") : ('Confirm')}
 													</button>
@@ -970,7 +985,7 @@ const Home = () => {
 															// Upgrade multitap limit
 															handleMultitapUpgrade()
 														}}
-														disabled={multitapLevel >= 9}
+														disabled={multitapLevel >= 9 || buttonLoading}
 													>
 														{multitapLevel >= 9 ? ("Max") : ('Confirm')}
 													</button>
@@ -1098,11 +1113,21 @@ const Home = () => {
 											{/* action buttons */}
 											<div className="flex gap-4 justify-center mt-8">
 												<button
-													className="w-1/3 p-2 bg-[#242434] rounded-xl text-sm z-50 border-b-4 border-b-[#191922] shadow-zinc-900"
+													className="px-3 p-2 bg-[#242434] rounded-xl text-sm z-50 border-b-4 border-b-[#191922] shadow-zinc-900"
 													onClick={handleDailyRewardClaim}
-													disabled={claimed.includes(currentDay)}
+													disabled={claimed.includes(currentDay) || buttonLoading}
 												>
-													Claim
+													{buttonLoading ? (
+														<span className="h-6 font-bold">
+															{dots}
+														</span>
+													) : (
+														claimed.includes(currentDay) ? (
+															<span>Come back tomorrow</span>
+														) : (
+															<span>Claim</span>
+														)
+													)}
 												</button>
 											</div>
 											<div className="absolute top-4 right-5">

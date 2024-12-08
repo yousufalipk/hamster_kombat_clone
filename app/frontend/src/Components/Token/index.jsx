@@ -37,10 +37,6 @@ const Token = () => {
 	const [popupClosing, setPopupClosing] = useState(false);
 	const [timeDifference, setTimeDifference] = useState(0);
 
-	useEffect(() => {
-		console.log("Selected Task", selectedTask);
-	}, [selectedTask])
-
 	const iconMapping = {
 		twitter: Twitter,
 		telegram: Telegram,
@@ -54,11 +50,6 @@ const Token = () => {
 		youtube: "Subscribe",
 		instagram: "Follow",
 	};
-
-	useEffect(() => {
-		console.log("Social Tasks", socialTasks);
-		console.log("Daily Tasks", dailyTasks);
-	}, [socialTasks, dailyTasks]);
 
 	useEffect(() => {
 		let interval;
