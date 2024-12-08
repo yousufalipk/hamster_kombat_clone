@@ -229,7 +229,7 @@ export const UserProvider = (props) => {
             setUsername(user.username);
             setProfilePic(user.profilePic);
             setLevel(user.level);
-            setCurrentRank(user.currentRank);
+            setCurrentRank(user.currentRank + 1);
             setBalance(user.balance);
             setCoinsPerMinute(user.coinsPerMinute.value);
             setReferrals(user.referrals);

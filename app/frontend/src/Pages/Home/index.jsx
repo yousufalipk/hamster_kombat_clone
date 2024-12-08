@@ -97,6 +97,7 @@ const Home = () => {
 	const [unlimitedTapsPopup, setUnlimitedTapsPopup] = useState(false);
 	const [energyRefillPopup, setEnergyRefillPopup] = useState(false);
 	const [dailyRewardPopup, setDailyRewardPopup] = useState(false);
+	const [cpmInfo, setCpmInfo] = useState(false);
 
 	const [dots, setDots] = useState('');
 	const [buttonLoading, setButtonLoading] = useState(false);
@@ -358,6 +359,7 @@ const Home = () => {
 
 	const handleEnergyRefill = async () => {
 		try {
+			setButtonLoading(true);
 			const res = await energyRefillUpgrade();
 
 			if (res.success) {
@@ -372,10 +374,13 @@ const Home = () => {
 		} catch (error) {
 			console.log("Error Refilling Energy!", error);
 			toast.error("Internal Server Error!");
+		} finally {
+			setButtonLoading(false);
 		}
 	}
 
 	const handleEnergyUpgrade = async () => {
+		setButtonLoading(true);
 		const res = await energyUpgrade();
 		if (res.success) {
 			toast.success("Energy Limit Upgraded!");
@@ -385,9 +390,11 @@ const Home = () => {
 			toast.error(res.mess);
 			setEnergyPopup(false);
 		}
+		setButtonLoading(false);
 	}
 
 	const handleMultitapUpgrade = async () => {
+		setButtonLoading(true);
 		const res = await multitapUpgrade();
 		if (res.success) {
 			toast.success("Multitap Level Upgraded!");
@@ -397,6 +404,7 @@ const Home = () => {
 			toast.error(res.mess);
 			setMultitapsPopup(false);
 		}
+		setButtonLoading(false);
 	}
 
 
@@ -555,7 +563,9 @@ const Home = () => {
 								{/* Coins per minute & balance */}
 								<div className="flex items-center justify-start w-screen px-5 pt-6 h-[10vh]">
 									{/* Coins Per Minute */}
-									<div className="flex flex-col justify-center items-center gap-1">
+									<div
+										onClick={() => { setCpmInfo(true) }}
+										className="z-50 flex flex-col justify-center items-center gap-1">
 										<div className="flex justify-center items-center">
 											<div className="">
 												<img className="pl-3" src={LittleCoin} alt="Coin-Icon" />
@@ -785,7 +795,7 @@ const Home = () => {
 															avaliableUnlimitedTaps === 0 ? (
 																'Come back tomorrow'
 															) : (
-																'Confirm'
+																'Boost'
 															)
 														)}
 													</button>
@@ -812,7 +822,7 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[40vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[35vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
@@ -822,17 +832,16 @@ const Home = () => {
 													</span>
 												</div>
 												<div className="flex justify-center flex-col items-center gap-2">
-													<img src={BatteryBooster1} alt="battery" width={25} />
+													<img src={BatteryBooster1} alt="battery" width={35} />
 													<h1 className="text-lg font-bold text-center">
 														Energy Refill
 													</h1>
 												</div>
 												<div className="text-center text-xs flex flex-col gap-4">
-													<p>Each boost will give you max energy</p>
-													<p>{energyLimit} energy per refill</p>
+													<p>Refill energy to maximum</p>
 												</div>
 												{/* action buttons */}
-												<div className='flex gap-4 justify-center mt-4'>
+												<div className='flex gap-4 justify-center mt-2'>
 													<div className="absolute top-4 right-5">
 														<button onClick={() => {
 															setPopupClosing(true);
@@ -845,14 +854,24 @@ const Home = () => {
 														</button>
 													</div>
 													<button
-														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+														className={`w-1/2 h-10 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm ${avaliableEnergyRefill === 0 && `grayscale`}`}
 														onClick={() => {
 															// Upgrade energy limit
 															handleEnergyRefill()
 														}}
 														disabled={avaliableEnergyRefill === 0 || buttonLoading}
 													>
-														{avaliableEnergyRefill === 0 ? ("Limit Reached!") : ('Confirm')}
+														{buttonLoading ? (
+															<span className="font-bold">
+																{dots}
+															</span>
+														) : (
+															avaliableEnergyRefill === 0 ? (
+																'Come back tomorrow'
+															) : (
+																'Refill'
+															)
+														)}
 													</button>
 												</div>
 											</div>
@@ -893,8 +912,8 @@ const Home = () => {
 													</h1>
 												</div>
 												<div className="text-center text-xs flex flex-col gap-4">
-													<p>Increased energy limit by 1500</p>
-													<p>+1500 per level</p>
+													<p>Increase the limit of the energy storage</p>
+													<p>+500 energy limit</p>
 													{energyLevel < 9 && (
 														<span className="flex gap-4 justify-center items-center">
 															Cost of level up
@@ -919,14 +938,22 @@ const Home = () => {
 														</button>
 													</div>
 													<button
-														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+														className={`w-1/2 h-10 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm ${energyLevel >= 9 && 'grayscale'}`}
 														onClick={() => {
 															// Upgrade energy limit
 															handleEnergyUpgrade()
 														}}
 														disabled={energyLevel >= 9 || buttonLoading}
 													>
-														{energyLevel >= 9 ? ("Max") : ('Confirm')}
+														{buttonLoading ? (
+															<span className="h-6 font-bold">
+																{dots}
+															</span>
+														) : (
+															<>
+																{energyLevel >= 9 ? ("Max") : ('Get it')}
+															</>
+														)}
 													</button>
 												</div>
 											</div>
@@ -964,12 +991,12 @@ const Home = () => {
 												<div className="flex justify-center flex-col items-center gap-2">
 													<img src={TouchIcon} alt="battery" width={25} />
 													<h1 className="text-lg font-bold text-center">
-														Multitap's
+														Multitap
 													</h1>
 												</div>
 												<div className="text-center text-xs flex flex-col gap-4">
-													<p>Increased tap value by 1</p>
-													<p>+1 per level</p>
+													<p>Increase amount of Tap you can earn per one tap</p>
+													<p>+1 per tap for each level</p>
 													{multitapLevel < 9 && (
 														<span className="flex gap-4 justify-center items-center">
 															Cost of level up
@@ -994,15 +1021,73 @@ const Home = () => {
 														</button>
 													</div>
 													<button
-														className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+														className={`w-1/2 h-10 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm ${multitapLevel >= 9 && 'grayscale'}`}
 														onClick={() => {
 															// Upgrade multitap limit
 															handleMultitapUpgrade()
 														}}
 														disabled={multitapLevel >= 9 || buttonLoading}
 													>
-														{multitapLevel >= 9 ? ("Max") : ('Confirm')}
+														{buttonLoading ? (
+															<span className="h-6 font-bold">
+																{dots}
+															</span>
+														) : (
+															<>
+																{multitapLevel >= 9 ? ("Max Level") : ('Get it')}
+															</>
+														)}
 													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</>
+						)}
+
+						{/* cpm Info */}
+						{cpmInfo && (
+							<>
+								<div
+									className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end"
+									style={{
+										animation: `${popupClosing ? "fadeOut" : "fadeIn"
+											} 0.5s ease-in-out forwards`,
+									}}
+								>
+									<div
+										style={{
+											animation: `${popupClosing ? "closePopup" : "openPopup"
+												} 0.5s ease-in-out forwards`,
+										}}
+									>
+										<div className="relative bg-[#06060E] w-[100vw] h-[25vh] rounded-t-3xl p-4 text-white">
+											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
+											<div className="flex flex-col gap-3">
+												<div className="flex justify-center flex-col items-center gap-2">
+													<img src={InfoIcon} alt="battery" width={25} />
+													<h1 className="text-lg font-bold text-center">
+														Coins Per Minute
+													</h1>
+												</div>
+												<div className="text-center text-xs flex flex-col gap-4 px-7 justify-center">
+													Coins Per Minute (CPM) defines how many coins users earn automatically every minute, based on their CPM value. Higher CPM means faster passive earnings.
+												</div>
+												{/* action buttons */}
+												<div className='flex gap-4 justify-center mt-4'>
+													<div className="absolute top-4 right-5">
+														<button onClick={() => {
+															setPopupClosing(true);
+															setTimeout(() => {
+																setCpmInfo(false);
+																setPopupClosing(false);
+															}, 500);
+														}}>
+															<img src={close} alt="" width={25} />
+														</button>
+													</div>
 												</div>
 											</div>
 										</div>
