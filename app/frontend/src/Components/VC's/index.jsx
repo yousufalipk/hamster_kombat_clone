@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import AngleIcon from "../../assets/BlackAngle.svg";
+import close from "../../assets/dailyreward/close.svg"
 
 import { toast } from 'react-toastify';
 import { useUser } from "../../context";
@@ -17,8 +18,25 @@ const VCS = () => {
 	const [selectedVc, setSelectedVc] = useState(null);
 	const [processing, setProcessing] = useState(null);
 
+	const [popupClosing, setPopupClosing] = useState(false);
+
+	const [dots, setDots] = useState('');
+	const [buttonLoading, setButtonLoading] = useState(false);
+
 	useEffect(() => {
-		if (!vcs) {
+		let interval;
+		if (buttonLoading) {
+			interval = setInterval(() => {
+				setDots(prev => (prev.length < 4 ? prev + '.' : ''));
+			}, 300);
+		} else {
+			setDots('');
+		}
+		return () => clearInterval(interval);
+	}, [buttonLoading]);
+
+	useEffect(() => {
+		if (vcs.length === 0) {
 			fetchVcs();
 		}
 	}, [])
@@ -28,16 +46,8 @@ const VCS = () => {
 		setSelectedVc(vc);
 	};
 
-	const handleCancel = () => {
-		setIsModalOpen(false);
-		setSelectedVc(null);
-	}
-
 	const handleVcUpgrade = async (upgradeCost) => {
-		if (upgradeCost > balance) {
-			toast.error('Insufficient Balance!');
-			return;
-		}
+		setButtonLoading(true);
 		try {
 			setProcessing(true);
 			const res = await upgradeVcLevel(selectedVc._id);
@@ -50,11 +60,11 @@ const VCS = () => {
 		} catch (error) {
 
 		} finally {
-			setProcessing(false);
+			setButtonLoading(false);
 		}
 	}
 
-	if (vcLoader || processing) {
+	if (vcLoader) {
 		return (
 			<>
 				<div className="h-[33vh] w-full flex justify-center items-center">
@@ -70,14 +80,40 @@ const VCS = () => {
 				<>
 					{isModalOpen && (
 						<div
-							onClick={() => handleCancel()}
+							style={{
+								animation: `${popupClosing ? "fadeOut" : "fadeIn"
+									} 0.5s ease-in-out forwards`,
+							}}
+							onClick={() => {
+								setPopupClosing(true);
+								setTimeout(() => {
+									setIsModalOpen(false);
+									setPopupClosing(false);
+								}, 500);
+							}}
 							className='fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-80 overflow-hidden'>
-							<div className='fixed bottom-0 h-[40vh] w-screen'>
-								<div className="absolute -inset-1 h-[40vh] bg-[#23a7ff] rounded-[35px]"></div>
-								<div className="absolute -inset-2 h-[40vh] bg-[#23a7ff] blur rounded-[50px]"></div>
-								<div className='w-screen bg-[#1B1B27] h-[40vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+							<div
+								style={{
+									animation: `${popupClosing ? "closePopup" : "openPopup"
+										} 0.5s ease-in-out forwards`,
+								}}
+								className='fixed bottom-0 h-[35vh] w-screen'>
+								<div className="absolute -inset-1 h-[35vh] bg-[#23a7ff] rounded-[35px]"></div>
+								<div className="absolute -inset-2 h-[35vh] bg-[#23a7ff] blur rounded-[50px]"></div>
+								<div className='w-screen bg-[#06060E] h-[35vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
 									{/* Main Body */}
 									<div className='mb-5 px-2 mt-10'>
+										<div className="absolute top-4 right-5">
+											<button onClick={() => {
+												setPopupClosing(true);
+												setTimeout(() => {
+													setIsModalOpen(false);
+													setPopupClosing(false);
+												}, 500);
+											}}>
+												<img src={close} alt="" width={25} />
+											</button>
+										</div>
 
 										<div className='flex relative justify-center'>
 											{/* logo */}
@@ -117,19 +153,21 @@ const VCS = () => {
 										{/* action buttons */}
 										<div className="flex flex-col gap-4 mt-3 justify-center p-2 items-center">
 											<button
-												className="w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm disabled:grayscale disabled:cursor-not-allowed"
+												className="w-1/2 h-10 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm disabled:grayscale disabled:cursor-not-allowed"
 												onClick={handleVcUpgrade}
-												disabled={
-													!(
-														(selectedVc?.userData?.nextLevelCost || selectedVc?.levels[0]?.cost) <= balance
-													)
-												}
+												disabled={buttonLoading}
 											>
-												{!(
-													(selectedVc?.userData?.nextLevelCost || selectedVc?.levels[0]?.cost) <= balance
-												)
-													? "Insufficient Balance"
-													: "Confirm"}
+												{balance >= (selectedVc?.userData?.nextLevelCost ?? selectedVc.levels[0].cost) ? (
+													<>
+														{buttonLoading ? (
+															<span className="h-6 font-bold">{dots}</span>
+														) : (
+															"Upgrade"
+														)}
+													</>
+												) : (
+													"Insufficient Balance"
+												)}
 											</button>
 										</div>
 									</div>

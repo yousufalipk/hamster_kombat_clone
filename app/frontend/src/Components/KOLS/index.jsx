@@ -5,6 +5,7 @@ import AngleIcon from "../../assets/BlackAngle.svg";
 import CustomLoader from '../Loader/Loader';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import close from "../../assets/dailyreward/close.svg"
 
 import { useUser } from '../../context/index';
 
@@ -15,31 +16,45 @@ const KOLS = () => {
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedKol, setSelectedKol] = useState(null);
-	const [processing, setProcessing] = useState(null);
+
+	const [popupClosing, setPopupClosing] = useState(false);
+
+	const [dots, setDots] = useState('');
+	const [buttonLoading, setButtonLoading] = useState(false);
 
 	useEffect(() => {
-		if (!kols) {
+		if (selectedKol) {
+			console.log("Balance", balance);
+			console.log("Selected Kol next upgrade cost", selectedKol?.userData?.nextLevelCost || selectedKol.levels[0].cost);
+		}
+	}, [selectedKol])
+
+	useEffect(() => {
+		let interval;
+		if (buttonLoading) {
+			interval = setInterval(() => {
+				setDots(prev => (prev.length < 4 ? prev + '.' : ''));
+			}, 300);
+		} else {
+			setDots('');
+		}
+		return () => clearInterval(interval);
+	}, [buttonLoading]);
+
+	useEffect(() => {
+		if (kols.length === 0) {
 			fetchKols();
 		}
 	}, []);
 
-	const handleUpgrade = (kol, upgradeCost) => {
-		if (upgradeCost > balance) {
-			toast.error('Insufficient Balance!');
-			return;
-		}
+	const handleUpgrade = (kol) => {
 		setIsModalOpen(true);
 		setSelectedKol(kol);
 	};
 
-	const handleCancel = () => {
-		setIsModalOpen(false);
-		setSelectedKol(null);
-	}
-
 	const handleProjectUpgrade = async () => {
+		setButtonLoading(true);
 		try {
-			setProcessing(true);
 			const res = await upgradeKolsLevel(selectedKol._id);
 			if (res.success) {
 				navigate('/hammer');
@@ -48,13 +63,13 @@ const KOLS = () => {
 				toast.error(res.mess);
 			}
 		} catch (error) {
-
+			console.log("Internal Server Error", error);
 		} finally {
-			setProcessing(false);
+			setButtonLoading(false);
 		}
 	}
 
-	if (kolsLoader || processing) {
+	if (kolsLoader) {
 		return (
 			<>
 				<div className="h-[33vh] w-full flex justify-center items-center">
@@ -70,14 +85,41 @@ const KOLS = () => {
 				<>
 					{isModalOpen && (
 						<div
-							onClick={() => handleCancel()}
+							style={{
+								animation: `${popupClosing ? "fadeOut" : "fadeIn"
+									} 0.5s ease-in-out forwards`,
+							}}
+							onClick={() => {
+								setPopupClosing(true);
+								setTimeout(() => {
+									setIsModalOpen(false);
+									setPopupClosing(false);
+								}, 500);
+							}}
 							className='fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-80 overflow-hidden'>
-							<div className='fixed bottom-0 h-[40vh] w-screen'>
+							<div
+								style={{
+									animation: `${popupClosing ? "closePopup" : "openPopup"
+										} 0.5s ease-in-out forwards`,
+								}}
+								className='fixed bottom-0 h-[35vh] w-screen'>
 								<div className="absolute -inset-1 h-[40vh] bg-[#23a7ff] rounded-[35px]"></div>
 								<div className="absolute -inset-2 h-[40vh] bg-[#23a7ff] blur rounded-[50px]"></div>
-								<div className='w-screen bg-[#1B1B27] h-[40vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+								<div className='w-screen bg-[#06060E] h-[35vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
 									{/* Main Body */}
 									<div className='mb-5 px-2 mt-10'>
+
+										<div className="absolute top-4 right-5">
+											<button onClick={() => {
+												setPopupClosing(true);
+												setTimeout(() => {
+													setIsModalOpen(false);
+													setPopupClosing(false);
+												}, 500);
+											}}>
+												<img src={close} alt="" width={25} />
+											</button>
+										</div>
 
 										<div className='flex relative justify-center'>
 											{/* logo */}
@@ -117,14 +159,24 @@ const KOLS = () => {
 										{/* action buttons */}
 										<div className='flex gap-4 mt-3 justify-center p-2'>
 											<button
-												className='w-1/2 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
+												className='w-1/2 h-10 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm'
 												onClick={() => (handleProjectUpgrade())}
+												disabled={buttonLoading}
 											>
-												Confirm
+												{balance >= (selectedKol?.userData?.nextLevelCost ?? selectedKol.levels[0].cost) ? (
+													<>
+														{buttonLoading ? (
+															<span className="h-6 font-bold">{dots}</span>
+														) : (
+															"Upgrade"
+														)}
+													</>
+												) : (
+													"Insufficient Balance"
+												)}
 											</button>
 										</div>
 									</div>
-
 								</div>
 							</div>
 						</div>
@@ -210,8 +262,8 @@ const KOLS = () => {
 																/>
 																<button
 																	className="text-xs font-thin"
-																	onClick={() => handleUpgrade(kol, kol?.userData?.nextLevelCost || kol.levels[0].cost)}
-																	disabled={processing}
+																	onClick={() => handleUpgrade(kol)}
+																	disabled={buttonLoading}
 																>
 																	Upgrade
 																</button>
