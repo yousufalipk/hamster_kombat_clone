@@ -94,7 +94,7 @@ const Current = () => {
 				</div>
 			) : (
 				<div className="h-[33vh] w-full flex justify-center items-center text-white">
-					<span className="text-xl font-semibold">No projects!</span>
+					<span className="text-xl font-semibold text-white">No projects!</span>
 				</div>
 			)}
 		</>

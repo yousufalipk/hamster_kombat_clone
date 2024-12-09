@@ -18,6 +18,9 @@ import invite2 from '../../assets/invite/2.svg';
 import invite3 from '../../assets/invite/3.svg';
 
 
+import CustomLoader from '../../Components/Loader/Loader';
+
+
 const BottleCap = () => {
 	const { claimUserTask, fetchUserTask, userSocialTasks, setUserSocialTasks, userDailyTasks, setUserDailyTasks, balance, fetchInviteFriends, inviteFriends, claimInviteFriendTask } = useUser();
 
@@ -33,13 +36,10 @@ const BottleCap = () => {
 	const [inviteFriendsPopup, setInviteFriendsPopup] = useState(false);
 	const [selectedInviteFriendTask, setSelectedInviteFriendTask] = useState(false);
 
+	const [tasksLoader, setTaskLoader] = useState(false);
+
 	const [] = useState();
 
-	useEffect(() => {
-		if (inviteFriends.length === 0) {
-			fetchInviteFriends();
-		}
-	}, [])
 
 	const iconMapping = {
 		twitter: Twitter,
@@ -62,9 +62,14 @@ const BottleCap = () => {
 	};
 
 	useEffect(() => {
+		setTaskLoader(true);
 		if (userSocialTasks.length === 0 && userDailyTasks.length === 0) {
 			fetchUserTask();
 		}
+		if (inviteFriends.length === 0) {
+			fetchInviteFriends();
+		}
+		setTaskLoader(false);
 	}, []);
 
 	useEffect(() => {
@@ -124,8 +129,11 @@ const BottleCap = () => {
 
 	const handleClaimInviteReward = async (rewardId) => {
 		try {
+			setButtonLoading(true);
 			const res = await claimInviteFriendTask(rewardId);
 			if (res.success) {
+				const updatedSelectedTask = selectedInviteFriendTask.find(task => task.id === selectedInviteFriendTask.id);
+				setSelectedInviteFriendTask(updatedSelectedTask);
 				toast.success(res.mess);
 			} else {
 				toast.error(res.mess);
@@ -133,7 +141,19 @@ const BottleCap = () => {
 		} catch (error) {
 			console.log('Internal Server Error', error);
 			toast.error('Internal Server Error');
+		} finally {
+			setButtonLoading(false);
 		}
+	}
+
+	if (tasksLoader) {
+		return (
+			<>
+				<div className="h-[33vh] w-full flex justify-center items-center">
+					<CustomLoader size={200} />
+				</div>
+			</>
+		)
 	}
 
 	return (
@@ -394,7 +414,7 @@ const BottleCap = () => {
 						</div>
 					) : (
 						<div className="h-[30vh] w-full flex justify-center items-center">
-							No Daily Task's
+							<span className="text-xl font-semibold text-white">No Social Task's!</span>
 						</div>
 					)}
 					{/* Heading 2 */}
@@ -451,7 +471,7 @@ const BottleCap = () => {
 						</div>
 					) : (
 						<div className="h-[30vh] w-full flex justify-center items-center">
-							No Social Task's
+							<span className="text-xl font-semibold text-white">No Daily Task's!</span>
 						</div>
 					)}
 

@@ -25,14 +25,6 @@ const Hammer = () => {
 	}, [])
 
 
-	const timer = {
-		time: "23:18:33",
-	};
-
-	const balance = {
-		value: 4000000,
-	};
-
 	return (
 		<>
 			<div className='relative h-[86vh] w-[100vw] overflow-y-scroll overflow-x-hidden'>
@@ -140,7 +132,7 @@ const Hammer = () => {
 									/>
 								</div>
 								<div className='text-[#FFF] text-base font-normal'>
-									{balance.value}
+									{400000}
 								</div>
 							</div>
 
