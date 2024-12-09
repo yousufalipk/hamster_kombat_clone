@@ -135,6 +135,7 @@ const Token = () => {
 
 	const handleClaimTask = async () => {
 		try {
+			setButtonLoading(true);
 			if (!selectedTask?.claimedStatus) {
 				console.log('setting status to true!');
 				setSelectedTask((prevTask) => ({
@@ -167,6 +168,8 @@ const Token = () => {
 		} catch (error) {
 			console.log("Internal Server Error", error);
 			toast.error('Internal Server Error! 2222');
+		} finally {
+			setButtonLoading(false);
 		}
 	}
 
@@ -210,7 +213,7 @@ const Token = () => {
 										<div className="absolute -inset-2 h-[50vh] bg-[#23a7ff] blur rounded-[50px]"></div>
 										<div
 											className='w-screen bg-[#06060E] h-[50vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
-											<div className="absolute top-3 right-7 z-20"
+											<div className="absolute top-3 right-5 z-20"
 												onClick={() => {
 													setPopupClosing(true);
 													setTimeout(() => {
@@ -388,7 +391,7 @@ const Token = () => {
 														{selectedTask.reward} {token.project.name.match(/[A-Z]/g)?.join('')}
 													</p>
 												</div>
-												{selectedTask.claimedStatus !== 'claimed' && (
+												{selectedTask.claimedStatus !== 'claimed' ? (
 													<>
 														<div className="text-center text-md flex flex-col mt-5 ">
 															<img src={linbottle} alt="" />
@@ -398,13 +401,18 @@ const Token = () => {
 																onClick={() => {
 																	handleClaimTask(selectedTask);
 																}}
-																disabled={selectedTask.claimedStatus === 'pending'}
+																disabled={selectedTask.claimedStatus === 'pending' || buttonLoading}
 																className={`w-full py-2 bg-gradient-to-b from-[#00B2FF] to-[#2226FF] text-white font-bold rounded-md ${selectedTask.claimedStatus === 'pending' ? 'filter grayscale' : ''}`}
 															>
-																Check
+																{buttonLoading ? (
+																	<span className="h-6 font-bold">
+																		{dots}
+																	</span>) : 'Check'}
 															</button>
 														</div>
 													</>
+												) : (
+													<div className="p-5"></div>
 												)}
 											</div>
 										</div>
