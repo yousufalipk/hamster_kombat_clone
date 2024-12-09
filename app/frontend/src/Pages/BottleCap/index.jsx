@@ -28,8 +28,6 @@ const BottleCap = () => {
 	const [taskPopUp, setTaskPopup] = useState(false);
 	const [popupClosing, setPopupClosing] = useState(false);
 	const [timeDifference, setTimeDifference] = useState(0);
-	const [isPopup, setisPopup] = useState(false)
-	const [isClosing, setIsClosing] = useState(false);
 	const [buttonLoading, setButtonLoading] = useState(false);
 	const [dots, setDots] = useState('');
 
@@ -37,8 +35,6 @@ const BottleCap = () => {
 	const [selectedInviteFriendTask, setSelectedInviteFriendTask] = useState(false);
 
 	const [tasksLoader, setTaskLoader] = useState(false);
-
-	const [] = useState();
 
 
 	const iconMapping = {
@@ -98,20 +94,26 @@ const BottleCap = () => {
 			}
 			const res = await claimUserTask(selectedTask._id);
 			if (res.success) {
-				console.log('res', res);
 				if (res.data.claimedStatus === 'pending') {
 					setTimeDifference(30);
 				}
 				const res2 = await fetchUserTask();
+				console.log(res2.success);
 				if (res2.success) {
-					const allTasks = res2.data.project.tasks;
-					setUserDailyTasks(allTasks.filter(task => task.taskType === "daily"));
-					setUserSocialTasks(allTasks.filter(task => task.taskType === "social"));
-					const updatedDailyTask = res2.data.tasks.tasks.daily.find((t) => t._id === selectedTask._id);
-					const updatedSocialTask = res2.data.tasks.tasks.social.find((t) => t._id === selectedTask._id);
+					console.log("res2 data", res2.data);
+					setUserDailyTasks(res2.data.daily);
+					setUserSocialTasks(res2.data.social);
+					const updatedDailyTask = res2.data.daily.find((t) => t._id === selectedTask._id);
+					const updatedSocialTask = res2.data.social.find((t) => t._id === selectedTask._id);
+					console.log('updatedDailyTask', updatedDailyTask);
+					console.log('updatedSocialTask', updatedSocialTask);
 					if (updatedDailyTask) {
+						console.log('updating daily task!');
 						setSelectedTask(updatedDailyTask);
-					} else {
+					}
+
+					if (updatedSocialTask) {
+						console.log('updating social task!');
 						setSelectedTask(updatedSocialTask);
 					}
 				}
@@ -132,9 +134,12 @@ const BottleCap = () => {
 			setButtonLoading(true);
 			const res = await claimInviteFriendTask(rewardId);
 			if (res.success) {
-				const updatedSelectedTask = selectedInviteFriendTask.find(task => task.id === selectedInviteFriendTask.id);
-				setSelectedInviteFriendTask(updatedSelectedTask);
 				toast.success(res.mess);
+				console.log("setting state true");
+				setSelectedInviteFriendTask((prevTask) => ({
+					...prevTask,
+					claimed: true,
+				}));
 			} else {
 				toast.error(res.mess);
 			}

@@ -678,7 +678,7 @@ export const UserProvider = (props) => {
             if (res.data.status === 'success') {
                 setUserSocialTasks(res.data.tasks.social);
                 setUserDailyTasks(res.data.tasks.daily);
-                return ({ success: false, mess: res.data.message });
+                return ({ success: true, data: res.data.tasks });
             } else {
                 return ({ success: false, mess: res.data.message });
             }
@@ -712,7 +712,6 @@ export const UserProvider = (props) => {
                 rewardId: rewardId
             });
             if (res.data.status === 'success') {
-                await fetchInviteFriends();
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
