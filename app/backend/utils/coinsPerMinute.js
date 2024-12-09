@@ -23,10 +23,8 @@ exports.getCoinsPerMinute = async (user) => {
             balanceToAdd = user.coinsPerMinute.value * roundedDifferenceInMinutes;
         }
 
-        user.balance += balanceToAdd;
-
-        user.coinsPerMinute.lastClaimed = currentDate;
-        return user;
+        balanceToAdd;
+        return balanceToAdd;
     } catch (error) {
         console.log("Error getting coins per minute!");
     }

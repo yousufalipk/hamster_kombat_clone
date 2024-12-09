@@ -93,6 +93,8 @@ export const UserProvider = (props) => {
 
     const [inviteFriends, setInviteFriends] = useState([]);
 
+    const [avaliableCpm, setAvaliableCpm] = useState(0);
+
     useEffect(() => {
         if (!userId) {
             initializeUser();
@@ -241,7 +243,12 @@ export const UserProvider = (props) => {
                 });
 
                 if (res.data.status === 'success') {
-                    initilizeStates(res.data.user);
+                    if (res.data.cpm) {
+                        setAvaliableCpm(res.data.balanceToAdd);
+                        initilizeStates(res.data.user);
+                    } else {
+                        initilizeStates(res.data.user);
+                    }
                 }
             } else {
                 setLoaderErrorMes({
@@ -722,6 +729,26 @@ export const UserProvider = (props) => {
         }
     }
 
+
+    const claimCpmCoins = async () => {
+        try {
+            const res = await axios.post(`${apiUrl}/user/claim-cpm`, {
+                userId: userId,
+                balanceToAdd: avaliableCpm
+            });
+            if (res.data.status === 'success') {
+                setBalance(res.data.balance);
+                setAvaliableCpm(0);
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error");
+            return ({ success: true, mess: "Internal Server Error!" });
+        }
+    }
+
     return (
         <UserContext.Provider value={{
             initializeUser,
@@ -809,8 +836,10 @@ export const UserProvider = (props) => {
             fetchInviteFriends,
             inviteFriends,
             setInviteFriends,
-            claimInviteFriendTask
+            claimInviteFriendTask,
 
+            avaliableCpm,
+            claimCpmCoins
         }}>
             {props.children}
         </UserContext.Provider>

@@ -82,7 +82,9 @@ const Home = () => {
 		tapBalance,
 		setTapBalance,
 		coinsPerMinute,
-		remaningTime
+		remaningTime,
+		avaliableCpm,
+		claimCpmCoins
 	} = useUser();
 
 	const [clicks, setClicks] = useState([]);
@@ -419,6 +421,23 @@ const Home = () => {
 			toast.error(res.mess);
 		}
 		setButtonLoading(false);
+	}
+
+	const handleClaimCpm = async () => {
+		setButtonLoading(true);
+		try {
+			const res = await claimCpmCoins();
+			if (res.success) {
+				toast.success(res.mess);
+			} else {
+				toast.error(res.mess);
+			}
+		} catch (error) {
+			console.log('Internal Server Error!');
+			toast.error('Internal Server Error!');
+		} finally {
+			setButtonLoading(false);
+		}
 	}
 
 	return (
@@ -1106,6 +1125,62 @@ const Home = () => {
 							</>
 						)}
 
+						{/* Avaliable cpm Info */}
+						{avaliableCpm && (
+							<>
+								<div
+									className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end"
+									style={{
+										animation: `${popupClosing ? "fadeOut" : "fadeIn"
+											} 0.5s ease-in-out forwards`,
+									}}
+								>
+									<div
+										style={{
+											animation: `${popupClosing ? "closePopup" : "openPopup"
+												} 0.5s ease-in-out forwards`,
+										}}
+									>
+										<div className="relative bg-[#06060E] w-[100vw] h-[30vh] rounded-t-3xl p-4 text-white">
+											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
+											<div className="flex flex-col gap-3">
+												<div className="flex justify-center flex-col items-center gap-2">
+													<img src={InfoIcon} alt="battery" width={25} />
+													<h1 className="text-lg font-bold text-center">
+														Coins Per Minute
+													</h1>
+												</div>
+												<div className="text-center text-xs flex flex-col gap-4 px-7 justify-center">
+													{avaliableCpm} +PTAP
+												</div>
+												{/* action buttons */}
+												<div className='flex gap-4 justify-center my-4'>
+													<button
+														className={`w-1/2 h-10 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm`}
+														onClick={() => {
+															handleClaimCpm()
+														}}
+														disabled={buttonLoading}
+													>
+														{buttonLoading ? (
+															<span className="h-6 font-bold">
+																{dots}
+															</span>
+														) : (
+															<>
+																Claim
+															</>
+														)}
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</>
+						)}
+
 						{/* Daily Reward Popup */}
 						{dailyRewardPopup && (
 							<>
@@ -1257,7 +1332,8 @@ const Home = () => {
 						)}
 					</div>
 				</>
-			)}
+			)
+			}
 		</>
 	);
 };

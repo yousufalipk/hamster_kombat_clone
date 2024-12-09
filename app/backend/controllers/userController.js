@@ -123,6 +123,7 @@ exports.initializeUser = async (req, res) => {
             }
         }
 
+        let balanceToAdd;
         if (!isUser) {
             isUser = new UserModel({
                 telegramId,
@@ -168,13 +169,11 @@ exports.initializeUser = async (req, res) => {
             res3 = resetComboCards(res2);
 
             if (isUser.coinsPerMinute.value !== 0) {
-                res4 = await getCoinsPerMinute(res3);
-                await res4.save();
-                isUser = res4;
-            } else {
-                await res2.save();
-                isUser = res2;
+                balanceToAdd = await getCoinsPerMinute(res3);
             }
+
+            await res3.save();
+            isUser = res3;
 
             if (isUser.unlimitedTaps.status === true) {
                 const lastClaimed = isUser.unlimitedTaps.lastClaimed;
@@ -187,18 +186,63 @@ exports.initializeUser = async (req, res) => {
             }
         }
 
-        return res.status(200).json({
-            status: 'success',
-            message: 'User initialized successfully!',
-            user: isUser
-        });
-
+        if (balanceToAdd > 0) {
+            return res.status(200).json({
+                status: 'success',
+                message: 'User initialized successfully!',
+                user: isUser,
+                cpm: true,
+                balanceToAdd: balanceToAdd
+            });
+        } else {
+            return res.status(200).json({
+                status: 'success',
+                message: 'User initialized successfully!',
+                user: isUser,
+                cpm: false,
+                balanceToAdd: 0
+            });
+        }
     } catch (error) {
         console.error("Error during user initialization:", error);
         return res.status(500).json({
             status: 'failed',
             message: 'Internal Server Error'
         });
+    }
+}
+
+exports.claimCPM = async (req, res) => {
+    try {
+        const { userId, balanceToAdd } = req.body;
+
+        const user = await UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            })
+        }
+
+        const currentDate = new Date();
+
+        user.balance += balanceToAdd;
+        user.coinsPerMinute.lastClaimed = currentDate;
+
+        await user.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Cpm Claimed Succesfuly!',
+            balance: user.balance
+        })
+    } catch (error) {
+        console.log('Internal Server Error!', error);
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
     }
 }
 
