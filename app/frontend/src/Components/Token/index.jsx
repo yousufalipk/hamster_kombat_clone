@@ -28,8 +28,8 @@ const Token = () => {
 	const [isModalOpen, setModalOpen] = useState(false);
 	const [processing, setProcessing] = useState(true);
 	const [buttonLoading, setButtonLoading] = useState(false);
-	const [token, setToken] = useState();
 	const [dots, setDots] = useState('');
+	const [token, setToken] = useState();
 	const [dailyTasks, setDailyTasks] = useState([]);
 	const [socialTasks, setSocialTasks] = useState([]);
 	const [selectedTask, setSelectedTask] = useState(null);
@@ -106,10 +106,6 @@ const Token = () => {
 
 	const handleTokenBuy = () => {
 		setModalOpen(true);
-	}
-
-	const handleCancel = () => {
-		setModalOpen(false);
 	}
 
 	const handleProjectUpgrade = async () => {

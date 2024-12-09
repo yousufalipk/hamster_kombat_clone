@@ -3,6 +3,7 @@ const ProjectModel = require('../models/projectSchema');
 const KolModel = require('../models/kolsSchema');
 const PatnerModel = require('../models/patnersSchema');
 const VcModel = require('../models/vcSchema');
+const TaskModel = require('../models/tasksSchema');
 const { TELEGRAM_BOT_TOKEN } = require('../config/env');
 const { Telegraf } = require("telegraf");
 const { getIo, userSocketMap } = require('../utils/socketHelper');
@@ -35,6 +36,33 @@ const multitapValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const day = [0, 1, 2, 3, 4, 5, 6];
 const reward = [500, 1000, 1500, 2000, 2500, 3000, 3500];
+
+const inviteTasks = [
+    {
+        id: 1,
+        title: 'Invite 1 friend',
+        reward: 50000,
+        refferals: 1
+    },
+    {
+        id: 2,
+        title: 'Invite 3 friend',
+        reward: 50000,
+        refferals: 3
+    },
+    {
+        id: 3,
+        title: 'Invite 4 friend',
+        reward: 50000,
+        refferals: 4
+    },
+];
+
+
+const getTaskDetailsById = (id) => {
+    const task = inviteTasks.find(task => task.id === id);
+    return task ? { reward: task.reward, refferals: task.refferals } : null;
+};
 
 /* Notes ---------
     Saving current date ===   const currentDate = new Date();
@@ -962,6 +990,148 @@ exports.claimProjectTask = async (req, res) => {
     }
 };
 
+exports.claimUserTask = async (req, res) => {
+    try {
+        const { userId, taskId } = req.body;
+
+        if (!userId || !taskId) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'User ID, and Task ID are required.',
+            });
+        }
+
+        const user = await UserModel.findById(userId);
+        const task = await TaskModel.findById(taskId);
+
+        if (!user || !task) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User or Task not found!',
+            });
+        }
+
+        let userTask = user.tasks.find((t) => t.taskId.toString() === taskId);
+
+        if (!userTask) {
+            user.tasks.push({
+                taskId,
+                claimedDate: new Date(),
+                claimedStatus: "pending",
+            });
+
+            await user.save();
+
+            return res.status(200).json({
+                status: 'success',
+                message: 'Reward claim requested, comeback after 30 minutes.',
+                claimedStatus: 'pending',
+                claimedDate: new Date(),
+            });
+        }
+
+        if (userTask.claimedStatus === 'claimed') {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Reward already claimed!',
+                claimedStatus: 'claimed',
+            });
+        } else if (userTask.claimedStatus === 'pending') {
+            const currentTime = new Date();
+            const timeDifference = (currentTime - new Date(userTask.claimedDate)) / (1000 * 60);
+
+            if (timeDifference < 30) {
+                return res.status(200).json({
+                    status: 'success',
+                    message: `Comeback after ${30 - Math.floor(timeDifference)} minutes!`,
+                    claimedStatus: 'pending',
+                    claimedDate: userTask.claimedDate,
+                });
+            } else {
+                userTask.claimedStatus = 'claimed';
+                userTask.claimedDate = currentTime;
+
+                const reward = task.reward || 0;
+
+                user.balance += reward;
+
+                await user.save();
+
+                return res.status(200).json({
+                    status: 'success',
+                    message: 'Task successfully claimed!',
+                    claimedStatus: 'claimed',
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Internal Server Error:', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error',
+            claimedStatus: 'error',
+        });
+    }
+};
+
+exports.fetchUserTasks = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!',
+            });
+        }
+
+        const tasks = await TaskModel.find();
+        if (tasks.length === 0) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Tasks not found!',
+            });
+        }
+
+        const enhancedTasks = tasks.map((task) => {
+            const userTask = user.tasks.find(
+                (userTask) =>
+                    userTask.taskId && userTask.taskId.toString() === task._id.toString()
+            );
+
+            if (userTask) {
+                return {
+                    ...task.toObject(),
+                    claimedStatus: userTask.claimedStatus || false,
+                    claimedDate: userTask.claimedDate || null,
+                };
+            }
+
+            return {
+                ...task.toObject(),
+                claimedStatus: false,
+            };
+        });
+
+        const categorizedTasks = {
+            daily: enhancedTasks.filter((task) => task.taskType === 'daily'),
+            social: enhancedTasks.filter((task) => task.taskType === 'social'),
+        };
+
+        return res.status(200).json({
+            status: 'success',
+            tasks: categorizedTasks,
+        });
+    } catch (error) {
+        console.error('Internal Server Error', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error',
+        });
+    }
+};
+
 exports.fetchUserKols = async (req, res) => {
     try {
         const { userId } = req.body;
@@ -1473,6 +1643,118 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
         });
     }
 };
+
+exports.fetchUserInviteFriends = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const user = await UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            });
+        }
+
+        let inviteTasksWithStatus = [];
+
+        inviteTasks.map((task, i) => {
+
+        })
+        return res.status(200).json({
+            status: 'success',
+            message: 'Tasks fetched succesfuly!',
+            inviteFriendsTasks: inviteTasks
+        });
+    } catch (error) {
+        console.log("Internal Server Error!", error);
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        })
+    }
+}
+
+exports.fetchUserInviteFriends = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const user = await UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!',
+            });
+        }
+
+        const inviteTasksWithStatus = inviteTasks.map((task) => {
+            const hasClaimed = user.friends.length >= task.refferals;
+            return {
+                ...task,
+                claimed: hasClaimed,
+            };
+        });
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Tasks fetched successfully!',
+            inviteFriendsTasks: inviteTasksWithStatus,
+        });
+    } catch (error) {
+        console.log("Internal Server Error!", error);
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error',
+        });
+    }
+};
+
+exports.claimInviteFriendsReward = async (req, res) => {
+    try {
+        const { userId, rewardId } = req.body;
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            })
+        }
+
+        if (user.friends.includes(rewardId)) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Already reward claimed!'
+            })
+        }
+
+        const taskDetails = getTaskDetailsById(rewardId);
+
+
+        if (user.referrals.length >= taskDetails.refferals) {
+            user.friends.push(rewardId);
+            user.balance += taskDetails.reward;
+            await user.save();
+            return res.status(200).json({
+                status: 'success',
+                message: 'Reward Claimed Succesfuly!'
+            })
+        } else {
+            return res.status(200).json({
+                status: 'failed',
+                message: `You have ${user.referrals.length} refferals!`
+            })
+        }
+    } catch (error) {
+        console.log('Internal Server Error', error);
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        })
+    }
+}
 
 exports.test = async (req, res) => {
     try {

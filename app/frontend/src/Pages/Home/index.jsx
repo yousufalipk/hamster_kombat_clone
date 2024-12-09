@@ -490,7 +490,7 @@ const Home = () => {
 									{/* Cards */}
 									<div className="pt-8 flex justify-evenly items-center">
 										{cards.map((data) => {
-											const { id, img, data1, timer, isDone } = data;
+											const { id, img, data1, isDone } = data;
 
 											return (
 												<div
@@ -527,9 +527,13 @@ const Home = () => {
 																	</div>
 																</div>
 															</div>
-															<div className="text-white text-[10px] mt-3 flex justify-center items-center">
-																{remaningTime}
-															</div>
+															{claimed.includes(currentDay) && (
+																<>
+																	<div className="text-white text-[10px] mt-3 flex justify-center items-center">
+																		{remaningTime}
+																	</div>
+																</>
+															)}
 														</>
 													) : (
 														<>
@@ -547,9 +551,13 @@ const Home = () => {
 																	</div>
 																</div>
 															</div>
-															<div className="text-white text-[10px] mt-3 flex justify-center items-center">
-																{remaningTime}
-															</div>
+															{claimed.includes(currentDay) && (
+																<>
+																	<div className="text-white text-[10px] mt-3 flex justify-center items-center">
+																		{remaningTime}
+																	</div>
+																</>
+															)}
 														</>
 													)}
 												</div>

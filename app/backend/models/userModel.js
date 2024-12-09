@@ -125,6 +125,25 @@ const userSchema = new mongoose.Schema({
             default: 0
         }
     }],
+    friends: {
+        type: [Number],
+        default: []
+    },
+    tasks: [{
+        taskId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'tasks',
+            default: null
+        },
+        claimedDate: {
+            type: String,
+            default: null
+        },
+        claimedStatus: {
+            type: String,
+            default: null
+        }
+    }],
     projects: [{
         projectId: {
             type: mongoose.Schema.Types.ObjectId,

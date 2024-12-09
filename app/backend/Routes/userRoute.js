@@ -22,6 +22,10 @@ const {
     fetchUserPatners,
     upgradeUserPatnerLevel,
     storeErrorLog,
+    claimUserTask,
+    fetchUserTasks,
+    claimInviteFriendsReward,
+    fetchUserInviteFriends,
     test
 } = require('../controllers/userController');
 
@@ -53,6 +57,11 @@ router.route('/upgrade-vc-level').post(upgradeUserVcLevel);
 router.route('/fetch-patners').post(fetchPatners);
 router.route('/fetch-user-patners').post(fetchUserPatners);
 router.route('/upgrade-patner-level').post(upgradeUserPatnerLevel);
+router.route('/claim-user-task').post(claimUserTask);
+router.route('/fetch-user-tasks').post(fetchUserTasks);
+router.route('/fetch-invite-friends').post(fetchUserInviteFriends);
+router.route('/claim-refferal-reward').post(claimInviteFriendsReward);
+
 
 // Test
 router.route('/test').post(test);

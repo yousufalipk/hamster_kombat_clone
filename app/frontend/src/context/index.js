@@ -87,6 +87,12 @@ export const UserProvider = (props) => {
 
     const [comboCards, setComboCards] = useState([]);
 
+    const [userSocialTasks, setUserSocialTasks] = useState([]);
+
+    const [userDailyTasks, setUserDailyTasks] = useState([]);
+
+    const [inviteFriends, setInviteFriends] = useState([]);
+
     useEffect(() => {
         if (!userId) {
             initializeUser();
@@ -647,6 +653,76 @@ export const UserProvider = (props) => {
         }
     }
 
+    const claimUserTask = async (taskId) => {
+        try {
+            const res = await axios.post(`${apiUrl}/user/claim-user-task`, {
+                userId: userId,
+                taskId: taskId
+            });
+            if (res.data.status === 'success') {
+                return ({ success: true, mess: res.data.message, data: res.data });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const fetchUserTask = async () => {
+        try {
+            const res = await axios.post(`${apiUrl}/user/fetch-user-tasks`, {
+                userId: userId,
+            })
+            if (res.data.status === 'success') {
+                setUserSocialTasks(res.data.tasks.social);
+                setUserDailyTasks(res.data.tasks.daily);
+                return ({ success: false, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const fetchInviteFriends = async () => {
+        try {
+            const res = await axios.post(`${apiUrl}/user/fetch-invite-friends`, {
+                userId: userId
+            });
+            if (res.data.status === 'success') {
+                setInviteFriends(res.data.inviteFriendsTasks);
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!");
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const claimInviteFriendTask = async (rewardId) => {
+        try {
+            const res = await axios.post(`${apiUrl}/user/claim-refferal-reward`, {
+                userId: userId,
+                rewardId: rewardId
+            });
+            if (res.data.status === 'success') {
+                await fetchInviteFriends();
+                return ({ success: true, mess: res.data.message });
+            } else {
+                return ({ success: false, mess: res.data.message });
+            }
+        } catch (error) {
+            console.log("Internal Server Error!");
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
     return (
         <UserContext.Provider value={{
             initializeUser,
@@ -723,6 +799,18 @@ export const UserProvider = (props) => {
             comboCards,
 
             remaningTime,
+
+            claimUserTask,
+            fetchUserTask,
+            userSocialTasks,
+            setUserSocialTasks,
+            userDailyTasks,
+            setUserDailyTasks,
+
+            fetchInviteFriends,
+            inviteFriends,
+            setInviteFriends,
+            claimInviteFriendTask
 
         }}>
             {props.children}

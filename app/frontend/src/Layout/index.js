@@ -18,7 +18,7 @@ const Layout = () => {
             <div className='relative h-full w-screen overflow-hidden z-20'>
                 <img src={EllipseImg} alt="grad" className='absolute' />
                 <img src={EllipseImg} alt="grad" className='absolute -bottom-72' />
-                <div>
+                <div className='h-[86vh]'>
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/bottle-cap" element={<BottleCap />} />
