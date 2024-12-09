@@ -4,6 +4,7 @@ import { useUser } from '../../context/index';
 
 import Coin from "../../assets/BigCoinIcon.svg";
 import { LuLoader2 } from "react-icons/lu";
+import CutomLoader from '../Loader/Loader';
 
 
 const Card = ({ name, logo1, logo2, balance, level, fromColor, toColor }) => (
@@ -62,7 +63,7 @@ const Current = () => {
 		return (
 			<>
 				<div className="h-[33vh] w-full flex justify-center items-center">
-					<LuLoader2 className="animate-spin w-20 h-20 text-white" />
+					<CutomLoader size={100} />
 				</div>
 			</>
 		)

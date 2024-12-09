@@ -17,7 +17,7 @@ const App = () => {
 		return (
 			<>
 				<div className="h-[100vh] w-[100vw] bg-black flex justify-center items-center">
-					<CustomLoader />
+					<CustomLoader size={200} />
 				</div>
 			</>
 		)
