@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import AngleIcon from "../../assets/BlackAngle.svg";
-import { LuLoader2 } from "react-icons/lu";
+import CustomLoader from '../Loader/Loader';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 
@@ -58,7 +58,7 @@ const KOLS = () => {
 		return (
 			<>
 				<div className="h-[33vh] w-full flex justify-center items-center">
-					<LuLoader2 className="animate-spin w-20 h-20 text-white" />
+					<CustomLoader className="animate-spin w-20 h-20 text-white" />
 				</div>
 			</>
 		)

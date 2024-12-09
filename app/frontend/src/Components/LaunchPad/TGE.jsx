@@ -3,73 +3,18 @@ import MIcon from "../../assets/MIcon.png";
 import Coin from "../../assets/BigCoinIcon.svg";
 import Gamefi from "../../assets/GamefiIcon.png";
 import { useUser } from '../../context/index';
-import { LuLoader2 } from "react-icons/lu";
+import CustomLoader from '../Loader/Loader';
 
 import PopUp from '../PopUp/popup1';
 
 let tgeToggle = 'launchpad';
 
-const initialCards = [
-	{
-		id: 1,
-		name: "MemeFi",
-		logo1: MIcon,
-		logo2: Coin,
-		balance: 5000,
-		level: 10,
-		bgColor: "memefi-bg",
-		tgeToggle: 'launchpad'
-	},
-	{
-		id: 2,
-		name: "Gamefi",
-		logo1: Gamefi,
-		logo2: Coin,
-		balance: 5000,
-		level: 19,
-		bgColor: "gamefi2-bg",
-		tgeToggle: 'launchpad'
-	},
-	{
-		id: 3,
-		name: "Gamefi",
-		logo1: Gamefi,
-		logo2: Coin,
-		balance: 5000,
-		level: 19,
-		bgColor: "gamefi1-bg",
-		tgeToggle: 'launchpad'
-	},
-	{
-		id: 4,
-		name: "Gamefi",
-		logo1: Gamefi,
-		logo2: Coin,
-		balance: 5000,
-		level: 19,
-		bgColor: "gamefi1-bg",
-		tgeToggle: 'launchpad'
-	},
-	{
-		id: 5,
-		name: "Gamefi",
-		logo1: Gamefi,
-		logo2: Coin,
-		balance: 5000,
-		level: 19,
-		bgColor: "gamefi1-bg",
-		tgeToggle: 'launchpad'
-	}
-];
-
 const TGE = () => {
-	const [cards, setCards] = useState(initialCards);
-
 	const { isModalOpen, setModalOpen, setSendData, tgeProjects, projectLoader } = useUser();
 
 	const handleToggleChange = (id, toggleValue) => {
 		setModalOpen(true);
-		cards?.forEach((card) => {
+		tgeProjects?.forEach((card) => {
 			if (card.id === id) {
 				card.tgeToggle = toggleValue;
 				setSendData(card);
@@ -155,7 +100,7 @@ const TGE = () => {
 		return (
 			<>
 				<div className="h-[33vh] w-full flex justify-center items-center">
-					<LuLoader2 className="animate-spin w-20 h-20 text-white" />
+					<CustomLoader size={100} />
 				</div>
 			</>
 		)

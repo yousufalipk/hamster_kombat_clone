@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/index';
 
 import Coin from "../../assets/BigCoinIcon.svg";
-import { LuLoader2 } from "react-icons/lu";
 import CutomLoader from '../Loader/Loader';
 
 

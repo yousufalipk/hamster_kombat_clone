@@ -2,56 +2,7 @@ import React, { useEffect } from "react";
 import Tonfish from "../../assets/TonfishIcon.png";
 import Coin from "../../assets/BigCoinIcon.svg";
 import { useUser } from "../../context";
-import { LuLoader2 } from "react-icons/lu";
-
-const cards = [
-	{
-		id: 1,
-		name: "Tonfish",
-		logo1: Tonfish,
-		logo2: Coin,
-		balance: "0.00",
-		level: 0,
-		bgColor: "tonfish-bg",
-	},
-	{
-		id: 2,
-		name: "Tonfish",
-		logo1: Tonfish,
-		logo2: Coin,
-		balance: "0.00",
-		level: 0,
-		bgColor: "tonfish-bg",
-	},
-	{
-		id: 3,
-		name: "Tonfish",
-		logo1: Tonfish,
-		logo2: Coin,
-		balance: "0.00",
-		level: 0,
-		bgColor: "tonfish-bg",
-	},
-	{
-		id: 4,
-		name: "Tonfish",
-		logo1: Tonfish,
-		logo2: Coin,
-		balance: "0.00",
-		level: 0,
-		bgColor: "tonfish-bg",
-	},
-	{
-		id: 5,
-		name: "Tonfish",
-		logo1: Tonfish,
-		logo2: Coin,
-		balance: "0.00",
-		level: 0,
-		bgColor: "tonfish-bg",
-	},
-];
-
+import CustomLoader from '../Loader/Loader';
 
 const Card = ({ name, logo1, logo2, balance, level, toColor, fromColor }) => (
 	<div className="h-[17vh] px-4 py-2 rounded-[20px] text-[#FFF]"
@@ -95,7 +46,7 @@ const MissedProjects = () => {
 		return (
 			<>
 				<div className="h-[33vh] w-full flex justify-center items-center">
-					<LuLoader2 className="animate-spin w-20 h-20 text-white" />
+					<CustomLoader size={100} />
 				</div>
 			</>
 		)

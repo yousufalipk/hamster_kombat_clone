@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { useUser } from '../../context/index';
-import { LuLoader2 } from "react-icons/lu";
+import CustomLoader from '../Loader/Loader';
 
 import LeftArrowIcon from '../../assets/leaderboard/left.svg';
 import RightArrowIcon from '../../assets/leaderboard/right.svg';
@@ -160,7 +160,7 @@ const Rankings = () => {
 		return (
 			<>
 				<div className="h-[100vh] w-[100vw] bg-black flex justify-center items-center">
-					<LuLoader2 className="animate-spin w-20 h-20 text-white" />
+					<CustomLoader size={200} />
 				</div>
 			</>
 		)

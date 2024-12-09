@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import { useUser } from '../../context/index';
 import { useNavigate } from 'react-router-dom';
-import { LuLoader2 } from "react-icons/lu";
+import CustomLoader from '../Loader/Loader';
 
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
@@ -178,7 +178,7 @@ const Token = () => {
 			<>
 				{processing && (
 					<div className="h-[100vh] w-[100vw] z-50 bg-black opacity-50 flex justify-center items-center">
-						<LuLoader2 className="animate-spin w-20 h-20 text-white" />
+						<CustomLoader size={200} />
 					</div>
 				)}
 

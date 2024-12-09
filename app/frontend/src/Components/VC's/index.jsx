@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LuLoader2 } from "react-icons/lu";
+import CustomLoader from '../Loader/Loader';
 import { useNavigate } from "react-router-dom";
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
@@ -58,7 +58,7 @@ const VCS = () => {
 		return (
 			<>
 				<div className="h-[33vh] w-full flex justify-center items-center">
-					<LuLoader2 className="animate-spin w-20 h-20 text-white" />
+					<CustomLoader size={100} />
 				</div>
 			</>
 		)
