@@ -100,20 +100,15 @@ const BottleCap = () => {
 				const res2 = await fetchUserTask();
 				console.log(res2.success);
 				if (res2.success) {
-					console.log("res2 data", res2.data);
 					setUserDailyTasks(res2.data.daily);
 					setUserSocialTasks(res2.data.social);
 					const updatedDailyTask = res2.data.daily.find((t) => t._id === selectedTask._id);
 					const updatedSocialTask = res2.data.social.find((t) => t._id === selectedTask._id);
-					console.log('updatedDailyTask', updatedDailyTask);
-					console.log('updatedSocialTask', updatedSocialTask);
 					if (updatedDailyTask) {
-						console.log('updating daily task!');
 						setSelectedTask(updatedDailyTask);
 					}
 
 					if (updatedSocialTask) {
-						console.log('updating social task!');
 						setSelectedTask(updatedSocialTask);
 					}
 				}
@@ -163,359 +158,361 @@ const BottleCap = () => {
 
 	return (
 		<>
-			<div className='h-[100vh] w-[100vw] bg-gradient-to-t from-[#1B1B27] to-black overflow-y-scroll overflow-x-hidden'>
-				{taskPopUp && selectedTask && (
-					<>
-						<div
-							style={{
-								animation: `${popupClosing ? "fadeOut" : "fadeIn"
-									} 0.5s ease-in-out forwards`,
-							}}
-							className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end"
-						>
-							<div
-								style={{
-									animation: `${popupClosing ? "closePopup" : "openPopup"
-										} 0.5s ease-in-out forwards`,
-								}}
-							>
-								<div className="relative bg-[#06060E] w-[100vw] rounded-t-[30px]  text-white">
-									<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
-									<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-									<div className="flex flex-col items-center relative">
-										<div className="absolute top-3 right-7"
-											onClick={() => {
-												setPopupClosing(true);
-												setTimeout(() => {
-													setTaskPopup(false);
-													setPopupClosing(false);
-												}, 500);
-											}}
-										>
-											<img src={closebutton} alt="" />
-										</div>
-										<div className="h-1 w-16 bg-[#D9D9D9] rounded-md  mt-2 opacity-70"></div>
-										<div className="flex justify-center flex-col items-center gap-2 mt-3">
-											<img src={iconMapping[selectedTask.iconType]} alt="icon" />
-										</div>
-										<div className="text-xl text-white mt-3">
-											<p>{selectedTask.title}</p>
-										</div>
-										<div className="mt-5">
-											<button
-												onClick={() => {
-													window.open(selectedTask.link, '_blank');
-												}}
-												className="bg-white py-2 rounded-md text-black px-6 font-medium"
-											>
-												{buttonText[selectedTask.iconType]}
-											</button>
-										</div>
-										{selectedTask.claimedStatus === 'pending' && (
-											<div className="text-gray-200 text-sm px-5 text-center mt-4">
-												Please wait {timeDifference} minutes for moderation check to claim the prize
-											</div>
-										)}
-										<div className="mt-5">
-											<p className="flex justify-center items-center gap-2 border border-[#242434] py-1  rounded-md text-[#FF8F00] px-6 text-lg font-medium">
-												<img
-													src={LittleCoin}
-													alt="Little coin"
-													width={25}
-													height={25}
-												/>
-												{selectedTask.reward} PTAP
-											</p>
-										</div>
-										{selectedTask.claimedStatus !== 'claimed' ? (
-											<>
-												<div className="text-center text-md flex flex-col mt-5 ">
-													<img src={linbottle} alt="" />
-												</div>
-												<div className="flex w-full mt-3 items-center justify-center gap-4 z-40 mb-4 px-3">
-													<button
-														onClick={() => {
-															handleClaimTask(selectedTask);
-														}}
-														disabled={selectedTask.claimedStatus === 'pending' || buttonLoading}
-														className={`w-full py-2 bg-gradient-to-b from-[#00B2FF] to-[#2226FF] text-white font-bold rounded-md ${selectedTask.claimedStatus === 'pending' ? 'filter grayscale' : ''}`}
-													>
-														{buttonLoading ? (
-															<span className="h-6 font-bold">
-																{dots}
-															</span>) : 'Check'}
-													</button>
-												</div>
-											</>
-										) : (
-											<div className="p-5"></div>
-										)}
-									</div>
-								</div>
-							</div>
-						</div>
-					</>
-				)}
-
-				{inviteFriendsPopup && selectedInviteFriendTask && (
-					<>
-						<div
-							style={{
-								animation: `${popupClosing ? "fadeOut" : "fadeIn"
-									} 0.5s ease-in-out forwards`,
-							}}
-							className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end"
-						>
-							<div
-								style={{
-									animation: `${popupClosing ? "closePopup" : "openPopup"
-										} 0.5s ease-in-out forwards`,
-								}}
-							>
-								<div className="relative bg-[#06060E] w-[100vw] rounded-t-[30px]  text-white">
-									<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
-									<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-									<div className="flex flex-col items-center relative">
-										<div className="absolute top-3 right-7"
-											onClick={() => {
-												setPopupClosing(true);
-												setTimeout(() => {
-													setInviteFriendsPopup(false);
-													setPopupClosing(false);
-												}, 500);
-											}}
-										>
-											<img src={closebutton} alt="" />
-										</div>
-										<div className="h-1 w-16 bg-[#D9D9D9] rounded-md  mt-2 opacity-70"></div>
-										<div className="flex justify-center flex-col items-center gap-2 mt-3">
-											<img src={inviteIconMapping[selectedInviteFriendTask.id]} alt="icon" />
-										</div>
-										<div className="text-xl text-white mt-3">
-											<p>{selectedInviteFriendTask.title}</p>
-										</div>
-										<div className="mt-5">
-											<p className="flex justify-center items-center gap-2 border border-[#242434] py-1  rounded-md text-[#FF8F00] px-6 text-lg font-medium">
-												<img
-													src={LittleCoin}
-													alt="Little coin"
-													width={25}
-													height={25}
-												/>
-												{selectedInviteFriendTask.reward} PTAP
-											</p>
-										</div>
-										{!selectedInviteFriendTask.claimed ? (
-											<>
-												<div className="text-center text-md flex flex-col mt-5 ">
-													<img src={linbottle} alt="" />
-												</div>
-												<div className="flex w-full mt-3 items-center justify-center gap-4 z-40 mb-4 px-3">
-													<button
-														onClick={() => {
-															handleClaimInviteReward(selectedInviteFriendTask.id);
-														}}
-														disabled={buttonLoading}
-														className={`w-full py-2 bg-gradient-to-b from-[#00B2FF] to-[#2226FF] text-white font-bold rounded-md ${selectedInviteFriendTask.claimed ? 'filter grayscale' : ''}`}
-													>
-														{buttonLoading ? (
-															<span className="h-6 font-bold">
-																{dots}
-															</span>) : 'Check'}
-													</button>
-												</div>
-											</>
-										) : (
-											<div className="p-5"></div>
-										)}
-									</div>
-								</div>
-							</div>
-						</div>
-					</>
-				)}
-
-				{/* Upper Card */}
-				<div className='relative h-[30vh] py-5'>
-					<div className=' w-full px-12 flex flex-col justify-center items-center relative'>
-						<div className='flex items-center justify-center gap-2'>
-							<div className=''>
-								<img
-									src={BigCoin}
-									alt='BigCoin-Icon'
-								/>
-							</div>
-							<div className='text-[#FFF] text-[24px] font-medium'>
-								<p>{balance}</p>
-							</div>
-						</div>
-						<div className='flex pt-3'>
-							<div className='mx-auto bg-[#0199FF] w-20 p-1 rounded-full  shadow-[0_0_20px_0px_rgba(0,0,0,0.2)] shadow-[#0199FF]'>
-								<img
-									src={padaIcon}
-									alt='Panda-Pic'
-								/>
-							</div>
-						</div>
-						<div className="text-white mt-3 text-lg font-semibold">
-							<p>Complete tasks and Earn more!</p>
-						</div>
-					</div>
-				</div>
-
-				{/* Tasks Section */}
-				<div className="h-[80vh] relative z-10 border-6 px-4 pt-5 border-t-2 mt-5 rounded-tl-[30px] rounded-tr-[30px] border-[#0099FF] shadow-[#0099ff92]  shadow-lg">
-					{/* Heading 1 */}
-					<div>
-						<p className="text-[#9595A9] text-lg ">Daily Task</p>
-					</div>
-					{/* Pandatop News Cards */}
-					{userDailyTasks.length > 0 ? (
-						<div>
-							{userDailyTasks.map((task, index) => {
-								return (
-									<div
-										onClick={() => {
-											setTaskPopup(true);
-											setSelectedTask(task);
-											if (task.claimedStatus === 'pending') {
-												const currentTime = new Date();
-												const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
-												const remaningMin = 30 - Math.floor(timeDifference);
-												if (remaningMin <= 0) {
-													setSelectedTask((prevTask) => ({
-														...prevTask,
-														claimedStatus: true,
-													}));
-												}
-												setTimeDifference(30 - Math.floor(timeDifference));
-											}
-										}}
-										key={index}
-										className="bg-[#1B1B27] text-white flex justify-between items-center border border-[#0099FF] rounded-[14px] gap-4 py-2 px-3 my-3 "
-									>
-										<div className="flex gap-3 justify-center items-center py-1 w-full">
-											{/* Icon */}
-											<div className="flex flex-shrink-0 ">
-												<img src={iconMapping[task.iconType]} alt="icon" width={40} height={40} />
-											</div>
-											{/* Name */}
-											<div className="flex justify-between items-center w-full">
-												<div>
-													<div className="flex text-md">{task.title}</div>
-													<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
-														<img src={BigCoin} alt="" className="h-4 w-5" />
-														<span className="text-sm">+{task.reward}</span>
-													</div>
-												</div>
-												<div>
-													<img src={arrow} alt="arrow" width={15} />
-												</div>
-											</div>
-										</div>
-									</div>
-								);
-							})}
-						</div>
-					) : (
-						<div className="h-[30vh] w-full flex justify-center items-center">
-							<span className="text-xl font-semibold text-white">No Social Task's!</span>
-						</div>
-					)}
-					{/* Heading 2 */}
-					<div>
-						<p className="text-[#9595A9] text-lg ">Social Media</p>
-					</div>
-					{/* Pandatop News Cards */}
-					{userSocialTasks.length > 0 ? (
-						<div>
-							{userSocialTasks.map((task, index) => {
-								return (
-									<div
-										onClick={() => {
-											setTaskPopup(true);
-											setSelectedTask(task);
-											if (task.claimedStatus === 'pending') {
-												const currentTime = new Date();
-												const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
-												const remaningMin = 30 - Math.floor(timeDifference);
-												if (remaningMin <= 0) {
-													setSelectedTask((prevTask) => ({
-														...prevTask,
-														claimedStatus: true,
-													}));
-												}
-												setTimeDifference(30 - Math.floor(timeDifference));
-											}
-										}}
-										key={index}
-										className="bg-[#1B1B27] text-white   flex justify-between items-center border border-[#0099FF] rounded-[14px] gap-4 py-2 px-3 my-3 "
-									>
-										<div className="flex gap-3 justify-center items-center py-1 w-full">
-											{/* Icon */}
-											<div className="flex flex-shrink-0 ">
-												<img src={iconMapping[task.iconType]} alt="icon" width={40} height={40} />
-											</div>
-											{/* Name */}
-											<div className="flex justify-between items-center w-full">
-												<div>
-													<div className="flex text-md">{task.title}</div>
-													<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
-														<img src={BigCoin} alt="" className="h-4 w-5" />
-														<span className="text-sm">+{task.reward}</span>
-													</div>
-												</div>
-												<div>
-													<img src={arrow} alt="arrow" width={15} />
-												</div>
-											</div>
-										</div>
-									</div>
-								);
-							})}
-						</div>
-					) : (
-						<div className="h-[30vh] w-full flex justify-center items-center">
-							<span className="text-xl font-semibold text-white">No Daily Task's!</span>
-						</div>
-					)}
-
-					{inviteFriends && (
+			<div className='h-[100vh] w-[100vw] bg-gradient-to-t from-[#1B1B27] to-black '>
+				<div className="h-[90vh] w-[100vw] overflow-y-scroll overflow-x-hidden">
+					{taskPopUp && selectedTask && (
 						<>
-							{inviteFriends.map((task, index) => {
-								return (
-									<div
-										onClick={() => {
-											setSelectedInviteFriendTask(task);
-											setInviteFriendsPopup(true);
-										}}
-										key={index}
-										className="bg-[#1B1B27] text-white   flex justify-between items-center border border-[#0099FF] rounded-[14px] gap-4 py-2 px-3 my-3 "
-									>
-										<div className="flex gap-3 justify-center items-center py-1 w-full">
-											{/* Icon */}
-											<div className="flex flex-shrink-0 ">
-												<img src={inviteIconMapping[task.id]} alt="icon" width={40} height={40} />
+							<div
+								style={{
+									animation: `${popupClosing ? "fadeOut" : "fadeIn"
+										} 0.5s ease-in-out forwards`,
+								}}
+								className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end"
+							>
+								<div
+									style={{
+										animation: `${popupClosing ? "closePopup" : "openPopup"
+											} 0.5s ease-in-out forwards`,
+									}}
+								>
+									<div className="relative bg-[#06060E] w-[100vw] rounded-t-[30px]  text-white">
+										<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+										<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
+										<div className="flex flex-col items-center relative">
+											<div className="absolute top-3 right-7"
+												onClick={() => {
+													setPopupClosing(true);
+													setTimeout(() => {
+														setTaskPopup(false);
+														setPopupClosing(false);
+													}, 500);
+												}}
+											>
+												<img src={closebutton} alt="" />
 											</div>
-											{/* Name */}
-											<div className="flex justify-between items-center w-full">
-												<div>
-													<div className="flex text-md">{task.title}</div>
-													<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
-														<img src={BigCoin} alt="" className="h-4 w-5" />
-														<span className="text-sm">+{task.reward}</span>
+											<div className="h-1 w-16 bg-[#D9D9D9] rounded-md  mt-2 opacity-70"></div>
+											<div className="flex justify-center flex-col items-center gap-2 mt-3">
+												<img src={iconMapping[selectedTask.iconType]} alt="icon" />
+											</div>
+											<div className="text-xl text-white mt-3">
+												<p>{selectedTask.title}</p>
+											</div>
+											<div className="mt-5">
+												<button
+													onClick={() => {
+														window.open(selectedTask.link, '_blank');
+													}}
+													className="bg-white py-2 rounded-md text-black px-6 font-medium"
+												>
+													{buttonText[selectedTask.iconType]}
+												</button>
+											</div>
+											{selectedTask.claimedStatus === 'pending' && (
+												<div className="text-gray-200 text-sm px-5 text-center mt-4">
+													Please wait {timeDifference} minutes for moderation check to claim the prize
+												</div>
+											)}
+											<div className="mt-5">
+												<p className="flex justify-center items-center gap-2 border border-[#242434] py-1  rounded-md text-[#FF8F00] px-6 text-lg font-medium">
+													<img
+														src={LittleCoin}
+														alt="Little coin"
+														width={25}
+														height={25}
+													/>
+													{selectedTask.reward} PTAP
+												</p>
+											</div>
+											{selectedTask.claimedStatus !== 'claimed' ? (
+												<>
+													<div className="text-center text-md flex flex-col mt-5 ">
+														<img src={linbottle} alt="" />
 													</div>
-												</div>
-												<div>
-													<img src={arrow} alt="arrow" width={15} />
-												</div>
-											</div>
+													<div className="flex w-full mt-3 items-center justify-center gap-4 z-40 mb-4 px-3">
+														<button
+															onClick={() => {
+																handleClaimTask(selectedTask);
+															}}
+															disabled={selectedTask.claimedStatus === 'pending' || buttonLoading}
+															className={`w-full py-2 bg-gradient-to-b from-[#00B2FF] to-[#2226FF] text-white font-bold rounded-md ${selectedTask.claimedStatus === 'pending' ? 'filter grayscale' : ''}`}
+														>
+															{buttonLoading ? (
+																<span className="h-6 font-bold">
+																	{dots}
+																</span>) : 'Check'}
+														</button>
+													</div>
+												</>
+											) : (
+												<div className="p-5"></div>
+											)}
 										</div>
 									</div>
-								);
-							})}
+								</div>
+							</div>
 						</>
 					)}
+
+					{inviteFriendsPopup && selectedInviteFriendTask && (
+						<>
+							<div
+								style={{
+									animation: `${popupClosing ? "fadeOut" : "fadeIn"
+										} 0.5s ease-in-out forwards`,
+								}}
+								className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end"
+							>
+								<div
+									style={{
+										animation: `${popupClosing ? "closePopup" : "openPopup"
+											} 0.5s ease-in-out forwards`,
+									}}
+								>
+									<div className="relative bg-[#06060E] w-[100vw] rounded-t-[30px]  text-white">
+										<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+										<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
+										<div className="flex flex-col items-center relative">
+											<div className="absolute top-3 right-7"
+												onClick={() => {
+													setPopupClosing(true);
+													setTimeout(() => {
+														setInviteFriendsPopup(false);
+														setPopupClosing(false);
+													}, 500);
+												}}
+											>
+												<img src={closebutton} alt="" />
+											</div>
+											<div className="h-1 w-16 bg-[#D9D9D9] rounded-md  mt-2 opacity-70"></div>
+											<div className="flex justify-center flex-col items-center gap-2 mt-3">
+												<img src={inviteIconMapping[selectedInviteFriendTask.id]} alt="icon" />
+											</div>
+											<div className="text-xl text-white mt-3">
+												<p>{selectedInviteFriendTask.title}</p>
+											</div>
+											<div className="mt-5">
+												<p className="flex justify-center items-center gap-2 border border-[#242434] py-1  rounded-md text-[#FF8F00] px-6 text-lg font-medium">
+													<img
+														src={LittleCoin}
+														alt="Little coin"
+														width={25}
+														height={25}
+													/>
+													{selectedInviteFriendTask.reward} PTAP
+												</p>
+											</div>
+											{!selectedInviteFriendTask.claimed ? (
+												<>
+													<div className="text-center text-md flex flex-col mt-5 ">
+														<img src={linbottle} alt="" />
+													</div>
+													<div className="flex w-full mt-3 items-center justify-center gap-4 z-40 mb-4 px-3">
+														<button
+															onClick={() => {
+																handleClaimInviteReward(selectedInviteFriendTask.id);
+															}}
+															disabled={buttonLoading}
+															className={`w-full py-2 bg-gradient-to-b from-[#00B2FF] to-[#2226FF] text-white font-bold rounded-md ${selectedInviteFriendTask.claimed ? 'filter grayscale' : ''}`}
+														>
+															{buttonLoading ? (
+																<span className="h-6 font-bold">
+																	{dots}
+																</span>) : 'Check'}
+														</button>
+													</div>
+												</>
+											) : (
+												<div className="p-5"></div>
+											)}
+										</div>
+									</div>
+								</div>
+							</div>
+						</>
+					)}
+
+					{/* Upper Card */}
+					<div className='relative h-[30vh] py-5'>
+						<div className=' w-full px-12 flex flex-col justify-center items-center relative'>
+							<div className='flex items-center justify-center gap-2'>
+								<div className=''>
+									<img
+										src={BigCoin}
+										alt='BigCoin-Icon'
+									/>
+								</div>
+								<div className='text-[#FFF] text-[24px] font-medium'>
+									<p>{balance}</p>
+								</div>
+							</div>
+							<div className='flex pt-3'>
+								<div className='mx-auto bg-[#0199FF] w-20 p-1 rounded-full  shadow-[0_0_20px_0px_rgba(0,0,0,0.2)] shadow-[#0199FF]'>
+									<img
+										src={padaIcon}
+										alt='Panda-Pic'
+									/>
+								</div>
+							</div>
+							<div className="text-white mt-3 text-lg font-semibold text-center">
+								<p>Complete tasks and Earn more!</p>
+							</div>
+						</div>
+					</div>
+
+					{/* Tasks Section */}
+					<div className="h-[90vh] relative z-10 border-6 px-4 pt-5 border-t-2 mt-5 rounded-tl-[30px] rounded-tr-[30px] border-[#0099FF] shadow-[#0099ff92]">
+						{/* Heading 1 */}
+						<div>
+							<p className="text-[#9595A9] text-lg ">Daily Task</p>
+						</div>
+						{/* Pandatop News Cards */}
+						{userDailyTasks.length > 0 ? (
+							<div>
+								{userDailyTasks.map((task, index) => {
+									return (
+										<div
+											onClick={() => {
+												setTaskPopup(true);
+												setSelectedTask(task);
+												if (task.claimedStatus === 'pending') {
+													const currentTime = new Date();
+													const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
+													const remaningMin = 30 - Math.floor(timeDifference);
+													if (remaningMin <= 0) {
+														setSelectedTask((prevTask) => ({
+															...prevTask,
+															claimedStatus: true,
+														}));
+													}
+													setTimeDifference(30 - Math.floor(timeDifference));
+												}
+											}}
+											key={index}
+											className="bg-[#1B1B27] text-white flex justify-between items-center border border-[#0099FF] rounded-[14px] gap-4 py-2 px-3 my-3 "
+										>
+											<div className="flex gap-3 justify-center items-center py-1 w-full">
+												{/* Icon */}
+												<div className="flex flex-shrink-0 ">
+													<img src={iconMapping[task.iconType]} alt="icon" width={40} height={40} />
+												</div>
+												{/* Name */}
+												<div className="flex justify-between items-center w-full">
+													<div>
+														<div className="flex text-md">{task.title}</div>
+														<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
+															<img src={BigCoin} alt="" className="h-4 w-5" />
+															<span className="text-sm">+{task.reward}</span>
+														</div>
+													</div>
+													<div>
+														<img src={arrow} alt="arrow" width={15} />
+													</div>
+												</div>
+											</div>
+										</div>
+									);
+								})}
+							</div>
+						) : (
+							<div className="h-[30vh] w-full flex justify-center items-center">
+								<span className="text-xl font-semibold text-white">No Social Task's!</span>
+							</div>
+						)}
+						{/* Heading 2 */}
+						<div>
+							<p className="text-[#9595A9] text-lg ">Social Media</p>
+						</div>
+						{/* Pandatop News Cards */}
+						{userSocialTasks.length > 0 ? (
+							<div>
+								{userSocialTasks.map((task, index) => {
+									return (
+										<div
+											onClick={() => {
+												setTaskPopup(true);
+												setSelectedTask(task);
+												if (task.claimedStatus === 'pending') {
+													const currentTime = new Date();
+													const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
+													const remaningMin = 30 - Math.floor(timeDifference);
+													if (remaningMin <= 0) {
+														setSelectedTask((prevTask) => ({
+															...prevTask,
+															claimedStatus: true,
+														}));
+													}
+													setTimeDifference(30 - Math.floor(timeDifference));
+												}
+											}}
+											key={index}
+											className="bg-[#1B1B27] text-white   flex justify-between items-center border border-[#0099FF] rounded-[14px] gap-4 py-2 px-3 my-3 "
+										>
+											<div className="flex gap-3 justify-center items-center py-1 w-full">
+												{/* Icon */}
+												<div className="flex flex-shrink-0 ">
+													<img src={iconMapping[task.iconType]} alt="icon" width={40} height={40} />
+												</div>
+												{/* Name */}
+												<div className="flex justify-between items-center w-full">
+													<div>
+														<div className="flex text-md">{task.title}</div>
+														<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
+															<img src={BigCoin} alt="" className="h-4 w-5" />
+															<span className="text-sm">+{task.reward}</span>
+														</div>
+													</div>
+													<div>
+														<img src={arrow} alt="arrow" width={15} />
+													</div>
+												</div>
+											</div>
+										</div>
+									);
+								})}
+							</div>
+						) : (
+							<div className="h-[30vh] w-full flex justify-center items-center">
+								<span className="text-xl font-semibold text-white">No Daily Task's!</span>
+							</div>
+						)}
+
+						{inviteFriends && (
+							<>
+								{inviteFriends.map((task, index) => {
+									return (
+										<div
+											onClick={() => {
+												setSelectedInviteFriendTask(task);
+												setInviteFriendsPopup(true);
+											}}
+											key={index}
+											className="bg-[#1B1B27] text-white   flex justify-between items-center border border-[#0099FF] rounded-[14px] gap-4 py-2 px-3 my-3 "
+										>
+											<div className="flex gap-3 justify-center items-center py-1 w-full">
+												{/* Icon */}
+												<div className="flex flex-shrink-0 ">
+													<img src={inviteIconMapping[task.id]} alt="icon" width={40} height={40} />
+												</div>
+												{/* Name */}
+												<div className="flex justify-between items-center w-full">
+													<div>
+														<div className="flex text-md">{task.title}</div>
+														<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
+															<img src={BigCoin} alt="" className="h-4 w-5" />
+															<span className="text-sm">+{task.reward}</span>
+														</div>
+													</div>
+													<div>
+														<img src={arrow} alt="arrow" width={15} />
+													</div>
+												</div>
+											</div>
+										</div>
+									);
+								})}
+							</>
+						)}
+					</div>
 				</div>
 			</div>
 		</>
