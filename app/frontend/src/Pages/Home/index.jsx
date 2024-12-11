@@ -110,6 +110,33 @@ const Home = () => {
 	const scaleRef = useRef(null);
 	const fadeRef = useRef(null);
 
+	const [animatedBalance, setAnimatedBalance] = useState(balance);
+
+	useEffect(() => {
+		const duration = 1000;
+		const stepTime = 10;
+		const steps = duration / stepTime;
+		const difference = balance - animatedBalance;
+		const stepValue = difference / steps;
+
+		if (difference !== 0) {
+			let currentStep = 0;
+
+			const animate = () => {
+				currentStep++;
+				setAnimatedBalance((prev) =>
+					currentStep < steps ? prev + stepValue : balance
+				);
+
+				if (currentStep < steps) {
+					requestAnimationFrame(animate);
+				}
+			};
+
+			animate();
+		}
+	}, [balance]);
+
 	useEffect(() => {
 		let interval;
 		if (buttonLoading) {
@@ -616,7 +643,7 @@ const Home = () => {
 										<div>
 											<img src={BigCoin} alt="Coin-Icon" width="24" />
 										</div>
-										<div className="text-[#FFF] text-[24px] font-medium">{balance}</div>
+										<div className="text-[#FFF] text-[24px] font-medium">{Math.round(animatedBalance)}</div>
 									</div>
 								</div>
 
