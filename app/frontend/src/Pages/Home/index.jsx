@@ -23,6 +23,8 @@ import FlashIcon from "../../assets/lighteningIcon.png";
 import InfoIcon from "../../assets/InfoIcon.svg";
 import AngleIcon from "../../assets/AngleIcon.svg";
 import DomeProfilePic from "../../assets/profile.png";
+import padaIcon from "../../assets/pages/pandaicon.svg"
+import CpmInfoBg from '../../assets/cpmPopupBg.svg';
 
 import tick from "../../assets/dailyreward/tick.svg";
 import close from "../../assets/dailyreward/close.svg"
@@ -84,7 +86,8 @@ const Home = () => {
 		coinsPerMinute,
 		remaningTime,
 		avaliableCpm,
-		claimCpmCoins
+		claimCpmCoins,
+		setAvaliableCpm
 	} = useUser();
 
 	const [clicks, setClicks] = useState([]);
@@ -1168,23 +1171,33 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[30vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[45vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-											<div className="flex flex-col gap-3">
-												<div className="flex justify-center flex-col items-center gap-2">
-													<img src={InfoIcon} alt="battery" width={25} />
-													<h1 className="text-lg font-bold text-center">
-														Coins Per Minute
-													</h1>
+											<div className="relative flex flex-col gap-3 items-center">
+												<img src={CpmInfoBg} alt="bg" className="absolute z-0 top-10" />
+												<div className="h-1 w-16 bg-[#D9D9D9] rounded-md"></div>
+												<div className="flex justify-center flex-col items-center gap-5">
+													<img src={padaIcon} alt="pandaIcon" width={50} />
+													<div>
+														<p className="flex justify-center items-center gap-1 border border-[#242434] p-3 px-5 rounded-md text-[#FF8F00] text-lg font-medium">
+															<img
+																src={LittleCoin}
+																alt="Little coin"
+																width={25}
+																height={25}
+															/>
+															+{avaliableCpm} PTap
+														</p>
+													</div>
 												</div>
-												<div className="text-center text-xs flex flex-col gap-4 px-7 justify-center">
-													{avaliableCpm} +PTAP
+												<div className="text-center text-gray-200 text-lg text- flex flex-col gap-4 px-7 justify-center">
+													Coins per minute reward is ready!
 												</div>
 												{/* action buttons */}
-												<div className='flex gap-4 justify-center my-4'>
+												<div className='w-full flex gap-4 justify-center my-4'>
 													<button
-														className={`w-1/2 h-10 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm`}
+														className={`w-full h-12 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-md`}
 														onClick={() => {
 															handleClaimCpm()
 														}}
@@ -1196,9 +1209,20 @@ const Home = () => {
 															</span>
 														) : (
 															<>
-																Claim
+																Thank you, PandaTap!
 															</>
 														)}
+													</button>
+												</div>
+												<div className="absolute top-0 right-0">
+													<button onClick={() => {
+														setPopupClosing(true);
+														setTimeout(() => {
+															setAvaliableCpm(false);
+															setPopupClosing(false);
+														}, 500);
+													}}>
+														<img src={close} alt="" width={25} />
 													</button>
 												</div>
 											</div>

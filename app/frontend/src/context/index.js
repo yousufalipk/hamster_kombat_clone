@@ -839,7 +839,8 @@ export const UserProvider = (props) => {
             claimInviteFriendTask,
 
             avaliableCpm,
-            claimCpmCoins
+            claimCpmCoins,
+            setAvaliableCpm
         }}>
             {props.children}
         </UserContext.Provider>

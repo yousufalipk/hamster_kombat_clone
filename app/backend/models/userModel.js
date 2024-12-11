@@ -217,8 +217,12 @@ const userSchema = new mongoose.Schema({
         timestamp: {
             type: Date,
             default: Date.now
-        }
-    }]
+        },
+    }],
+    walletAddress: {
+        type: String,
+        default: null
+    }
 }, { timestamps: true });
 
 const UserModel = mongoose.model('User', userSchema);

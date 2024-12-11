@@ -1804,6 +1804,51 @@ exports.claimInviteFriendsReward = async (req, res) => {
     }
 }
 
+exports.addOrUpdateWalletAddress = async (req, res) => {
+    try {
+        const { userId, walletAddress } = req.body;
+
+        if (!userId || !walletAddress) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'User ID and Wallet Address are required!'
+            });
+        }
+
+        const user = await UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User not found!'
+            });
+        }
+
+        if (user.walletAddress) {
+            user.walletAddress = walletAddress;
+            await user.save();
+            return res.status(200).json({
+                status: 'success',
+                message: 'Wallet Connected successfully!'
+            });
+        } else {
+            user.walletAddress = walletAddress;
+            await user.save();
+            return res.status(200).json({
+                status: 'success',
+                message: 'Wallet Connected successfully!',
+                walletAddress: user.walletAddress
+            });
+        }
+    } catch (error) {
+        console.error('Internal Server Error:', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        });
+    }
+};
+
 exports.test = async (req, res) => {
     try {
         const { error } = req.body;

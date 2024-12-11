@@ -27,6 +27,7 @@ const {
     claimInviteFriendsReward,
     fetchUserInviteFriends,
     claimCPM,
+    addOrUpdateWalletAddress,
     test
 } = require('../controllers/userController');
 
@@ -63,6 +64,7 @@ router.route('/fetch-user-tasks').post(fetchUserTasks);
 router.route('/fetch-invite-friends').post(fetchUserInviteFriends);
 router.route('/claim-refferal-reward').post(claimInviteFriendsReward);
 router.route('/claim-cpm').post(claimCPM);
+router.route('/add-wallet-address').post(addOrUpdateWalletAddress);
 
 
 // Test
