@@ -842,7 +842,11 @@ exports.userOneProjectDetails = async (req, res) => {
         let userLevel = null;
         const userProject = user.projects.find((p) => p._id.toString() === projectId);
         if (userProject) {
-            userLevel = userProject.level || null;
+            if (userProject?.level === 0) {
+                userLevel = 0;
+            } else {
+                userLevel = userProject.level || null;
+            }
         }
 
         let nextLevelCost = 0, nextLevelReward = 0, nextLevelCpm = 0;
@@ -886,7 +890,7 @@ exports.userOneProjectDetails = async (req, res) => {
         const userData = {
             userLevel: displayUserLevel === 'max'
                 ? 'max'
-                : (!displayUserLevel ? 0 : (displayUserLevel + 1)),
+                : (!displayUserLevel ? 1 : (displayUserLevel + 1)),
             walletBalance,
             nextLevelCost,
             nextLevelReward,

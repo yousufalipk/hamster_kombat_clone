@@ -249,7 +249,7 @@ const Token = () => {
 												{/* description */}
 												<div className='my-2'>
 													<p className='text-center font-thin text-xs'>
-														You will get +{token.userData.nextLevelReward} coins of {token.project.name} coins against {token.userData.nextLevelCost} pandatop coins.
+														You will get +{token?.userData?.nextLevelReward} coins of {token.project.name} coins against {token.userData.nextLevelCost} pandatop coins.
 													</p>
 												</div>
 												<div className='text-center text-[#FF9500] font-semibold'>
