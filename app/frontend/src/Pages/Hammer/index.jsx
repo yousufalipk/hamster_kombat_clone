@@ -111,17 +111,21 @@ const Hammer = () => {
 								<div className='text-[#FFF] text-base font-medium'>
 									<p>Daily Combo Reward</p>
 								</div>
-								<div className='flex items-center gap-2 pt-1'>
-									<div className=''>
-										<img
-											src={TimerIcon}
-											alt='Timer-Icon'
-										/>
-									</div>
-									<div className='text-[#A5A5A5] text-xs font-normal'>
-										{remaningTime}
-									</div>
-								</div>
+								{comboCards.length >= 2 && (
+									<>
+										<div className='flex items-center gap-2 pt-1'>
+											<div className=''>
+												<img
+													src={TimerIcon}
+													alt='Timer-Icon'
+												/>
+											</div>
+											<div className='text-[#A5A5A5] text-xs font-normal'>
+												{remaningTime}
+											</div>
+										</div>
+									</>
+								)}
 							</div>
 							{/* Reward Button */}
 							<div className='grad flex items-center gap-1 px-4 py-1'>
@@ -131,7 +135,7 @@ const Hammer = () => {
 										alt='Coin-Icon'
 									/>
 								</div>
-								<div className='text-[#FFF] text-base font-normal'>
+								<div className={`text-[#FFF] text-base font-normal ${comboCards.length >= 2 && `grayscale`}`}>
 									{400000}
 								</div>
 							</div>

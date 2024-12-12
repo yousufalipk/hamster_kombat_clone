@@ -1148,7 +1148,7 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[25vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[35vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
@@ -1163,6 +1163,23 @@ const Home = () => {
 												</div>
 												{/* action buttons */}
 												<div className='flex gap-4 justify-center mt-4'>
+													<button
+														className={`w-full h-12 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-md`}
+														onClick={() => {
+															navigate('/hammer')
+														}}
+														disabled={buttonLoading}
+													>
+														{buttonLoading ? (
+															<span className="h-6 font-bold">
+																{dots}
+															</span>
+														) : (
+															<>
+																MINE CPM!
+															</>
+														)}
+													</button>
 													<div className="absolute top-4 right-5">
 														<button onClick={() => {
 															setPopupClosing(true);
