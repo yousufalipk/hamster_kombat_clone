@@ -646,26 +646,27 @@ const Home = () => {
 										<div>
 											<img src={BigCoin} alt="Coin-Icon" width="24" />
 										</div>
-										<div className="text-[#FFF] text-[24px] font-medium">{Math.round(animatedBalance)}</div>
+										<div className="text-[#FFF] text-[24px] font-medium">{balance}</div>
 									</div>
 								</div>
 
 								{/* Bot & Options */}
-								<div className="flex justify-center items-center w-screen h-[41vh] mt-auto">
+								<div
+									onTouchStart={(e) => handleBotTap(e)}
+									ref={tapRef}
+									className="flex justify-center items-center w-screen h-[41vh] mt-auto overflow-hidden">
 									{/* Bot Image Tap to earn */}
 									<div
-										onPointerDown={handleBotTap}
-										ref={tapRef}
 										className="relative flex justify-end items-center rounded-full h-[40vh] w-[60vw]"
 									>
 
-										<div className="relative select-none rounded-full w-full h-full z-10">
+										<div className="relative select-none rounded-full w-full h-full z-10 overflow-visible">
 											{clicks.map((click) => (
 												<div
 													className='absolute text-2xl font-bold opacity-0 text-[#0072ff] z-50'
 													style={{
-														top: `${click.y - 42}px`,
-														left: `${click.x - 28}px`,
+														top: `${click.y - 0}px`,
+														left: `${click.x - 100}px`,
 														animation: `textAnimation 1s ease-out`,
 													}}
 													onAnimationEnd={() => handleAnimationEnd(click.id)}
@@ -674,7 +675,8 @@ const Home = () => {
 													+{addCoins}
 												</div>
 											))}
-											<div className="absoulte h-full w-full rounded-full overflow-hidden flex items-center justify-center">
+											<div
+												className="absoulte h-full w-full rounded-full overflow-hidden flex items-center justify-center">
 												{/* Animation Cards */}
 												<div className="absolute z-0 w-[100vw] animate-rotatePulse">
 													<img
@@ -698,9 +700,6 @@ const Home = () => {
 												</div>
 												<div className="absolute z-40">
 													<img src={BigPanda} alt="Panda-Icon" className="bot-tap" />
-												</div>
-												<div className="absolute z-50 top-[60%] left-[37%]">
-													<img src={TouchIcon} alt="Touch-Icon" />
 												</div>
 											</div>
 										</div>

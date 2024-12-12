@@ -47,9 +47,9 @@ exports.createProject = async (req, res) => {
                 const prevLevel = levels[i - 1];
                 levels.push({
                     level: i + 1,
-                    cost: prevLevel.cost + costMultiplier,
-                    reward: prevLevel.reward + rewardMultiplier,
-                    cpm: prevLevel.cpm + cpmMultiplier,
+                    cost: prevLevel.cost * costMultiplier,
+                    reward: prevLevel.reward * rewardMultiplier,
+                    cpm: prevLevel.cpm * cpmMultiplier,
                 });
             }
         }
@@ -218,9 +218,9 @@ exports.updateProject = async (req, res) => {
                 const prevLevel = levels[i - 1];
                 levels.push({
                     level: i + 1,
-                    cost: prevLevel.cost + costMultiplier,
-                    reward: prevLevel.reward + rewardMultiplier,
-                    cpm: prevLevel.cpm + cpmMultiplier,
+                    cost: prevLevel.cost * costMultiplier,
+                    reward: prevLevel.reward * rewardMultiplier,
+                    cpm: prevLevel.cpm * cpmMultiplier,
                 });
             }
         }

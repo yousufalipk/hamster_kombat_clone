@@ -7,22 +7,27 @@ import circleimg from "../../assets/wallet/round_circles.svg"
 import walletsvg from "../../assets/wallet/walletsvg.svg"
 import connstwallet from "../../assets/wallet/connecttwallet.svg"
 
+import PopupLine from '../../assets/line.svg'
+import WalletImage from '../../assets/walletImg.svg';
+
 import walletLie from "../../assets/wallet/walletline.svg"
 import walletLeft from "../../assets/wallet/walletLeft.svg"
-import walletRight from "../../assets/wallet/walletRight.svg"
+import walletRight from "../../assets/wallet/walletRight.svg";
+
+import { useUser } from '../../context/index';
 
 
 const Wallet = () => {
+
+	const priceInDollar = 0.001;
+
+	const { balance } = useUser();
 
 	const [buttonType, setButtonType] = useState('connect');
 	const [iswithdraw, setIsPopupWithdraw] = useState(false);
 	const [isconnect, setIsPopupConnect] = useState(false);
 
-
-	useEffect(() => {
-		console.log("withdraw state vlaue", iswithdraw);
-	}, [iswithdraw])
-
+	const [popupClosing, setPopupClosing] = useState(false);
 
 	const toggleButtonType = (btn) => {
 		if (btn === 2) {
@@ -42,11 +47,10 @@ const Wallet = () => {
 					<div className="text-white flex flex-col justify-center items-center">
 						<p className="mb-2 text-gray-200">Avalibale balance</p>
 						<div className="flex gap-2">
-							<h1 className="text-xl font-semibold">25 951 748</h1>
+							<h1 className="text-xl font-semibold">{balance}</h1>
 							<img src={LittleCoin} alt='coin_img' />
 						</div>
-						<p className="text-gray-500">≈ 0.00897 $</p>
-
+						<p className="text-gray-500">≈ {priceInDollar * balance} $</p>
 					</div>
 
 					{/* buttons */}
@@ -144,11 +148,19 @@ const Wallet = () => {
 					<div
 						className={`popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end`}
 						style={{
-							animation: `openPopup 0.7s ease-in-out`,
+							animation: `${popupClosing ? "fadeOut" : "fadeIn"
+								} 0.5s ease-in-out forwards`,
 						}}
 					>
-						<div>
-							<div className="relative bg-[#06060E] w-[100vw] rounded-t-3xl p-6 text-white">
+						<div
+							style={{
+								animation: `${popupClosing ? "closePopup" : "openPopup"
+									} 0.5s ease-in-out forwards`,
+							}}
+							className="popup-overlay"
+						>
+							<div
+								className="popup-overlay relative bg-[#06060E] w-[100vw] rounded-t-3xl p-6 text-white">
 								<div className="absolute -top-16 left-0"><img src={walletLeft} alt="" /></div>
 								<div className="absolute bottom-10 -right-10 h-40"><img src={walletRight} alt="" /></div>
 
@@ -169,7 +181,18 @@ const Wallet = () => {
 										<p>Do you want to change withdrawal method?</p>
 									</div>
 									<div className="flex w-full mt-3 items-center justify-center gap-4 z-40">
-										<button className="w-36 bg-white h-10 rounded-md text-black font-bold" onClick={() => { setIsPopupWithdraw(false) }}>No</button>
+										<button
+											className="w-36 bg-white h-10 rounded-md text-black font-bold"
+											onClick={() => {
+												setPopupClosing(true);
+												setTimeout(() => {
+													setIsPopupWithdraw(false);
+													setPopupClosing(false);
+												}, 500);
+											}}
+										>
+											No
+										</button>
 										<button className="w-36  py-2 bg-gradient-to-b from-[#00B2FF]  to-[#2226FF] text-white font-bold rounded-md">Yes</button>
 									</div>
 								</div>
@@ -182,10 +205,17 @@ const Wallet = () => {
 					<div
 						className={`popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end`}
 						style={{
-							animation: `openPopup 0.7s ease-in-out`,
+							animation: `${popupClosing ? "fadeOut" : "fadeIn"
+								} 0.5s ease-in-out forwards`,
 						}}
 					>
-						<div>
+						<div
+							style={{
+								animation: `${popupClosing ? "closePopup" : "openPopup"
+									} 0.5s ease-in-out forwards`,
+							}}
+							className="popup-overlay"
+						>
 							<div className="relative bg-[#06060E] w-[100vw] rounded-t-3xl p-6 text-white">
 								<div className="absolute -top-16 left-0"><img src={walletLeft} alt="" /></div>
 								<div className="absolute bottom-10 -right-10 h-40"><img src={walletRight} alt="" /></div>
@@ -195,16 +225,27 @@ const Wallet = () => {
 								<div className="flex flex-col items-center ">
 									<div className="h-1 w-16 bg-[#D9D9D9] rounded-md"></div>
 									<div className="flex justify-center flex-col items-center gap-2 h-28">
-										<img src={connstwallet} alt="battery" />
-									</div>
-									<div className="mt-2">
-										<img src={walletLie} alt="wallet line" />
+										<img src={WalletImage} alt="wallet" />
 									</div>
 									<div className="text-center text-md flex flex-col ">
-										<p>Do you want to connect manually?</p>
+										<p>Do you want to connect with your telegram wallet?</p>
+									</div>
+									<div className="h-2 mt-5">
+										<img src={PopupLine} alt="wallet line" />
 									</div>
 									<div className="flex w-full mt-3 items-center justify-center gap-4 z-40">
-										<button className="w-36 bg-white h-10 rounded-md text-black font-bold" onClick={() => { setIsPopupConnect(false) }}>No</button>
+										<button
+											className="w-36 bg-white h-10 rounded-md text-black font-bold"
+											onClick={() => {
+												setPopupClosing(true);
+												setTimeout(() => {
+													setIsPopupConnect(false);
+													setPopupClosing(false);
+												}, 500);
+											}}
+										>
+											No
+										</button>
 										<button className="w-36  py-2 bg-gradient-to-b from-[#00B2FF]  to-[#2226FF] text-white font-bold rounded-md">Yes</button>
 									</div>
 								</div>
