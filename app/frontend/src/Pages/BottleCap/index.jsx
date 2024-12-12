@@ -47,7 +47,10 @@ const BottleCap = () => {
 	const inviteIconMapping = {
 		1: invite1,
 		2: invite2,
-		3: invite3
+		3: invite3,
+		4: invite3,
+		5: invite3,
+		6: invite3
 	};
 
 	const buttonText = {

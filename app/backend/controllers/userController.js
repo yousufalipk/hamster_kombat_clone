@@ -47,14 +47,32 @@ const inviteTasks = [
     {
         id: 2,
         title: 'Invite 3 friend',
-        reward: 50000,
+        reward: 150000,
         refferals: 3
     },
     {
         id: 3,
-        title: 'Invite 4 friend',
-        reward: 50000,
-        refferals: 4
+        title: 'Invite 5 friend',
+        reward: 250000,
+        refferals: 5
+    },
+    {
+        id: 4,
+        title: 'Invite 7 friend',
+        reward: 500000,
+        refferals: 7
+    },
+    {
+        id: 5,
+        title: 'Invite 9 friend',
+        reward: 750000,
+        refferals: 9
+    },
+    {
+        id: 6,
+        title: 'Invite 12 friend',
+        reward: 1000000,
+        refferals: 12
     },
 ];
 
