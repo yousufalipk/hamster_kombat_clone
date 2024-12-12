@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 import midAnimationCircle from '../../assets/animation/1.png';
 import finalAnimationCircle from '../../assets/animation/2.png';
 
+import popupLine from "../../assets/token/popupLine.svg";
+
 import BackgroundImg from '../../assets/background/bg.png';
 import DailyGamePlay from "../../assets/dailyGamePlayIcon.png";
 import DailyReward from "../../assets/dailyRewardIcon.png";
@@ -1055,36 +1057,54 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[45vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[50vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-											<div className="flex flex-col gap-3">
-												<div className="flex justify-start">
-													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
-														{multitapLevel >= 9 ? ('Max') : (`Level ${multitapLevel + 1}`)}
-													</span>
-												</div>
-												<div className="flex justify-center flex-col items-center gap-2">
-													<img src={TouchIcon} alt="battery" width={25} />
-													<h1 className="text-lg font-bold text-center">
+											<div className="flex flex-col justify-center items-center gap-3">
+												<div className="h-1 w-16 bg-[#D9D9D9] rounded-md opacity-70"></div>
+												<div className="mt-2 flex justify-center flex-col items-center gap-2">
+													<img src={TouchIcon} alt="battery" width={35} />
+													<h1 className="text-xl font-bold text-center">
 														Multitap
 													</h1>
 												</div>
-												<div className="text-center text-xs flex flex-col gap-4">
+												<div className="text-center text-md text-gray-300 flex flex-col items-center justify-center gap-2">
 													<p>Increase amount of Tap you can earn per one tap</p>
 													<p>+1 per tap for each level</p>
-													{multitapLevel < 9 && (
-														<span className="flex gap-4 justify-center items-center">
-															Cost of level up
-															<div className="flex justify-center items-center">
-																<img src={BigCoin} alt="coin" width={20} />
-																<p className="w-10">{multitapUpgradeCost[multitapLevel + 1]}</p>
-															</div>
-														</span>
-													)}
+													<div className="flex gap-2 items-center justify-center py-1">
+														<h1 className="text-xl text-[#FF8F00]">level {multitapLevel >= 9 ? ('Max') : (`${multitapLevel + 2}`)}</h1>
+														<svg width="1" height="37" viewBox="0 0 1 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<line x1="0.5" y1="37" x2="0.5" stroke="url(#paint0_linear_1774_715)" />
+															<defs>
+																<linearGradient id="paint0_linear_1774_715" x1="1.5" y1="37" x2="1.5" y2="0" gradientUnits="userSpaceOnUse">
+																	<stop stopColor="#0B0B1D" />
+																	<stop offset="0.5" stopColor="white" />
+																	<stop offset="1" stopColor="#090918" />
+																</linearGradient>
+															</defs>
+														</svg>
+														<div>
+															{multitapLevel < 9 && (
+																<>
+																	<div className="py-1">
+																		<p className="flex justify-center items-center gap-1 text-xl text-[#FF8F00]">
+																			<img
+																				src={LittleCoin}
+																				alt="Little coin"
+																				width={25}
+																				height={25}
+																				className="mt-1"
+																			/>
+																			{multitapUpgradeCost[multitapLevel + 1]}
+																		</p>
+																	</div>
+																</>
+															)}
+														</div>
+													</div>
 												</div>
 												{/* action buttons */}
-												<div className='flex gap-4 justify-center mt-4'>
+												<div className='flex gap-4 justify-center mt-2 w-full'>
 													<div className="absolute top-4 right-5">
 														<button onClick={() => {
 															setPopupClosing(true);
