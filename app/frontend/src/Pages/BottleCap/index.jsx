@@ -18,11 +18,13 @@ import invite2 from '../../assets/invite/2.svg';
 import invite3 from '../../assets/invite/3.svg';
 
 
+import { Link } from 'react-router-dom';
+
 import CustomLoader from '../../Components/Loader/Loader';
 
 
 const BottleCap = () => {
-	const { claimUserTask, fetchUserTask, userSocialTasks, setUserSocialTasks, userDailyTasks, setUserDailyTasks, balance, fetchInviteFriends, inviteFriends, claimInviteFriendTask } = useUser();
+	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, setUserSocialTasks, userDailyTasks, setUserDailyTasks, balance, fetchInviteFriends, inviteFriends, claimInviteFriendTask } = useUser();
 
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [taskPopUp, setTaskPopup] = useState(false);
@@ -292,6 +294,14 @@ const BottleCap = () => {
 											</div>
 											<div className="text-xl text-white mt-3">
 												<p>{selectedInviteFriendTask.title}</p>
+											</div>
+											<div className="mt-5">
+												<Link
+													to={`https://t.me/share/url?url=t.me/pandatap_mini_bot/pandatap?startapp=${telegramId}&text=Hey  I just made ${balance} $MFI Points on Panda Tap To Earn Game ! The airdrop is definitely going to be huge ! Join via my referral link and we both can get a headstart.`}
+													className="bg-white py-2 rounded-md text-black px-6 font-medium"
+												>
+													Invite Friend
+												</Link>
 											</div>
 											<div className="mt-5">
 												<p className="flex justify-center items-center gap-2 border border-[#242434] py-1  rounded-md text-[#FF8F00] px-6 text-lg font-medium">

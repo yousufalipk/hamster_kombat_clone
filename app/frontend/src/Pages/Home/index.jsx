@@ -837,11 +837,6 @@ const Home = () => {
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
-												<div className="flex justify-start">
-													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
-														{`Avalibale ${avaliableUnlimitedTaps}`}
-													</span>
-												</div>
 												<div className="flex justify-center flex-col items-center gap-2">
 													<img src={JetPack} alt="battery" width={35} />
 													<h1 className="text-lg font-bold text-center">
@@ -912,11 +907,6 @@ const Home = () => {
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
-												<div className="flex justify-start">
-													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
-														{`Avalibale ${avaliableEnergyRefill}`}
-													</span>
-												</div>
 												<div className="flex justify-center flex-col items-center gap-2">
 													<img src={BatteryBooster1} alt="battery" width={35} />
 													<h1 className="text-lg font-bold text-center">
