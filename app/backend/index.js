@@ -48,8 +48,7 @@ io.on('connection', (socket) => {
                 const res = await checkLevelUpgrade(isUser.balance, isUser.level, isUser.currentRank);
 
                 if (res.success) {
-                    isUser.level = res.data.newLevel;
-                    isUser.currentRank = res.data.newRank;
+                    isUser.level = res.data.currentLevel;
 
                 }
                 await isUser.save();

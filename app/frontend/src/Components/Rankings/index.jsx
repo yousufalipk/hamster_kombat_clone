@@ -26,7 +26,7 @@ import Coin from "../../assets/BigCoinIcon.svg";
 import ProfilePic from '../../assets/profile.png';
 
 const Rankings = () => {
-	const { topUsers, fetchLeaderboardUsers, level, userId } = useUser();
+	const { topUsers, fetchLeaderboardUsers, level, userId, levelsData } = useUser();
 
 	const [rankLoader, setRankLoader] = useState(null);
 
@@ -53,77 +53,66 @@ const Rankings = () => {
 		}
 	}, [navigate]);
 
-	const pagesName = [
-		'silver',
-		'gold',
-		'diamond',
-		'platinum',
-		'legendary',
-		'master',
-		'grandMaster',
-		'epic'
-	];
+	useEffect(() => {
+		console.log('topUsers', topUsers);
+	}, [topUsers]);
 
 	const stageImages = {
-		silver: SilverStage,
-		gold: GoldStage,
-		diamond: DaimondStage,
-		platinum: PlatinumStage,
-		legendary: LegendaryStage,
-		master: MasterStage,
-		grandMaster: GrandMasterStage,
-		epic: EpicStage
+		0: SilverStage,
+		1: GoldStage,
+		2: DaimondStage,
+		3: PlatinumStage,
+		4: LegendaryStage,
+		5: MasterStage,
+		6: GrandMasterStage,
+		7: EpicStage,
+		8: EpicStage,
+		9: EpicStage,
+		10: EpicStage,
+		11: EpicStage,
+		12: EpicStage,
+		13: EpicStage,
 	};
 
 	useEffect(() => {
 		if (level) {
-			setPage(level);
-			updateStageImage(level);
+			console.log('level', level - 1);
+			setPage(level - 1);
+			updateStageImage(level - 1);
 		}
 	}, [level]);
 
 	const updateStageImage = (stage) => {
+		console.log('stage', stage);
 		if (stageImageRef.current) {
 			stageImageRef.current.src = stageImages[stage];
 		}
 	};
 
 	const handleClickLeft = () => {
-		if (level === 'silver') {
-			toast.error("Reach the Gold level to unlock more pages!");
-			return;
-		}
-		setRankLoader(true);
-		const currentIndex = pagesName.indexOf(page);
-		if (currentIndex > 0) {
-			const newPage = pagesName[currentIndex - 1];
-			setPage(newPage);
-			updateStageImage(newPage);
+		// setRankLoader(true);
+		if (page > 0) {
+			setPage((prevPage) => prevPage - 1);
+			updateStageImage(page);
 			setTimeout(() => {
 				setRankLoader(false);
 			}, 300)
 		} else {
-			setRankLoader(false);
+			// setRankLoader(false);
 			console.log("You're at the first page!");
 		}
 	};
 
 	const handleClickRight = () => {
-		if (level === 'silver') {
-			toast.error("Reach the Gold level to unlock more pages!");
-			return;
-		}
-		setRankLoader(true);
-		const currentIndex = pagesName.indexOf(page);
-		if (currentIndex < pagesName.length - 1) {
-			const newPage = pagesName[currentIndex + 1];
-			setPage(newPage);
-			updateStageImage(newPage);
+		//setRankLoader(true);
+		if (page < levelsData.length - 1) {
+			setPage((prevPage) => prevPage + 1);
+			updateStageImage(page);
 			setTimeout(() => {
 				setRankLoader(false);
 			}, 300)
 		} else {
-			setRankLoader(false);
+			//setRankLoader(false);
 			console.log("You're at the last page!");
 		}
 	};
@@ -136,6 +125,7 @@ const Rankings = () => {
 
 	useEffect(() => {
 		if (topUsers && topUsers[page]) {
+			console.log('TopUsers', topUsers[page]);
 			setCurrentPageUsers(topUsers[page]);
 		}
 	}, [page, topUsers]);
@@ -155,6 +145,11 @@ const Rankings = () => {
 			};
 		}
 	}, [navigate]);
+
+	useEffect(() => {
+		console.log('Tesiting .....');
+		console.log('page', page);
+	}, [])
 
 	if (rankLoader) {
 		return (
@@ -177,26 +172,32 @@ const Rankings = () => {
 								<img
 									src={BackgroundImg}
 									alt="Background"
-									className="w-full h-full object-cover scale-[1] fixed top-[0vh]"
+									className="w-full h-full object-cover relative scale-150 top-[9vh]"
 								/>
 							</div>
 							<div className="relative z-10">
 								<div className="w-full h-[5vh] flex justify-end items-center">
 									<div className="flex justify-center items-center text-white font-semibold gap-1">
 										<img src={BadgeIcon} alt="badge_icon" />
-										<p className="capitalize">{page}</p>
+										<p className="capitalize">{levelsData[page].name}</p>
 									</div>
 								</div>
 								{/* top 3 stage */}
 								<div className='h-[40vh] flex text-[#FFF] overflow-hidden'>
 									<button
 										onClick={handleClickLeft}
-										className={`${pagesName.indexOf(page) === 0 ? "opacity-50 pointer-events-none" : "opacity-100"}`}
+										className={`${page === 0 ? "opacity-50 pointer-events-none" : "opacity-100"}`}
 									>
 										<img src={LeftArrowIcon} alt="left" />
 									</button>
 									<div className='flex w-[80vw] mx-2 justify-center items-center relative'>
-										<img ref={stageImageRef} src={stageImages[page]} alt="stage_img" className="absolute bottom-0" />
+										<img
+											ref={stageImageRef}
+											src={stageImages[page]}
+											alt="stage_img"
+											className="absolute bottom-0"
+											loading="eager"
+										/>
 										<div className="absolute z-50 h-full w-full flex justify-center mx-5">
 											<div className="left w-[25vw] mt-10 flex flex-col items-center gap-1">
 												{currentPageUsers[1] && (
@@ -265,7 +266,7 @@ const Rankings = () => {
 									</div>
 									<button
 										onClick={handleClickRight}
-										className={`${pagesName.indexOf(page) === pagesName.length - 1 ? "opacity-50 pointer-events-none" : "opacity-100"}`}
+										className={`${page === levelsData.length - 1 ? "opacity-50 pointer-events-none" : "opacity-100"}`}
 									>
 										<img src={RightArrowIcon} alt="right" />
 									</button>

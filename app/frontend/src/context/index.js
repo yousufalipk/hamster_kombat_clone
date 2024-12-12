@@ -28,7 +28,7 @@ export const UserProvider = (props) => {
     const [username, setUsername] = useState(null);
     const [profilePic, setProfilePic] = useState('not set');
     const [level, setLevel] = useState(null);
-    const [currentRank, setCurrentRank] = useState(null);
+    const [levelName, setLevelName] = useState(null);
     const [balance, setBalance] = useState(0);
     const [tapBalance, setTapBalance] = useState(0);
     const [coinsPerMinute, setCoinsPerMinute] = useState(0);
@@ -95,6 +95,22 @@ export const UserProvider = (props) => {
 
     const [avaliableCpm, setAvaliableCpm] = useState(0);
 
+    const levelsData = [
+        { id: 1, name: 'RockStar', rangeFrom: 0, rangeTo: 5000 },
+        { id: 2, name: 'Energetic', rangeFrom: 5000, rangeTo: 50000 },
+        { id: 3, name: 'Adventurous', rangeFrom: 50000, rangeTo: 250000 },
+        { id: 4, name: 'Tech Genius', rangeFrom: 250000, rangeTo: 500000 },
+        { id: 5, name: 'Astronaut', rangeFrom: 500000, rangeTo: 1000000 },
+        { id: 6, name: 'Super Hero', rangeFrom: 1000000, rangeTo: 2500000 },
+        { id: 7, name: 'Detective', rangeFrom: 2500000, rangeTo: 5000000 },
+        { id: 8, name: 'Pirate', rangeFrom: 5000000, rangeTo: 20000000 },
+        { id: 9, name: 'Samurai', rangeFrom: 20000000, rangeTo: 50000000 },
+        { id: 10, name: 'Pirate', rangeFrom: 50000000, rangeTo: 150000000 },
+        { id: 11, name: 'Ninja', rangeFrom: 150000000, rangeTo: 500000000 },
+        { id: 12, name: 'Cyber Warrior', rangeFrom: 500000000, rangeTo: 1000000000 },
+        { id: 13, name: 'Crypto', rangeFrom: 1000000000, rangeTo: 3000000000 },
+    ];
+
     useEffect(() => {
         if (!userId) {
             initializeUser();
@@ -139,10 +155,11 @@ export const UserProvider = (props) => {
             });
 
             newSocket.on('levelup', (user) => {
-                const percentage = (user.currentRank / 10) * 100;
+                const percentage = (user.level / (levelsData.length - 1)) * 100;
+                console.log('Percentage socket', percentage);
                 setLevelPercentage(percentage);
-                setCurrentRank(user.currentRank);
-                setLevel(user.level);
+                setLevel(user.level + 1);
+                setLevelName(levelsData[user.level].name);
             });
 
 
@@ -270,15 +287,15 @@ export const UserProvider = (props) => {
 
     const initilizeStates = async (user) => {
         try {
-            const percentage = (user.currentRank / 10) * 100;
+            const percentage = (user.level / (levelsData.length - 1)) * 100;
             setUserId(user._id);
             setTelegramId(user.telegramId);
             setFirstName(user.firstName);
             setLastName(user.lastName);
             setUsername(user.username);
             setProfilePic(user.profilePic);
-            setLevel(user.level);
-            setCurrentRank(user.currentRank + 1);
+            setLevel(user.level + 1);
+            setLevelName(levelsData[user.level].name);
             setBalance(user.balance);
             setCoinsPerMinute(user.coinsPerMinute.value);
             setReferrals(user.referrals);
@@ -455,7 +472,6 @@ export const UserProvider = (props) => {
     const fetchLeaderboardUsers = async () => {
         try {
             setLoader(true);
-            console.log("Fetching Top Users...");
             const response = await axios.post(`${apiUrl}/user/fetch-leaderboard`, {
                 userId: userId
             });
@@ -765,7 +781,7 @@ export const UserProvider = (props) => {
             username,
             profilePic,
             level,
-            currentRank,
+            levelName,
             levelPercentage,
             setBalance,
             balance,
@@ -840,7 +856,8 @@ export const UserProvider = (props) => {
 
             avaliableCpm,
             claimCpmCoins,
-            setAvaliableCpm
+            setAvaliableCpm,
+            levelsData
         }}>
             {props.children}
         </UserContext.Provider>

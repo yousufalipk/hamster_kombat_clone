@@ -10,10 +10,6 @@ const userSchema = new mongoose.Schema({
     lastName: String,
     username: String,
     level: {
-        type: String,
-        default: 'silver'
-    },
-    currentRank: {
         type: Number,
         default: 0
     },

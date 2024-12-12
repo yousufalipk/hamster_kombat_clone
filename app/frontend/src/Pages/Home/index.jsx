@@ -59,7 +59,7 @@ const Home = () => {
 		userDataInitilized,
 		firstName,
 		level,
-		currentRank,
+		levelName,
 		levelPercentage,
 		setBalance,
 		balance,
@@ -87,8 +87,13 @@ const Home = () => {
 		remaningTime,
 		avaliableCpm,
 		claimCpmCoins,
-		setAvaliableCpm
+		setAvaliableCpm,
+		levelsData
 	} = useUser();
+
+	useEffect(() => {
+		console.log('Level Percentage Home', levelPercentage);
+	}, [levelPercentage])
 
 	const [clicks, setClicks] = useState([]);
 	const tapRef = useRef(null);
@@ -267,8 +272,6 @@ const Home = () => {
 
 	// Handle multiple taps
 	const handleBotTap = (e) => {
-
-		e.preventDefault();
 		e.stopPropagation();
 
 		// Skip if no energy left
@@ -513,12 +516,12 @@ const Home = () => {
 											onClick={() => handleRankings()}
 											className="rounded-full bg-[#252525] min-w-[40%] px-4 py-1">
 											<div className="flex items-center gap-2">
-												<div className="text-[#FFF] font-normal text-xs">{level}</div>
+												<div className="text-[#FFF] font-normal text-xs">{levelName}</div>
 												<div>
 													<img src={AngleIcon} alt="Angle-Icon" />
 												</div>
 												<div className="text-[#FFF] text-xs font-normal pl-11">
-													{currentRank}/10
+													{level}/{levelsData.length}
 												</div>
 											</div>
 											<div>
