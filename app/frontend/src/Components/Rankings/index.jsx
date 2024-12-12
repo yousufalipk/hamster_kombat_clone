@@ -165,8 +165,8 @@ const Rankings = () => {
 		<>
 			{topUsers && currentPageUsers && (
 				<>
-					<div className='h-[86vh] w-[100vw] z-10'>
-						<div className='min-h-[37vh] pb-3 pt-5 px-5 rounded-br-3xl rounded-bl-3xl relative'>
+					<div className='h-[92vh] w-[100vw] z-10 overflow-scroll'>
+						<div className='min-h-[37vh] px-5 rounded-br-3xl rounded-bl-3xl relative'>
 							{/* Background Image */}
 							<div className="absolute z-10">
 								<img
@@ -176,7 +176,7 @@ const Rankings = () => {
 								/>
 							</div>
 							<div className="relative z-10">
-								<div className="w-full h-[5vh] flex justify-end items-center">
+								<div className="w-full h-[10vh] flex justify-end items-center">
 									<div className="flex justify-center items-center text-white font-semibold gap-1">
 										<img src={BadgeIcon} alt="badge_icon" />
 										<p className="capitalize">{levelsData[page].name}</p>
@@ -272,8 +272,8 @@ const Rankings = () => {
 									</button>
 								</div>
 								{/* List of competitors */}
-								<div className='bg-[#1B1B27] pb-3 pt-5 rounded-tl-[14px] rounded-tr-[14px] overflow-hidden h-[55vh] flex flex-col gap-3 w-[90vw]'>
-									<div className="flex flex-col gap-4 justify-center items-center h-[40vh]">
+								<div className='bg-[#1B1B27] pb-3 pt-5 rounded-tl-[14px] rounded-tr-[14px] flex flex-col gap-3 w-[90vw]'>
+									<div className="flex flex-col gap-4 justify-start items-center min-h-[40vh]">
 										{currentPageUsers.map((user, i) => {
 											if (i <= 2) return null;
 
@@ -287,18 +287,20 @@ const Rankings = () => {
 														className="relative z-20 shadow-md border-[0.5px] border-[#12121C] w-[85vw] h-[10vh] bg-[#0C0C0C] rounded-xl flex items-center gap-3 font-semibold"
 													>
 														{/* User Profile */}
-														<div className="flex items-center gap-3 py-1 px-3">
-															<div className="rounded-full border-2 border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
-																{i}
+														<div className="flex items-center gap-3 py-1 px-3 w-full">
+															<div className="w-[10%] flex justify-center items-center overflow-hidden">
+																<span className="rounded-full border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
+																	{i}
+																</span>
 															</div>
-															<div>
+															<div className="w-[25%] flex justify-start items-center overflow-hidden">
 																{user.profilePic === "not set" ? (
 																	<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
 																) : (
 																	<img src={user.profilePic} alt="Profile" width={50} className="rounded-full" />
 																)}
 															</div>
-															<div className="flex flex-col justify-center items-center gap-2 text-white">
+															<div className="w-[65%] flex flex-col justify-center items-start gap-2 text-white overflow-hidden">
 																<h1>
 																	<p>{user.firstName.slice(0, 7)}</p>
 																</h1>
@@ -316,17 +318,19 @@ const Rankings = () => {
 													className="shadow-md border-[0.5px] border-[#12121C] w-[85vw] h-[10vh] bg-gradient-to-t from-[#12121C] to-[#21212D] rounded-lg flex items-center gap-3 px-3 p-1"
 												>
 													{/* Other user's */}
-													<div className="rounded-full border-2 border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
-														{i}
+													<div className="w-[10%] flex justify-center items-center overflow-hidden">
+														<span className="rounded-full border-2 border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
+															{i}
+														</span>
 													</div>
-													<div>
+													<div className="w-[25%] flex justify-start items-center overflow-hidden">
 														{user.profilePic === "not set" ? (
 															<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
 														) : (
 															<img src={user.profilePic} alt="Profile" width={50} className="rounded-full" />
 														)}
 													</div>
-													<div className="flex flex-col justify-center items-center gap-2 text-white">
+													<div className="w-[65%] flex flex-col justify-center items-start gap-2 text-white overflow-hidden">
 														<h1>
 															<p>{user.firstName.slice(0, 7)}</p>
 														</h1>

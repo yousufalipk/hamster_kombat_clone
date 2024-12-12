@@ -88,7 +88,8 @@ const Home = () => {
 		avaliableCpm,
 		claimCpmCoins,
 		setAvaliableCpm,
-		levelsData
+		levelsData,
+		comboCards
 	} = useUser();
 
 	const [clicks, setClicks] = useState([]);
@@ -259,7 +260,7 @@ const Home = () => {
 			setPopupClosing(false);
 		}
 		else if (data.id === 3) {
-			navigate('/');
+			navigate('/hammer');
 		}
 		else if (data.id === 4) {
 			navigate('/');
@@ -339,8 +340,8 @@ const Home = () => {
 			img: DailyCombo,
 			data1: "Daily Combo",
 			timer: "00:00:00",
-			isDone: false,
-			isCommingSoon: true,
+			isDone: comboCards.length >= 2 ? true : false,
+			isCommingSoon: false,
 		},
 		/*
 		{
@@ -575,13 +576,27 @@ const Home = () => {
 																	</div>
 																</div>
 															</div>
-															{claimed.includes(currentDay) && (
-																<>
-																	<div className="text-white text-[10px] mt-3 flex justify-center items-center">
-																		{remaningTime}
-																	</div>
-																</>
-															)}
+															<div className="w-full h-[2vh] flex justify-center items-center">
+																{
+																	id === 2 ?
+																		(claimed.includes(currentDay) && (
+																			<>
+																				<div className="text-white text-[10px] mt-3 flex justify-center items-center">
+																					{remaningTime}
+																				</div>
+																			</>
+																		))
+																		: id === 3 ?
+																			(comboCards.length >= 2 && (
+																				<>
+																					<div className="text-white text-[10px] mt-3 flex justify-center items-center">
+																						{remaningTime}
+																					</div>
+																				</>
+																			))
+																			: null
+																}
+															</div>
 														</>
 													) : (
 														<>
@@ -599,13 +614,27 @@ const Home = () => {
 																	</div>
 																</div>
 															</div>
-															{claimed.includes(currentDay) && (
-																<>
-																	<div className="text-white text-[10px] mt-3 flex justify-center items-center">
-																		{remaningTime}
-																	</div>
-																</>
-															)}
+															<div className="w-full h-[2vh] flex justify-center items-center">
+																{
+																	id === 2 ?
+																		(claimed.includes(currentDay) && (
+																			<>
+																				<div className="text-white text-[10px] mt-3 flex justify-center items-center">
+																					{remaningTime}
+																				</div>
+																			</>
+																		))
+																		: id === 3 ?
+																			(comboCards.length >= 2 && (
+																				<>
+																					<div className="text-white text-[10px] mt-3 flex justify-center items-center">
+																						{remaningTime}
+																					</div>
+																				</>
+																			))
+																			: null
+																}
+															</div>
 														</>
 													)}
 												</div>
