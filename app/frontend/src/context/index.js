@@ -156,7 +156,6 @@ export const UserProvider = (props) => {
 
             newSocket.on('levelup', (user) => {
                 const percentage = (user.level / (levelsData.length - 1)) * 100;
-                console.log('Percentage socket', percentage);
                 setLevelPercentage(percentage);
                 setLevel(user.level + 1);
                 setLevelName(levelsData[user.level].name);

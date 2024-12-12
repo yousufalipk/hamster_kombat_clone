@@ -91,10 +91,6 @@ const Home = () => {
 		levelsData
 	} = useUser();
 
-	useEffect(() => {
-		console.log('Level Percentage Home', levelPercentage);
-	}, [levelPercentage])
-
 	const [clicks, setClicks] = useState([]);
 	const tapRef = useRef(null);
 	const isUpdating = useRef(false);
