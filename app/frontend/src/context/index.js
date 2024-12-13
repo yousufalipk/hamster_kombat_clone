@@ -159,7 +159,7 @@ export const UserProvider = (props) => {
             });
 
             newSocket.on('levelup', (user) => {
-                const percentage = (user.level + 1 / (levelsData.length - 1)) * 100;
+                const percentage = ((user.level + 1) / levelsData.length) * 100;
                 setLevelPercentage(percentage);
                 setLevel(user.level + 1);
                 setLevelName(levelsData[user.level].name);
@@ -304,7 +304,7 @@ export const UserProvider = (props) => {
 
     const initilizeStates = async (user) => {
         try {
-            const percentage = (user.level + 1 / (levelsData.length - 1)) * 100;
+            const percentage = ((user.level + 1) / levelsData.length) * 100;
             setUserId(user._id);
             setTelegramId(user.telegramId);
             setFirstName(user.firstName);
