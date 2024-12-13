@@ -66,7 +66,7 @@ router.route('/fetch-invite-friends').post(fetchUserInviteFriends);
 router.route('/claim-refferal-reward').post(claimInviteFriendsReward);
 router.route('/claim-cpm').post(claimCPM);
 router.route('/add-wallet-address').post(addOrUpdateWalletAddress);
-router.route('/get-server-time').get(getServerTimeStamp);
+router.route('/get-server-timestamp').get(getServerTimeStamp);
 
 
 // Test

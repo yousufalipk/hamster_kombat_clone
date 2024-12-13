@@ -117,18 +117,22 @@ export const UserProvider = (props) => {
         }
     }, [])
 
-
     // Reamning time updater
     useEffect(() => {
-        setRemaningTime(calculateRemainingTime());
+        const fetchRemainingTime = async () => {
+            const time = await calculateRemainingTime();
+            setRemaningTime(time);
+        };
+
+        fetchRemainingTime();
 
         const interval = setInterval(() => {
-            const newTime = calculateRemainingTime();
-            setRemaningTime(newTime);
+            fetchRemainingTime();
         }, 1000);
 
         return () => clearInterval(interval);
     }, []);
+
 
     // Refill energy over time
     useEffect(() => {
@@ -170,11 +174,13 @@ export const UserProvider = (props) => {
     }, [apiUrl, userId]);
 
     const check1day = async (inputDate) => {
-        let currentDate;
-        const res = await axios.get(`${apiUrl}/user/get-server-time`);
-        if (res.success) {
-            currentDate = res.data.serverTime;
+        let timestamp;
+        const res = await axios.get(`${apiUrl}/user/get-server-timestamp`);
+        if (res.data.status === 'success') {
+            timestamp = res.data.serverTime.dateTime;
         }
+
+        const currentDate = new Date(timestamp);
         const oneDay = 24 * 60 * 60 * 1000;
         const input = new Date(inputDate);
         const diff = currentDate - input;
@@ -187,11 +193,14 @@ export const UserProvider = (props) => {
     };
 
     const calculateRemainingTime = async () => {
-        let currentDate;
-        const res = await axios.get(`${apiUrl}/user/get-server-time`);
-        if (res.success) {
-            currentDate = res.data.serverTime;
+        let timestamp;
+        const res = await axios.get(`${apiUrl}/user/get-server-timestamp`);
+
+        if (res.data.status === 'success') {
+            timestamp = res.data.serverTime.dateTime;
         }
+
+        const currentDate = new Date(timestamp);
         const nextMidnight = new Date(currentDate);
 
         nextMidnight.setDate(currentDate.getDate() + 1);
@@ -207,10 +216,11 @@ export const UserProvider = (props) => {
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-        return `${hours.toString().padStart(2, '0')}:${minutes
-            .toString()
-            .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+        return timeString;
     };
+
 
     /* 
     levels

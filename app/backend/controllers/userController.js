@@ -1869,19 +1869,23 @@ exports.addOrUpdateWalletAddress = async (req, res) => {
 exports.getServerTimeStamp = async (req, res) => {
     try {
         const timestamp = Date.now();
+        const dateTime = new Date(timestamp).toISOString();
         return res.status(200).json({
             status: 'success',
-            message: 'Timestamp fetched succesfuly!',
-            serverTime: timestamp
-        })
+            message: 'Timestamp with date & time fetched successfully!',
+            serverTime: {
+                timestamp,
+                dateTime
+            }
+        });
     } catch (error) {
-        console.log('Internal Server Error!', error);
-        return res.status(200).json({
+        console.log('Internal Server Error', error);
+        return res.status(500).json({
             status: 'failed',
             message: 'Internal Server Error!'
-        })
+        });
     }
-}
+};
 
 exports.test = async (req, res) => {
     try {
