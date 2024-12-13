@@ -12,13 +12,11 @@ import { useUser } from "./context/index";
 const App = () => {
 	const { loader, loaderErrorMes } = useUser();
 
-	// Handle Telegram close event (when user tries to close the app)
 	useEffect(() => {
 		if (window.Telegram && window.Telegram.WebApp) {
 			window.Telegram.WebApp.onEvent("close", () => {
 				const confirmation = window.confirm("Are you sure you want to close the app?");
 				if (!confirmation) {
-					// Prevent closing if the user cancels the action
 					window.Telegram.WebApp.enableClosingConfirmation();
 				}
 			});

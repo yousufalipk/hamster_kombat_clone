@@ -226,6 +226,44 @@ const Home = () => {
 
 	const navigate = useNavigate();
 
+
+	useEffect(() => {
+		if (staticUser !== 'true') {
+			const tele = window.Telegram.WebApp;
+			tele.disableVerticalSwipes();
+			tele.BackButton.hide();
+			tele.disableVerticalSwipes();
+			tele.expand();
+			tele.ready();
+			window.Telegram.WebApp.setHeaderColor("#000000");
+
+			document.addEventListener('dblclick', (e) => {
+				e.preventDefault();
+			});
+
+			document.addEventListener('touchstart', function (event) {
+				if (event.touches.length > 1) {
+					event.preventDefault();
+				}
+			}, { passive: false });
+
+			if (tele.HapticFeedback) {
+				tele.HapticFeedback.impactOccurred("medium");
+			}
+
+			tele.BackButton.onClick(() => {
+				const userConfirmed = window.confirm("Are you sure you want to close the app?");
+				if (userConfirmed) {
+					tele.close();
+				} else {
+					return;
+				}
+			});
+		}
+	}, []);
+
+
+	/*
 	useEffect(() => {
 		if (staticUser !== 'true') {
 			const tele = window.Telegram.WebApp;
@@ -253,6 +291,7 @@ const Home = () => {
 			}
 		}
 	}, []);
+	*/
 
 	// Update Balance Interval
 	useEffect(() => {
