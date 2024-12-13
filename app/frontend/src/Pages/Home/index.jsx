@@ -226,7 +226,6 @@ const Home = () => {
 
 	const navigate = useNavigate();
 
-
 	useEffect(() => {
 		if (staticUser !== 'true') {
 			const tele = window.Telegram.WebApp;
@@ -237,10 +236,12 @@ const Home = () => {
 			tele.ready();
 			window.Telegram.WebApp.setHeaderColor("#000000");
 
+			// Disable zoom on double-tap
 			document.addEventListener('dblclick', (e) => {
 				e.preventDefault();
 			});
 
+			// Disable pinch-zoom
 			document.addEventListener('touchstart', function (event) {
 				if (event.touches.length > 1) {
 					event.preventDefault();
@@ -251,12 +252,20 @@ const Home = () => {
 				tele.HapticFeedback.impactOccurred("medium");
 			}
 
+			// Custom logic for back button with confirmation
 			tele.BackButton.onClick(() => {
 				const userConfirmed = window.confirm("Are you sure you want to close the app?");
 				if (userConfirmed) {
-					tele.close();
-				} else {
-					return;
+					tele.close();  // Close the app if the user confirms
+				}
+				// If not confirmed, the app will not close
+			});
+
+			// Handling window close event as a fallback
+			window.addEventListener('beforeunload', (e) => {
+				const userConfirmed = window.confirm("Are you sure you want to leave?");
+				if (!userConfirmed) {
+					e.preventDefault();  // Prevent the window from closing
 				}
 			});
 		}
