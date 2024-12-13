@@ -3,23 +3,43 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from '../../context/index';
 import { toast } from 'react-toastify';
 
+import DailyGamePlayImg from '../../assets/optimizedImages/Home/dailyGamePlay.webp';
+import DailyRewardImg from '../../assets/optimizedImages/Home/dailyReward.webp';
+import DailyComboImg from '../../assets/optimizedImages/Home/dailyCombo.webp';
+
+import Panda1 from '../../assets/optimizedImages/Home/Pandas/1.webp';
+import Panda2 from '../../assets/optimizedImages/Home/Pandas/2.webp';
+import Panda3 from '../../assets/optimizedImages/Home/Pandas/3.webp';
+import Panda4 from '../../assets/optimizedImages/Home/Pandas/4.webp';
+import Panda5 from '../../assets/optimizedImages/Home/Pandas/5.webp';
+import Panda6 from '../../assets/optimizedImages/Home/Pandas/6.webp';
+import Panda7 from '../../assets/optimizedImages/Home/Pandas/7.webp';
+import Panda8 from '../../assets/optimizedImages/Home/Pandas/8.webp';
+import Panda9 from '../../assets/optimizedImages/Home/Pandas/9.webp';
+import Panda10 from '../../assets/optimizedImages/Home/Pandas/10.webp';
+import Panda11 from '../../assets/optimizedImages/Home/Pandas/11.webp';
+import Panda12 from '../../assets/optimizedImages/Home/Pandas/12.webp';
+import Panda13 from '../../assets/optimizedImages/Home/Pandas/13.webp';
+import Panda14 from '../../assets/optimizedImages/Home/Pandas/14.webp';
+
+import Booster1Img from '../../assets/optimizedImages/Home/Boosters/b1.webp';
+import Booster2Img from '../../assets/optimizedImages/Home/Boosters/b2.webp';
+import Booster3Img from '../../assets/optimizedImages/Home/Boosters/b3.webp';
+import Booster4Img from '../../assets/optimizedImages/Home/Boosters/b4.webp';
+
+import BigCoin from '../../assets/optimizedImages/BigCoin.webp';
+import SmallCoin from '../../assets/optimizedImages/SmallCoin.webp';
+
+import CirclesBackgroundImg from '../../assets/optimizedImages/Home/bg.webp';
+
+
+
+import PandaCircleIcon from "../../assets/PandaCircleIcon.svg";
 import midAnimationCircle from '../../assets/animation/1.png';
 import finalAnimationCircle from '../../assets/animation/2.png';
 
-import popupLine from "../../assets/token/popupLine.svg";
-
-import BackgroundImg from '../../assets/background/bg.png';
-import DailyGamePlay from "../../assets/dailyGamePlayIcon.png";
-import DailyReward from "../../assets/dailyRewardIcon.png";
-import DailyCombo from "../../assets/dailyComboIcon.png";
-import DailySecretCode from "../../assets/secretCodeIcon.png";
-import LittleCoin from "../../assets/LittleCoinIcon.svg";
-import BigCoin from "../../assets/BigCoinIcon.svg";
-import BigPanda from "../../assets/bigPandaIcon.png";
-import PandaCircleIcon from "../../assets/PandaCircleIcon.svg";
 import JetPack from "../../assets/jetPackIcon.png";
 import BatteryBooster1 from "../../assets/batteryBooster1Icon.png";
-import BatteryBooster2 from "../../assets/batteryBooster2Icon.png";
 import TouchIcon from "../../assets/touchIcon.png";
 import FlashIcon from "../../assets/lighteningIcon.png";
 import InfoIcon from "../../assets/InfoIcon.svg";
@@ -39,9 +59,25 @@ import leftreward from '../../assets/dailyreward/leftReward.svg';
 import rightreward from '../../assets/dailyreward/rightReward.svg';
 
 import CommingSoon from '../../assets/root/comingSoon.svg';
-import axios from "axios";
 
 const Home = () => {
+
+	const pandaMapping = {
+		0: Panda1,
+		1: Panda2,
+		2: Panda3,
+		3: Panda4,
+		4: Panda5,
+		5: Panda6,
+		6: Panda7,
+		7: Panda8,
+		8: Panda9,
+		9: Panda10,
+		10: Panda11,
+		11: Panda12,
+		12: Panda13,
+		13: Panda14,
+	};
 
 	const energyUpgradeCost = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
 	const multitapUpgradeCost = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000];
@@ -50,7 +86,6 @@ const Home = () => {
 	const reward = [500, 1000, 1500, 2000, 2500, 3000, 3500];
 
 	const staticUser = process.env.REACT_APP_STATIC_USER;
-	const apiUrl = process.env.REACT_APP_URL;
 
 	const getRandomName = () => {
 		const randomNames = ["John Doe", "Jane Smith", "Alex Johnson", "Chris Lee", "Taylor Brown"];
@@ -273,37 +308,6 @@ const Home = () => {
 		}
 	}, []);
 
-
-	/*
-	useEffect(() => {
-		if (staticUser !== 'true') {
-			const tele = window.Telegram.WebApp;
-			tele.disableVerticalSwipes();
-			tele.BackButton.hide();
-			tele.disableVerticalSwipes();
-			tele.expand();
-			tele.ready();
-			window.Telegram.WebApp.setHeaderColor("#000000");
-
-			// Disable zoom on double-tap
-			document.addEventListener('dblclick', (e) => {
-				e.preventDefault();
-			});
-
-			// Disable pinch-zoom
-			document.addEventListener('touchstart', function (event) {
-				if (event.touches.length > 1) {
-					event.preventDefault();
-				}
-			}, { passive: false });
-
-			if (tele.HapticFeedback) {
-				tele.HapticFeedback.impactOccurred("medium");
-			}
-		}
-	}, []);
-	*/
-
 	// Update Balance Interval
 	useEffect(() => {
 		const intervalId = setInterval(async () => {
@@ -417,7 +421,7 @@ const Home = () => {
 	const cards = [
 		{
 			id: 1,
-			img: DailyGamePlay,
+			img: DailyGamePlayImg,
 			data1: "Daily Game Play",
 			timer: "00:00:00",
 			isDone: false,
@@ -425,7 +429,7 @@ const Home = () => {
 		},
 		{
 			id: 2,
-			img: DailyReward,
+			img: DailyRewardImg,
 			data1: "Daily Reward",
 			timer: "13:11:35",
 			isDone: claimed.includes(currentDay) ? true : false,
@@ -433,7 +437,7 @@ const Home = () => {
 		},
 		{
 			id: 3,
-			img: DailyCombo,
+			img: DailyComboImg,
 			data1: "Daily Combo",
 			timer: "00:00:00",
 			isDone: comboCards.length >= 2 ? true : false,
@@ -574,7 +578,7 @@ const Home = () => {
 						{/* Background Image */}
 						<div className="absolute inset-0 -z-10">
 							<img
-								src={BackgroundImg}
+								src={CirclesBackgroundImg}
 								alt="Background"
 								className="scale-150 object-cover fixed top-[30vh]"
 							/>
@@ -663,11 +667,11 @@ const Home = () => {
 																{/* Main content */}
 																<div className={`flex flex-col justify-center items-center p-2 h-20 ${data.isCommingSoon ? `bg-[#1B1B27]` : `bg-[#162B58]`} rounded-[14px] gap-2`}>
 																	<div className="h-[70%] flex justify-center items-center">
-																		<img src={img} alt="Logo" width="40" />
+																		<img src={img} alt="Logo" />
 																	</div>
 																	<div className="h-[30%] text-[#FFF] text-[10px] font-medium flex justify-center items-start">
 																		<div className="flex justify-center items-center">
-																			<p className={`text-[9px] ${data.isCommingSoon && `text-gray-400`}`}>{data1}</p>
+																			<p className={`text-[11px] ${data.isCommingSoon && `text-gray-400`}`}>{data1}</p>
 																		</div>
 																	</div>
 																</div>
@@ -705,7 +709,7 @@ const Home = () => {
 																	</div>
 																	<div className="h-[30%] text-[#FFF] text-[10px] font-medium flex justify-center items-start">
 																		<div className="flex justify-center items-center">
-																			<p className={`text-[9px] ${data.isCommingSoon && `text-gray-400`}`}>{data1}</p>
+																			<p className={`text-[10px] ${data.isCommingSoon && `text-gray-400`}`}>{data1}</p>
 																		</div>
 																	</div>
 																</div>
@@ -751,7 +755,7 @@ const Home = () => {
 										className="z-20 flex flex-col justify-center items-center gap-1">
 										<div className="flex justify-center items-center">
 											<div className="">
-												<img className="pl-3" src={LittleCoin} alt="Coin-Icon" />
+												<img className="pl-3" src={SmallCoin} alt="Coin-Icon" />
 											</div>
 											<div className="text-[#FFF] text-[11.655px] font-medium">
 												<p>+{formatCoins(coinsPerMinute)}</p>
@@ -823,7 +827,7 @@ const Home = () => {
 													<img src={PandaCircleIcon} alt="Panda-circle" />
 												</div>
 												<div className="absolute z-40">
-													<img src={BigPanda} alt="Panda-Icon" className="bot-tap" />
+													<img src={pandaMapping[level]} alt="Panda-Icon" className="bot-tap rounded-full" width={100} />
 												</div>
 											</div>
 										</div>
@@ -845,7 +849,7 @@ const Home = () => {
 													boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
 												}}
 											>
-												<img src={JetPack} alt='JetPack-Icon' className='p-1' />
+												<img src={Booster1Img} alt='JetPack-Icon' className='p-1' />
 											</div>
 										</div>
 										{/* b-1 b */}
@@ -862,7 +866,7 @@ const Home = () => {
 													boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
 												}}
 											>
-												<img src={BatteryBooster1} alt='BatteryBooster-Icon' className='p-1' />
+												<img src={Booster2Img} alt='BatteryBooster-Icon' className='p-1' />
 											</div>
 										</div>
 										{/* b-1 c */}
@@ -876,7 +880,7 @@ const Home = () => {
 													boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
 												}}
 											>
-												<img src={TouchIcon} alt='TouchIcon-Icon' className='p-1' />
+												<img src={Booster3Img} alt='TouchIcon-Icon' className='p-1' />
 											</div>
 										</div>
 										{/* b-1 d */}
@@ -890,7 +894,7 @@ const Home = () => {
 													boxShadow: '0 12px 10px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 173, 255, 0.6)',
 												}}
 											>
-												<img src={BatteryBooster2} alt='BatteryBooster2-Icon' className='p-1' />
+												<img src={Booster4Img} alt='BatteryBooster2-Icon' className='p-1' />
 											</div>
 										</div>
 									</div>
@@ -1176,7 +1180,7 @@ const Home = () => {
 																<div className="py-1">
 																	<p className="flex justify-center items-center gap-1 text-xl text-[#FF8F00]">
 																		<img
-																			src={LittleCoin}
+																			src={SmallCoin}
 																			alt="Little coin"
 																			width={25}
 																			height={25}
@@ -1318,11 +1322,11 @@ const Home = () => {
 												<img src={CpmInfoBg} alt="bg" className="absolute z-0 top-10" />
 												<div className="h-1 w-16 bg-[#D9D9D9] rounded-md"></div>
 												<div className="flex justify-center flex-col items-center gap-5">
-													<img src={padaIcon} alt="pandaIcon" width={50} />
+													<img src={padaIcon} alt="pandaIcon" width={50} className="border-2" />
 													<div>
 														<p className="flex justify-center items-center gap-1 border border-[#242434] p-3 px-5 rounded-md text-[#FF8F00] text-lg font-medium">
 															<img
-																src={LittleCoin}
+																src={SmallCoin}
 																alt="Little coin"
 																width={25}
 																height={25}

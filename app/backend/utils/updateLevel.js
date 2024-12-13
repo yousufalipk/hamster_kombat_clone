@@ -1,19 +1,20 @@
 const UserModel = require('../models/userModel');
 
 const levelsData = [
-    { id: 1, name: 'RockStar Panda', rangeFrom: 0, rangeTo: 5000 },
-    { id: 2, name: 'Energetic Panda', rangeFrom: 5000, rangeTo: 50000 },
-    { id: 3, name: 'Adventurous Panda', rangeFrom: 50000, rangeTo: 250000 },
-    { id: 4, name: 'Tech Genius Panda', rangeFrom: 250000, rangeTo: 500000 },
-    { id: 5, name: 'Astronaut Panda', rangeFrom: 500000, rangeTo: 1000000 },
-    { id: 6, name: 'Super Hero Panda', rangeFrom: 1000000, rangeTo: 2500000 },
-    { id: 7, name: 'Detective Panda', rangeFrom: 2500000, rangeTo: 5000000 },
-    { id: 8, name: 'Pirate Panda', rangeFrom: 5000000, rangeTo: 20000000 },
+    { id: 1, name: 'Adventurous', rangeFrom: 0, rangeTo: 5000 },
+    { id: 2, name: 'Energetic', rangeFrom: 5000, rangeTo: 50000 },
+    { id: 3, name: 'Rockstar', rangeFrom: 50000, rangeTo: 250000 },
+    { id: 4, name: 'Astronaut', rangeFrom: 250000, rangeTo: 500000 },
+    { id: 5, name: 'Super Hero', rangeFrom: 500000, rangeTo: 1000000 },
+    { id: 6, name: 'Detective', rangeFrom: 1000000, rangeTo: 2500000 },
+    { id: 7, name: 'Ninja', rangeFrom: 2500000, rangeTo: 5000000 },
+    { id: 8, name: 'Pirate', rangeFrom: 5000000, rangeTo: 20000000 },
     { id: 9, name: 'Samurai Panda', rangeFrom: 20000000, rangeTo: 50000000 },
-    { id: 10, name: 'Pirate Panda', rangeFrom: 50000000, rangeTo: 150000000 },
-    { id: 11, name: 'Ninja Panda', rangeFrom: 150000000, rangeTo: 500000000 },
-    { id: 12, name: 'Cyber Warrior Panda', rangeFrom: 500000000, rangeTo: 1000000000 },
-    { id: 13, name: 'Crypto Panda', rangeFrom: 1000000000, rangeTo: 3000000000 },
+    { id: 10, name: 'Tapster', rangeFrom: 50000000, rangeTo: 150000000 },
+    { id: 11, name: 'Tech Genius', rangeFrom: 150000000, rangeTo: 500000000 },
+    { id: 12, name: 'Cyber Warrior', rangeFrom: 500000000, rangeTo: 1000000000 },
+    { id: 13, name: 'Flare', rangeFrom: 1000000000, rangeTo: 3000000000 },
+    { id: 14, name: 'The Crypto', rangeFrom: 3000000000, rangeTo: 'max' },
 ];
 
 exports.checkLevelUpgrade = async (userBalance, currentLevel) => {
@@ -22,15 +23,22 @@ exports.checkLevelUpgrade = async (userBalance, currentLevel) => {
             return { success: false, mess: 'Missing required fields!' };
         }
 
-        if (currentLevel < 0 || currentLevel > levelsData.length) {
+        if (currentLevel < 0 || currentLevel >= levelsData.length) {
             return { success: false, mess: 'Invalid current level!' };
         }
-
 
         console.log('Level', userBalance, currentLevel);
         const currentLevelData = levelsData[currentLevel];
         if (!currentLevelData) {
             return { success: false, mess: 'Current level not found!' };
+        }
+
+        if (currentLevelData.rangeTo === 'max' && userBalance >= currentLevelData.rangeFrom) {
+            return {
+                success: false,
+                mess: 'You are already at the highest level.',
+                data: { currentLevel, levelName: currentLevelData.name }
+            };
         }
 
         if (userBalance >= currentLevelData.rangeFrom && userBalance < currentLevelData.rangeTo) {
@@ -42,7 +50,7 @@ exports.checkLevelUpgrade = async (userBalance, currentLevel) => {
         }
 
         const newLevelData = levelsData.find(level =>
-            userBalance >= level.rangeFrom && userBalance < level.rangeTo
+            userBalance >= level.rangeFrom && (level.rangeTo === 'max' || userBalance < level.rangeTo)
         );
 
         if (!newLevelData) {
@@ -92,12 +100,12 @@ exports.fetchTopUsersForAllLevels = async (req, res) => {
 
         for (const { id, name, rangeFrom, rangeTo } of levelsData) {
             const topUsers = await UserModel.aggregate([
-                { $match: { balance: { $gte: rangeFrom, $lt: rangeTo } } },
+                { $match: { balance: { $gte: rangeFrom, $lt: rangeTo === 'max' ? Number.MAX_SAFE_INTEGER : rangeTo } } },
                 { $sort: { balance: -1 } },
                 { $limit: usersLimit - 1 },
             ]);
 
-            const isUserInLevel = user.balance >= rangeFrom && user.balance < rangeTo;
+            const isUserInLevel = user.balance >= rangeFrom && (rangeTo === 'max' || user.balance < rangeTo);
 
             if (isUserInLevel) {
                 const isUserInTop = topUsers.some(u => String(u._id) === String(user._id));
@@ -108,6 +116,7 @@ exports.fetchTopUsersForAllLevels = async (req, res) => {
 
                 topUsers.sort((a, b) => b.balance - a.balance);
             }
+
             allLevelTopUsers[id - 1] = topUsers.slice(0, usersLimit);
         }
 

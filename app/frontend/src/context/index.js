@@ -96,19 +96,20 @@ export const UserProvider = (props) => {
     const [avaliableCpm, setAvaliableCpm] = useState(0);
 
     const levelsData = [
-        { id: 1, name: 'RockStar', rangeFrom: 0, rangeTo: 5000 },
+        { id: 1, name: 'Adventurous', rangeFrom: 0, rangeTo: 5000 },
         { id: 2, name: 'Energetic', rangeFrom: 5000, rangeTo: 50000 },
-        { id: 3, name: 'Adventurous', rangeFrom: 50000, rangeTo: 250000 },
-        { id: 4, name: 'Tech Genius', rangeFrom: 250000, rangeTo: 500000 },
-        { id: 5, name: 'Astronaut', rangeFrom: 500000, rangeTo: 1000000 },
-        { id: 6, name: 'Super Hero', rangeFrom: 1000000, rangeTo: 2500000 },
-        { id: 7, name: 'Detective', rangeFrom: 2500000, rangeTo: 5000000 },
+        { id: 3, name: 'Rockstar', rangeFrom: 50000, rangeTo: 250000 },
+        { id: 4, name: 'Astronaut', rangeFrom: 250000, rangeTo: 500000 },
+        { id: 5, name: 'Super Hero', rangeFrom: 500000, rangeTo: 1000000 },
+        { id: 6, name: 'Detective', rangeFrom: 1000000, rangeTo: 2500000 },
+        { id: 7, name: 'Ninja', rangeFrom: 2500000, rangeTo: 5000000 },
         { id: 8, name: 'Pirate', rangeFrom: 5000000, rangeTo: 20000000 },
-        { id: 9, name: 'Samurai', rangeFrom: 20000000, rangeTo: 50000000 },
-        { id: 10, name: 'Pirate', rangeFrom: 50000000, rangeTo: 150000000 },
-        { id: 11, name: 'Ninja', rangeFrom: 150000000, rangeTo: 500000000 },
+        { id: 9, name: 'Samurai Panda', rangeFrom: 20000000, rangeTo: 50000000 },
+        { id: 10, name: 'Tapster', rangeFrom: 50000000, rangeTo: 150000000 },
+        { id: 11, name: 'Tech Genius', rangeFrom: 150000000, rangeTo: 500000000 },
         { id: 12, name: 'Cyber Warrior', rangeFrom: 500000000, rangeTo: 1000000000 },
-        { id: 13, name: 'Crypto', rangeFrom: 1000000000, rangeTo: 3000000000 },
+        { id: 13, name: 'Flare', rangeFrom: 1000000000, rangeTo: 3000000000 },
+        { id: 14, name: 'The Crypto', rangeFrom: 3000000000, rangeTo: 'max' },
     ];
 
     useEffect(() => {
