@@ -169,8 +169,12 @@ export const UserProvider = (props) => {
         }
     }, [apiUrl, userId]);
 
-    const check1day = (inputDate) => {
-        const currentDate = new Date();
+    const check1day = async (inputDate) => {
+        let currentDate;
+        const res = await axios.get(`${apiUrl}/user/get-server-time`);
+        if (res.success) {
+            currentDate = res.data.serverTime;
+        }
         const oneDay = 24 * 60 * 60 * 1000;
         const input = new Date(inputDate);
         const diff = currentDate - input;
@@ -182,8 +186,12 @@ export const UserProvider = (props) => {
         }
     };
 
-    const calculateRemainingTime = () => {
-        const currentDate = new Date();
+    const calculateRemainingTime = async () => {
+        let currentDate;
+        const res = await axios.get(`${apiUrl}/user/get-server-time`);
+        if (res.success) {
+            currentDate = res.data.serverTime;
+        }
         const nextMidnight = new Date(currentDate);
 
         nextMidnight.setDate(currentDate.getDate() + 1);

@@ -39,6 +39,7 @@ import leftreward from '../../assets/dailyreward/leftReward.svg';
 import rightreward from '../../assets/dailyreward/rightReward.svg';
 
 import CommingSoon from '../../assets/root/comingSoon.svg';
+import axios from "axios";
 
 const Home = () => {
 
@@ -49,6 +50,7 @@ const Home = () => {
 	const reward = [500, 1000, 1500, 2000, 2500, 3000, 3500];
 
 	const staticUser = process.env.REACT_APP_STATIC_USER;
+	const apiUrl = process.env.REACT_APP_URL;
 
 	const getRandomName = () => {
 		const randomNames = ["John Doe", "Jane Smith", "Alex Johnson", "Chris Lee", "Taylor Brown"];
@@ -124,8 +126,12 @@ const Home = () => {
 	}, [levelPercentage])
 
 	useEffect(() => {
-		const handleBeforeUnload = () => {
-			const timestamp = Date.now();
+		const handleBeforeUnload = async () => {
+			let timestamp;
+			const res = await axios.get(`${apiUrl}/user/get-server-time`);
+			if (res.success) {
+				timestamp = res.data.serverTime;
+			}
 			localStorage.setItem("energy", energy.toString());
 			localStorage.setItem("lastUpdated", timestamp.toString());
 		};
@@ -135,12 +141,17 @@ const Home = () => {
 		return () => window.removeEventListener("beforeunload", handleBeforeUnload);
 	}, [energy]);
 
-	useEffect(() => {
+	useEffect(async () => {
 		const storedEnergy = parseInt(localStorage.getItem("energy") || `${energyLimit}`, 10);
 		const lastUpdated = parseInt(localStorage.getItem("lastUpdated") || "0", 10);
 
+		let timestamp;
+		const res = await axios.get(`${apiUrl}/user/get-server-time`);
+		if (res.success) {
+			timestamp = res.data.serverTime;
+		}
 		if (lastUpdated) {
-			const elapsedTime = Math.floor((Date.now() - lastUpdated) / 1000);
+			const elapsedTime = Math.floor((timestamp - lastUpdated) / 1000);
 			const newEnergy = Math.min(storedEnergy + elapsedTime, energyLimit);
 			setEnergy(newEnergy);
 		} else {
