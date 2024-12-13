@@ -1,7 +1,7 @@
 const express = require('express');
 const { Telegraf } = require('telegraf');
 
-const { PORT, BOT_TOKEN } = require('./Config/env');
+const { PORT, BOT_TOKEN, REACT_APP_URL } = require('./Config/env');
 
 const bot = new Telegraf(BOT_TOKEN);
 
@@ -22,7 +22,7 @@ app.post(BOT_WEBHOOK_PATH, (req, res) => {
 app.listen(PORT, async () => {
 	console.log(`Server running on http://localhost:${PORT}`);
 
-	const WEBHOOK_URL = `https://pandatap-production.up.railway.app${BOT_WEBHOOK_PATH}`;
+	const WEBHOOK_URL = `${REACT_APP_URL}${BOT_WEBHOOK_PATH}`;
 	await bot.telegram.setWebhook(WEBHOOK_URL);
 	console.log(`Webhook set to ${WEBHOOK_URL}`);
 });
