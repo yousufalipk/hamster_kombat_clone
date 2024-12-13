@@ -120,6 +120,35 @@ const Home = () => {
 	const [animatedBalance, setAnimatedBalance] = useState(balance);
 
 	useEffect(() => {
+		console.log('Level Percentage: ', levelPercentage);
+	}, [levelPercentage])
+
+	useEffect(() => {
+		const handleBeforeUnload = () => {
+			const timestamp = Date.now();
+			localStorage.setItem("energy", energy.toString());
+			localStorage.setItem("lastUpdated", timestamp.toString());
+		};
+
+		window.addEventListener("beforeunload", handleBeforeUnload);
+
+		return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+	}, [energy]);
+
+	useEffect(() => {
+		const storedEnergy = parseInt(localStorage.getItem("energy") || `${energyLimit}`, 10);
+		const lastUpdated = parseInt(localStorage.getItem("lastUpdated") || "0", 10);
+
+		if (lastUpdated) {
+			const elapsedTime = Math.floor((Date.now() - lastUpdated) / 1000);
+			const newEnergy = Math.min(storedEnergy + elapsedTime, energyLimit);
+			setEnergy(newEnergy);
+		} else {
+			setEnergy(storedEnergy);
+		}
+	}, []);
+
+	useEffect(() => {
 		const duration = 1000;
 		const stepTime = 10;
 		const steps = duration / stepTime;
@@ -1070,37 +1099,25 @@ const Home = () => {
 												</div>
 												<div className="text-center text-md text-gray-300 flex flex-col items-center justify-center gap-2">
 													<p>Increase amount of Tap you can earn per one tap</p>
+													<h1 className="text-xl text-[#FF8F00]">level {multitapLevel >= 9 ? ('Max') : (`${multitapLevel + 2}`)}</h1>
 													<p>+1 per tap for each level</p>
-													<div className="flex gap-2 items-center justify-center py-1">
-														<h1 className="text-xl text-[#FF8F00]">level {multitapLevel >= 9 ? ('Max') : (`${multitapLevel + 2}`)}</h1>
-														<svg width="1" height="37" viewBox="0 0 1 37" fill="none" xmlns="http://www.w3.org/2000/svg">
-															<line x1="0.5" y1="37" x2="0.5" stroke="url(#paint0_linear_1774_715)" />
-															<defs>
-																<linearGradient id="paint0_linear_1774_715" x1="1.5" y1="37" x2="1.5" y2="0" gradientUnits="userSpaceOnUse">
-																	<stop stopColor="#0B0B1D" />
-																	<stop offset="0.5" stopColor="white" />
-																	<stop offset="1" stopColor="#090918" />
-																</linearGradient>
-															</defs>
-														</svg>
-														<div>
-															{multitapLevel < 9 && (
-																<>
-																	<div className="py-1">
-																		<p className="flex justify-center items-center gap-1 text-xl text-[#FF8F00]">
-																			<img
-																				src={LittleCoin}
-																				alt="Little coin"
-																				width={25}
-																				height={25}
-																				className="mt-1"
-																			/>
-																			{multitapUpgradeCost[multitapLevel + 1]}
-																		</p>
-																	</div>
-																</>
-															)}
-														</div>
+													<div>
+														{multitapLevel < 9 && (
+															<>
+																<div className="py-1">
+																	<p className="flex justify-center items-center gap-1 text-xl text-[#FF8F00]">
+																		<img
+																			src={LittleCoin}
+																			alt="Little coin"
+																			width={25}
+																			height={25}
+																			className="mt-1"
+																		/>
+																		{multitapUpgradeCost[multitapLevel + 1]}
+																	</p>
+																</div>
+															</>
+														)}
 													</div>
 												</div>
 												{/* action buttons */}
