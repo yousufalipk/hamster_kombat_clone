@@ -37,13 +37,15 @@ bot.start(async (ctx) => {
 	});
 });
 
-// Webhook route
 app.post('/bot', (req, res) => {
-	bot.handleUpdate(req.body, res);
-	res.sendStatus(200);
+	bot.handleUpdate(req.body).then(() => {
+		res.sendStatus(200);
+	}).catch((err) => {
+		console.error('Error processing update:', err);
+		res.sendStatus(500);
+	});
 });
 
-// Express server for health check
 app.get('/', (req, res) => {
 	res.send('Bot is running');
 });
