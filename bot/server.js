@@ -22,7 +22,7 @@ app.post(BOT_WEBHOOK_PATH, (req, res) => {
 app.listen(PORT, async () => {
 	console.log(`Server running on http://localhost:${PORT}`);
 
-	const WEBHOOK_URL = `https://your-public-server.com${BOT_WEBHOOK_PATH}`;
+	const WEBHOOK_URL = `https://pandatap-production.up.railway.app${BOT_WEBHOOK_PATH}`;
 	await bot.telegram.setWebhook(WEBHOOK_URL);
 	console.log(`Webhook set to ${WEBHOOK_URL}`);
 });
