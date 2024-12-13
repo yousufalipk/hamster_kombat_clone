@@ -1,24 +1,17 @@
-import { Telegraf, Markup } from "telegraf";
-import { config } from "dotenv";
-config();
+const express = require('express');
+const { Telegraf } = require('telegraf');
 
-const bot = new Telegraf(process.env.BOT_TOKEN);
+const { BOT_TOKEN, PORT } = require('./Config/env.js');
 
-bot.start(async (ctx) => {
-	const username = ctx.from.username;
-	console.log(`User @${username} started the bot`);
+const bot = new Telegraf(BOT_TOKEN);
+const app = express();
 
-	const keyboard = Markup.inlineKeyboard([
-		[Markup.button.url("Play", "https://panda-tap.vercel.app")],
-	]);
-
-	await ctx.reply(`Hello @${username}, your bot is ready to work!`, keyboard);
+bot.on('text', (ctx) => {
+	ctx.reply('Received your message!');
 });
 
-bot
-	.launch()
-	.then(() => console.log("Bot launched successfully"))
-	.catch((error) => console.error("Error launching bot:", error));
+app.post('/webhook', (req, res) => {
+	bot.handleUpdate(req.body, res);
+});
 
-process.once("SIGINT", () => bot.stop("SIGINT"));
-process.once("SIGTERM", () => bot.stop("SIGTERM"));
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
