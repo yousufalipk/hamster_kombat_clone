@@ -125,39 +125,41 @@ const Home = () => {
 		console.log('Level Percentage: ', levelPercentage);
 	}, [levelPercentage])
 
+
+	// Before app closed set last reffill time & energy 
 	useEffect(() => {
-		const handleBeforeUnload = async () => {
-			let timestamp;
-			const res = await axios.get(`${apiUrl}/user/get-server-timestamp`);
-			if (res.data.status === 'success') {
-				timestamp = res.data.serverTime.dateTime;
-			}
+		const handleBeforeUnload = () => {
+			const currentTime = new Date().getTime();
+
 			localStorage.setItem("energy", energy.toString());
-			localStorage.setItem("lastUpdated", timestamp.toString());
+			localStorage.setItem("lastUpdated", currentTime.toString());
 		};
 
 		window.addEventListener("beforeunload", handleBeforeUnload);
 		return () => window.removeEventListener("beforeunload", handleBeforeUnload);
 	}, [energy]);
 
-	const getEnergy = async () => {
-		const storedEnergy = parseInt(localStorage.getItem("energy") || `${energyLimit}`, 10);
+	// Getting energy back
+	const getEnergy = () => {
+		const storedEnergy = parseInt(localStorage.getItem("energy") || energyLimit, 10);
 		const lastUpdated = parseInt(localStorage.getItem("lastUpdated") || "0", 10);
 
-		let timestamp;
-		const res = await axios.get(`${apiUrl}/user/get-server-timestamp`);
-		if (res.data.status === 'success') {
-			timestamp = res.data.serverTime.timestamp;
-		}
-		const currentDay = new Date(timestamp);
 		if (lastUpdated) {
-			const elapsedTime = Math.floor((currentDay - lastUpdated) / 1000);
+			const elapsedTime = Math.floor((Date.now() - lastUpdated) / 1000);
 			const newEnergy = Math.min(storedEnergy + elapsedTime, energyLimit);
+			console.log('NEW Energy 111', newEnergy);
 			setEnergy(newEnergy);
 		} else {
+			console.log('stored Energy 222', storedEnergy);
 			setEnergy(storedEnergy);
 		}
-	}
+	};
+
+	useEffect(() => {
+		console.log('Energy', energy);
+	}, [energy])
+
+
 
 	useEffect(() => {
 		getEnergy();

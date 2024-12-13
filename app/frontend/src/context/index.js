@@ -354,7 +354,6 @@ export const UserProvider = (props) => {
             }
             setAvaliableUnlimitedTaps(user.unlimitedTaps.available);
             setAvaliableEnergyRefill(user.energyRefill.available);
-            setEnergy(user.energy.limit);
             setEnergyLevel(user.energy.level);
             setEnergyLimit(user.energy.limit);
             setMultitapLevel(user.multitaps.level);
