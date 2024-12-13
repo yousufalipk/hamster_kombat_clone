@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const { BOT_TOKEN, PORT } = require('./Config/env');
+
+console.log('BOT TOKEN', BOT_TOKEN);
 const bot = new Telegraf(BOT_TOKEN);
 const express = require("express");
 const app = express();
@@ -14,7 +16,6 @@ const community_link = "https://t.me/kvantsarcadetask";
 
 // Bot commands
 bot.start(async (ctx) => {
-	console.log('Bot started!');
 	const chatId = ctx.message.chat.id;
 	const userId = ctx.message.from.id;
 	const startPayload = ctx.startPayload;
