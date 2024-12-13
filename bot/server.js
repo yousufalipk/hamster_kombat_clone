@@ -1,56 +1,28 @@
-const { Telegraf } = require("telegraf");
-const dotenv = require('dotenv');
-dotenv.config();
+const express = require('express');
+const { Telegraf } = require('telegraf');
 
-const { BOT_TOKEN, PORT } = require('./Config/env');
+const { PORT, BOT_TOKEN } = require('./Config/env');
 
-console.log('BOT TOKEN', BOT_TOKEN);
 const bot = new Telegraf(BOT_TOKEN);
-const express = require("express");
+
 const app = express();
 
 app.use(express.json());
 
-const web_link = "https://t.me/pandatap_mini_bot/pandatap";
-const community_link = "https://t.me/kvantsarcadetask";
+bot.start((ctx) => ctx.reply('Welcome! How can I help you?'));
+bot.help((ctx) => ctx.reply('Available commands: /start, /help'));
+bot.on('text', (ctx) => ctx.reply(`You said: ${ctx.message.text}`));
 
-// Bot commands
-bot.start(async (ctx) => {
-	const chatId = ctx.message.chat.id;
-	const userId = ctx.message.from.id;
-	const startPayload = ctx.startPayload;
-
-	const urlSent = `${web_link}`;
-
-	ctx.replyWithMarkdown(`*Hey, Welcome to Panda Tap!*`, {
-		reply_markup: {
-			inline_keyboard: [
-				[{
-					text: "👋 Start now!",
-					web_app: { url: web_link }
-				}],
-				[{
-					text: "Join our Community",
-					url: community_link
-				}]
-			]
-		}
-	});
+const BOT_WEBHOOK_PATH = '/bot';
+app.post(BOT_WEBHOOK_PATH, (req, res) => {
+	bot.handleUpdate(req.body);
+	res.sendStatus(200);
 });
 
-app.post('/bot', (req, res) => {
-	bot.handleUpdate(req.body).then(() => {
-		res.sendStatus(200);
-	}).catch((err) => {
-		console.error('Error processing update:', err);
-		res.sendStatus(500);
-	});
-});
+app.listen(PORT, async () => {
+	console.log(`Server running on http://localhost:${PORT}`);
 
-app.get('/', (req, res) => {
-	res.send('Bot is running');
-});
-
-app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}`);
+	const WEBHOOK_URL = `https://your-public-server.com${BOT_WEBHOOK_PATH}`;
+	await bot.telegram.setWebhook(WEBHOOK_URL);
+	console.log(`Webhook set to ${WEBHOOK_URL}`);
 });
