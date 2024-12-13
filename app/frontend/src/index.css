@@ -6,6 +6,7 @@
   box-sizing: border-box;
   margin: 0px;
   padding: 0px;
+  font-family: 'Outfit', sans-serif;
 }
 
 .grad {
@@ -193,11 +194,11 @@ html {
 }
 
 .scale-up {
-  transform: scale(1.91);
+  transform: scale(2);
 }
 
 .scale-down {
-  transform: scale(0.52);
+  transform: scale(0);
 }
 
 .fade-out {

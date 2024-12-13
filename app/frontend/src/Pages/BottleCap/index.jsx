@@ -439,7 +439,6 @@ const BottleCap = () => {
 							</div>
 						) : (
 							<div className="h-[30vh] w-full flex justify-center items-center">
-								<span className="text-xl font-semibold text-white">No Social Task's!</span>
 							</div>
 						)}
 						{/* Heading 2 */}
@@ -505,7 +504,6 @@ const BottleCap = () => {
 							</div>
 						) : (
 							<div className="h-[30vh] w-full flex justify-center items-center">
-								<span className="text-xl font-semibold text-white">No Daily Task's!</span>
 							</div>
 						)}
 

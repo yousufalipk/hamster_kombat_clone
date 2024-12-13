@@ -1107,7 +1107,11 @@ const Home = () => {
 											<div className="flex flex-col justify-center items-center gap-3">
 												<div className="h-1 w-16 bg-[#D9D9D9] rounded-md opacity-70"></div>
 												<div className="mt-2 flex justify-center flex-col items-center gap-2">
-													<img src={TouchIcon} alt="battery" width={35} />
+													<img
+														src={TouchIcon}
+														alt="battery"
+														width={50}
+													/>
 													<h1 className="text-xl font-bold text-center">
 														Multitap
 													</h1>
