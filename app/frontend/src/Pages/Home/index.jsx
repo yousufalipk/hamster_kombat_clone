@@ -96,7 +96,6 @@ const Home = () => {
 
 	const {
 		userId,
-		initializeUser,
 		userDataInitilized,
 		firstName,
 		level,

@@ -146,11 +146,6 @@ const Rankings = () => {
 		}
 	}, [navigate]);
 
-	useEffect(() => {
-		console.log('Tesiting .....');
-		console.log('page', page);
-	}, [])
-
 	if (rankLoader) {
 		return (
 			<>
@@ -295,7 +290,9 @@ const Rankings = () => {
 															</div>
 															<div className="w-[25%] flex justify-start items-center overflow-hidden">
 																{user.profilePic === "not set" ? (
-																	<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
+																	<div className="w-15 h-15 rounded-full bg-black text-white text-md">
+																		<p>{user.firstName.slice(0, 1)}</p>
+																	</div>
 																) : (
 																	<img src={user.profilePic} alt="Profile" width={50} className="rounded-full" />
 																)}
@@ -325,7 +322,9 @@ const Rankings = () => {
 													</div>
 													<div className="w-[25%] flex justify-start items-center overflow-hidden">
 														{user.profilePic === "not set" ? (
-															<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
+															<div className="w-14 h-14 flex justify-center items-center rounded-full bg-black text-white text-md">
+																<p>{user.firstName.slice(0, 1)}</p>
+															</div>
 														) : (
 															<img src={user.profilePic} alt="Profile" width={50} className="rounded-full" />
 														)}
