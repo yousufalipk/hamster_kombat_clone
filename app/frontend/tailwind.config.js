@@ -35,7 +35,8 @@ module.exports = {
 				secondary: '#000000',
 				customOrange: '#FF9500',
 				darkBlue: '#2226FF',
-				lightBlue: '#00B2FF'
+				lightBlue: '#00B2FF',
+				borderGray: '#242434'
 			},
 		},
 	},

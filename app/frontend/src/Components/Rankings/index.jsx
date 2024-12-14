@@ -8,7 +8,7 @@ import CustomLoader from '../Loader/Loader';
 import LeftArrowIcon from '../../assets/leaderboard/left.svg';
 import RightArrowIcon from '../../assets/leaderboard/right.svg';
 
-import BackgroundImg from '../../assets/optimizedImages/Home/bg.webp';
+import BackgroundImg from '../../assets/optimizedImages/Home/bg.svg';
 
 import SilverStage from '../../assets/leaderboard/stages/silver.svg';
 import GoldStage from '../../assets/leaderboard/stages/gold.svg';

@@ -27,19 +27,19 @@ import Booster2Img from '../../assets/optimizedImages/Home/Boosters/b2.webp';
 import Booster3Img from '../../assets/optimizedImages/Home/Boosters/b3.webp';
 import Booster4Img from '../../assets/optimizedImages/Home/Boosters/b4.webp';
 
-import BigCoin from '../../assets/optimizedImages/BigCoin.webp';
-import SmallCoin from '../../assets/optimizedImages/SmallCoin.webp';
-import CirclesBackgroundImg from '../../assets/optimizedImages/Home/bg.webp';
+import BigCoin from '../../assets/optimizedImages/BigCoin.svg';
+import SmallCoin from '../../assets/optimizedImages/SmallCoin.svg';
+import CirclesBackgroundImg from '../../assets/optimizedImages/Home/bg.svg';
 
-import LargeBooster1Img from '../../assets/optimizedImages/Home/Boosters/large/tapBooster.webp';
-import LargeBooster2Img from '../../assets/optimizedImages/Home/Boosters/large/energyRefill.webp';
-import LargeBooster3Img from '../../assets/optimizedImages/Home/Boosters/large/multiTap.webp';
-import LargeBooster4Img from '../../assets/optimizedImages/Home/Boosters/large/energyLimit.webp';
+import LargeBooster1Img from '../../assets/optimizedImages/Home/Boosters/large/tapBooster.svg';
+import LargeBooster2Img from '../../assets/optimizedImages/Home/Boosters/large/energyRefill.svg';
+import LargeBooster3Img from '../../assets/optimizedImages/Home/Boosters/large/multiTap.svg';
+import LargeBooster4Img from '../../assets/optimizedImages/Home/Boosters/large/energyLimit.svg';
 
 import PopupHorizontalLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 import LeftPopupEllipse from '../../assets/optimizedImages/popup/leftEllipse.webp';
 import RightPopupEllipse from '../../assets/optimizedImages/popup/rightEllipse.webp';
-import CrossImg from '../../assets/optimizedImages/closeButton.webp';
+import CrossImg from '../../assets/optimizedImages/closeButton.svg';
 
 
 
@@ -581,7 +581,7 @@ const Home = () => {
 							<img
 								src={CirclesBackgroundImg}
 								alt="Background"
-								className="scale-150 object-cover fixed top-[30vh]"
+								className="scale-95 object-cover fixed top-[21vh]"
 							/>
 						</div>
 
@@ -934,10 +934,12 @@ const Home = () => {
 										}}
 									>
 										<div
-											className="relative bg-[#06060E] w-[100vw] h-[48vh] rounded-t-3xl p-6 text-white">
+											className="relative bg-[#06060E] w-[100vw] h-[54vh] rounded-t-3xl p-6 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-											<div className="flex flex-col gap-1">
+
+											{/* Main */}
+											<div className="w-full h-[45vh] flex flex-col">
 												{/* Left top ellipse */}
 												<div className="-left-10 -top-20 w-52 h-52 absolute">
 													<img src={LeftPopupEllipse} alt="popup-ellipse" />
@@ -946,41 +948,68 @@ const Home = () => {
 												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
 													<img src={RightPopupEllipse} alt="popup-ellipse" />
 												</div>
-												<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
-												<div className="relative h-[15vh] flex justify-center flex-col items-center gap-2">
-													<img src={LargeBooster1Img} alt="tap_booster" className="absolute -top-10" width={150} />
-													<h1 className="text-2xl popup-heading text-center absolute bottom-3">
-														Tap Booster
-													</h1>
+												{/* Cross Button */}
+												<div className="absolute top-4 right-5">
+													<button onClick={() => {
+														setPopupClosing(true);
+														setTimeout(() => {
+															setUnlimitedTapsPopup(false);
+															setPopupClosing(false);
+														}, 500);
+													}}>
+														<img src={CrossImg} alt="" width={25} />
+													</button>
 												</div>
-												<div className="text-center text-gray-200 text-xs flex flex-col gap-4">
-													<p>Tap as much as you can within 30 secs, energy will not be deducted.</p>
-													<p className="text-customOrange text-xl border border-gray-700 rounded-lg w-[50vw] mx-auto">X2 Unlimited Taps</p>
-												</div>
-												<div className="py-3">
-													<img src={PopupHorizontalLine} alt="popUp_horizontal_line" />
-												</div>
-												<div className="flex justify-center items-center gap-1">
-													<img src={BigCoin} alt="big_coin" width={25} />
-													<p className="text-customOrange text-2xl">FREE</p>
-												</div>
-												{/* action buttons */}
-												<div className='flex gap-4 justify-center mt-2'>
-													<div className="absolute top-4 right-5">
-														<button onClick={() => {
-															setPopupClosing(true);
-															setTimeout(() => {
-																setUnlimitedTapsPopup(false);
-																setPopupClosing(false);
-															}, 500);
-														}}>
-															<img src={CrossImg} alt="" width={25} />
-														</button>
+												{/* Top White Bar */}
+												<h1 className="border-2 rounded-full border-gray-200 w-[20vw] mx-auto absolute top-3 left-[40%]"></h1>
+
+												{/* Logo, Title & Desc */}
+												<div className="relative z-50 h-[25vh] flex justify-center flex-col items-center py-4">
+													<img
+														style={{
+															filter: "drop-shadow(0px 0px 25px #BF95E9)",
+														}}
+														src={LargeBooster1Img}
+														alt="tap_booster"
+														className="absolute top-3"
+													/>
+													<div className="absolute bottom-3 flex flex-col gap-1">
+														<h1 className="text-2xl popup-heading text-center">
+															Tap Booster
+														</h1>
+														<p className="text-[14px] font-light text-center">
+															Tap as much as you can within 30 secs, energy will not be deducted.
+														</p>
 													</div>
+												</div>
+
+												{/* Reward, Line, Cost */}
+												<div className="relative z-50 w-full h-[15vh] flex flex-col items-center gap-2 py-2">
+
+													{/* Reward*/}
+													<div className="w-full h-[6vh] flex justify-center items-center">
+														<p className="text-customOrange text-[22px] border-2 border-borderGray rounded-lg px-2 text-center">
+															x2 Unlimited Taps
+														</p>
+													</div>
+
+													{/* Line */}
+													<div className="w-full h-[3vh] flex justify-center items-center">
+														<img src={PopupHorizontalLine} alt="popUp_horizontal_line" />
+													</div>
+
+													{/* Cost Section */}
+													<div className="w-full h-[6vh] flex justify-center items-center -mt-2 gap-1">
+														<img src={BigCoin} alt="big_coin" width={25} />
+														<p className="text-customOrange text-[30px]">Free</p>
+													</div>
+												</div>
+
+												{/* Buttons */}
+												<div className="w-full h-[5vh]">
 													<button
 														className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableUnlimitedTaps === 0 && `grayscale`}`}
 														onClick={() => {
-															// Upgrade Unlimited Taps
 															handleUnlimitedTaps();
 														}}
 														disabled={avaliableUnlimitedTaps === 0 || buttonLoading}
