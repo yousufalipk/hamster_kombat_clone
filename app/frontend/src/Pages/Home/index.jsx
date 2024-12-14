@@ -98,7 +98,7 @@ const Home = () => {
 		userId,
 		userDataInitilized,
 		firstName,
-		//level,
+		level,
 		levelName,
 		levelPercentage,
 		setBalance,
@@ -131,8 +131,6 @@ const Home = () => {
 		levelsData,
 		comboCards
 	} = useUser();
-
-	const level = 13;
 
 	const [clicks, setClicks] = useState([]);
 	const tapRef = useRef(null);
