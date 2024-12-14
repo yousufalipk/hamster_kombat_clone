@@ -290,7 +290,7 @@ const Rankings = () => {
 															</div>
 															<div className="w-[25%] flex justify-start items-center overflow-hidden">
 																{user.profilePic === "not set" ? (
-																	<div className="w-15 h-15 rounded-full bg-black text-white text-md">
+																	<div className="w-14 h-14 flex justify-center items-center rounded-full bg-black text-white text-md">
 																		<p>{user.firstName.slice(0, 1)}</p>
 																	</div>
 																) : (

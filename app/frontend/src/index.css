@@ -6,7 +6,7 @@
   box-sizing: border-box;
   margin: 0px;
   padding: 0px;
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
 }
 
 .grad {
@@ -203,4 +203,8 @@ html {
 
 .fade-out {
   opacity: 0;
+}
+
+.popup-heading {
+  font-weight: 500;
 }

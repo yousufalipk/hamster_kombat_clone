@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from '../../context/index';
 import { toast } from 'react-toastify';
 
-import DailyGamePlayImg from '../../assets/optimizedImages/Home/dailyGamePlay.webp';
-import DailyRewardImg from '../../assets/optimizedImages/Home/dailyReward.webp';
-import DailyComboImg from '../../assets/optimizedImages/Home/dailyCombo.webp';
+import DailyGamePlayImg from '../../assets/optimizedImages/Home/dailyGamePlay.svg';
+import DailyRewardImg from '../../assets/optimizedImages/Home/dailyReward.svg';
+import DailyComboImg from '../../assets/optimizedImages/Home/dailyCombo.svg';
 
 import Panda1 from '../../assets/optimizedImages/Home/Pandas/1.webp';
 import Panda2 from '../../assets/optimizedImages/Home/Pandas/2.webp';
@@ -98,7 +98,7 @@ const Home = () => {
 		userId,
 		userDataInitilized,
 		firstName,
-		level,
+		//level,
 		levelName,
 		levelPercentage,
 		setBalance,
@@ -131,6 +131,8 @@ const Home = () => {
 		levelsData,
 		comboCards
 	} = useUser();
+
+	const level = 13;
 
 	const [clicks, setClicks] = useState([]);
 	const tapRef = useRef(null);
@@ -947,7 +949,7 @@ const Home = () => {
 												<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
 												<div className="relative h-[15vh] flex justify-center flex-col items-center gap-2">
 													<img src={LargeBooster1Img} alt="tap_booster" className="absolute -top-10" width={150} />
-													<h1 className="text-2xl text-center absolute bottom-3">
+													<h1 className="text-2xl popup-heading text-center absolute bottom-3">
 														Tap Booster
 													</h1>
 												</div>

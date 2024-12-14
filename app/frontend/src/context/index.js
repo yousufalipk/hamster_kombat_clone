@@ -93,7 +93,7 @@ export const UserProvider = (props) => {
 
     const [inviteFriends, setInviteFriends] = useState([]);
 
-    const [avaliableCpm, setAvaliableCpm] = useState(0);
+    const [avaliableCpm, setAvaliableCpm] = useState(100);
 
     const levelsData = [
         { id: 1, name: 'Adventurous', rangeFrom: 0, rangeTo: 5000 },
