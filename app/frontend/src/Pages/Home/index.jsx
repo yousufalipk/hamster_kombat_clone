@@ -29,8 +29,17 @@ import Booster4Img from '../../assets/optimizedImages/Home/Boosters/b4.webp';
 
 import BigCoin from '../../assets/optimizedImages/BigCoin.webp';
 import SmallCoin from '../../assets/optimizedImages/SmallCoin.webp';
-
 import CirclesBackgroundImg from '../../assets/optimizedImages/Home/bg.webp';
+
+import LargeBooster1Img from '../../assets/optimizedImages/Home/Boosters/large/tapBooster.webp';
+import LargeBooster2Img from '../../assets/optimizedImages/Home/Boosters/large/energyRefill.webp';
+import LargeBooster3Img from '../../assets/optimizedImages/Home/Boosters/large/multiTap.webp';
+import LargeBooster4Img from '../../assets/optimizedImages/Home/Boosters/large/energyLimit.webp';
+
+import PopupHorizontalLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
+import LeftPopupEllipse from '../../assets/optimizedImages/popup/leftEllipse.webp';
+import RightPopupEllipse from '../../assets/optimizedImages/popup/rightEllipse.webp';
+import CrossImg from '../../assets/optimizedImages/closeButton.webp';
 
 
 
@@ -38,25 +47,18 @@ import PandaCircleIcon from "../../assets/PandaCircleIcon.svg";
 import midAnimationCircle from '../../assets/animation/1.png';
 import finalAnimationCircle from '../../assets/animation/2.png';
 
-import JetPack from "../../assets/jetPackIcon.png";
-import BatteryBooster1 from "../../assets/batteryBooster1Icon.png";
-import TouchIcon from "../../assets/touchIcon.png";
-import FlashIcon from "../../assets/lighteningIcon.png";
 import InfoIcon from "../../assets/InfoIcon.svg";
+import CpmInfoBg from '../../assets/cpmPopupBg.svg';
+import FlashIcon from "../../assets/lighteningIcon.png";
 import AngleIcon from "../../assets/AngleIcon.svg";
 import DomeProfilePic from "../../assets/profile.png";
 import padaIcon from "../../assets/pages/pandaicon.svg"
-import CpmInfoBg from '../../assets/cpmPopupBg.svg';
 
 import tick from "../../assets/dailyreward/tick.svg";
-import close from "../../assets/dailyreward/close.svg"
 import day7coin from "../../assets/dailyreward/day7coin.svg";
 
 import leftbox from '../../assets/dailyreward/gift1.svg';
 import rightbox from '../../assets/dailyreward/gift2.svg';
-
-import leftreward from '../../assets/dailyreward/leftReward.svg';
-import rightreward from '../../assets/dailyreward/rightReward.svg';
 
 import CommingSoon from '../../assets/root/comingSoon.svg';
 
@@ -518,7 +520,6 @@ const Home = () => {
 		if (res.success) {
 			toast.success("Energy Limit Upgraded!");
 			setEnergyPopup(false);
-			initializeUser();
 		} else {
 			toast.error(res.mess);
 			setEnergyPopup(false);
@@ -532,7 +533,6 @@ const Home = () => {
 		if (res.success) {
 			toast.success("Multitap Level Upgraded!");
 			setMultitapsPopup(false);
-			initializeUser();
 		} else {
 			toast.error(res.mess);
 			setMultitapsPopup(false);
@@ -933,19 +933,35 @@ const Home = () => {
 										}}
 									>
 										<div
-											className="relative bg-[#06060E] w-[100vw] h-[40vh] rounded-t-3xl p-6 text-white">
+											className="relative bg-[#06060E] w-[100vw] h-[48vh] rounded-t-3xl p-6 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-											<div className="flex flex-col gap-3">
-												<div className="flex justify-center flex-col items-center gap-2">
-													<img src={JetPack} alt="battery" width={35} />
-													<h1 className="text-lg font-bold text-center">
+											<div className="flex flex-col gap-1">
+												{/* Left top ellipse */}
+												<div className="-left-10 -top-20 w-52 h-52 absolute">
+													<img src={LeftPopupEllipse} alt="popup-ellipse" />
+												</div>
+												{/* Right bottom ellipse */}
+												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
+													<img src={RightPopupEllipse} alt="popup-ellipse" />
+												</div>
+												<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
+												<div className="relative h-[15vh] flex justify-center flex-col items-center gap-2">
+													<img src={LargeBooster1Img} alt="tap_booster" className="absolute -top-10" width={150} />
+													<h1 className="text-2xl text-center absolute bottom-3">
 														Tap Booster
 													</h1>
 												</div>
-												<div className="text-center text-xs flex flex-col gap-4">
+												<div className="text-center text-gray-200 text-xs flex flex-col gap-4">
 													<p>Tap as much as you can within 30 secs, energy will not be deducted.</p>
-													<p>X2 Unlimited Taps</p>
+													<p className="text-customOrange text-xl border border-gray-700 rounded-lg w-[50vw] mx-auto">X2 Unlimited Taps</p>
+												</div>
+												<div className="py-3">
+													<img src={PopupHorizontalLine} alt="popUp_horizontal_line" />
+												</div>
+												<div className="flex justify-center items-center gap-1">
+													<img src={BigCoin} alt="big_coin" width={25} />
+													<p className="text-customOrange text-2xl">FREE</p>
 												</div>
 												{/* action buttons */}
 												<div className='flex gap-4 justify-center mt-2'>
@@ -957,11 +973,11 @@ const Home = () => {
 																setPopupClosing(false);
 															}, 500);
 														}}>
-															<img src={close} alt="" width={25} />
+															<img src={CrossImg} alt="" width={25} />
 														</button>
 													</div>
 													<button
-														className={`w-1/2 h-10 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm ${avaliableUnlimitedTaps === 0 && `grayscale`}`}
+														className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableUnlimitedTaps === 0 && `grayscale`}`}
 														onClick={() => {
 															// Upgrade Unlimited Taps
 															handleUnlimitedTaps();
@@ -969,8 +985,10 @@ const Home = () => {
 														disabled={avaliableUnlimitedTaps === 0 || buttonLoading}
 													>
 														{buttonLoading ? (
-															<span className="font-bold">
-																{dots}
+															<span className="flex justify-center items-center text-5xl font-bold w-full">
+																<p className="absolute -mt-6">
+																	{dots}
+																</p>
 															</span>
 														) : (
 															avaliableUnlimitedTaps === 0 ? (
@@ -1003,18 +1021,32 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[35vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[40vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
-												<div className="flex justify-center flex-col items-center gap-2">
-													<img src={BatteryBooster1} alt="battery" width={35} />
-													<h1 className="text-lg font-bold text-center">
+												{/* Left top ellipse */}
+												<div className="-left-10 -top-20 w-52 h-52 absolute">
+													<img src={LeftPopupEllipse} alt="popup-ellipse" />
+												</div>
+												{/* Right bottom ellipse */}
+												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
+													<img src={RightPopupEllipse} alt="popup-ellipse" />
+												</div>
+												<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
+												<div className="relative h-[15vh] flex justify-center flex-col items-center gap-2">
+													<img src={LargeBooster2Img} alt="tap_booster" className="absolute -top-20" width={210} />
+													<h1 className="text-2xl text-center absolute bottom-3">
 														Energy Refill
 													</h1>
 												</div>
-												<div className="text-center text-xs flex flex-col gap-4">
+												<div className="text-center text-gray-200 text-xs flex flex-col gap-4">
 													<p>Refill energy to maximum</p>
+												</div>
+												<img src={PopupHorizontalLine} alt="popup_horizontal_line" />
+												<div className="flex justify-center items-center gap-1">
+													<img src={BigCoin} alt="big_coin" width={25} />
+													<p className="text-customOrange text-2xl">Free</p>
 												</div>
 												{/* action buttons */}
 												<div className='flex gap-4 justify-center mt-2'>
@@ -1026,11 +1058,11 @@ const Home = () => {
 																setPopupClosing(false);
 															}, 500);
 														}}>
-															<img src={close} alt="" width={25} />
+															<img src={CrossImg} alt="" width={25} />
 														</button>
 													</div>
 													<button
-														className={`w-1/2 h-10 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm ${avaliableEnergyRefill === 0 && `grayscale`}`}
+														className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableUnlimitedTaps === 0 && `grayscale`}`}
 														onClick={() => {
 															// Upgrade energy limit
 															handleEnergyRefill()
@@ -1038,8 +1070,10 @@ const Home = () => {
 														disabled={avaliableEnergyRefill === 0 || buttonLoading}
 													>
 														{buttonLoading ? (
-															<span className="font-bold">
-																{dots}
+															<span className="flex justify-center items-center text-5xl font-bold w-full">
+																<p className="absolute -mt-6">
+																	{dots}
+																</p>
 															</span>
 														) : (
 															avaliableEnergyRefill === 0 ? (
@@ -1076,32 +1110,45 @@ const Home = () => {
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
-												<div className="flex justify-start">
-													<span className="bg-gradient-to-t from-[#2226FF] to-[#00B2FF] text-xs py-1 rounded-lg px-2">
-														{energyLevel >= 9 ? ('Max') : (`Level ${energyLevel + 1}`)}
-													</span>
+												{/* Left top ellipse */}
+												<div className="-left-10 -top-20 w-52 h-52 absolute">
+													<img src={LeftPopupEllipse} alt="popup-ellipse" />
 												</div>
-												<div className="flex justify-center flex-col items-center gap-2">
-													<img src={BatteryBooster1} alt="battery" width={25} />
-													<h1 className="text-lg font-bold text-center">
+												{/* Right bottom ellipse */}
+												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
+													<img src={RightPopupEllipse} alt="popup-ellipse" />
+												</div>
+												<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
+												<div className="relative h-[15vh] flex justify-center flex-col items-center gap-2">
+													<img src={LargeBooster4Img} alt="energy_limit" className="absolute -top-20" width={230} />
+													<h1 className="text-2xl text-center absolute bottom-3">
 														Energy Limit
 													</h1>
 												</div>
-												<div className="text-center text-xs flex flex-col gap-4">
-													<p>Increase the limit of the energy storage</p>
-													<p>+500 energy limit</p>
-													{energyLevel < 9 && (
-														<span className="flex gap-4 justify-center items-center">
-															Cost of level up
-															<div className="flex justify-center items-center">
-																<img src={BigCoin} alt="coin" width={20} />
+												<div className="text-center text-xs flex flex-col gap-3">
+													<p className="text-gray-200">Increase the limit of the energy storage</p>
+													<p className="text-customOrange text-lg border border-gray-700 rounded-lg w-[50vw] mx-auto">+500 energy limit</p>
+													<img src={PopupHorizontalLine} alt="popup_horizontal_line" />
+													{energyLevel < 9 ? (
+														<span className="flex justify-center items-center text-customOrange text-2xl">
+															<div className="flex justify-center items-center gap-1">
+																<img src={BigCoin} alt="coin" width={25} />
 																<p className="w-10">{energyUpgradeCost[energyLevel + 1]}</p>
 															</div>
 														</span>
+													) : (
+														<>
+															<span className="flex justify-center items-center text-customOrange text-2xl">
+																<div className="flex justify-center items-center gap-1">
+																	<img src={BigCoin} alt="coin" width={25} />
+																	<p className="w-10">0</p>
+																</div>
+															</span>
+														</>
 													)}
 												</div>
 												{/* action buttons */}
-												<div className='flex gap-4 justify-center mt-4'>
+												<div className='flex gap-4 justify-center mt-1'>
 													<div className="absolute top-4 right-5">
 														<button onClick={() => {
 															setPopupClosing(true);
@@ -1110,11 +1157,11 @@ const Home = () => {
 																setPopupClosing(false);
 															}, 500);
 														}}>
-															<img src={close} alt="" width={25} />
+															<img src={CrossImg} alt="" width={25} />
 														</button>
 													</div>
 													<button
-														className={`w-1/2 h-10 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm ${energyLevel >= 9 && 'grayscale'}`}
+														className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableUnlimitedTaps === 0 && `grayscale`}`}
 														onClick={() => {
 															// Upgrade energy limit
 															handleEnergyUpgrade()
@@ -1122,8 +1169,10 @@ const Home = () => {
 														disabled={energyLevel >= 9 || buttonLoading}
 													>
 														{buttonLoading ? (
-															<span className="h-6 font-bold">
-																{dots}
+															<span className="flex justify-center items-center text-5xl font-bold w-full">
+																<p className="absolute -mt-6">
+																	{dots}
+																</p>
 															</span>
 														) : (
 															<>
@@ -1155,30 +1204,37 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[50vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[54vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-											<div className="flex flex-col justify-center items-center gap-3">
-												<div className="h-1 w-16 bg-[#D9D9D9] rounded-md opacity-70"></div>
-												<div className="mt-2 flex justify-center flex-col items-center gap-2">
-													<img
-														src={TouchIcon}
-														alt="battery"
-														width={50}
-													/>
-													<h1 className="text-xl font-bold text-center">
-														Multitap
+											<div className="flex flex-col gap-3">
+												{/* Left top ellipse */}
+												<div className="-left-10 -top-20 w-52 h-52 absolute">
+													<img src={LeftPopupEllipse} alt="popup-ellipse" />
+												</div>
+												{/* Right bottom ellipse */}
+												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
+													<img src={RightPopupEllipse} alt="popup-ellipse" />
+												</div>
+												<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
+												<div className="relative h-[15vh] flex justify-center flex-col items-center gap-2">
+													<img src={LargeBooster3Img} alt="energy_limit" className="absolute -top-10" width={150} />
+													<h1 className="text-2xl text-center absolute -bottom-3">
+														Multi Tap
 													</h1>
 												</div>
-												<div className="text-center text-md text-gray-300 flex flex-col items-center justify-center gap-2">
+												<div className="mt-2 text-center text-sm px-4 text-gray-300 flex flex-col items-center justify-center gap-2">
 													<p>Increase amount of Tap you can earn per one tap</p>
-													<h1 className="text-xl text-[#FF8F00]">level {multitapLevel >= 9 ? ('Max') : (`${multitapLevel + 2}`)}</h1>
+													<h1 className="text-xl text-customOrange">level {multitapLevel >= 9 ? ('Max') : (`${multitapLevel + 2}`)}</h1>
 													<p>+1 per tap for each level</p>
+													<div className="py-2">
+														<img src={PopupHorizontalLine} alt="popup_horizontal_line" />
+													</div>
 													<div>
-														{multitapLevel < 9 && (
+														{multitapLevel < 9 ? (
 															<>
-																<div className="py-1">
-																	<p className="flex justify-center items-center gap-1 text-xl text-[#FF8F00]">
+																<div>
+																	<p className="flex justify-center items-center gap-1 text-2xl text-customOrange">
 																		<img
 																			src={SmallCoin}
 																			alt="Little coin"
@@ -1187,6 +1243,21 @@ const Home = () => {
 																			className="mt-1"
 																		/>
 																		{multitapUpgradeCost[multitapLevel + 1]}
+																	</p>
+																</div>
+															</>
+														) : (
+															<>
+																<div>
+																	<p className="flex justify-center items-center gap-1 text-2xl text-customOrange">
+																		<img
+																			src={SmallCoin}
+																			alt="Little coin"
+																			width={25}
+																			height={25}
+																			className="mt-1"
+																		/>
+																		0
 																	</p>
 																</div>
 															</>
@@ -1203,11 +1274,11 @@ const Home = () => {
 																setPopupClosing(false);
 															}, 500);
 														}}>
-															<img src={close} alt="" width={25} />
+															<img src={CrossImg} alt="" width={25} />
 														</button>
 													</div>
 													<button
-														className={`w-1/2 h-10 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm ${multitapLevel >= 9 && 'grayscale'}`}
+														className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableUnlimitedTaps === 0 && `grayscale`}`}
 														onClick={() => {
 															// Upgrade multitap limit
 															handleMultitapUpgrade()
@@ -1215,8 +1286,10 @@ const Home = () => {
 														disabled={multitapLevel >= 9 || buttonLoading}
 													>
 														{buttonLoading ? (
-															<span className="h-6 font-bold">
-																{dots}
+															<span className="flex justify-center items-center text-5xl font-bold w-full">
+																<p className="absolute -mt-6">
+																	{dots}
+																</p>
 															</span>
 														) : (
 															<>
@@ -1252,6 +1325,14 @@ const Home = () => {
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="flex flex-col gap-3">
+												{/* Left top ellipse */}
+												<div className="-left-10 -top-20 w-52 h-52 absolute">
+													<img src={LeftPopupEllipse} alt="popup-ellipse" />
+												</div>
+												{/* Right bottom ellipse */}
+												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
+													<img src={RightPopupEllipse} alt="popup-ellipse" />
+												</div>
 												<div className="flex justify-center flex-col items-center gap-2">
 													<img src={InfoIcon} alt="battery" width={25} />
 													<h1 className="text-lg font-bold text-center">
@@ -1264,15 +1345,17 @@ const Home = () => {
 												{/* action buttons */}
 												<div className='flex gap-4 justify-center mt-4'>
 													<button
-														className={`w-full h-12 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-md`}
+														className={`w-full h-12 z-50 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-md`}
 														onClick={() => {
 															navigate('/hammer')
 														}}
 														disabled={buttonLoading}
 													>
 														{buttonLoading ? (
-															<span className="h-6 font-bold">
-																{dots}
+															<span className="flex justify-center items-center text-5xl font-bold w-full">
+																<p className="absolute -mt-6">
+																	{dots}
+																</p>
 															</span>
 														) : (
 															<>
@@ -1288,7 +1371,7 @@ const Home = () => {
 																setPopupClosing(false);
 															}, 500);
 														}}>
-															<img src={close} alt="" width={25} />
+															<img src={CrossImg} alt="" width={25} />
 														</button>
 													</div>
 												</div>
@@ -1315,14 +1398,22 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[45vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[43vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div className="relative flex flex-col gap-3 items-center">
+												{/* Left top ellipse */}
+												<div className="-left-10 -top-20 w-52 h-52 absolute">
+													<img src={LeftPopupEllipse} alt="popup-ellipse" />
+												</div>
+												{/* Right bottom ellipse */}
+												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
+													<img src={RightPopupEllipse} alt="popup-ellipse" />
+												</div>
 												<img src={CpmInfoBg} alt="bg" className="absolute z-0 top-10" />
 												<div className="h-1 w-16 bg-[#D9D9D9] rounded-md"></div>
 												<div className="flex justify-center flex-col items-center gap-5">
-													<img src={padaIcon} alt="pandaIcon" width={50} className="border-2" />
+													<img src={padaIcon} alt="pandaIcon" width={50} />
 													<div>
 														<p className="flex justify-center items-center gap-1 border border-[#242434] p-3 px-5 rounded-md text-[#FF8F00] text-lg font-medium">
 															<img
@@ -1341,15 +1432,17 @@ const Home = () => {
 												{/* action buttons */}
 												<div className='w-full flex gap-4 justify-center my-4'>
 													<button
-														className={`w-full h-12 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-md`}
+														className={`w-full h-12 z-50 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-md`}
 														onClick={() => {
-															handleClaimCpm()
+															handleClaimCpm();
 														}}
 														disabled={buttonLoading}
 													>
 														{buttonLoading ? (
-															<span className="h-6 font-bold">
-																{dots}
+															<span className="flex justify-center items-center text-5xl font-bold w-full">
+																<p className="absolute -mt-6">
+																	{dots}
+																</p>
 															</span>
 														) : (
 															<>
@@ -1366,7 +1459,7 @@ const Home = () => {
 															setPopupClosing(false);
 														}, 500);
 													}}>
-														<img src={close} alt="" width={25} />
+														<img src={CrossImg} alt="" width={25} />
 													</button>
 												</div>
 											</div>
@@ -1395,10 +1488,10 @@ const Home = () => {
 										<div
 											className="relative bg-[#06060E] w-[100vw] h-[80vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute left-0 -top-10">
-												<img src={rightreward} alt="" />
+												<img src={RightPopupEllipse} alt="" />
 											</div>
 											<div className="absolute bottom-0 right-0">
-												<img src={leftreward} alt="" />
+												<img src={LeftPopupEllipse} alt="" />
 											</div>
 											<div className="absolute left-0 bottom-20">
 												<img src={leftbox} alt="" />
@@ -1517,7 +1610,7 @@ const Home = () => {
 														setPopupClosing(false);
 													}, 500);
 												}}>
-													<img src={close} alt="" width={25} />
+													<img src={CrossImg} alt="" width={25} />
 												</button>
 											</div>
 										</div>

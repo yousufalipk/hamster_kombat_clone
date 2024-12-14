@@ -93,7 +93,7 @@ export const UserProvider = (props) => {
 
     const [inviteFriends, setInviteFriends] = useState([]);
 
-    const [avaliableCpm, setAvaliableCpm] = useState(0);
+    const [avaliableCpm, setAvaliableCpm] = useState(100);
 
     const levelsData = [
         { id: 1, name: 'Adventurous', rangeFrom: 0, rangeTo: 5000 },
@@ -376,6 +376,7 @@ export const UserProvider = (props) => {
                 userId: userId
             });
             if (res.data.status === 'success') {
+                await initilizeStates(res.data.user);
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -396,6 +397,7 @@ export const UserProvider = (props) => {
                 userId: userId
             });
             if (res.data.status === 'success') {
+                await initilizeStates(res.data.user);
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });

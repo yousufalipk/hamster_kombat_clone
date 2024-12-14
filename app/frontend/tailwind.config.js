@@ -30,6 +30,13 @@ module.exports = {
 					},
 				},
 			},
+			colors: {
+				primary: '#ffffff',
+				secondary: '#000000',
+				customOrange: '#FF9500',
+				darkBlue: '#2226FF',
+				lightBlue: '#00B2FF'
+			},
 		},
 	},
 	plugins: [],
