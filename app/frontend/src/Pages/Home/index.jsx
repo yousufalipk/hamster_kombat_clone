@@ -157,11 +157,6 @@ const Home = () => {
 
 	const [animatedBalance, setAnimatedBalance] = useState(balance);
 
-	useEffect(() => {
-		console.log('Level Percentage: ', levelPercentage);
-	}, [levelPercentage])
-
-
 	// Before app closed set last reffill time & energy 
 	useEffect(() => {
 		const handleBeforeUnload = () => {
@@ -183,19 +178,11 @@ const Home = () => {
 		if (lastUpdated) {
 			const elapsedTime = Math.floor((Date.now() - lastUpdated) / 1000);
 			const newEnergy = Math.min(storedEnergy + elapsedTime, energyLimit);
-			console.log('NEW Energy 111', newEnergy);
 			setEnergy(newEnergy);
 		} else {
-			console.log('stored Energy 222', storedEnergy);
 			setEnergy(storedEnergy);
 		}
 	};
-
-	useEffect(() => {
-		console.log('Energy', energy);
-	}, [energy])
-
-
 
 	useEffect(() => {
 		getEnergy();
@@ -833,14 +820,15 @@ const Home = () => {
 									</div>
 
 									{/* Side Booster Options */}
-									<div className='absolute right-5 flex flex-col justify-center items-center gap-6'>
+									<div className='z-50 absolute right-5 flex flex-col justify-center items-center gap-6'>
 										{/* b-1 a */}
 										<div className='relative flex justify-center items-center'>
 											<div className='text-[#FFF] text-[10px] font-medium absolute -top-4 -right-1'>
 												{avaliableUnlimitedTaps}/{5}
 											</div>
 											<div
-												onClick={() => {
+												onClick={(e) => {
+													e.stopPropagation()
 													setUnlimitedTapsPopup(true);
 												}}
 												className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
@@ -857,7 +845,8 @@ const Home = () => {
 												{avaliableEnergyRefill}/{3}
 											</div>
 											<div
-												onClick={() => {
+												onClick={(e) => {
+													e.stopPropagation()
 													setEnergyRefillPopup(true);
 												}}
 												className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
@@ -871,7 +860,8 @@ const Home = () => {
 										{/* b-1 c */}
 										<div className='relative flex justify-center items-center'>
 											<div
-												onClick={() => {
+												onClick={(e) => {
+													e.stopPropagation()
 													setMultitapsPopup(true);
 												}}
 												className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
@@ -885,7 +875,8 @@ const Home = () => {
 										{/* b-1 d */}
 										<div className='relative flex justify-center items-center'>
 											<div
-												onClick={() => {
+												onClick={(e) => {
+													e.stopPropagation()
 													setEnergyPopup(true);
 												}}
 												className='relative z-10 rounded-full min-w-[46px] min-h-[46px] bg-gradient-to-r from-[#1344C2] to-[#1A5FF2] flex justify-center items-center border-[#1A5FF2] border-[1px]'
@@ -916,7 +907,7 @@ const Home = () => {
 							</div>
 						</div>
 
-						{/* 1 Unlimited Taps Popup */}
+						{/* 1 Final Unlimited Taps Popup */}
 						{unlimitedTapsPopup && (
 							<>
 								<div
@@ -924,112 +915,126 @@ const Home = () => {
 										animation: `${popupClosing ? "fadeOut" : "fadeIn"
 											} 0.5s ease-in-out forwards`,
 									}}
-									className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end">
+									onClick={() => {
+										setPopupClosing(true);
+										setTimeout(() => {
+											setUnlimitedTapsPopup(false);
+											setPopupClosing(false);
+										}, 500);
+									}}
+									className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 flex items-end"
+								>
 									<div
-										style={{
-											animation: `${popupClosing ? "closePopup" : "openPopup"
-												} 0.5s ease-in-out forwards`,
-										}}
-									>
+										onClick={(e) => e.stopPropagation()}
+										className="w-full h-[54vh] popup-content">
 										<div
-											className="relative bg-[#06060E] w-[100vw] h-[54vh] rounded-t-3xl p-6 text-white">
-											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
-											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
+											style={{
+												animation: `${popupClosing ? "closePopup" : "openPopup"
+													} 0.5s ease-in-out forwards`,
+											}}
+										>
+											<div
+												className="relative bg-[#06060E] w-[100vw] h-[54vh] rounded-t-3xl p-6 text-white">
+												<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+												<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 
-											{/* Main */}
-											<div className="w-full h-[45vh] flex flex-col">
-												{/* Left top ellipse */}
-												<div className="-left-10 -top-20 w-52 h-52 absolute">
-													<img src={LeftPopupEllipse} alt="popup-ellipse" />
-												</div>
-												{/* Right bottom ellipse */}
-												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
-													<img src={RightPopupEllipse} alt="popup-ellipse" />
-												</div>
-												{/* Cross Button */}
-												<button
-													onClick={() => {
-														setPopupClosing(true);
-														setTimeout(() => {
-															setUnlimitedTapsPopup(false);
-															setPopupClosing(false);
-														}, 500);
-													}}
-													style={{
-														zIndex: 60
-													}}
-													className="w-12 h-12 absolute right-0 top-0 flex justify-center items-center"
-												>
-													<img src={CrossImg} alt="crossImg" />
-												</button>
-												{/* Top White Bar */}
-												<h1 className="border-2 rounded-full border-gray-200 w-[20vw] mx-auto absolute top-3 left-[40%]"></h1>
-
-												{/* Logo, Title & Desc */}
-												<div className="relative z-50 h-[25vh] flex justify-center flex-col items-center py-4">
-													<img
-														style={{
-															filter: "drop-shadow(0px 0px 25px #BF95E9)",
-														}}
-														src={LargeBooster1Img}
-														alt="tap_booster"
-														className="absolute top-3"
-													/>
-													<div className="absolute bottom-3 flex flex-col gap-1">
-														<h1 className="text-2xl popup-heading text-center">
-															Tap Booster
-														</h1>
-														<p className="text-[14px] font-light text-center">
-															Tap as much as you can within 30 secs, energy will not be deducted.
-														</p>
+												{/* Main */}
+												<div className="w-full h-[45vh] flex flex-col">
+													{/* Left top ellipse */}
+													<div className="-left-10 -top-20 w-52 h-52 absolute">
+														<img src={LeftPopupEllipse} alt="popup-ellipse" />
 													</div>
-												</div>
-
-												{/* Reward, Line, Cost */}
-												<div className="relative z-50 w-full h-[15vh] flex flex-col items-center gap-2 py-2">
-
-													{/* Reward*/}
-													<div className="w-full h-[6vh] flex justify-center items-center">
-														<p className="text-customOrange text-[22px] border-2 border-borderGray rounded-lg px-2 text-center">
-															x2 Unlimited Taps
-														</p>
+													{/* Right bottom ellipse */}
+													<div className="-right-10 -bottom-5 w-52 h-52 absolute">
+														<img src={RightPopupEllipse} alt="popup-ellipse" />
 													</div>
+													<div className="popup-main">
+														{/* Cross Button */}
+														<button
+															onClick={() => {
+																setPopupClosing(true);
+																setTimeout(() => {
+																	setUnlimitedTapsPopup(false);
+																	setPopupClosing(false);
+																}, 500);
+															}}
+															style={{
+																zIndex: 60
+															}}
+															className="w-12 h-12 absolute right-0 top-0 flex justify-center items-center"
+														>
+															<img src={CrossImg} alt="crossImg" />
+														</button>
+														{/* Top White Bar */}
+														<h1 className="border-2 rounded-full border-gray-200 w-[20vw] mx-auto absolute top-3 left-[40%]"></h1>
 
-													{/* Line */}
-													<div className="w-full h-[3vh] flex justify-center items-center">
-														<img src={PopupHorizontalLine} alt="popUp_horizontal_line" />
-													</div>
-
-													{/* Cost Section */}
-													<div className="w-full h-[6vh] flex justify-center items-center -mt-2 gap-1">
-														<img src={BigCoin} alt="big_coin" width={25} />
-														<p className="text-customOrange text-[30px]">Free</p>
-													</div>
-												</div>
-
-												{/* Buttons */}
-												<div className="w-full h-[5vh]">
-													<button
-														className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableUnlimitedTaps === 0 && `grayscale`}`}
-														onClick={() => {
-															handleUnlimitedTaps();
-														}}
-														disabled={avaliableUnlimitedTaps === 0 || buttonLoading}
-													>
-														{buttonLoading ? (
-															<span className="flex justify-center items-center text-5xl font-bold w-full">
-																<p className="absolute -mt-6">
-																	{dots}
+														{/* Logo, Title & Desc */}
+														<div className="relative z-50 h-[25vh] flex justify-center flex-col items-center py-4">
+															<img
+																style={{
+																	filter: "drop-shadow(0px 0px 25px #BF95E9)",
+																}}
+																src={LargeBooster1Img}
+																alt="tap_booster"
+																className="absolute top-3"
+															/>
+															<div className="absolute bottom-3 flex flex-col gap-1">
+																<h1 className="text-2xl popup-heading text-center">
+																	Tap Booster
+																</h1>
+																<p className="text-[14px] font-light text-center">
+																	Tap as much as you can within 30 secs, energy will not be deducted.
 																</p>
-															</span>
-														) : (
-															avaliableUnlimitedTaps === 0 ? (
-																'Come back tomorrow'
-															) : (
-																'Boost'
-															)
-														)}
-													</button>
+															</div>
+														</div>
+
+														{/* Reward, Line, Cost */}
+														<div className="relative z-50 w-full h-[15vh] flex flex-col items-center gap-2 py-2">
+
+															{/* Reward*/}
+															<div className="w-full h-[6vh] flex justify-center items-center">
+																<p className="text-customOrange text-[22px] border-2 border-borderGray rounded-lg px-2 text-center">
+																	x2 Unlimited Taps
+																</p>
+															</div>
+
+															{/* Line */}
+															<div className="w-full h-[3vh] flex justify-center items-center">
+																<img src={PopupHorizontalLine} alt="popUp_horizontal_line" />
+															</div>
+
+															{/* Cost Section */}
+															<div className="w-full h-[6vh] flex justify-center items-center -mt-2 gap-1">
+																<img src={BigCoin} alt="big_coin" width={25} />
+																<p className="text-customOrange text-[30px]">Free</p>
+															</div>
+														</div>
+
+														{/* Buttons */}
+														<div className="w-full h-[5vh]">
+															<button
+																className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableUnlimitedTaps === 0 && `grayscale`}`}
+																onClick={() => {
+																	handleUnlimitedTaps();
+																}}
+																disabled={avaliableUnlimitedTaps === 0 || buttonLoading}
+															>
+																{buttonLoading ? (
+																	<span className="flex justify-center items-center font-semibold text-5xl w-full">
+																		<p className="absolute -mt-6">
+																			{dots}
+																		</p>
+																	</span>
+																) : (
+																	avaliableUnlimitedTaps === 0 ? (
+																		'Come back tomorrow'
+																	) : (
+																		'Boost'
+																	)
+																)}
+															</button>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -1038,10 +1043,17 @@ const Home = () => {
 							</>
 						)}
 
-						{/* 2 Energy Upgrade Popup */}
+						{/* 2 Final Energy Upgrade Popup */}
 						{energyRefillPopup && (
 							<>
 								<div
+									onClick={() => {
+										setPopupClosing(true);
+										setTimeout(() => {
+											setEnergyRefillPopup(false);
+											setPopupClosing(false);
+										}, 500);
+									}}
 									style={{
 										animation: `${popupClosing ? "fadeOut" : "fadeIn"
 											} 0.5s ease-in-out forwards`,
@@ -1054,97 +1066,105 @@ const Home = () => {
 										}}
 									>
 										<div
-											className="relative bg-[#06060E] w-[100vw] h-[48vh] rounded-t-3xl p-6 text-white">
-											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
-											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
+											onClick={(e) => e.stopPropagation()}
+											className="popup-overlay"
+										>
+											<div
+												className="relative bg-[#06060E] w-[100vw] h-[48vh] rounded-t-3xl p-6 text-white">
+												<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+												<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 
-											{/* Main */}
-											<div className="w-full h-[40vh] flex flex-col">
-												{/* Left top ellipse */}
-												<div className="-left-10 -top-20 w-52 h-52 absolute">
-													<img src={LeftPopupEllipse} alt="popup-ellipse" />
-												</div>
-												{/* Right bottom ellipse */}
-												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
-													<img src={RightPopupEllipse} alt="popup-ellipse" />
-												</div>
-												{/* Cross Button */}
-												<button
-													onClick={() => {
-														setPopupClosing(true);
-														setTimeout(() => {
-															setEnergyRefillPopup(false);
-															setPopupClosing(false);
-														}, 500);
-													}}
-													style={{
-														zIndex: 60
-													}}
-													className="w-12 h-12 absolute right-0 top-0 flex justify-center items-center"
-												>
-													<img src={CrossImg} alt="crossImg" />
-												</button>
-												{/* Top White Bar */}
-												<h1 className="border-2 rounded-full border-gray-200 w-[20vw] mx-auto absolute top-3 left-[40%]"></h1>
-
-												{/* Logo, Title & Desc */}
-												<div className="relative z-50 h-[30vh] flex justify-center flex-col items-center py-4">
-													<img
-														style={{
-															filter: "drop-shadow(0px 0px 25px #ADFFB7)",
-														}}
-														src={LargeBooster2Img}
-														alt="tap_booster"
-														className="absolute top-3"
-													/>
-													<div className="absolute bottom-3 flex flex-col gap-1">
-														<h1 className="text-2xl popup-heading text-center">
-															Energy Refill
-														</h1>
-														<p className="text-[14px] font-light text-center">
-															Refill Energy to maximum
-														</p>
+												{/* Main */}
+												<div className="w-full h-[40vh] flex flex-col">
+													{/* Left top ellipse */}
+													<div className="-left-10 -top-20 w-52 h-52 absolute">
+														<img src={LeftPopupEllipse} alt="popup-ellipse" />
 													</div>
-												</div>
-
-												{/* Reward, Line, Cost */}
-												<div className="relative z-50 w-full h-[15vh] flex flex-col items-center gap-2">
-
-													{/* Line */}
-													<div className="w-full h-[3vh] flex justify-center items-center">
-														<img src={PopupHorizontalLine} alt="popUp_horizontal_line" />
+													{/* Right bottom ellipse */}
+													<div className="-right-10 -bottom-5 w-52 h-52 absolute">
+														<img src={RightPopupEllipse} alt="popup-ellipse" />
 													</div>
 
-													{/* Cost Section */}
-													<div className="w-full h-[6vh] flex justify-center items-center -mt-2 gap-1">
-														<img src={BigCoin} alt="big_coin" width={25} />
-														<p className="text-customOrange text-[30px]">Free</p>
-													</div>
-												</div>
+													<div className="popup-main w-full h-full">
+														{/* Cross Button */}
+														<button
+															onClick={() => {
+																setPopupClosing(true);
+																setTimeout(() => {
+																	setEnergyRefillPopup(false);
+																	setPopupClosing(false);
+																}, 500);
+															}}
+															style={{
+																zIndex: 60
+															}}
+															className="w-12 h-12 absolute right-0 top-0 flex justify-center items-center"
+														>
+															<img src={CrossImg} alt="crossImg" />
+														</button>
+														{/* Top White Bar */}
+														<h1 className="border-2 rounded-full border-gray-200 w-[20vw] mx-auto absolute top-3 left-[40%]"></h1>
 
-												{/* Buttons */}
-												<div className="w-full h-[5vh]">
-													<button
-														onClick={() => {
-															handleEnergyRefill();
-														}}
-														disabled={avaliableEnergyRefill === 0 || buttonLoading}
-														className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableEnergyRefill === 0 && `grayscale`}`}
-													>
-														{buttonLoading ? (
-															<span className="flex justify-center items-center text-5xl font-bold w-full">
-																<p className="absolute -mt-6 w-full">
-																	{dots}
+														{/* Logo, Title & Desc */}
+														<div className="relative z-50 h-[30vh] flex justify-center flex-col items-center py-4">
+															<img
+																style={{
+																	filter: "drop-shadow(0px 0px 25px #ADFFB7)",
+																}}
+																src={LargeBooster2Img}
+																alt="tap_booster"
+																className="absolute top-3"
+															/>
+															<div className="absolute bottom-1 flex flex-col gap-4">
+																<h1 className="text-2xl popup-heading text-center">
+																	Energy Refill
+																</h1>
+																<p className="text-[14px] font-light text-center">
+																	Refill Energy to maximum
 																</p>
-															</span>
-														) : (
-															avaliableEnergyRefill === 0 ? (
-																'Come back tomorrow'
-															) : (
-																'Refill'
-															)
-														)}
-													</button>
+															</div>
+														</div>
+
+														{/* Reward, Line, Cost */}
+														<div className="relative z-50 w-full h-[15vh] flex flex-col items-center gap-2">
+
+															{/* Line */}
+															<div className="w-full h-[3vh] flex justify-center items-end">
+																<img src={PopupHorizontalLine} alt="popUp_horizontal_line" />
+															</div>
+
+															{/* Cost Section */}
+															<div className="w-full h-[6vh] flex justify-center items-center gap-1">
+																<img src={BigCoin} alt="big_coin" width={25} />
+																<p className="text-customOrange text-[30px]">Free</p>
+															</div>
+														</div>
+
+														{/* Buttons */}
+														<div className="w-full h-[5vh]">
+															<button
+																onClick={() => {
+																	handleEnergyRefill();
+																}}
+																disabled={avaliableEnergyRefill === 0 || buttonLoading}
+																className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableEnergyRefill === 0 && `grayscale`}`}
+															>
+																{buttonLoading ? (
+																	<span className="flex justify-center items-center text-5xl font-bold w-full">
+																		<p className="absolute -mt-6 w-full">
+																			{dots}
+																		</p>
+																	</span>
+																) : (
+																	avaliableEnergyRefill === 0 ? (
+																		'Come back tomorrow'
+																	) : (
+																		'Refill'
+																	)
+																)}
+															</button>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -1153,10 +1173,17 @@ const Home = () => {
 							</>
 						)}
 
-						{/* 3 Energy Upgrade Popup */}
+						{/* 3 Final Energy Upgrade Popup */}
 						{energyPopup && (
 							<>
 								<div
+									onClick={() => {
+										setPopupClosing(true);
+										setTimeout(() => {
+											setEnergyPopup(false);
+											setPopupClosing(false);
+										}, 500);
+									}}
 									style={{
 										animation: `${popupClosing ? "fadeOut" : "fadeIn"
 											} 0.5s ease-in-out forwards`,
@@ -1168,80 +1195,104 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[45vh] rounded-t-3xl p-4 text-white">
-											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
-											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-											<div className="flex flex-col gap-3">
-												{/* Left top ellipse */}
-												<div className="-left-10 -top-20 w-52 h-52 absolute">
-													<img src={LeftPopupEllipse} alt="popup-ellipse" />
-												</div>
-												{/* Right bottom ellipse */}
-												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
-													<img src={RightPopupEllipse} alt="popup-ellipse" />
-												</div>
-												<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
-												<div className="relative h-[15vh] flex justify-center flex-col items-center gap-2">
-													<img src={LargeBooster4Img} alt="energy_limit" className="absolute -top-20" width={230} />
-													<h1 className="text-2xl text-center absolute bottom-3">
-														Energy Limit
-													</h1>
-												</div>
-												<div className="text-center text-xs flex flex-col gap-3">
-													<p className="text-gray-200">Increase the limit of the energy storage</p>
-													<p className="text-customOrange text-lg border border-gray-700 rounded-lg w-[50vw] mx-auto">+500 energy limit</p>
-													<img src={PopupHorizontalLine} alt="popup_horizontal_line" />
-													{energyLevel < 9 ? (
-														<span className="flex justify-center items-center text-customOrange text-2xl">
-															<div className="flex justify-center items-center gap-1">
-																<img src={BigCoin} alt="coin" width={25} />
-																<p className="w-10">{energyUpgradeCost[energyLevel + 1]}</p>
-															</div>
-														</span>
-													) : (
-														<>
-															<span className="flex justify-center items-center text-customOrange text-2xl">
-																<div className="flex justify-center items-center gap-1">
-																	<img src={BigCoin} alt="coin" width={25} />
-																	<p className="w-10">0</p>
-																</div>
-															</span>
-														</>
-													)}
-												</div>
-												{/* action buttons */}
-												<div className='flex gap-4 justify-center mt-1'>
-													<div className="absolute top-4 right-5">
-														<button onClick={() => {
-															setPopupClosing(true);
-															setTimeout(() => {
-																setEnergyPopup(false);
-																setPopupClosing(false);
-															}, 500);
-														}}>
-															<img src={CrossImg} alt="" width={25} />
-														</button>
+										<div
+											onClick={(e) => e.stopPropagation()}
+										>
+											<div
+												className="relative bg-[#06060E] w-[100vw] h-[54vh] rounded-t-3xl p-6 text-white">
+												<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+												<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
+
+												{/* Main */}
+												<div className="popup-content w-full h-[45vh]">
+													{/* Left top ellipse */}
+													<div className="-left-10 -top-20 w-52 h-52 absolute">
+														<img src={LeftPopupEllipse} alt="popup-ellipse" />
 													</div>
-													<button
-														className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableUnlimitedTaps === 0 && `grayscale`}`}
-														onClick={() => {
-															// Upgrade energy limit
-															handleEnergyUpgrade()
-														}}
-														disabled={energyLevel >= 9 || buttonLoading}
-													>
-														{buttonLoading ? (
-															<span className="flex justify-center items-center text-5xl font-bold w-full">
-																<p className="absolute -mt-6">
-																	{dots}
+													{/* Right bottom ellipse */}
+													<div className="-right-10 -bottom-5 w-52 h-52 absolute">
+														<img src={RightPopupEllipse} alt="popup-ellipse" />
+													</div>
+													<div className="popup-main w-full h-full">
+														{/* Cross Button */}
+														<button
+															onClick={() => {
+																setPopupClosing(true);
+																setTimeout(() => {
+																	setEnergyPopup(false);
+																	setPopupClosing(false);
+																}, 500);
+															}}
+															className="w-12 h-12 absolute right-0 top-0 flex justify-center items-center"
+														>
+															<img src={CrossImg} alt="crossImg" />
+														</button>
+														{/* Top White Bar */}
+														<h1 className="border-2 rounded-full border-gray-200 w-[20vw] mx-auto absolute top-3 left-[40%]"></h1>
+
+														{/* Logo, Title & Desc */}
+														<div className="relative z-50 h-[20vh] flex justify-center flex-col items-center py-4">
+															<img
+																style={{
+																	filter: "drop-shadow(0px 0px 25px #9E9E9E)",
+																}}
+																src={LargeBooster4Img}
+																alt="tap_booster"
+																className="absolute top-3"
+															/>
+															<div className="absolute bottom-0 flex flex-col gap-1">
+																<h1 className="text-2xl popup-heading text-center">
+																	Energy Limit
+																</h1>
+																<p className="text-[14px] font-light text-center mt-1">
+																	Increase the limit of the energy storage
 																</p>
-															</span>
-														) : (
-															<>
-																{energyLevel >= 9 ? ("Max") : ('Get it')}
-															</>
-														)}
-													</button>
+															</div>
+														</div>
+
+														{/* Reward, Line, Cost */}
+														<div className="relative z-50 w-full h-[15vh] flex flex-col items-center gap-2 mt-2">
+															{/* Level */}
+															<h1 className="text-xl text-customOrange font-semibold">Level {energyLevel >= 9 ? ('Max') : (`${energyLevel + 1}`)}</h1>
+															<p>+500 energy limit</p>
+
+															{/* Line */}
+															<div className="w-full h-[3vh] flex justify-center items-center mt-2">
+																<img src={PopupHorizontalLine} alt="popUp_horizontal_line" />
+															</div>
+
+															{/* Cost Section */}
+															<div className="w-full h-[6vh] flex justify-center items-center gap-1">
+																<img src={BigCoin} alt="big_coin" width={25} />
+																<p className="text-customOrange text-[30px]">Free</p>
+															</div>
+														</div>
+
+														{/* Buttons */}
+														<div className="w-full h-[5vh] mt-7">
+															<button
+																onClick={() => {
+																	handleEnergyRefill();
+																}}
+																disabled={avaliableEnergyRefill === 0 || buttonLoading}
+																className={`w-full h-12 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableEnergyRefill === 0 && `grayscale`}`}
+															>
+																{buttonLoading ? (
+																	<span className="flex justify-center items-center text-5xl font-bold w-full">
+																		<p className="absolute -mt-6 w-full">
+																			{dots}
+																		</p>
+																	</span>
+																) : (
+																	avaliableEnergyRefill === 0 ? (
+																		'Come back tomorrow'
+																	) : (
+																		'Refill'
+																	)
+																)}
+															</button>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -1254,6 +1305,13 @@ const Home = () => {
 						{multitapsPopup && (
 							<>
 								<div
+									onClick={() => {
+										setPopupClosing(true);
+										setTimeout(() => {
+											setMultitapsPopup(false);
+											setPopupClosing(false);
+										}, 500);
+									}}
 									className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end"
 									style={{
 										animation: `${popupClosing ? "fadeOut" : "fadeIn"
@@ -1269,7 +1327,10 @@ const Home = () => {
 										<div className="relative bg-[#06060E] w-[100vw] h-[54vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-											<div className="flex flex-col gap-3">
+
+											<div
+												onClick={(e) => e.stopPropagation()}
+												className="popup-content">
 												{/* Left top ellipse */}
 												<div className="-left-10 -top-20 w-52 h-52 absolute">
 													<img src={LeftPopupEllipse} alt="popup-ellipse" />
@@ -1278,87 +1339,96 @@ const Home = () => {
 												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
 													<img src={RightPopupEllipse} alt="popup-ellipse" />
 												</div>
-												<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
-												<div className="relative h-[15vh] flex justify-center flex-col items-center gap-2">
-													<img src={LargeBooster3Img} alt="energy_limit" className="absolute -top-10" width={150} />
-													<h1 className="text-2xl text-center absolute -bottom-3">
-														Multi Tap
-													</h1>
-												</div>
-												<div className="mt-2 text-center text-sm px-4 text-gray-300 flex flex-col items-center justify-center gap-2">
-													<p>Increase amount of Tap you can earn per one tap</p>
-													<h1 className="text-xl text-customOrange">level {multitapLevel >= 9 ? ('Max') : (`${multitapLevel + 2}`)}</h1>
-													<p>+1 per tap for each level</p>
-													<div className="py-2">
-														<img src={PopupHorizontalLine} alt="popup_horizontal_line" />
+												<div className="popup-main">
+													<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
+													<div className="relative h-[15vh] flex justify-center flex-col items-center gap-2">
+														<img
+															style={{
+																filter: "drop-shadow(0px 0px 25px #9E9E9E)",
+															}}
+															src={LargeBooster3Img}
+															alt="tap_booster"
+															className="absolute top-2"
+														/>
+														<h1 className="text-2xl text-center absolute -bottom-6">
+															Multi Tap
+														</h1>
 													</div>
-													<div>
-														{multitapLevel < 9 ? (
-															<>
-																<div>
-																	<p className="flex justify-center items-center gap-1 text-2xl text-customOrange">
-																		<img
-																			src={SmallCoin}
-																			alt="Little coin"
-																			width={25}
-																			height={25}
-																			className="mt-1"
-																		/>
-																		{multitapUpgradeCost[multitapLevel + 1]}
-																	</p>
-																</div>
-															</>
-														) : (
-															<>
-																<div>
-																	<p className="flex justify-center items-center gap-1 text-2xl text-customOrange">
-																		<img
-																			src={SmallCoin}
-																			alt="Little coin"
-																			width={25}
-																			height={25}
-																			className="mt-1"
-																		/>
-																		0
-																	</p>
-																</div>
-															</>
-														)}
+													<div className="mt-7 text-center text-sm px-4 text-gray-300 flex flex-col items-center justify-center gap-2">
+														<p>Increase amount of Tap you can earn per one tap</p>
+														<h1 className="text-xl text-customOrange">Level {multitapLevel >= 9 ? ('Max') : (`${multitapLevel + 2}`)}</h1>
+														<p>+1 per tap for each level</p>
+														<div className="py-2">
+															<img src={PopupHorizontalLine} alt="popup_horizontal_line" />
+														</div>
+														<div>
+															{multitapLevel < 9 ? (
+																<>
+																	<div>
+																		<p className="flex justify-center items-center gap-1 text-[30px] text-customOrange">
+																			<img
+																				src={SmallCoin}
+																				alt="Little coin"
+																				width={30}
+																				height={30}
+																				className="mt-1"
+																			/>
+																			{multitapUpgradeCost[multitapLevel + 1]}
+																		</p>
+																	</div>
+																</>
+															) : (
+																<>
+																	<div>
+																		<p className="flex justify-center items-center gap-1 text-2xl text-customOrange">
+																			<img
+																				src={SmallCoin}
+																				alt="Little coin"
+																				width={25}
+																				height={25}
+																				className="mt-1"
+																			/>
+																			0
+																		</p>
+																	</div>
+																</>
+															)}
+														</div>
 													</div>
-												</div>
-												{/* action buttons */}
-												<div className='flex gap-4 justify-center mt-2 w-full'>
-													<div className="absolute top-4 right-5">
-														<button onClick={() => {
-															setPopupClosing(true);
-															setTimeout(() => {
-																setMultitapsPopup(false);
-																setPopupClosing(false);
-															}, 500);
-														}}>
-															<img src={CrossImg} alt="" width={25} />
+													{/* action buttons */}
+													<div className='flex gap-4 justify-center mt-4 w-full'>
+														<div className="absolute top-4 right-5">
+															<button onClick={() => {
+																setPopupClosing(true);
+																setTimeout(() => {
+																	setMultitapsPopup(false);
+																	setPopupClosing(false);
+																}, 500);
+															}}>
+																<img src={CrossImg} alt="" width={25} />
+															</button>
+														</div>
+														<button
+															className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableUnlimitedTaps === 0 && `grayscale`}`}
+															onClick={() => {
+																// Upgrade multitap limit
+																handleMultitapUpgrade()
+															}}
+															disabled={multitapLevel >= 9 || buttonLoading}
+														>
+															{buttonLoading ? (
+																<span className="flex justify-center items-center text-5xl font-bold w-full">
+																	<p className="absolute -mt-6">
+																		{dots}
+																	</p>
+																</span>
+															) : (
+																<>
+																	{multitapLevel >= 9 ? ("Max Level") : ('Get it')}
+																</>
+															)}
 														</button>
 													</div>
-													<button
-														className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableUnlimitedTaps === 0 && `grayscale`}`}
-														onClick={() => {
-															// Upgrade multitap limit
-															handleMultitapUpgrade()
-														}}
-														disabled={multitapLevel >= 9 || buttonLoading}
-													>
-														{buttonLoading ? (
-															<span className="flex justify-center items-center text-5xl font-bold w-full">
-																<p className="absolute -mt-6">
-																	{dots}
-																</p>
-															</span>
-														) : (
-															<>
-																{multitapLevel >= 9 ? ("Max Level") : ('Get it')}
-															</>
-														)}
-													</button>
 												</div>
 											</div>
 										</div>
@@ -1371,6 +1441,13 @@ const Home = () => {
 						{cpmInfo && (
 							<>
 								<div
+									onClick={() => {
+										setPopupClosing(true);
+										setTimeout(() => {
+											setCpmInfo(false);
+											setPopupClosing(false);
+										}, 500);
+									}}
 									className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end"
 									style={{
 										animation: `${popupClosing ? "fadeOut" : "fadeIn"
@@ -1383,10 +1460,12 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[35vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[32vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-											<div className="flex flex-col gap-3">
+											<div
+												onClick={(e) => e.stopPropagation()}
+												className="popup-content flex flex-col gap-3">
 												{/* Left top ellipse */}
 												<div className="-left-10 -top-20 w-52 h-52 absolute">
 													<img src={LeftPopupEllipse} alt="popup-ellipse" />
@@ -1395,46 +1474,48 @@ const Home = () => {
 												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
 													<img src={RightPopupEllipse} alt="popup-ellipse" />
 												</div>
-												<div className="flex justify-center flex-col items-center gap-2">
-													<img src={InfoIcon} alt="battery" width={25} />
-													<h1 className="text-lg font-bold text-center">
-														Coins Per Minute
-													</h1>
-												</div>
-												<div className="text-center text-xs flex flex-col gap-4 px-7 justify-center">
-													Coins Per Minute (CPM) defines how many coins users earn automatically every minute, based on their CPM value. Higher CPM means faster passive earnings.
-												</div>
-												{/* action buttons */}
-												<div className='flex gap-4 justify-center mt-4'>
-													<button
-														className={`w-full h-12 z-50 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-md`}
-														onClick={() => {
-															navigate('/hammer')
-														}}
-														disabled={buttonLoading}
-													>
-														{buttonLoading ? (
-															<span className="flex justify-center items-center text-5xl font-bold w-full">
-																<p className="absolute -mt-6">
-																	{dots}
-																</p>
-															</span>
-														) : (
-															<>
-																MINE CPM!
-															</>
-														)}
-													</button>
-													<div className="absolute top-4 right-5">
-														<button onClick={() => {
-															setPopupClosing(true);
-															setTimeout(() => {
-																setCpmInfo(false);
-																setPopupClosing(false);
-															}, 500);
-														}}>
-															<img src={CrossImg} alt="" width={25} />
+												<div className="popup-main">
+													<div className="flex justify-center flex-col items-center gap-2">
+														<img src={InfoIcon} alt="battery" width={25} />
+														<h1 className="text-lg font-bold text-center">
+															Coins Per Minute
+														</h1>
+													</div>
+													<div className="text-center text-xs flex flex-col gap-4 px-7 justify-center">
+														Coins Per Minute (CPM) defines how many coins users earn automatically every minute, based on their CPM value. Higher CPM means faster passive earnings.
+													</div>
+													{/* action buttons */}
+													<div className='flex gap-4 justify-center mt-4'>
+														<button
+															className={`w-full h-12 z-50 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-md`}
+															onClick={() => {
+																navigate('/hammer')
+															}}
+															disabled={buttonLoading}
+														>
+															{buttonLoading ? (
+																<span className="flex justify-center items-center text-5xl font-bold w-full">
+																	<p className="absolute -mt-6">
+																		{dots}
+																	</p>
+																</span>
+															) : (
+																<>
+																	MINE CPM!
+																</>
+															)}
 														</button>
+														<div className="absolute top-4 right-5">
+															<button onClick={() => {
+																setPopupClosing(true);
+																setTimeout(() => {
+																	setCpmInfo(false);
+																	setPopupClosing(false);
+																}, 500);
+															}}>
+																<img src={CrossImg} alt="" width={25} />
+															</button>
+														</div>
 													</div>
 												</div>
 											</div>

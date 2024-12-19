@@ -208,3 +208,19 @@ html {
 .popup-heading {
   font-weight: 500;
 }
+
+.popup-overlay {
+  display: flex;
+  z-index: 1000;
+}
+
+.popup-content {
+  display: flex;
+  z-index: 2000;
+}
+
+.popup-main {
+  display: flex;
+  flex-direction: column;
+  z-index: 3000;
+}
