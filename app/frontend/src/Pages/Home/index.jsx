@@ -1740,7 +1740,7 @@ const Home = () => {
 											{/* action buttons */}
 											<div className="flex gap-4 justify-center mt-8">
 												<button
-													className="h-10 px-3 p-2 bg-[#242434] rounded-xl text-sm z-50 border-b-4 border-b-[#191922] shadow-zinc-900"
+													className="h-10 min-w-10 px-3 p-2 bg-[#242434] rounded-xl text-sm z-50 border-b-4 border-b-[#191922] shadow-zinc-900"
 													onClick={handleDailyRewardClaim}
 													disabled={claimed.includes(currentDay) || buttonLoading}
 												>
