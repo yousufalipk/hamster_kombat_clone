@@ -133,6 +133,7 @@ const Home = () => {
 	} = useUser();
 
 	const [clicks, setClicks] = useState([]);
+	const [isTapped, setIsTapped] = useState(false);
 	const tapRef = useRef(null);
 	const isUpdating = useRef(false);
 
@@ -156,6 +157,12 @@ const Home = () => {
 	const fadeRef = useRef(null);
 
 	const [animatedBalance, setAnimatedBalance] = useState(balance);
+
+	// Bot scaling on tap effect 
+	const handleTap = () => {
+		setIsTapped(true);
+		setTimeout(() => setIsTapped(false), 150);
+	};
 
 	// Before app closed set last reffill time & energy 
 	useEffect(() => {
@@ -766,29 +773,34 @@ const Home = () => {
 
 								{/* Bot & Options */}
 								<div
-									onTouchStart={(e) => handleBotTap(e)}
-									ref={tapRef}
-									className="flex justify-center items-center w-screen h-[41vh] mt-auto overflow-hidden">
+									className="flex justify-center items-center w-full h-[42vh]">
+
+									{/* +1 animation per tap */}
+									{clicks.map((click) => (
+										<div
+											className='absolute text-2xl font-bold opacity-0 text-[#0072ff] z-50'
+											style={{
+												top: `${click.y - (-230)}px`,
+												left: `${click.x - (-30)}px`,
+												animation: `textAnimation 1s ease-out`,
+											}}
+											onAnimationEnd={() => handleAnimationEnd(click.id)}
+											key={click.id}
+										>
+											+{addCoins}
+										</div>
+									))}
+
 									{/* Bot Image Tap to earn */}
 									<div
-										className="relative flex justify-end items-center rounded-full h-[40vh] w-[60vw]"
+										onPointerDown={(e) => {
+											handleTap();
+											handleBotTap(e);
+										}}
+										ref={tapRef}
+										className="relative flex justify-end items-center h-[40vh] w-[70vw] overflow-hidden"
 									>
-
 										<div className="relative select-none rounded-full w-full h-full z-10 overflow-visible">
-											{clicks.map((click) => (
-												<div
-													className='absolute text-2xl font-bold opacity-0 text-[#0072ff] z-50'
-													style={{
-														top: `${click.y - 0}px`,
-														left: `${click.x - 100}px`,
-														animation: `textAnimation 1s ease-out`,
-													}}
-													onAnimationEnd={() => handleAnimationEnd(click.id)}
-													key={click.id}
-												>
-													+{addCoins}
-												</div>
-											))}
 											<div
 												className="absoulte h-full w-full rounded-full overflow-hidden flex items-center justify-center">
 												{/* Animation Cards */}
@@ -813,7 +825,13 @@ const Home = () => {
 													<img src={PandaCircleIcon} alt="Panda-circle" />
 												</div>
 												<div className="absolute z-40">
-													<img src={pandaMapping[level]} alt="Panda-Icon" className="bot-tap rounded-full" width={100} />
+													<img
+														src={pandaMapping[level]}
+														alt="Panda-Icon"
+														className={`rounded-full transition-transform ease-out duration-150 ${isTapped ? "scale-110" : ""
+															}`}
+														width={100}
+													/>
 												</div>
 											</div>
 										</div>
