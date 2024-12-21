@@ -1529,6 +1529,13 @@ const Home = () => {
 						{avaliableCpm && (
 							<>
 								<div
+									onClick={() => {
+										setPopupClosing(true);
+										setTimeout(() => {
+											setAvaliableCpm(false);
+											setPopupClosing(false);
+										}, 500);
+									}}
 									className="popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end"
 									style={{
 										animation: `${popupClosing ? "fadeOut" : "fadeIn"
@@ -1544,7 +1551,10 @@ const Home = () => {
 										<div className="relative bg-[#06060E] w-[100vw] h-[43vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-											<div className="relative flex flex-col gap-3 items-center">
+											<div
+												onClick={(e) => e.stopPropagation()}
+												className="popup-content relative "
+											>
 												{/* Left top ellipse */}
 												<div className="-left-10 -top-20 w-52 h-52 absolute">
 													<img src={LeftPopupEllipse} alt="popup-ellipse" />
@@ -1553,57 +1563,59 @@ const Home = () => {
 												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
 													<img src={RightPopupEllipse} alt="popup-ellipse" />
 												</div>
-												<img src={CpmInfoBg} alt="bg" className="absolute z-0 top-10" />
-												<div className="h-1 w-16 bg-[#D9D9D9] rounded-md"></div>
-												<div className="flex justify-center flex-col items-center gap-5">
-													<img src={padaIcon} alt="pandaIcon" width={50} />
-													<div>
-														<p className="flex justify-center items-center gap-1 border border-[#242434] p-3 px-5 rounded-md text-[#FF8F00] text-lg font-medium">
-															<img
-																src={SmallCoin}
-																alt="Little coin"
-																width={25}
-																height={25}
-															/>
-															+{avaliableCpm} PTap
-														</p>
+												<div className="popup-main flex flex-col gap-3 items-center">
+													<img src={CpmInfoBg} alt="bg" className="absolute z-0 top-10" />
+													<div className="h-1 w-16 bg-[#D9D9D9] rounded-md"></div>
+													<div className="flex justify-center flex-col items-center gap-5">
+														<img src={padaIcon} alt="pandaIcon" width={50} />
+														<div>
+															<p className="flex justify-center items-center gap-1 border border-[#242434] py-2 px-6 rounded-md text-[#FF8F00] text-[26px] font-semibold">
+																<img
+																	src={SmallCoin}
+																	alt="Little coin"
+																	width={25}
+																	height={25}
+																/>
+																+{avaliableCpm} PTap
+															</p>
+														</div>
 													</div>
-												</div>
-												<div className="text-center text-gray-200 text-lg text- flex flex-col gap-4 px-7 justify-center">
-													Coins per minute reward is ready!
-												</div>
-												{/* action buttons */}
-												<div className='w-full flex gap-4 justify-center my-4'>
-													<button
-														className={`w-full h-12 z-50 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-md`}
-														onClick={() => {
-															handleClaimCpm();
-														}}
-														disabled={buttonLoading}
-													>
-														{buttonLoading ? (
-															<span className="flex justify-center items-center text-5xl font-bold w-full">
-																<p className="absolute -mt-6">
-																	{dots}
-																</p>
-															</span>
-														) : (
-															<>
-																Thank you, PandaTap!
-															</>
-														)}
-													</button>
-												</div>
-												<div className="absolute top-0 right-0">
-													<button onClick={() => {
-														setPopupClosing(true);
-														setTimeout(() => {
-															setAvaliableCpm(false);
-															setPopupClosing(false);
-														}, 500);
-													}}>
-														<img src={CrossImg} alt="" width={25} />
-													</button>
+													<div className="text-center text-gray-200 text-lg text- flex flex-col gap-4 px-7 justify-center">
+														Coins per minute reward is ready!
+													</div>
+													{/* action buttons */}
+													<div className='w-full flex gap-4 justify-center my-4'>
+														<button
+															className={`w-full h-12 z-50 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-md`}
+															onClick={() => {
+																handleClaimCpm();
+															}}
+															disabled={buttonLoading}
+														>
+															{buttonLoading ? (
+																<span className="flex justify-center items-center text-5xl font-bold w-full">
+																	<p className="absolute -mt-6">
+																		{dots}
+																	</p>
+																</span>
+															) : (
+																<>
+																	Claim
+																</>
+															)}
+														</button>
+													</div>
+													<div className="absolute top-0 right-0">
+														<button onClick={() => {
+															setPopupClosing(true);
+															setTimeout(() => {
+																setAvaliableCpm(false);
+																setPopupClosing(false);
+															}, 500);
+														}}>
+															<img src={CrossImg} alt="" width={25} />
+														</button>
+													</div>
 												</div>
 											</div>
 										</div>
