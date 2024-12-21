@@ -222,18 +222,6 @@ export const UserProvider = (props) => {
         return timeString;
     };
 
-
-    /* 
-    levels
-    1 - Silver
-    2 - Gold
-    3 - Daimond
-    4 - Platimum 
-    5 - Legendary 
-    6 - Master
-    7 - Grand Master 
-    8 - Epic  */
-
     // Initilize User
     const initializeUser = async () => {
         let referrerId = null, isPremium = false, profileUrl = "not set";

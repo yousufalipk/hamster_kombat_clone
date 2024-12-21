@@ -15,6 +15,7 @@ const {
     check2min,
     check1day,
     check2days,
+    check1week
 } = require('../utils/index');
 const {
     resetBoosters,
@@ -514,10 +515,13 @@ exports.claimDailyRewards = async (req, res) => {
         } else {
             const lastDateClaimed = user.dailyReward.date;
             const lastDayClaimed = claimed[claimed.length - 1];
+
             if (lastDayClaimed === 6) {
                 const lastDateClaimed = user.dailyReward.date;
-                const is1day = check1day(lastDateClaimed);
-                if (!is1day) {
+                const isOneWeek = check1day(lastDateClaimed);
+                console.log('is one week', isOneWeek)
+                if (!isOneWeek) {
+                    console.log('----> Reseting one week passed!');
                     user.dailyReward.claimed = [];
                     user.dailyReward.date = null;
                     user.dailyReward.day = 0;
@@ -528,23 +532,26 @@ exports.claimDailyRewards = async (req, res) => {
                         message: '1 Week Passed, Resetting data, try again!'
                     })
                 } else {
+                    console.log('--> Claimed Reward for day 7!');
                     return res.status(200).json({
                         stauts: 'failed',
                         message: 'You have already claimed todays reward!'
                     })
                 }
             }
+
             // check 24 hours if the day is continuing
             const is24hrs = check1day(lastDateClaimed);
             if (is24hrs) {
+                console.log('--> within one day continuing!');
                 return res.status(200).json({
                     status: 'failed',
                     message: 'You have already claimed todays reward'
                 })
             } else {
                 const is48hrs = check2days(lastDateClaimed);
-                console.log(is48hrs);
                 if (!is48hrs) {
+                    console.log('--> Daily Streak break resetting!');
                     user.dailyReward.claimed = [];
                     user.dailyReward.date = null;
                     user.dailyReward.day = 0;
@@ -556,6 +563,7 @@ exports.claimDailyRewards = async (req, res) => {
                         user: user
                     })
                 } else {
+                    console.log('--> Claiming todays reward!');
                     const toClaimReward = user.dailyReward.reward;
                     const currentDate = new Date();
 
@@ -575,7 +583,7 @@ exports.claimDailyRewards = async (req, res) => {
             }
         }
     } catch (error) {
-        console.log("Error claiming daily reward");
+        console.log("Error claiming daily reward", error);
         return res.status(200).json({
             status: 'failed',
             message: 'Internal Server Error!'
