@@ -1712,78 +1712,90 @@ const Home = () => {
 															Earn Coins by logging in game daily! Don't miss a day, or your streak will reset!
 														</p>
 														<div className="overflow-scroll w-[90vw] h-[50vh] flex flex-wrap gap-4 justify-center items-center">
-															{days.map((day, index) => (
-																<div
-																	key={index}
-																	className={`border-2 relative w-[23vw] h-[14vh] border-[#AFABAB] rounded-lg pt-2 flex flex-col gap-2 ${index === 6 ? "w-[80vw]" : ""
-																		} ${currentDay >= day
-																			? "bg-[#2E60B2]"
-																			: "bg-[#767676]"
-																		} ${claimed.includes(day) ? "bg-[#767676]" : ""
-																		}`}
-																>
-																	<div>
+															{days.map((day, index) => {
+																console.log('Current Day', currentDay);
+																console.log('Day', day);
+																if (currentDay === day && !claimed.includes(day)) {
+																	return (
+																		<div className="w-16 h-16 bg-red-700">
+																			I am current Day!
+																		</div>
+																	)
+																} else {
+																	return (
 																		<div
-																			className={`${claimed.includes(day)
-																				? "bg-[#474750]"
-																				: "bg-[#1942EC]"
-																				} mr-6 flex w-[20vw] shadow-inherit shadow-xl items-center justify-center rounded-r-md text-white`}
+																			key={index}
+																			className={`border-2 relative w-[23vw] h-[14vh] border-[#AFABAB] rounded-lg pt-2 flex flex-col gap-2 ${index === 6 ? "w-[80vw]" : ""
+																				} ${currentDay >= day
+																					? "bg-[#2E60B2]"
+																					: "bg-[#767676]"
+																				} ${claimed.includes(day) ? "bg-[#767676]" : ""
+																				}`}
 																		>
-																			<h1 className="font-semibold text-sm">Day {day + 1}</h1>
-																		</div>
-																		<div className="flex flex-col items-center mt-2 gap-1">
-																			{claimed.includes(day) ? (
-																				<div className="bg-[#D9D9D9] rounded-full h-6 w-6 flex items-center justify-center">
-																					<img
-																						src={tick}
-																						width={25}
-																						alt="tick"
-																					/>
+																			<div>
+																				<div
+																					className={`${claimed.includes(day)
+																						? "bg-[#474750]"
+																						: "bg-[#1942EC]"
+																						} mr-6 flex w-[20vw] shadow-inherit shadow-xl items-center justify-center rounded-r-md text-white`}
+																				>
+																					<h1 className="font-semibold text-sm">Day {day + 1}</h1>
 																				</div>
-																			) : (
-																				<>
-																					{index === 6 ? (
-																						<img
-																							className="absolute top-6"
-																							src={day7coin}
-																							width={80}
-																							alt="Big Coin"
-																						/>
+																				<div className="flex flex-col items-center mt-2 gap-1">
+																					{claimed.includes(day) ? (
+																						<div className="bg-[#D9D9D9] rounded-full h-6 w-6 flex items-center justify-center">
+																							<img
+																								src={tick}
+																								width={25}
+																								alt="tick"
+																							/>
+																						</div>
 																					) : (
-																						<img
-																							src={BigCoin}
-																							width={30}
-																							alt="Big Coin"
-																						/>
+																						<>
+																							{index === 6 ? (
+																								<img
+																									className="absolute top-6"
+																									src={day7coin}
+																									width={80}
+																									alt="Big Coin"
+																								/>
+																							) : (
+																								<img
+																									src={BigCoin}
+																									width={30}
+																									alt="Big Coin"
+																								/>
+																							)}
+																						</>
 																					)}
-																				</>
-																			)}
 
-																			{index === 6 ? (
-																				<h2
-																					className={`text-md text-[#000000] absolute bottom-1 font-medium ${claimed.includes(day) &&
-																						"text-[#393838]"
-																						} ${currentDay === day &&
-																						"text-[#ffffff]"
-																						}`}
-																				>
-																					{reward[day]}
-																				</h2>
-																			) : (
-																				<h2
-																					className={`text-md text-[#000000] font-medium ${claimed.includes(day) &&
-																						"text-[#393838]"
-																						} ${currentDay === day &&
-																						"text-[#ffffff]"
-																						}`}
-																				>
-																					{reward[day]}
-																				</h2>
-																			)}
+																					{index === 6 ? (
+																						<h2
+																							className={`text-md text-[#000000] absolute bottom-1 font-medium ${claimed.includes(day) &&
+																								"text-[#393838]"
+																								} ${currentDay === day &&
+																								"text-[#ffffff]"
+																								}`}
+																						>
+																							{reward[day]}
+																						</h2>
+																					) : (
+																						<h2
+																							className={`text-md text-[#000000] font-medium ${claimed.includes(day) &&
+																								"text-[#393838]"
+																								} ${currentDay === day &&
+																								"text-[#ffffff]"
+																								}`}
+																						>
+																							{reward[day]}
+																						</h2>
+																					)}
+																				</div>
+																			</div>
 																		</div>
-																	</div>
-																</div>
-															))}
+																	)
+																}
+															})}
 														</div>
 													</div>
 													{/* action buttons */}

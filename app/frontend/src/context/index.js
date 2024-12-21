@@ -307,6 +307,7 @@ export const UserProvider = (props) => {
             setReferrals(user.referrals);
             setComboCards(user.comboCards);
             setClaimed(user.dailyReward.claimed);
+
             if (user.dailyReward.date) {
                 const is1Day = check1day(user.dailyReward.date);
                 if (is1Day) {
@@ -317,6 +318,7 @@ export const UserProvider = (props) => {
             } else {
                 setCurrentDay(user.dailyReward.day);
             }
+
             // 4 boosters
             if (user.unlimitedTaps.status = true) {
                 if (user.unlimitedTaps.lastClaimed) {
