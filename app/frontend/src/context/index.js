@@ -54,6 +54,10 @@ export const UserProvider = (props) => {
     const [claimed, setClaimed] = useState([]);
     const [currentDay, setCurrentDay] = useState(null);
 
+    useEffect(() => {
+        console.log('Current Day', currentDay);
+    }, [currentDay])
+
     // Leaderboard 
 
     const [topUsers, setTopUsers] = useState(null);
@@ -193,6 +197,29 @@ export const UserProvider = (props) => {
         }
     };
 
+    const checkSameDate = async (inputDate) => {
+        let timestamp;
+        const res = await axios.get(`${apiUrl}/user/get-server-timestamp`);
+        if (res.data.status === 'success') {
+            timestamp = res.data.serverTime.dateTime;
+        }
+
+        const currentDate = new Date(timestamp);
+        const input = new Date(inputDate);
+
+        console.log('Current Date', currentDate);
+        console.log('Input Date', input);
+
+        const normalizedCurrentDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
+        const normalizedInputDate = `${input.getFullYear()}-${input.getMonth() + 1}-${input.getDate()}`;
+
+        if (normalizedCurrentDate === normalizedInputDate) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     const calculateRemainingTime = async () => {
         let timestamp;
         const res = await axios.get(`${apiUrl}/user/get-server-timestamp`);
@@ -309,7 +336,9 @@ export const UserProvider = (props) => {
             setClaimed(user.dailyReward.claimed);
 
             if (user.dailyReward.date) {
-                const is1Day = check1day(user.dailyReward.date);
+                const is1Day = await checkSameDate(user.dailyReward.date);
+
+                console.log('is1Day', is1Day);
                 if (is1Day) {
                     setCurrentDay(user.dailyReward.day - 1);
                 } else {

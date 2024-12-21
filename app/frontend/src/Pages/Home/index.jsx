@@ -41,6 +41,8 @@ import LeftPopupEllipse from '../../assets/optimizedImages/popup/leftEllipse.web
 import RightPopupEllipse from '../../assets/optimizedImages/popup/rightEllipse.webp';
 import CrossImg from '../../assets/optimizedImages/closeButton.svg';
 
+import DaiyCurrentDayBg from '../../assets/dailyreward/dailyCurrentDay.jpg';
+
 
 
 import PandaCircleIcon from "../../assets/PandaCircleIcon.svg";
@@ -773,6 +775,11 @@ const Home = () => {
 
 								{/* Bot & Options */}
 								<div
+									onPointerDown={(e) => {
+										handleTap();
+										handleBotTap(e);
+									}}
+									ref={tapRef}
 									className="flex justify-center items-center w-full h-[42vh]">
 
 									{/* +1 animation per tap */}
@@ -791,36 +798,33 @@ const Home = () => {
 										</div>
 									))}
 
+									{/* Animation Cards */}
+									<div className="absolute z-0 w-[100vw] animate-rotatePulse">
+										<img
+											src={finalAnimationCircle}
+											alt="final"
+											ref={fadeRef}
+											className={`transition-opacity duration-1000 ${disableEnergy ? '' : 'fade-out'}`}
+										/>
+									</div>
+
+									<div className={`absolute z-30 ${disableEnergy ? 'scale-up' : 'scale-down fade-out'}`} ref={scaleRef}>
+										<img
+											src={midAnimationCircle}
+											alt="start_animation"
+											width={animationComplete ? 50 : 100}
+											className="transition-all duration-1000"
+										/>
+									</div>
+
 									{/* Bot Image Tap to earn */}
 									<div
-										onPointerDown={(e) => {
-											handleTap();
-											handleBotTap(e);
-										}}
-										ref={tapRef}
-										className="relative flex justify-end items-center h-[40vh] w-[70vw] overflow-hidden"
+										className="relative flex justify-end items-center h-[40vh] w-[60vw] overflow-hidden"
 									>
 										<div className="relative select-none rounded-full w-full h-full z-10 overflow-visible">
 											<div
-												className="absoulte h-full w-full rounded-full overflow-hidden flex items-center justify-center">
-												{/* Animation Cards */}
-												<div className="absolute z-0 w-[100vw] animate-rotatePulse">
-													<img
-														src={finalAnimationCircle}
-														alt="final"
-														ref={fadeRef}
-														className={`transition-opacity duration-1000 ${disableEnergy ? '' : 'fade-out'}`}
-													/>
-												</div>
-
-												<div className={`absolute z-30 ${disableEnergy ? 'scale-up' : 'scale-down fade-out'}`} ref={scaleRef}>
-													<img
-														src={midAnimationCircle}
-														alt="start_animation"
-														width={animationComplete ? 50 : 100}
-														className="transition-all duration-1000"
-													/>
-												</div>
+												className="absoulte h-full w-full rounded-full overflow-hidden flex items-center justify-center"
+											>
 												<div className="absolute z-20">
 													<img src={PandaCircleIcon} alt="Panda-circle" />
 												</div>
@@ -1713,12 +1717,77 @@ const Home = () => {
 														</p>
 														<div className="overflow-scroll w-[90vw] h-[50vh] flex flex-wrap gap-4 justify-center items-center">
 															{days.map((day, index) => {
-																console.log('Current Day', currentDay);
-																console.log('Day', day);
 																if (currentDay === day && !claimed.includes(day)) {
 																	return (
-																		<div className="w-16 h-16 bg-red-700">
-																			I am current Day!
+																		<div
+																			key={index}
+																			style={{
+																				backgroundImage: `url(${DaiyCurrentDayBg})`,
+																				backgroundSize: 'cover',
+																				backgroundPosition: 'center'
+																			}}
+																			className={`shadow-[0_0_20px_0px_rgba(0,0,0,0.2)] shadow-[#2174FF] border-2 border-[#2174FF] relative w-[23vw] h-[14vh] rounded-lg pt-2 flex flex-col gap-2 ${index === 6 ? "w-[80vw]" : ""}`}
+																		>
+																			<div>
+																				<div
+																					className={`${claimed.includes(day)
+																						? "bg-[#474750]"
+																						: "bg-[#1942EC]"
+																						} mr-6 flex w-[20vw] shadow-inherit shadow-xl items-center justify-center rounded-r-md text-white`}
+																				>
+																					<h1 className="font-semibold text-sm">Day {day + 1}</h1>
+																				</div>
+																				<div className="flex flex-col items-center mt-2 gap-1">
+																					{claimed.includes(day) ? (
+																						<div className="bg-[#D9D9D9] rounded-full h-6 w-6 flex items-center justify-center">
+																							<img
+																								src={tick}
+																								width={25}
+																								alt="tick"
+																							/>
+																						</div>
+																					) : (
+																						<>
+																							{index === 6 ? (
+																								<img
+																									className="absolute top-6"
+																									src={day7coin}
+																									width={80}
+																									alt="Big Coin"
+																								/>
+																							) : (
+																								<img
+																									src={BigCoin}
+																									width={30}
+																									alt="Big Coin"
+																								/>
+																							)}
+																						</>
+																					)}
+
+																					{index === 6 ? (
+																						<h2
+																							className={`text-md text-[#000000] absolute bottom-1 font-medium ${claimed.includes(day) &&
+																								"text-[#393838]"
+																								} ${currentDay === day &&
+																								"text-[#ffffff]"
+																								}`}
+																						>
+																							{reward[day]}
+																						</h2>
+																					) : (
+																						<h2
+																							className={`text-md text-[#000000] font-medium ${claimed.includes(day) &&
+																								"text-[#393838]"
+																								} ${currentDay === day &&
+																								"text-[#ffffff]"
+																								}`}
+																						>
+																							{reward[day]}
+																						</h2>
+																					)}
+																				</div>
+																			</div>
 																		</div>
 																	)
 																} else {
