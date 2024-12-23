@@ -605,7 +605,7 @@ const Home = () => {
 													<div
 														className={`h-2 transition-all duration-300 ease-in-out rounded`}
 														style={{
-															width: `${levelPercentage}%`,
+															width: `${levelPercentage || 0}%`,
 															background: `linear-gradient(to right, rgb(48 43 251), rgb(54 197 244))`,
 														}}
 													/>
@@ -725,6 +725,7 @@ const Home = () => {
 
 							{/* Coins Details & Bot Image */}
 							<div className="min-h-[56vh] flex flex-col justify-center items-center">
+
 								{/* Coins per minute & balance */}
 								<div className="flex items-center justify-start w-screen px-5 pt-6 h-[10vh]">
 									{/* Coins Per Minute */}
