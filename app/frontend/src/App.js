@@ -12,17 +12,6 @@ import { useUser } from "./context/index";
 const App = () => {
 	const { loader, loaderErrorMes } = useUser();
 
-	useEffect(() => {
-		if (window.Telegram && window.Telegram.WebApp) {
-			window.Telegram.WebApp.onEvent("close", () => {
-				const confirmation = window.confirm("Are you sure you want to close the app?");
-				if (!confirmation) {
-					window.Telegram.WebApp.enableClosingConfirmation();
-				}
-			});
-		}
-	}, []);
-
 	if (loader) {
 		return (
 			<div className="h-screen w-screen bg-black flex justify-center items-center">
