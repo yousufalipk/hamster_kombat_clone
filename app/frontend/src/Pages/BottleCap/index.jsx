@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import BackIcon from "../../assets/BackIcon.svg";
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import Twitter from "../../assets/pages/twitter.svg";
 import Telegram from "../../assets/pages/telegram.svg";
@@ -61,17 +60,6 @@ const BottleCap = () => {
 		youtube: "Watch",
 		instagram: "Follow",
 	};
-
-	useEffect(() => {
-		setTaskLoader(true);
-		if (userSocialTasks.length === 0 && userDailyTasks.length === 0) {
-			fetchUserTask();
-		}
-		if (inviteFriends.length === 0) {
-			fetchInviteFriends();
-		}
-		setTaskLoader(false);
-	}, []);
 
 	useEffect(() => {
 		let interval;

@@ -55,8 +55,13 @@ export const UserProvider = (props) => {
     const [currentDay, setCurrentDay] = useState(null);
 
     useEffect(() => {
-        console.log('Current Day', currentDay);
-    }, [currentDay])
+        if (userSocialTasks.length === 0 && userDailyTasks.length === 0) {
+            fetchUserTask();
+        }
+        if (inviteFriends.length === 0) {
+            fetchInviteFriends();
+        }
+    }, []);
 
     // Leaderboard 
 
