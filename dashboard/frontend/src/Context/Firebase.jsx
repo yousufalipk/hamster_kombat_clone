@@ -124,6 +124,8 @@ export const FirebaseProvider = (props) => {
                 withCredentials: true
             })
 
+            console.log('Response 1', response.data);
+
             if (response.data.status === 'success') {
                 localStorage.setItem('accessToken', response.data.accessToken);
                 localStorage.setItem('refreshToken', response.data.refreshToken);
@@ -188,13 +190,13 @@ export const FirebaseProvider = (props) => {
     }
 
     const createProject = async (data) => {
-        const numberOfLevel = parseInt(data.numberOfLevel, 10);
-        const baseCost = parseInt(data.baseCost, 10);
-        const baseReward = parseInt(data.baseReward, 10);
-        const baseCpm = parseInt(data.baseCpm, 10);
-        const costMultiplier = parseInt(data.costMultiplier, 10);
-        const rewardMultiplier = parseInt(data.rewardMultiplier, 10);
-        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
+        const numberOfLevel = parseFloat(data.numberOfLevel);
+        const baseCost = parseFloat(data.baseCost);
+        const baseReward = parseFloat(data.baseReward);
+        const baseCpm = parseFloat(data.baseCpm);
+        const costMultiplier = parseFloat(data.costMultiplier);
+        const rewardMultiplier = parseFloat(data.rewardMultiplier);
+        const cpmMultiplier = parseFloat(data.cpmMultiplier);
         try {
             const response = await axios.post(`${apiUrl}/project/create`, {
                 name: data.name,
@@ -232,13 +234,13 @@ export const FirebaseProvider = (props) => {
     };
 
     const updateProject = async (data, id) => {
-        const numberOfLevel = parseInt(data.numberOfLevel, 10);
-        const baseCost = parseInt(data.baseCost, 10);
-        const baseReward = parseInt(data.baseReward, 10);
-        const baseCpm = parseInt(data.baseCpm, 10);
-        const costMultiplier = parseInt(data.costMultiplier, 10);
-        const rewardMultiplier = parseInt(data.rewardMultiplier, 10);
-        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
+        const numberOfLevel = parseFloat(data.numberOfLevel, 10);
+        const baseCost = parseFloat(data.baseCost, 10);
+        const baseReward = parseFloat(data.baseReward, 10);
+        const baseCpm = parseFloat(data.baseCpm, 10);
+        const costMultiplier = parseFloat(data.costMultiplier, 10);
+        const rewardMultiplier = parseFloat(data.rewardMultiplier, 10);
+        const cpmMultiplier = parseFloat(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/project/update`, {
                 projectId: id,
@@ -445,11 +447,11 @@ export const FirebaseProvider = (props) => {
     }
 
     const createKol = async (data) => {
-        const numberOfLevel = parseInt(data.numberOfLevel, 10);
-        const baseCost = parseInt(data.baseCost, 10);
-        const baseCpm = parseInt(data.baseCpm, 10);
-        const costMultiplier = parseInt(data.costMultiplier, 10);
-        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
+        const numberOfLevel = parseFloat(data.numberOfLevel, 10);
+        const baseCost = parseFloat(data.baseCost, 10);
+        const baseCpm = parseFloat(data.baseCpm, 10);
+        const costMultiplier = parseFloat(data.costMultiplier, 10);
+        const cpmMultiplier = parseFloat(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/kols/add-kol`, {
                 name: data.name,
@@ -488,11 +490,11 @@ export const FirebaseProvider = (props) => {
     };
 
     const updateKol = async (data, id) => {
-        const numberOfLevel = parseInt(data.numberOfLevel, 10);
-        const baseCost = parseInt(data.baseCost, 10);
-        const baseCpm = parseInt(data.baseCpm, 10);
-        const costMultiplier = parseInt(data.costMultiplier, 10);
-        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
+        const numberOfLevel = parseFloat(data.numberOfLevel, 10);
+        const baseCost = parseFloat(data.baseCost, 10);
+        const baseCpm = parseFloat(data.baseCpm, 10);
+        const costMultiplier = parseFloat(data.costMultiplier, 10);
+        const cpmMultiplier = parseFloat(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/kols/update-kol`, {
                 kolId: id,
@@ -568,11 +570,11 @@ export const FirebaseProvider = (props) => {
     }
 
     const createPatner = async (data) => {
-        const numberOfLevel = parseInt(data.numberOfLevel, 10);
-        const baseCost = parseInt(data.baseCost, 10);
-        const baseCpm = parseInt(data.baseCpm, 10);
-        const costMultiplier = parseInt(data.costMultiplier, 10);
-        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
+        const numberOfLevel = parseFloat(data.numberOfLevel, 10);
+        const baseCost = parseFloat(data.baseCost, 10);
+        const baseCpm = parseFloat(data.baseCpm, 10);
+        const costMultiplier = parseFloat(data.costMultiplier, 10);
+        const cpmMultiplier = parseFloat(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/patners/add-patner`, {
                 name: data.name,
@@ -611,11 +613,11 @@ export const FirebaseProvider = (props) => {
     };
 
     const updatePatner = async (data, id) => {
-        const numberOfLevel = parseInt(data.numberOfLevel, 10);
-        const baseCost = parseInt(data.baseCost, 10);
-        const baseCpm = parseInt(data.baseCpm, 10);
-        const costMultiplier = parseInt(data.costMultiplier, 10);
-        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
+        const numberOfLevel = parseFloat(data.numberOfLevel, 10);
+        const baseCost = parseFloat(data.baseCost, 10);
+        const baseCpm = parseFloat(data.baseCpm, 10);
+        const costMultiplier = parseFloat(data.costMultiplier, 10);
+        const cpmMultiplier = parseFloat(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/patners/update-patner`, {
                 patnerId: id,
@@ -692,11 +694,11 @@ export const FirebaseProvider = (props) => {
     }
 
     const createVc = async (data) => {
-        const numberOfLevel = parseInt(data.numberOfLevel, 10);
-        const baseCost = parseInt(data.baseCost, 10);
-        const baseCpm = parseInt(data.baseCpm, 10);
-        const costMultiplier = parseInt(data.costMultiplier, 10);
-        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
+        const numberOfLevel = parseFloat(data.numberOfLevel, 10);
+        const baseCost = parseFloat(data.baseCost, 10);
+        const baseCpm = parseFloat(data.baseCpm, 10);
+        const costMultiplier = parseFloat(data.costMultiplier, 10);
+        const cpmMultiplier = parseFloat(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/vcs/add-vc`, {
                 name: data.name,
@@ -735,11 +737,11 @@ export const FirebaseProvider = (props) => {
     };
 
     const updateVc = async (data, id) => {
-        const numberOfLevel = parseInt(data.numberOfLevel, 10);
-        const baseCost = parseInt(data.baseCost, 10);
-        const baseCpm = parseInt(data.baseCpm, 10);
-        const costMultiplier = parseInt(data.costMultiplier, 10);
-        const cpmMultiplier = parseInt(data.cpmMultiplier, 10);
+        const numberOfLevel = parseFloat(data.numberOfLevel, 10);
+        const baseCost = parseFloat(data.baseCost, 10);
+        const baseCpm = parseFloat(data.baseCpm, 10);
+        const costMultiplier = parseFloat(data.costMultiplier, 10);
+        const cpmMultiplier = parseFloat(data.cpmMultiplier, 10);
         try {
             const response = await axios.post(`${apiUrl}/vcs/update-vc`, {
                 vcId: id,
