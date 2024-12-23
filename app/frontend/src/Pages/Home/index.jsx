@@ -775,11 +775,6 @@ const Home = () => {
 
 								{/* Bot & Options */}
 								<div
-									onPointerDown={(e) => {
-										handleTap();
-										handleBotTap(e);
-									}}
-									ref={tapRef}
 									className="flex justify-center items-center w-full h-[42vh]">
 
 									{/* +1 animation per tap */}
@@ -799,7 +794,8 @@ const Home = () => {
 									))}
 
 									{/* Animation Cards */}
-									<div className="absolute z-0 w-[100vw] animate-rotatePulse">
+									<div
+										className="absolute z-0 w-[100vw] animate-rotatePulse pointer-events-none">
 										<img
 											src={finalAnimationCircle}
 											alt="final"
@@ -808,7 +804,7 @@ const Home = () => {
 										/>
 									</div>
 
-									<div className={`absolute z-30 ${disableEnergy ? 'scale-up' : 'scale-down fade-out'}`} ref={scaleRef}>
+									<div className={`pointer-events-none absolute z-30 ${disableEnergy ? 'scale-up' : 'scale-down fade-out'}`} ref={scaleRef}>
 										<img
 											src={midAnimationCircle}
 											alt="start_animation"
@@ -819,6 +815,11 @@ const Home = () => {
 
 									{/* Bot Image Tap to earn */}
 									<div
+										onPointerDown={(e) => {
+											handleTap();
+											handleBotTap(e);
+										}}
+										ref={tapRef}
 										className="relative flex justify-end items-center h-[40vh] w-[60vw] overflow-hidden"
 									>
 										<div className="relative select-none rounded-full w-full h-full z-10 overflow-visible">
@@ -1163,7 +1164,7 @@ const Home = () => {
 														</div>
 
 														{/* Buttons */}
-														<div className="w-full h-[5vh]">
+														<div className="w-full h-[5vh] mb-2">
 															<button
 																onClick={() => {
 																	handleEnergyRefill();
@@ -1275,7 +1276,7 @@ const Home = () => {
 														{/* Reward, Line, Cost */}
 														<div className="relative z-50 w-full h-[15vh] flex flex-col items-center gap-2 mt-2">
 															{/* Level */}
-															<h1 className="text-xl text-customOrange font-semibold">Level {energyLevel >= 9 ? ('Max') : (`${energyLevel + 1}`)}</h1>
+															<h1 className="text-xl text-customOrange">Level {energyLevel >= 9 ? ('Max') : (`${energyLevel + 1}`)}</h1>
 															<p>+500 energy limit</p>
 
 															{/* Line */}
@@ -1346,7 +1347,7 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[54vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[57vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 
