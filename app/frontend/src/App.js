@@ -1,27 +1,32 @@
 import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import CustomLoader from "./Components/Loader/Loader";
-
 import Token from "./Components/Token/index";
 import GamePage from "./Pages/Game/Game";
-
 import Layout from "./Layout/index";
-
 import { useUser } from "./context/index";
 
 const App = () => {
-
+	const staticUser = process.env.REACT_APP_STATIC_USER;
 	useEffect(() => {
-		const handleBeforeUnload = (event) => {
-			event.preventDefault();
-			event.returnValue = "";
-		};
+		if (staticUser === 'false') {
+			const tg = window.Telegram.WebApp;
 
-		window.addEventListener("beforeunload", handleBeforeUnload);
+			const handleCloseEvent = () => {
+				const shouldClose = window.confirm("Are you sure you want to close the app?");
+				if (!shouldClose) {
+					tg.MainButton.show();
+					return false;
+				}
+				tg.close();
+			};
 
-		return () => {
-			window.removeEventListener("beforeunload", handleBeforeUnload);
-		};
+			tg.onEvent("close", handleCloseEvent);
+
+			return () => {
+				tg.offEvent("close", handleCloseEvent);
+			};
+		}
 	}, []);
 
 	const { loader, loaderErrorMes } = useUser();
