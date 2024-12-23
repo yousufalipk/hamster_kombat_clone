@@ -10,6 +10,20 @@ import Layout from "./Layout/index";
 import { useUser } from "./context/index";
 
 const App = () => {
+
+	useEffect(() => {
+		const handleBeforeUnload = (event) => {
+			event.preventDefault();
+			event.returnValue = "";
+		};
+
+		window.addEventListener("beforeunload", handleBeforeUnload);
+
+		return () => {
+			window.removeEventListener("beforeunload", handleBeforeUnload);
+		};
+	}, []);
+
 	const { loader, loaderErrorMes } = useUser();
 
 	if (loader) {
