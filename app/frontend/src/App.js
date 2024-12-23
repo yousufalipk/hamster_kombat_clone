@@ -7,26 +7,22 @@ import Layout from "./Layout/index";
 import { useUser } from "./context/index";
 
 const App = () => {
-	const staticUser = process.env.REACT_APP_STATIC_USER;
 	useEffect(() => {
-		if (staticUser === 'false') {
-			const tg = window.Telegram.WebApp;
+		const tg = window.Telegram.WebApp;
 
-			const handleCloseEvent = () => {
-				const shouldClose = window.confirm("Are you sure you want to close the app?");
-				if (!shouldClose) {
-					tg.MainButton.show();
-					return false;
-				}
-				tg.close();
-			};
+		const handleCloseEvent = () => {
+			const shouldClose = window.confirm("Are you sure you want to close the app?");
+			if (!shouldClose) {
+				return false;
+			}
+			tg.close();
+		};
 
-			tg.onEvent("close", handleCloseEvent);
+		tg.onEvent("backButtonClicked", handleCloseEvent);
 
-			return () => {
-				tg.offEvent("close", handleCloseEvent);
-			};
-		}
+		return () => {
+			tg.offEvent("backButtonClicked", handleCloseEvent);
+		};
 	}, []);
 
 	const { loader, loaderErrorMes } = useUser();
