@@ -61,7 +61,7 @@ export const UserProvider = (props) => {
         if (inviteFriends.length === 0) {
             fetchInviteFriends();
         }
-    }, []);
+    }, [userId]);
 
     // Leaderboard 
 

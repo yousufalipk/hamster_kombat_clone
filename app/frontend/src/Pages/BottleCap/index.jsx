@@ -361,7 +361,7 @@ const BottleCap = () => {
 					</div>
 
 					{/* Tasks Section */}
-					<div className="h-[90vh] relative z-10 border-6 px-4 pt-5 border-t-2 mt-5 rounded-tl-[30px] rounded-tr-[30px] border-[#0099FF] shadow-[#0099ff92]">
+					<div className="h-full relative z-10 border-6 px-4 pt-5 border-t-2 mt-5 rounded-tl-[30px] rounded-tr-[30px] border-[#0099FF] shadow-[#0099ff92]">
 						{/* Heading 1 */}
 						<div>
 							<p className="text-[#9595A9] text-lg ">Daily Task</p>
@@ -540,6 +540,9 @@ const BottleCap = () => {
 								})}
 							</>
 						)}
+						<div className="w-full h-[4vh]">
+
+						</div>
 					</div>
 				</div>
 			</div>
