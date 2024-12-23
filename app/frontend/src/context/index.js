@@ -178,25 +178,6 @@ export const UserProvider = (props) => {
         }
     }, [apiUrl, userId]);
 
-    const check1day = async (inputDate) => {
-        let timestamp;
-        const res = await axios.get(`${apiUrl}/user/get-server-timestamp`);
-        if (res.data.status === 'success') {
-            timestamp = res.data.serverTime.dateTime;
-        }
-
-        const currentDate = new Date(timestamp);
-        const oneDay = 24 * 60 * 60 * 1000;
-        const input = new Date(inputDate);
-        const diff = currentDate - input;
-
-        if (diff <= oneDay) {
-            return true;
-        } else {
-            return false;
-        }
-    };
-
     const checkSameDate = async (inputDate) => {
         let timestamp;
         const res = await axios.get(`${apiUrl}/user/get-server-timestamp`);

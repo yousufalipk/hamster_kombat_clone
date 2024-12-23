@@ -285,23 +285,6 @@ const Home = () => {
 			if (tele.HapticFeedback) {
 				tele.HapticFeedback.impactOccurred("medium");
 			}
-
-			// Custom logic for back button with confirmation
-			tele.BackButton.onClick(() => {
-				const userConfirmed = window.confirm("Are you sure you want to close the app?");
-				if (userConfirmed) {
-					tele.close();  // Close the app if the user confirms
-				}
-				// If not confirmed, the app will not close
-			});
-
-			// Handling window close event as a fallback
-			window.addEventListener('beforeunload', (e) => {
-				const userConfirmed = window.confirm("Are you sure you want to leave?");
-				if (!userConfirmed) {
-					e.preventDefault();  // Prevent the window from closing
-				}
-			});
 		}
 	}, []);
 
@@ -1871,7 +1854,7 @@ const Home = () => {
 													{/* action buttons */}
 													<div className="flex gap-4 justify-center mt-8">
 														<button
-															className="h-10 min-w-12 px-3 p-2 bg-[#242434] rounded-xl text-sm z-50 border-b-4 border-b-[#191922] shadow-zinc-900"
+															className="h-10 min-w-16 px-3 p-2 bg-[#242434] rounded-xl text-sm z-50 border-b-4 border-b-[#191922] shadow-zinc-900"
 															onClick={handleDailyRewardClaim}
 															disabled={claimed.includes(currentDay) || buttonLoading}
 														>
