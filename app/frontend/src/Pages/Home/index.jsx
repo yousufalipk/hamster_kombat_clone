@@ -311,6 +311,7 @@ const Home = () => {
 	useEffect(() => {
 		if (staticUser !== 'true') {
 			const tele = window.Telegram.WebApp;
+			tele.isClosingConfirmationEnabled = true;
 			tele.disableVerticalSwipes();
 			tele.BackButton.hide();
 			tele.disableVerticalSwipes();
