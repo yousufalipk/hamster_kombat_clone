@@ -145,6 +145,7 @@ export const UserProvider = (props) => {
 
 
     // Refill energy over time
+    /*
     useEffect(() => {
         const interval = setInterval(() => {
             setEnergy(prevEnergy => Math.min(prevEnergy + 1, energyLimit));
@@ -152,6 +153,7 @@ export const UserProvider = (props) => {
 
         return () => clearInterval(interval);
     }, [energy, setEnergy]);
+    */
 
     // Socket connection
     useEffect(() => {

@@ -66,36 +66,6 @@ import CommingSoon from '../../assets/root/comingSoon.svg';
 
 const Home = () => {
 
-	const pandaMapping = {
-		0: Panda1,
-		1: Panda2,
-		2: Panda3,
-		3: Panda4,
-		4: Panda5,
-		5: Panda6,
-		6: Panda7,
-		7: Panda8,
-		8: Panda9,
-		9: Panda10,
-		10: Panda11,
-		11: Panda12,
-		12: Panda13,
-		13: Panda14,
-	};
-
-	const energyUpgradeCost = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
-	const multitapUpgradeCost = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000];
-
-	const days = [0, 1, 2, 3, 4, 5, 6];
-	const reward = [500, 1000, 1500, 2000, 2500, 3000, 3500];
-
-	const staticUser = process.env.REACT_APP_STATIC_USER;
-
-	const getRandomName = () => {
-		const randomNames = ["John Doe", "Jane Smith", "Alex Johnson", "Chris Lee", "Taylor Brown"];
-		return randomNames[Math.floor(Math.random() * randomNames.length)];
-	};
-
 	const {
 		userId,
 		userDataInitilized,
@@ -134,6 +104,115 @@ const Home = () => {
 		comboCards
 	} = useUser();
 
+	const [isRefilling, setIsRefilling] = useState(false);
+
+	const accumulatedEnergyRef = useRef(energy);
+
+	const refillIntervalRef = useRef(null);
+
+	const refillTimeoutRef = useRef(null);
+
+	const refillDuration = 800;
+
+	const incrementValue = 1;
+
+	const startRefillInterval = () => {
+		if (refillIntervalRef.current) {
+			clearInterval(refillIntervalRef.current);
+		}
+		refillIntervalRef.current = setInterval(() => {
+			setEnergy((prevEnergy) => {
+				if (isNaN(prevEnergy) || prevEnergy >= energyLimit) {
+					clearInterval(refillIntervalRef.current);
+					setIsRefilling(false);
+					return energyLimit;
+				}
+
+				const newEnergy = Math.min(prevEnergy + incrementValue, energyLimit);
+
+				if (!isNaN(newEnergy)) {
+					accumulatedEnergyRef.current = newEnergy;
+				}
+				return newEnergy;
+			});
+		}, 500);
+	};
+
+	const refillEnergy = () => {
+		setIsRefilling(true);
+		startRefillInterval();
+	};
+
+	useEffect(() => {
+		if (energy < energyLimit) {
+			refillEnergy();
+		}
+	}, [energy]);
+
+	useEffect(() => {
+		if (userId) {
+			if (refillIntervalRef.current) {
+				clearInterval(refillIntervalRef.current);
+			}
+
+			const storedEnergy = localStorage.getItem("energy");
+			const lastRefillTime = localStorage.getItem("lastRefillTime");
+
+			let energyValue = storedEnergy ? Number(storedEnergy) : energyLimit;
+			let lastTime = lastRefillTime ? Number(lastRefillTime) : Date.now();
+
+			if (!isNaN(energyValue) && energyValue >= 0 && !isNaN(lastTime) && lastTime > 0) {
+				const elapsedTime = Date.now() - lastTime;
+				const elapsedSteps = Math.floor(elapsedTime / refillDuration);
+				const restoredEnergy = Math.min(energyValue + elapsedSteps * incrementValue, energyLimit);
+
+				if (restoredEnergy >= 0) {
+					setEnergy(restoredEnergy);
+
+					if (restoredEnergy < energyLimit) {
+						setIsRefilling(true);
+						refillEnergy();
+					}
+				}
+			} else {
+				setEnergy(energyLimit);
+			}
+
+			localStorage.setItem("energy", energyValue);
+			localStorage.setItem("lastRefillTime", lastTime);
+		}
+	}, [userId, refillDuration, incrementValue, energyLimit]);
+
+	const pandaMapping = {
+		0: Panda1,
+		1: Panda2,
+		2: Panda3,
+		3: Panda4,
+		4: Panda5,
+		5: Panda6,
+		6: Panda7,
+		7: Panda8,
+		8: Panda9,
+		9: Panda10,
+		10: Panda11,
+		11: Panda12,
+		12: Panda13,
+		13: Panda14,
+	};
+
+	const energyUpgradeCost = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
+	const multitapUpgradeCost = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000];
+
+	const days = [0, 1, 2, 3, 4, 5, 6];
+	const reward = [500, 1000, 1500, 2000, 2500, 3000, 3500];
+
+	const staticUser = process.env.REACT_APP_STATIC_USER;
+
+	const getRandomName = () => {
+		const randomNames = ["John Doe", "Jane Smith", "Alex Johnson", "Chris Lee", "Taylor Brown"];
+		return randomNames[Math.floor(Math.random() * randomNames.length)];
+	};
+
 	const [clicks, setClicks] = useState([]);
 	const [isTapped, setIsTapped] = useState(false);
 	const tapRef = useRef(null);
@@ -165,37 +244,6 @@ const Home = () => {
 		setIsTapped(true);
 		setTimeout(() => setIsTapped(false), 150);
 	};
-
-	// Before app closed set last reffill time & energy 
-	useEffect(() => {
-		const handleBeforeUnload = () => {
-			const currentTime = new Date().getTime();
-
-			localStorage.setItem("energy", energy.toString());
-			localStorage.setItem("lastUpdated", currentTime.toString());
-		};
-
-		window.addEventListener("beforeunload", handleBeforeUnload);
-		return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-	}, [energy]);
-
-	// Getting energy back
-	const getEnergy = () => {
-		const storedEnergy = parseInt(localStorage.getItem("energy") || energyLimit, 10);
-		const lastUpdated = parseInt(localStorage.getItem("lastUpdated") || "0", 10);
-
-		if (lastUpdated) {
-			const elapsedTime = Math.floor((Date.now() - lastUpdated) / 1000);
-			const newEnergy = Math.min(storedEnergy + elapsedTime, energyLimit);
-			setEnergy(newEnergy);
-		} else {
-			setEnergy(storedEnergy);
-		}
-	};
-
-	useEffect(() => {
-		getEnergy();
-	}, []);
 
 	useEffect(() => {
 		const duration = 1000;
@@ -371,11 +419,26 @@ const Home = () => {
 						y: touch.clientY - rect.top,
 					};
 
+					let newEnergy;
+
 					setClicks((prevClicks) => [...prevClicks, newClick]);
 
 					// Reduce Energy - 1 per tap
 					if (!disableEnergy) {
-						setEnergy(prevEnergy => Math.max(prevEnergy - 1, 0));
+						setEnergy((prevEnergy) => {
+							newEnergy = Math.max(prevEnergy - 1, 0);
+							accumulatedEnergyRef.current = newEnergy;
+							if (isNaN(newEnergy) || newEnergy === undefined || newEnergy === null) {
+								return energyLimit;
+							} else {
+								return newEnergy;
+							}
+						});
+						if (newEnergy) {
+							localStorage.setItem("energy", newEnergy);
+							localStorage.setItem("lastRefillTime", Date.now());
+						}
+
 					} else {
 						console.log("Energy is disabled!");
 					}
