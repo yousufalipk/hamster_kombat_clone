@@ -25,8 +25,12 @@ import { toast } from 'react-toastify';
 import { TonConnect } from '@tonconnect/sdk';
 
 const Wallet = () => {
+	const apiUrl = process.env.REACT_APP_URL;
 
-	const tonConnect = new TonConnect();
+	const tonConnect = new TonConnect({
+		manifestUrl: `${apiUrl}/tonconnect-manifest.json`
+	});
+
 
 	const { balance, walletAddress, setWalletAddress } = useUser();
 
@@ -131,7 +135,7 @@ const Wallet = () => {
 					{/* buttons */}
 					<div className="relative text-white flex mt-8 w-4/5">
 						<button
-							className={`w-1/2 p-2 rounded-l-lg gap-2 flex justify-center items-center text-xs font-semibold bg-[#303941] ${buttonType !== 'connect' && `opacity-40`} `}
+							className={`w - 1 / 2 p - 2 rounded - l - lg gap - 2 flex justify - center items - center text - xs font - semibold bg - [#303941] ${buttonType !== 'connect' && `opacity-40`} `}
 							onClick={() => toggleButtonType(1)}
 						>
 							<img
@@ -142,7 +146,7 @@ const Wallet = () => {
 							Connect Wallet
 						</button>
 						<button
-							className={`w-1/2 p-2 rounded-r-lg gap-2 flex justify-center items-center text-xs font-semibold bg-[#303941] ${buttonType !== 'withdraw' && `opacity-40`} `}
+							className={`w - 1 / 2 p - 2 rounded - r - lg gap - 2 flex justify - center items - center text - xs font - semibold bg - [#303941] ${buttonType !== 'withdraw' && `opacity-40`} `}
 							onClick={() => toggleButtonType(2)}
 							disabled={true}
 						>
@@ -314,16 +318,16 @@ const Wallet = () => {
 
 				{iswithdraw && (
 					<div
-						className={`popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end`}
+						className={`popup - overlay absolute w - [100vw] h - [100vh] top - 0 bg - black bg - opacity - 50 z - 20 flex items - end`}
 						style={{
 							animation: `${popupClosing ? "fadeOut" : "fadeIn"
-								} 0.5s ease-in-out forwards`,
+								} 0.5s ease -in -out forwards`,
 						}}
 					>
 						<div
 							style={{
 								animation: `${popupClosing ? "closePopup" : "openPopup"
-									} 0.5s ease-in-out forwards`,
+									} 0.5s ease -in -out forwards`,
 							}}
 							className="popup-overlay"
 						>
@@ -371,16 +375,16 @@ const Wallet = () => {
 
 				{isconnect && (
 					<div
-						className={`popup-overlay absolute w-[100vw] h-[100vh] top-0 bg-black bg-opacity-50 z-20 flex items-end`}
+						className={`popup - overlay absolute w - [100vw] h - [100vh] top - 0 bg - black bg - opacity - 50 z - 20 flex items - end`}
 						style={{
 							animation: `${popupClosing ? "fadeOut" : "fadeIn"
-								} 0.5s ease-in-out forwards`,
+								} 0.5s ease -in -out forwards`,
 						}}
 					>
 						<div
 							style={{
 								animation: `${popupClosing ? "closePopup" : "openPopup"
-									} 0.5s ease-in-out forwards`,
+									} 0.5s ease -in -out forwards`,
 							}}
 							className="popup-overlay"
 						>
