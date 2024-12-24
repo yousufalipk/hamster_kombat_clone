@@ -4,8 +4,8 @@ import WalletIcon from '../../assets/wallet/wallet.svg';
 import WithdrawIcon from '../../assets/wallet/withdraw.svg';
 import ConnectIcon from '../../assets/wallet/connect.svg';
 import circleimg from "../../assets/wallet/round_circles.svg"
-import walletsvg from "../../assets/wallet/walletsvg.svg"
-import connstwallet from "../../assets/wallet/connecttwallet.svg"
+import walletsvg from "../../assets/wallet/walletsvg.svg";
+import HelmetIcon from "../../assets/HelmetIcon.svg";
 
 import PopupLine from '../../assets/line.svg'
 import WalletImage from '../../assets/walletImg.svg';
@@ -16,12 +16,29 @@ import walletRight from "../../assets/wallet/walletRight.svg";
 
 import { useUser } from '../../context/index';
 
+import { RxCross1 } from "react-icons/rx";
+import { FaCopy } from "react-icons/fa";
+
+import CommingSoon from '../../assets/root/comingSoon.svg';
+
+import { toast } from 'react-toastify';
+
+import { TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
+
 
 const Wallet = () => {
 
-	const priceInDollar = 0.001;
+	const { connect, disconnect, isConnected, walletAddress } = useTonWallet();
 
-	const { balance } = useUser();
+	const { balance, disconnectTONWallet, connectTONWallet } = useUser();
+
+	const [dots, setDots] = useState('');
+	const [buttonLoading, setButtonLoading] = useState(false);
+
+
+
+	const priceInDollar = 0.00;
+
 
 	const [buttonType, setButtonType] = useState('connect');
 	const [iswithdraw, setIsPopupWithdraw] = useState(false);
@@ -36,6 +53,78 @@ const Wallet = () => {
 			setButtonType('connect');
 		}
 	}
+
+	useEffect(() => {
+		let interval;
+		if (buttonLoading) {
+			interval = setInterval(() => {
+				setDots(prev => (prev.length < 4 ? prev + '.' : ''));
+			}, 300);
+		} else {
+			setDots('');
+		}
+		return () => clearInterval(interval);
+	}, [buttonLoading]);
+
+	const truncateWalletAddress = (address) => {
+		if (!address || address.length <= 10) return address;
+		const start = address.slice(0, 5);
+		const end = address.slice(-5);
+		return `${start}...${end}`;
+	};
+
+	const handleConnectTONWallet = async () => {
+		try {
+			const res = await connect();
+			if (res.success) {
+				const res = await connectTONWallet(walletAddress);
+				if (res.success) {
+					toast.success(res.mess);
+				} else {
+					toast.error(res.mess);
+				}
+			} else {
+				toast.error('Failed to connect to TON wallet.');
+			}
+		} catch (error) {
+			console.log('Internal Server Error!', error);
+			toast.error('An error occurred while connecting to TON wallet.');
+		}
+	};
+
+	const handleDisconnectTONWallet = async () => {
+		try {
+			const res = await disconnect();
+			if (res.success) {
+				const res = await disconnectTONWallet();
+				if (res.success) {
+					toast.success(res.mess);
+				} else {
+					toast.error(res.mess);
+				}
+			} else {
+				toast.error('Failed to disconnect from TON wallet.');
+			}
+		} catch (error) {
+			console.log('Internal Server Error!', error);
+			toast.error('An error occurred while disconnecting from TON wallet.');
+		}
+	};
+
+	const copyToClipboard = async () => {
+		try {
+			if (walletAddress) {
+				await navigator.clipboard.writeText(walletAddress);
+				toast.success('Wallet address copied to clipboard!');
+			} else {
+				toast.error('No wallet address to copy.');
+			}
+		} catch (error) {
+			console.error('Failed to copy wallet address:', error);
+			toast.error('Failed to copy wallet address.');
+		}
+	};
+
 	return (
 		<>
 			<div className='h-[86vh] w-[100vw] flex flex-col items-center relative'>
@@ -54,7 +143,7 @@ const Wallet = () => {
 					</div>
 
 					{/* buttons */}
-					<div className="text-white flex mt-8 w-4/5">
+					<div className="relative text-white flex mt-8 w-4/5">
 						<button
 							className={`w-1/2 p-2 rounded-l-lg gap-2 flex justify-center items-center text-xs font-semibold bg-[#303941] ${buttonType !== 'connect' && `opacity-40`} `}
 							onClick={() => toggleButtonType(1)}
@@ -69,6 +158,7 @@ const Wallet = () => {
 						<button
 							className={`w-1/2 p-2 rounded-r-lg gap-2 flex justify-center items-center text-xs font-semibold bg-[#303941] ${buttonType !== 'withdraw' && `opacity-40`} `}
 							onClick={() => toggleButtonType(2)}
+							disabled={true}
 						>
 							<img
 								src={WithdrawIcon}
@@ -77,28 +167,120 @@ const Wallet = () => {
 							/>
 							Withdraw
 						</button>
+						<img src={CommingSoon} alt="comming_soon" width={50} className="absolute -top-1 -right-1" />
 					</div>
 				</div>
 
 				{/* Content  */}
-				<div className="w-[100vw] h-[43vh] text-white z-10">
+				<div className="w-[100vw] h-[43vh] text-white z-10 flex flex-col justify-center items-center gap-2">
+					{/* Connect Wallet */}
 					{buttonType === 'connect' ? (
 						<>
-							<div className="w-[100vw] h-[43vh] flex flex-col gap-3 items-center justify-center">
-								<h1 className="text-2xl font-semibold">Connect Wallet</h1>
-								<img src={WalletIcon} alt="wallet_icon" width={140} />
-								<p className="text-xs px-5 justify-center text-center text-gray-300">
-									Easily access you <span className="text-white font-semibold">Telegram wallet</span> and make transactions directly from our <span className="text-white font-semibold">wallet.</span>
-								</p>
-								<button
-									onClick={() => { setIsPopupConnect(true) }}
-									className="bg-gradient-to-t from-[#2226FF] to to-[#00B2FF] py-2 px-10 rounded-lg text-xs font-semibold">
-									Connect
-								</button>
+							<div className="w-[80vw] h-[10vh] flex flex-col gap-3 items-center justify-center">
+								{walletAddress ? (
+									<>
+										<button
+											disabled={buttonLoading}
+											className="w-full h-12 z-50 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm">
+											{buttonLoading ? (
+												<span className="flex justify-center items-center text-5xl font-bold w-full">
+													<p className="absolute -mt-6">
+														{dots}
+													</p>
+												</span>
+											) : (
+												<>
+													<>
+														<div className="w-full h-full flex justify-center items-center gap-3">
+															<p>WALLET CONNECTED</p>
+															<img src={HelmetIcon} alt="wallet_icon" width={20} />
+														</div>
+													</>
+												</>
+											)}
+										</button>
+									</>
+								) : (
+									<>
+										<button
+											onClick={() => {
+												handleConnectTONWallet()
+											}}
+											disabled={buttonLoading}
+											className="w-full h-12 z-50 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm">
+											{buttonLoading ? (
+												<span className="flex justify-center items-center text-5xl font-bold w-full">
+													<p className="absolute -mt-6">
+														{dots}
+													</p>
+												</span>
+											) : (
+												<>
+													<div className="w-full h-full flex justify-center items-center gap-3">
+														<p>CONNECT YOUR TON WALLET</p>
+														<img src={HelmetIcon} alt="wallet_icon" width={20} />
+													</div>
+												</>
+											)}
+										</button>
+									</>
+								)}
+
+							</div>
+							<div className="w-[80vw] h-[33vh] rounded-2xl bg-[#0d121c] flex flex-col justify-center items-center gap-3 shadow-sm shadow-white">
+								{!walletAddress ? (
+									<>
+										<h1 className="text-center text-gray-200 text-lg p-5">
+											Your TON wallet is not connected!
+										</h1>
+									</>
+								) : (
+									<>
+										<h1 className="text-center text-gray-200 text-xl font-semibold px-4">
+											Your TON wallet is connected
+										</h1>
+										<p className="text-center text-gray-400 text-md">
+											You can disconnect or copy wallet address
+										</p>
+										<div className="w-full h-12 flex justify-between items-center gap-1 px-2">
+											<div
+												onClick={() => {
+													handleDisconnectTONWallet()
+												}}
+												className="w-[20%] h-full bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg flex justify-center items-center">
+												<RxCross1 size={25} className="opacity-50" />
+											</div>
+											<div className="relative w-[60%] h-full rounded-lg p-[1px] bg-gradient-to-t from-[#2226FF] to-[#00B2FF]">
+												<div className="w-full h-full bg-gradient-to-r from-[#0d121c] to-gray-700 rounded-lg flex justify-center items-center gap-2">
+													<img src={HelmetIcon} alt="wallet" width={20} />
+													<p
+														style={{
+															background: 'linear-gradient(to right, #2226FF, #00B2FF)',
+															WebkitBackgroundClip: 'text',
+															WebkitTextFillColor: 'transparent',
+															fontSize: '1rem',
+															fontWeight: 'bold'
+														}}
+													>
+														{truncateWalletAddress(walletAddress)}
+													</p>
+												</div>
+											</div>
+											<div
+												onClick={() => {
+													copyToClipboard();
+												}}
+												className="w-[20%] h-full bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg flex justify-center items-center">
+												<FaCopy size={25} className="opacity-50" />
+											</div>
+										</div>
+									</>
+								)}
 							</div>
 						</>
 					) : (
 						<>
+							{/* Withdraw */}
 							<div className="w-[100vw] h-[43vh] flex flex-col items-center justify-center">
 								<form action="" className="w-4/5 flex flex-col gap-3">
 									<div className="flex flex-col gap-1 w-full">

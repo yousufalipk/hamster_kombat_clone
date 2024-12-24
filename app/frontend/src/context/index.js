@@ -195,9 +195,6 @@ export const UserProvider = (props) => {
         const currentDate = new Date(timestamp);
         const input = new Date(inputDate);
 
-        console.log('Current Date', currentDate);
-        console.log('Input Date', input);
-
         const normalizedCurrentDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
         const normalizedInputDate = `${input.getFullYear()}-${input.getMonth() + 1}-${input.getDate()}`;
 
@@ -325,8 +322,6 @@ export const UserProvider = (props) => {
 
             if (user.dailyReward.date) {
                 const is1Day = await checkSameDate(user.dailyReward.date);
-
-                console.log('is1Day', is1Day);
                 if (is1Day) {
                     setCurrentDay(user.dailyReward.day - 1);
                 } else {
@@ -771,7 +766,6 @@ export const UserProvider = (props) => {
         }
     }
 
-
     const claimCpmCoins = async () => {
         try {
             const res = await axios.post(`${apiUrl}/user/claim-cpm`, {
@@ -788,6 +782,39 @@ export const UserProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error");
             return ({ success: true, mess: "Internal Server Error!" });
+        }
+    }
+
+    const connectTONWallet = async (walletAddress) => {
+        try {
+            const res = await axios.post(`${apiUrl}/user/add-wallet-address`, {
+                userId: userId,
+                walletAddress: walletAddress
+            });
+            if (res.data.status === 'success') {
+                return ({ success: false, mess: 'Wallet Connected Succesfuly!' })
+            } else {
+                return ({ success: false, mess: 'Error Connecting Wallet!' })
+            }
+        } catch (error) {
+            console.log('Internal Server Error!');
+            return ({ success: false, mess: 'Internal Server Error!' })
+        }
+    }
+
+    const disconnectTONWallet = async () => {
+        try {
+            const res = await axios.post(`${apiUrl}/user/remove-wallet-address`, {
+                userId: userId
+            });
+            if (res.data.status === 'success') {
+                return ({ success: false, mess: 'Wallet Removed Succesfuly!' })
+            } else {
+                return ({ success: false, mess: 'Error Removing Wallet!' })
+            }
+        } catch (error) {
+            console.log('Internal Server Error!');
+            return ({ success: false, mess: 'Internal Server Error!' })
         }
     }
 
@@ -883,7 +910,10 @@ export const UserProvider = (props) => {
             avaliableCpm,
             claimCpmCoins,
             setAvaliableCpm,
-            levelsData
+            levelsData,
+
+            disconnectTONWallet,
+            connectTONWallet
         }}>
             {props.children}
         </UserContext.Provider>

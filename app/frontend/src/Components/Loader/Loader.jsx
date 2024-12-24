@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Circles } from 'react-loader-spinner';
+import { HashLoader } from 'react-spinners';
 
 const Loader = ({ size }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -12,11 +12,11 @@ const Loader = ({ size }) => {
         <>
             <div className='flex justify-center items-center h-screen bg-custom-image bg-cover bg-center'>
                 {isLoading ? (
-                    <Circles
+                    <HashLoader
                         height={size || 200}
                         width={size || 200}
                         color="#00B2FF"
-                        ariaLabel="loading"
+                        aria-label="loading"
                     />
                 ) : (
                     <div></div>

@@ -1,20 +1,61 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import CustomLoader from "./Components/Loader/Loader";
 import Token from "./Components/Token/index";
 import GamePage from "./Pages/Game/Game";
 import Layout from "./Layout/index";
 import { useUser } from "./context/index";
+import axios from 'axios';
 
 const App = () => {
+	const [isTimeValid, setIsTimeValid] = useState(true);
 	const staticUser = process.env.REACT_APP_STATIC_USER;
+	const apiUrl = process.env.REACT_APP_URL;
 
 	const { loader, loaderErrorMes } = useUser();
+
+	useEffect(() => {
+		const checkTimeIntegrity = async () => {
+			try {
+				const response = await axios.get(`${apiUrl}/api/utc-time`);
+				const serverUtcTime = response.data.utcTime;
+
+				const serverTime = new Date(serverUtcTime).getTime();
+				const clientTime = new Date().getTime();
+
+				const timeDifference = Math.abs(serverTime - clientTime);
+
+				if (timeDifference > 5000 || timeDifference < -5000) {
+					setIsTimeValid(false);
+				} else {
+					setIsTimeValid(true);
+				}
+			} catch (error) {
+				console.error("Error fetching server time:", error);
+				setIsTimeValid(false);
+			}
+		};
+
+		checkTimeIntegrity();
+	}, [apiUrl]);
 
 	if (loader) {
 		return (
 			<div className="h-screen w-screen bg-black flex justify-center items-center">
 				<CustomLoader size={200} />
+			</div>
+		);
+	}
+
+	if (!isTimeValid) {
+		return (
+			<div
+				className="h-[100vh] w-[100vw] bg-black text-white flex flex-col gap-2 justify-center items-center text-center"
+			>
+				<div className="w-[80%] h-[80%] border-2 rounded-2xl border-white p-10 flex flex-col gap-5 justify-center items-center">
+					<h1 className="text-2xl font-bold">⚠️ Time Error Detected</h1>
+					<p className="text-lg font-light">Please set your device time to automatic to continue using the app.</p>
+				</div>
 			</div>
 		);
 	}

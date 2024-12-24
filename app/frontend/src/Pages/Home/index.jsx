@@ -612,6 +612,10 @@ const Home = () => {
 		}
 	}
 
+	const formatBalance = (balance) => {
+		return parseFloat(balance).toFixed(2);
+	}
+
 	return (
 		<>
 			{userDataInitilized && (
@@ -801,7 +805,7 @@ const Home = () => {
 												<img className="pl-3" src={SmallCoin} alt="Coin-Icon" />
 											</div>
 											<div className="text-[#FFF] text-[11.655px] font-medium">
-												<p>+{formatCoins(coinsPerMinute)}</p>
+												<p>+{formatBalance(formatCoins(coinsPerMinute))}</p>
 											</div>
 										</div>
 										<div className="flex justify-center items-center gap-1 pl-1">
@@ -817,7 +821,7 @@ const Home = () => {
 										<div>
 											<img src={BigCoin} alt="Coin-Icon" width="24" />
 										</div>
-										<div className="text-[#FFF] text-[24px] font-medium">{balance}</div>
+										<div className="text-[#FFF] text-[24px] font-medium">{formatBalance(balance)}</div>
 									</div>
 								</div>
 
@@ -1553,7 +1557,7 @@ const Home = () => {
 														</h1>
 													</div>
 													<div className="text-center text-xs flex flex-col gap-4 px-7 justify-center">
-														Coins Per Minute (CPM) defines how many coins users earn automatically every minute, based on their CPM value. Higher CPM means faster passive earnings.
+														Coins Per Minute (CPM) defines how many coins users earn automatically every minute, based on their CPM value. Higher CPM means faster passive earnings. Come Back every 1 hour to claim reward!
 													</div>
 													{/* action buttons */}
 													<div className='flex gap-4 justify-center mt-4'>
@@ -1572,7 +1576,7 @@ const Home = () => {
 																</span>
 															) : (
 																<>
-																	MINE CPM!
+																	Mine
 																</>
 															)}
 														</button>
@@ -1619,7 +1623,7 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[43vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[48vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div
@@ -1637,7 +1641,7 @@ const Home = () => {
 												<div className="popup-main flex flex-col gap-3 items-center">
 													<img src={CpmInfoBg} alt="bg" className="absolute z-0 top-10" />
 													<div className="h-1 w-16 bg-[#D9D9D9] rounded-md"></div>
-													<div className="flex justify-center flex-col items-center gap-5">
+													<div className="flex justify-center flex-col items-center gap-3">
 														<img src={padaIcon} alt="pandaIcon" width={50} />
 														<div>
 															<p className="flex justify-center items-center gap-1 border border-[#242434] py-2 px-6 rounded-md text-[#FF8F00] text-[26px] font-semibold">
@@ -1647,12 +1651,12 @@ const Home = () => {
 																	width={25}
 																	height={25}
 																/>
-																+{avaliableCpm} PTap
+																+{formatBalance(avaliableCpm)} PTap
 															</p>
 														</div>
 													</div>
-													<div className="text-center text-gray-200 text-lg text- flex flex-col gap-4 px-7 justify-center">
-														Coins per minute reward is ready!
+													<div className="text-center text-gray-200 text-lg flex flex-col gap-4 px-7 justify-center">
+														Coins per minute reward is ready!. Come Back every 1 hour to claim reward!
 													</div>
 													{/* action buttons */}
 													<div className='w-full flex gap-4 justify-center my-4'>

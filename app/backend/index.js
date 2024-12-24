@@ -126,3 +126,21 @@ app.get('/reset-users-combo-cards', async (req, res) => {
         res.status(500).send('Error during user balance update.');
     }
 });
+
+
+app.get('/api/utc-time', (req, res) => {
+    try {
+        const currentUTCTime = new Date().toISOString();
+
+        res.status(200).json({
+            success: true,
+            utcTime: currentUTCTime
+        });
+    } catch (error) {
+        console.error('Internal Server Error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error!'
+        });
+    }
+});

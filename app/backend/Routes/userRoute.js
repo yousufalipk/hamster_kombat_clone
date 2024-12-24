@@ -27,7 +27,8 @@ const {
     claimInviteFriendsReward,
     fetchUserInviteFriends,
     claimCPM,
-    addOrUpdateWalletAddress,
+    addWalletAddress,
+    removeWalletAddress,
     test,
     getServerTimeStamp
 } = require('../controllers/userController');
@@ -65,8 +66,9 @@ router.route('/fetch-user-tasks').post(fetchUserTasks);
 router.route('/fetch-invite-friends').post(fetchUserInviteFriends);
 router.route('/claim-refferal-reward').post(claimInviteFriendsReward);
 router.route('/claim-cpm').post(claimCPM);
-router.route('/add-wallet-address').post(addOrUpdateWalletAddress);
 router.route('/get-server-timestamp').get(getServerTimeStamp);
+router.route('/remove-wallet-address').post(removeWalletAddress);
+router.route('/add-wallet-address').post(addWalletAddress);
 
 
 // Test
