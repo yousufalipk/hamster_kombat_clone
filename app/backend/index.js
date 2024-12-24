@@ -6,6 +6,7 @@ const { PORT } = require('./config/env');
 const UserModel = require('./models/userModel');
 const { initializeIo, userSocketMap } = require('./utils/socketHelper');
 const user = require('./Routes/userRoute');
+const path = require('path');
 
 
 const {
@@ -28,6 +29,7 @@ const io = initializeIo(server);
 // Connect to the database
 connectToDb();
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Socket.io Connection
 io.on('connection', (socket) => {
