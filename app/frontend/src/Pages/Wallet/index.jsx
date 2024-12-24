@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
-import WalletIcon from '../../assets/wallet/wallet.svg';
 import WithdrawIcon from '../../assets/wallet/withdraw.svg';
 import ConnectIcon from '../../assets/wallet/connect.svg';
 import circleimg from "../../assets/wallet/round_circles.svg"
@@ -23,22 +22,23 @@ import CommingSoon from '../../assets/root/comingSoon.svg';
 
 import { toast } from 'react-toastify';
 
-import { TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
-
+import { TonConnect } from '@tonconnect/sdk';
 
 const Wallet = () => {
 
-	const { connect, disconnect, isConnected, walletAddress } = useTonWallet();
+	const tonConnect = new TonConnect();
 
-	const { balance, disconnectTONWallet, connectTONWallet } = useUser();
+	const { balance, walletAddress, setWalletAddress } = useUser();
+
+
+	useEffect(() => {
+		console.log('Wallet Address', walletAddress);
+	}, [walletAddress])
 
 	const [dots, setDots] = useState('');
 	const [buttonLoading, setButtonLoading] = useState(false);
 
-
-
 	const priceInDollar = 0.00;
-
 
 	const [buttonType, setButtonType] = useState('connect');
 	const [iswithdraw, setIsPopupWithdraw] = useState(false);
@@ -75,39 +75,25 @@ const Wallet = () => {
 
 	const handleConnectTONWallet = async () => {
 		try {
-			const res = await connect();
-			if (res.success) {
-				const res = await connectTONWallet(walletAddress);
-				if (res.success) {
-					toast.success(res.mess);
-				} else {
-					toast.error(res.mess);
-				}
+			const connectedWallet = await tonConnect.connect();
+			if (connectedWallet?.address) {
+				setWalletAddress(connectedWallet.address);
+				console.log('Wallet connected:', connectedWallet.address);
 			} else {
-				toast.error('Failed to connect to TON wallet.');
+				console.error('Failed to retrieve wallet address.');
 			}
 		} catch (error) {
-			console.log('Internal Server Error!', error);
-			toast.error('An error occurred while connecting to TON wallet.');
+			console.error('Error connecting wallet:', error.message);
 		}
 	};
 
 	const handleDisconnectTONWallet = async () => {
 		try {
-			const res = await disconnect();
-			if (res.success) {
-				const res = await disconnectTONWallet();
-				if (res.success) {
-					toast.success(res.mess);
-				} else {
-					toast.error(res.mess);
-				}
-			} else {
-				toast.error('Failed to disconnect from TON wallet.');
-			}
+			await tonConnect.disconnect();
+			setWalletAddress(null);
+			console.log('Wallet disconnected successfully');
 		} catch (error) {
-			console.log('Internal Server Error!', error);
-			toast.error('An error occurred while disconnecting from TON wallet.');
+			console.error('Error disconnecting wallet:', error.message);
 		}
 	};
 

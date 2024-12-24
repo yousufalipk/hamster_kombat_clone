@@ -34,6 +34,7 @@ export const UserProvider = (props) => {
     const [coinsPerMinute, setCoinsPerMinute] = useState(0);
     const [referrals, setReferrals] = useState([]);
     const [remaningTime, setRemaningTime] = useState(null);
+    const [walletAddress, setWalletAddress] = useState(null);
 
     // 4 Boosters 
     const [disableEnergy, setDisableEnergy] = useState(false);
@@ -913,7 +914,8 @@ export const UserProvider = (props) => {
             levelsData,
 
             disconnectTONWallet,
-            connectTONWallet
+            connectTONWallet,
+            walletAddress
         }}>
             {props.children}
         </UserContext.Provider>
