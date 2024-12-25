@@ -219,7 +219,7 @@ const InviteFriends = () => {
 										/>
 									</div>
 									<Link
-										to={`https://t.me/share/url?url=t.me/pandatap_mini_bot/pandatap?startapp=${telegramId}&text=Hey  I just made ${balance} $MFI Points on Panda Tap To Earn Game ! The airdrop is definitely going to be huge ! Join via my referral link and we both can get a headstart.`}
+										to={`https://t.me/share/url?url=t.me/pandatap_mini_bot/pandatap?startapp=${telegramId}&text=:tada: Welcome ${username} to PandaTap! :panda_face: Ready to see how high you can climb? Tap away and watch your fortunes grow! Step into the world of PandaTap and begin your journey from the ground up to the prestigious Founder level! Upgrade your cards and level up by tapping and completing various tasks within the app. And remember, adventures are best with friends. :handshake: Invite your friends: more friends — more profit! :money_with_wings:`}
 										className='text-md font-semibold'
 									>
 										Invite a Friend
