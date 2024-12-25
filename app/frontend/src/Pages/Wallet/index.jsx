@@ -5,18 +5,22 @@ import HelmetIcon from "../../assets/HelmetIcon.svg";
 import { RxCross1 } from "react-icons/rx";
 import { FaCopy } from "react-icons/fa";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
-import { TonConnect } from "@tonconnect/sdk";
+import { TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
 
 const Wallet = () => {
 	const { balance, walletAddress, setWalletAddress } = useUser();
 	const apiUrl = process.env.REACT_APP_URL;
 
-	// Initialize TonConnect instance
-	const tonConnect = new TonConnect();
+	// Initialize ton wallet
+	const wallet = useTonWallet();
+
 
 	useEffect(() => {
-		console.log("Wallet Address", walletAddress);
-	}, [walletAddress]);
+		const walletAddress = wallet.account.address;
+		console.log('Wallet Address', walletAddress);
+	}, [wallet]);
+
+
 
 	const truncateWalletAddress = (address) => {
 		if (!address || address.length <= 10) return address;
@@ -41,15 +45,7 @@ const Wallet = () => {
 
 	const connectWallet = async () => {
 		try {
-			const connectedWallet = await tonConnect.connect({
-				bridgeUrl: "https://bridge.tonapi.io/bridge", // Default bridge URL
-				manifestUrl: `${apiUrl}/tonconnect-manifest.json`, // Ensure this is valid
-			});
-			if (connectedWallet) {
-				setWalletAddress(connectedWallet.address);
-				toast.success("Wallet connected successfully!");
-				console.log("Wallet connected:", connectedWallet.address);
-			}
+
 		} catch (error) {
 			console.error("Error connecting wallet:", error);
 			toast.error(`Error connecting wallet: ${error.message}`);
@@ -58,10 +54,7 @@ const Wallet = () => {
 
 	const disconnectWallet = async () => {
 		try {
-			await tonConnect.disconnect();
-			setWalletAddress(null);
-			toast.success("Wallet disconnected successfully!");
-			console.log("Wallet disconnected successfully");
+
 		} catch (error) {
 			console.error("Error disconnecting wallet:", error);
 			toast.error("Failed to disconnect wallet.");
@@ -82,13 +75,7 @@ const Wallet = () => {
 
 				{/* Connect Wallet button */}
 				<div className="relative text-white flex mt-8 w-4/5">
-					<button
-						onClick={connectWallet}
-						className="w-full h-12 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg font-semibold text-sm flex items-center justify-center gap-2"
-					>
-						<img src={HelmetIcon} alt="wallet_icon" width={20} />
-						<span>Connect Wallet</span>
-					</button>
+					<TonConnectButton className="w-full h-12 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg font-semibold text-sm flex items-center justify-center gap-2" />
 				</div>
 			</div>
 
