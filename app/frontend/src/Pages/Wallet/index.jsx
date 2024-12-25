@@ -5,22 +5,35 @@ import HelmetIcon from "../../assets/HelmetIcon.svg";
 import { RxCross1 } from "react-icons/rx";
 import { FaCopy } from "react-icons/fa";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
-import { TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
+import { TonConnect } from "@tonconnect/sdk";
 
 const Wallet = () => {
 	const { balance, walletAddress, setWalletAddress } = useUser();
-	const apiUrl = process.env.REACT_APP_URL;
+	const [walletConnected, setWalletConnected] = useState(false);
 
-	// Initialize ton wallet
-	const wallet = useTonWallet();
-
+	const tonConnect = new TonConnect();
 
 	useEffect(() => {
-		const walletAddress = wallet?.account?.address || '';
-		console.log('Wallet Address', walletAddress);
-	}, [wallet]);
+		// Restore wallet connection if already connected
+		const session = tonConnect.restoreConnection();
+		if (session) {
+			const address = session.account?.address || "";
+			setWalletAddress(address);
+			setWalletConnected(true);
+		}
 
-
+		// Listen for connection status changes
+		tonConnect.onStatusChange((status) => {
+			if (status === "connected") {
+				const address = tonConnect.wallet?.account?.address || "";
+				setWalletAddress(address);
+				setWalletConnected(true);
+			} else {
+				setWalletAddress("");
+				setWalletConnected(false);
+			}
+		});
+	}, [tonConnect, setWalletAddress]);
 
 	const truncateWalletAddress = (address) => {
 		if (!address || address.length <= 10) return address;
@@ -45,7 +58,8 @@ const Wallet = () => {
 
 	const connectWallet = async () => {
 		try {
-
+			await tonConnect.connectWallet();
+			toast.success("Wallet connected successfully!");
 		} catch (error) {
 			console.error("Error connecting wallet:", error);
 			toast.error(`Error connecting wallet: ${error.message}`);
@@ -54,7 +68,10 @@ const Wallet = () => {
 
 	const disconnectWallet = async () => {
 		try {
-
+			await tonConnect.disconnect();
+			setWalletConnected(false);
+			setWalletAddress("");
+			toast.success("Wallet disconnected successfully!");
 		} catch (error) {
 			console.error("Error disconnecting wallet:", error);
 			toast.error("Failed to disconnect wallet.");
@@ -73,9 +90,14 @@ const Wallet = () => {
 					<p className="text-gray-500">≈ {balance * 0.00} $</p>
 				</div>
 
-				{/* Connect Wallet button */}
+				{/* Custom Connect Wallet button */}
 				<div className="relative text-white flex mt-8 w-4/5">
-					<TonConnectButton className="w-full h-12 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg font-semibold text-sm flex items-center justify-center gap-2" />
+					<button
+						className="w-full h-12 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg font-semibold text-sm flex items-center justify-center gap-2 text-white"
+						onClick={walletConnected ? disconnectWallet : connectWallet}
+					>
+						{walletConnected ? "Disconnect Wallet" : "Connect Wallet"}
+					</button>
 				</div>
 			</div>
 
