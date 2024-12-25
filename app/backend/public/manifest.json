@@ -1,7 +1,5 @@
 {
-    "name": "Panda Tap",
-    "url": "https://panda-tap-app-frontend.vercel.app",
-    "iconUrl": "https://panda-tap-app-frontend.vercel.app/panda.jpg",
-    "bridge": "https://connect.tonhubapi.com/bridge",
-    "supportedFeatures": ["ton_connect", "ton_disconnect"]
+  "url": "https://panda-tap-app-frontend.vercel.app",
+  "name": "Panda_Tap_APP",
+  "iconUrl": "https://panda-tap-backend-production.up.railway.app/logo.png"
 }
