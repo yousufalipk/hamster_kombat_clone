@@ -16,25 +16,39 @@ const Wallet = () => {
 
 	useEffect(() => {
 		// Restore wallet connection if already connected
-		const session = tonConnect.restoreConnection();
-		if (session) {
-			const address = session.account?.address || "";
-			setWalletAddress(address);
-			setWalletConnected(true);
-		}
+		const restoreConnection = async () => {
+			try {
+				const session = tonConnect.restoreConnection();
+				if (session) {
+					const address = session.account?.address || null;
+					setWalletAddress(address);
+					setWalletConnected(!!address);
+				}
+			} catch (error) {
+				console.error("Error restoring connection:", error);
+				toast.error("Failed to restore wallet connection.");
+			}
+		};
+
+		restoreConnection();
 
 		// Listen for connection status changes
-		tonConnect.onStatusChange((status) => {
+		const handleStatusChange = (status) => {
 			if (status === "connected") {
-				const address = tonConnect.wallet?.account?.address || "";
+				const address = tonConnect.wallet?.account?.address || null;
 				setWalletAddress(address);
-				setWalletConnected(true);
+				setWalletConnected(!!address);
 			} else {
-				setWalletAddress("");
+				setWalletAddress(null);
 				setWalletConnected(false);
 			}
-		});
-	}, [tonConnect, setWalletAddress]);
+		};
+
+		tonConnect.onStatusChange(handleStatusChange);
+
+		// Cleanup listener on unmount
+		return () => tonConnect.offStatusChange(handleStatusChange);
+	}, [tonConnect]);
 
 	const truncateWalletAddress = (address) => {
 		if (!address || address.length <= 10) return address;
@@ -60,7 +74,14 @@ const Wallet = () => {
 	const connectWallet = async () => {
 		try {
 			await tonConnect.connectWallet();
-			toast.success("Wallet connected successfully!");
+			const session = tonConnect.wallet?.account;
+			if (session) {
+				setWalletAddress(session.address);
+				setWalletConnected(true);
+				toast.success("Wallet connected successfully!");
+			} else {
+				toast.error("Failed to retrieve wallet address.");
+			}
 		} catch (error) {
 			console.error("Error connecting wallet:", error);
 			toast.error(`Error connecting wallet: ${error.message}`);
@@ -76,14 +97,13 @@ const Wallet = () => {
 
 			await tonConnect.disconnect();
 			setWalletConnected(false);
-			setWalletAddress("");
+			setWalletAddress(null);
 			toast.success("Wallet disconnected successfully!");
 		} catch (error) {
 			console.error("Error disconnecting wallet:", error);
 			toast.error("Failed to disconnect wallet.");
 		}
 	};
-
 
 	return (
 		<div className="h-[86vh] w-[100vw] flex flex-col items-center relative">
@@ -97,7 +117,6 @@ const Wallet = () => {
 					<p className="text-gray-500">≈ {balance * 0.00} $</p>
 				</div>
 
-				{/* Custom Connect Wallet button */}
 				<div className="relative text-white flex mt-8 w-4/5">
 					<button
 						className="w-full h-12 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg font-semibold text-sm flex items-center justify-center gap-2 text-white"
@@ -108,7 +127,6 @@ const Wallet = () => {
 				</div>
 			</div>
 
-			{/* Wallet address display and copy option */}
 			{walletAddress && (
 				<div className="w-[80vw] h-[33vh] rounded-2xl bg-[#0d121c] flex flex-col justify-center items-center gap-3 shadow-sm shadow-white">
 					<h1 className="text-center text-gray-200 text-xl font-semibold px-4">
