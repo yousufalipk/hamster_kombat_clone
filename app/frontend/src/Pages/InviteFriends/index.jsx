@@ -11,7 +11,7 @@ import { useUser } from '../../context/index';
 import { Link } from 'react-router-dom';
 
 const InviteFriends = () => {
-	const { telegramId, balance, referrals } = useUser();
+	const { telegramId, username, referrals } = useUser();
 
 	const formatBalanceWithCommas = (balance) => {
 		return balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
