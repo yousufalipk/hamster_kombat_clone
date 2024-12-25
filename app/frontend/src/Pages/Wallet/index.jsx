@@ -8,8 +8,9 @@ import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import { TonConnect } from "@tonconnect/sdk";
 
 const Wallet = () => {
-	const { balance, walletAddress, setWalletAddress } = useUser();
+	const { balance } = useUser();
 	const [walletConnected, setWalletConnected] = useState(false);
+	const [walletAddress, setWalletAddress] = useState(null);
 
 	const tonConnect = new TonConnect();
 
@@ -68,6 +69,11 @@ const Wallet = () => {
 
 	const disconnectWallet = async () => {
 		try {
+			if (!walletConnected) {
+				toast.error("Wallet is not connected. Nothing to disconnect.");
+				return;
+			}
+
 			await tonConnect.disconnect();
 			setWalletConnected(false);
 			setWalletAddress("");
@@ -77,6 +83,7 @@ const Wallet = () => {
 			toast.error("Failed to disconnect wallet.");
 		}
 	};
+
 
 	return (
 		<div className="h-[86vh] w-[100vw] flex flex-col items-center relative">
