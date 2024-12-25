@@ -5,41 +5,18 @@ import HelmetIcon from "../../assets/HelmetIcon.svg";
 import { RxCross1 } from "react-icons/rx";
 import { FaCopy } from "react-icons/fa";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
-import TonConnect from "@tonconnect/sdk";
+import { TonConnect } from "@tonconnect/sdk";
 
 const Wallet = () => {
 	const { balance, walletAddress, setWalletAddress } = useUser();
 	const apiUrl = process.env.REACT_APP_URL;
 
 	// Initialize TonConnect instance
-	const tonConnect = new TonConnect({
-		manifestUrl: `${apiUrl}/tonconnect-manifest.json`,
-	});
+	const tonConnect = new TonConnect();
 
-	// Handle connection state updates
-	const connectWallet = async () => {
-		try {
-			const connectedWallet = await tonConnect.connect();
-			setWalletAddress(connectedWallet.address);
-			toast.success("Wallet connected successfully!");
-			console.log("Wallet connected:", connectedWallet.address);
-		} catch (error) {
-			console.error("Error connecting wallet:", error.message);
-			toast.error("Failed to connect wallet.");
-		}
-	};
-
-	const disconnectWallet = async () => {
-		try {
-			await tonConnect.disconnect();
-			setWalletAddress(null);
-			toast.success("Wallet disconnected successfully!");
-			console.log("Wallet disconnected successfully");
-		} catch (error) {
-			console.error("Error disconnecting wallet:", error.message);
-			toast.error("Failed to disconnect wallet.");
-		}
-	};
+	useEffect(() => {
+		console.log("Wallet Address", walletAddress);
+	}, [walletAddress]);
 
 	const truncateWalletAddress = (address) => {
 		if (!address || address.length <= 10) return address;
@@ -62,6 +39,35 @@ const Wallet = () => {
 		}
 	};
 
+	const connectWallet = async () => {
+		try {
+			const connectedWallet = await tonConnect.connect({
+				bridgeUrl: "https://bridge.tonapi.io/bridge", // Default bridge URL
+				manifestUrl: `${apiUrl}/tonconnect-manifest.json`, // Ensure this is valid
+			});
+			if (connectedWallet) {
+				setWalletAddress(connectedWallet.address);
+				toast.success("Wallet connected successfully!");
+				console.log("Wallet connected:", connectedWallet.address);
+			}
+		} catch (error) {
+			console.error("Error connecting wallet:", error);
+			toast.error(`Error connecting wallet: ${error.message}`);
+		}
+	};
+
+	const disconnectWallet = async () => {
+		try {
+			await tonConnect.disconnect();
+			setWalletAddress(null);
+			toast.success("Wallet disconnected successfully!");
+			console.log("Wallet disconnected successfully");
+		} catch (error) {
+			console.error("Error disconnecting wallet:", error);
+			toast.error("Failed to disconnect wallet.");
+		}
+	};
+
 	return (
 		<div className="h-[86vh] w-[100vw] flex flex-col items-center relative">
 			<div className="w-[100vw] h-[40vh] flex flex-col justify-center items-center z-10">
@@ -71,19 +77,19 @@ const Wallet = () => {
 						<h1 className="text-xl font-semibold">{balance}</h1>
 						<img src={LittleCoin} alt="coin_img" />
 					</div>
-					<p className="text-gray-500">≈ {balance * 0.0} $</p>
+					<p className="text-gray-500">≈ {balance * 0.00} $</p>
 				</div>
 
 				{/* Connect Wallet button */}
-				{!walletAddress ? (
+				<div className="relative text-white flex mt-8 w-4/5">
 					<button
 						onClick={connectWallet}
-						className="relative text-white flex mt-8 w-4/5 h-12 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg font-semibold text-sm justify-center items-center"
+						className="w-full h-12 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg font-semibold text-sm flex items-center justify-center gap-2"
 					>
-						<img src={HelmetIcon} alt="wallet_icon" width={20} className="mr-2" />
-						Connect Wallet
+						<img src={HelmetIcon} alt="wallet_icon" width={20} />
+						<span>Connect Wallet</span>
 					</button>
-				) : null}
+				</div>
 			</div>
 
 			{/* Wallet address display and copy option */}
@@ -93,7 +99,7 @@ const Wallet = () => {
 						Your TON wallet is connected
 					</h1>
 					<p className="text-center text-gray-400 text-md">
-						You can disconnect or copy the wallet address
+						You can disconnect or copy wallet address
 					</p>
 					<div className="w-full h-12 flex justify-between items-center gap-1 px-2">
 						<div

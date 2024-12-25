@@ -915,7 +915,8 @@ export const UserProvider = (props) => {
 
             disconnectTONWallet,
             connectTONWallet,
-            walletAddress
+            walletAddress,
+            setWalletAddress
         }}>
             {props.children}
         </UserContext.Provider>
