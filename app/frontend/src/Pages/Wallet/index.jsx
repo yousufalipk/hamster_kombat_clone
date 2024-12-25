@@ -16,7 +16,7 @@ const Wallet = () => {
 
 
 	useEffect(() => {
-		const walletAddress = wallet.account.address;
+		const walletAddress = wallet?.account?.address || '';
 		console.log('Wallet Address', walletAddress);
 	}, [wallet]);
 
