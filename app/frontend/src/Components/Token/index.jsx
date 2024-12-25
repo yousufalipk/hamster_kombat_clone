@@ -52,6 +52,10 @@ const Token = () => {
 	};
 
 	useEffect(() => {
+		console.log('Token', token);
+	}, [token])
+
+	useEffect(() => {
 		let interval;
 		if (buttonLoading) {
 			interval = setInterval(() => {
@@ -418,24 +422,13 @@ const Token = () => {
 						)}
 
 						<div className='bg-[#060611] px-4 w-full h-[100vh] overflow-scroll'>
-							<div className='flex items-center gap-4'>
-								<div className='text-[#FFF] text-[18px] font-semibold'>{token.project.name}</div>
+							<div className="text-white flex justify-end items-center gap-2 p-5">
+								<img src={LittleCoin} alt="Coin-Icon" className="" />
+								{balance}
 							</div>
-
 							{/* Upper Card Portion */}
 							<div>
-								<div className="pt-10">
-									{/* Card Header */}
-									<div className="flex py-3 absolute top-0 right-0">
-										<div
-											className={`mx-auto flex items-center gap-2 px-4 rounded-[25.93px]`}
-										>
-											<div className="text-white flex justify-center items-center gap-2 ">
-												<img src={LittleCoin} alt="Coin-Icon" className="" />
-												{balance}
-											</div>
-										</div>
-									</div>
+								<div>
 									{/* Card */}
 									<button
 										style={{

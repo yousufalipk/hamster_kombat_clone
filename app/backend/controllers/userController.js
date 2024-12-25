@@ -912,10 +912,12 @@ exports.userOneProjectDetails = async (req, res) => {
             });
         }
 
+        console.log('Display User Level', displayUserLevel);
+
         const userData = {
             userLevel: displayUserLevel === 'max'
                 ? 'max'
-                : (!displayUserLevel ? 1 : (displayUserLevel + 1)),
+                : (displayUserLevel === null || displayUserLevel === undefined ? 0 : (displayUserLevel + 1)),
             walletBalance,
             nextLevelCost,
             nextLevelReward,

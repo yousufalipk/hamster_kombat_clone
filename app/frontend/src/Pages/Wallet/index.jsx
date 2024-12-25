@@ -60,7 +60,6 @@ const Wallet = () => {
 	const connectWallet = async (address) => {
 		try {
 			setWalletAddress(address);
-			console.log('Ton Wallet Connected Successfuly!');
 		} catch (error) {
 			console.error("Error connecting wallet:", error);
 		}
@@ -69,7 +68,6 @@ const Wallet = () => {
 	const disconnectWallet = async () => {
 		try {
 			setWalletAddress(null);
-			console.log('Ton wallet disconnected succesfully!');
 		} catch (error) {
 			console.error("Error disconnecting wallet:", error);
 		}

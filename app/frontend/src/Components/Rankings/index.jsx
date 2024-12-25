@@ -160,7 +160,7 @@ const Rankings = () => {
 		<>
 			{topUsers && currentPageUsers && (
 				<>
-					<div className='h-[92vh] w-[100vw] z-10 overflow-scroll'>
+					<div className='h-[92vh] w-[100vw] z-10 overflow-scroll overflow-x-hidden'>
 						<div className='min-h-[37vh] px-5 rounded-br-3xl rounded-bl-3xl relative'>
 							{/* Background Image */}
 							<div className="absolute z-10">
