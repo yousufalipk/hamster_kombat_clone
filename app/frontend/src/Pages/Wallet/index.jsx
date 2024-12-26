@@ -59,12 +59,7 @@ const Wallet = () => {
 
 	const connectWallet = async (address) => {
 		try {
-			const res = await updateWalletAddressToDb(address);
-			if (res.success) {
-				toast.success(res.mess);
-			} else {
-				toast.error(res.mess);
-			}
+			await updateWalletAddressToDb(address);
 			setWalletAddress(address);
 		} catch (error) {
 			console.error("Error connecting wallet:", error);
@@ -73,12 +68,7 @@ const Wallet = () => {
 
 	const disconnectWallet = async () => {
 		try {
-			const res = await updateWalletAddressToDb(null);
-			if (res.success) {
-				toast.success(res.mess);
-			} else {
-				toast.error(res.mess);
-			}
+			await updateWalletAddressToDb(null);
 			setWalletAddress(null);
 		} catch (error) {
 			console.error("Error disconnecting wallet:", error);
@@ -108,7 +98,7 @@ const Wallet = () => {
 			unsubscribe();
 		}
 
-	}, [tonConnectUI, connectWallet, disconnectWallet]);
+	}, []);
 
 	useEffect(() => {
 		let interval;
