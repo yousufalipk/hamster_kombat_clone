@@ -149,6 +149,27 @@ export const UserProvider = (props) => {
         { id: 14, name: 'The Crypto', rangeFrom: 3000000000, rangeTo: 'max' },
     ];
 
+    const formatLargeNumber = (value) => {
+        if (value === null || value === undefined || isNaN(value)) return '0';
+
+        const absValue = Math.abs(value);
+        let formattedValue = value;
+
+        if (absValue >= 1e12) {
+            formattedValue = `${(value / 1e12).toFixed(2)}T`;
+        } else if (absValue >= 1e9) {
+            formattedValue = `${(value / 1e9).toFixed(2)}B`;
+        } else if (absValue >= 1e6) {
+            formattedValue = `${(value / 1e6).toFixed(2)}M`;
+        } else if (absValue >= 1e3) {
+            formattedValue = `${(value / 1e3).toFixed(2)}K`;
+        } else {
+            formattedValue = value.toFixed(2);
+        }
+
+        return formattedValue;
+    };
+
     useEffect(() => {
         if (!userId) {
             initializeUser();
@@ -930,7 +951,9 @@ export const UserProvider = (props) => {
             updateWalletAddressToDb,
 
             rankLoader,
-            setRankLoader
+            setRankLoader,
+
+            formatLargeNumber
         }}>
             {props.children}
         </UserContext.Provider>

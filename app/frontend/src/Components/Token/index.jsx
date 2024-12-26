@@ -12,6 +12,7 @@ import linbottle from '../../assets/token/LineBottle.svg'
 import closebutton from "../../assets/token/closebutton.svg"
 
 import popupLine from "../../assets/token/popupLine.svg";
+import PopupVerticalLine from '../../assets/optimizedImages/popup/verticalLine.webp';
 
 import Twitter from '../../assets/token/twitter.svg';
 import Telegram from '../../assets/token/telegram.svg';
@@ -23,7 +24,7 @@ import cardbg from "../../assets/token/tokencardbg.svg";
 import loadcoin from "../../assets/token/loadcoin.svg";
 
 const Token = () => {
-	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask } = useUser();
+	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatLargeNumber } = useUser();
 
 	const [isModalOpen, setModalOpen] = useState(false);
 	const [processing, setProcessing] = useState(true);
@@ -79,10 +80,6 @@ const Token = () => {
 			}
 		}
 	}
-
-	useEffect(() => {
-		console.log("Selected Task", selectedTask);
-	}, [selectedTask])
 
 	useEffect(() => {
 		fetchData();
@@ -173,6 +170,14 @@ const Token = () => {
 		}
 	}
 
+	const getFirstWord = (inputLine) => {
+		if (typeof inputLine !== "string") {
+			inputLine = String(inputLine);
+		}
+		const firstWord = inputLine.split(' ')[0];
+		return firstWord.toLowerCase();
+	}
+
 	return (
 		<>
 			<>
@@ -188,31 +193,30 @@ const Token = () => {
 						{isModalOpen && (
 							<>
 								<div
+									onClick={() => {
+										setPopupClosing(true);
+										setTimeout(() => {
+											setModalOpen(false);
+											setPopupClosing(false);
+										}, 500);
+									}}
 									style={{
 										animation: `${popupClosing ? "fadeOut" : "fadeIn"
 											} 0.5s ease-in-out forwards`,
 									}}
-									className='popup-overlay fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-80 overflow-hidden'>
-									<div
-										onClick={() => {
-											setPopupClosing(true);
-											setTimeout(() => {
-												setModalOpen(false);
-												setPopupClosing(false);
-											}, 500);
-										}}
-										className="w-full h-[50vh] absolute top-0">
-									</div>
+									className='popup-overlay fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-80 overflow-hidden'
+								>
 									<div
 										style={{
 											animation: `${popupClosing ? "closePopup" : "openPopup"
 												} 0.5s ease-in-out forwards`,
 										}}
-										className='fixed bottom-0 h-[50vh] w-screen'>
-										<div className="absolute -inset-1 h-[50vh] bg-[#23a7ff] rounded-[35px]"></div>
-										<div className="absolute -inset-2 h-[50vh] bg-[#23a7ff] blur rounded-[50px]"></div>
+										className='fixed bottom-0 h-[53vh] w-screen'>
+										<div className="absolute -inset-1 h-[53vh] bg-[#23a7ff] rounded-[35px]"></div>
+										<div className="absolute -inset-2 h-[53vh] bg-[#23a7ff] blur rounded-[50px]"></div>
 										<div
-											className='w-screen bg-[#06060E] h-[50vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+											onClick={(e) => e.stopPropagation()}
+											className='w-screen bg-[#06060E] h-[53vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
 											<div className="absolute top-3 right-5 z-20"
 												onClick={() => {
 													setPopupClosing(true);
@@ -248,16 +252,16 @@ const Token = () => {
 												</div>
 												{/* popup title */}
 												<div className='flex justify-center mt-1'>
-													<h1 className='text-sm font-medium'>{token.project.name}</h1>
+													<h1 className='text-2xl popup-heading text-center'>{token.project.name}</h1>
 												</div>
 												{/* description */}
 												<div className='my-2'>
-													<p className='text-center font-thin text-xs'>
+													<p className='text-[14px] font-light text-center mt-1'>
 														You will get +{token?.userData?.nextLevelReward} coins of {token.project.name} coins against {token.userData.nextLevelCost} pandatop coins.
 													</p>
 												</div>
-												<div className='text-center text-[#FF9500] font-semibold'>
-													<p>level {token.userData.level}</p>
+												<div className='text-xl text-customOrange text-center'>
+													<p>level {token.userData.userLevel + 1}</p>
 												</div>
 												<div className='flex justify-center mt-3 gap-4'>
 													<div className='flex justify-center items-center gap-1'>
@@ -266,38 +270,42 @@ const Token = () => {
 															alt="Little coin"
 															className='w-5'
 														/>
-														<span className='text-sm'>+{token.userData.nextLevelReward} {token.project.name.match(/[A-Z]/g)?.join('')}</span>
+														<span className='text-sm'>+{token.userData.nextLevelReward.toLocaleString()} {token.project.name.match(/[A-Z]/g)?.join('')}</span>
 													</div>
-													<div className=' gap-2'>
-														<span className='text-xs font-thin'>coins per minute</span>
-														<div className='flex'>
+													<img src={PopupVerticalLine} alt="vertical_line" className="h-10" />
+													<div className='flex gap-1 justify-between items-center'>
+														<div className='flex justify-center items-center gap-1'>
 															<img
 																src={LittleCoin}
 																alt="Little coin"
+																className='w-5'
 															/>
-															<p>+{token.userData.nextLevelCpm}</p>
+															<p className="text-sm">+{token.userData.nextLevelCpm}</p>
 														</div>
+														<span className='text-xs font-thin'>CPM</span>
 													</div>
 												</div>
-												<div className='mt-2'>
+												<div className='py-2'>
 													<img src={popupLine} alt="" />
 												</div>
-												<div className='mt-2 flex justify-center items-center'>
+												<div className='flex justify-center items-center gap-1 text-[30px] text-customOrange py-2'>
 													<img
 														src={LittleCoin}
 														alt="Little coin"
-														className='w-10 h-10'
+														width={30}
+														height={30}
 													/>
-													<span className='text-[#FF9500] text-xl'>{token.userData.nextLevelCost}</span>
+													<span className='text-[#FF9500] text-xl'>{token.userData.nextLevelCost.toLocaleString()}</span>
 												</div>
 
-												{/* action buttons */}
-												<div className='flex gap-4 justify-center p-2'>
-
+												{/* Buttons */}
+												<div className="w-full h-[5vh] py-2">
 													<button
+														className={`w-full h-10 py-1 px-3 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm flex justify-center items-center`}
+														onClick={() => {
+															handleProjectUpgrade();
+														}}
 														disabled={buttonLoading || processing || token.userData.userLevel === 'max' || (token.userData.nextLevelCost) > balance}
-														className='w-1/2 py-1 px-3 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm flex justify-center items-center'
-														onClick={() => (handleProjectUpgrade())}
 													>
 														{token.userData.userLevel === 'max' ? (
 															<>
@@ -310,9 +318,12 @@ const Token = () => {
 																) : (
 																	<>
 																		{buttonLoading ? (
-																			<span className="h-6 font-bold">
-																				{dots}
-																			</span>) : 'Confirm'}
+																			<span className="flex justify-center items-center font-semibold text-5xl w-full">
+																				<p className="absolute -mt-6">
+																					{dots}
+																				</p>
+																			</span>
+																		) : 'Confirm'}
 																	</>
 																)}
 															</>
@@ -372,7 +383,23 @@ const Token = () => {
 														}}
 														className="bg-white py-2 rounded-md text-black px-6 font-medium"
 													>
-														{buttonText[selectedTask.iconType]}
+														{getFirstWord(selectedTask.title) === 'subscribe' || getFirstWord(selectedTask.title) === 'quote' || getFirstWord(selectedTask) === 'retweet' ? (
+															getFirstWord(selectedTask.title) === 'subscribe' ? (
+																<>{"Subscribe"}</>
+															) : (
+																getFirstWord(selectedTask.title) === 'retweet' ? (
+																	<>
+																		{"Retweet"}
+																	</>
+																) : (
+																	<>
+																		{"Quote"}
+																	</>
+																)
+															)
+														) : (
+															<>{buttonText[selectedTask.iconType]}</>
+														)}
 													</button>
 												</div>
 												{selectedTask.claimedStatus === 'pending' && (
@@ -388,7 +415,7 @@ const Token = () => {
 															width={25}
 															height={25}
 														/>
-														{selectedTask.reward} {token.project.name.match(/[A-Z]/g)?.join('')}
+														{selectedTask.reward.toLocaleString()} {token.project.name.match(/[A-Z]/g)?.join('')}
 													</p>
 												</div>
 												{selectedTask.claimedStatus !== 'claimed' ? (
@@ -424,7 +451,7 @@ const Token = () => {
 						<div className='bg-[#060611] px-4 w-full h-[100vh] overflow-scroll'>
 							<div className="text-white flex justify-end items-center gap-2 p-5">
 								<img src={LittleCoin} alt="Coin-Icon" className="" />
-								{balance}
+								{balance.toLocaleString()}
 							</div>
 							{/* Upper Card Portion */}
 							<div>
@@ -490,7 +517,7 @@ const Token = () => {
 																		/>
 																	</span>
 																	<p className="text-xl">
-																		{token.userData.nextLevelCost}
+																		{token.userData.nextLevelCost.toLocaleString()}
 																	</p>
 																</div>
 															)}
@@ -516,7 +543,7 @@ const Token = () => {
 																<div className="flex gap-2">
 																	<img src={BigCoin} alt="Coin-Icon" />
 																	<p className="text-white">
-																		{token.userData.walletBalance || 0}
+																		{token.userData.walletBalance.toLocaleString() || 0}
 																		<span className="text-xs">{token.project.name.match(/[A-Z]/g)?.join('')}</span>
 																	</p>
 
@@ -555,7 +582,7 @@ const Token = () => {
 																	<img src={loadcoin} alt="" width={12} />
 																</div>
 																<div className="text-xl text-[#FF8F00] font-medium">
-																	<p>+{token?.userData?.nextLevelCpm}</p>
+																	<p>+{formatLargeNumber(token?.userData?.nextLevelCpm)}</p>
 																</div>
 															</div>
 															<div className="w-[40%] flex items-center gap-2 border justify-center border-[#fff9f9] rounded-xl py-1">
@@ -565,7 +592,7 @@ const Token = () => {
 																	alt="Coin-Icon"
 																/>
 																<div className="text-[#FFF] text-[15px] font-normal text-xs ">
-																	<p> + {token?.userData?.nextLevelReward} {token.project.name.match(/[A-Z]/g)?.join('')}</p>
+																	<p> + {token?.userData?.nextLevelReward.toLocaleString()} {token.project.name.match(/[A-Z]/g)?.join('')}</p>
 																</div>
 															</div>
 														</div>

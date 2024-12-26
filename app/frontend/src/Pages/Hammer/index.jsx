@@ -38,7 +38,7 @@ const Hammer = () => {
 					<div className='bg-[#0C0C0C] h-[30vh] relative rounded-b-[26px]'>
 						<div className="absolute right-3 top-2 flex justify-end items-end gap-1 text-white">
 							<img src={SmallCoin} alt="smallCoin" width={25} />
-							<p>{balance}</p>
+							<p>{balance.toLocaleString()}</p>
 						</div>
 						{/* Two Cards */}
 						<div className='h-[20vh] flex gap-5 justify-center items-center pt-5'>

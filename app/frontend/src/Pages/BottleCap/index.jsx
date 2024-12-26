@@ -141,7 +141,7 @@ const BottleCap = () => {
 		}
 	}
 
-	function getFirstWord(inputLine) {
+	const getFirstWord = (inputLine) => {
 		if (typeof inputLine !== "string") {
 			inputLine = String(inputLine);
 		}
@@ -228,11 +228,19 @@ const BottleCap = () => {
 														}}
 														className="bg-white py-2 rounded-md text-black px-6 font-medium"
 													>
-														{getFirstWord(selectedTask.title) === 'subscribe' || getFirstWord(selectedTask.title) === 'quote' ? (
+														{getFirstWord(selectedTask.title) === 'subscribe' || getFirstWord(selectedTask.title) === 'quote' || getFirstWord(selectedTask) === 'retweet' ? (
 															getFirstWord(selectedTask.title) === 'subscribe' ? (
 																<>{"Subscribe"}</>
 															) : (
-																<>{"Quote"}</>
+																getFirstWord(selectedTask.title) === 'retweet' ? (
+																	<>
+																		{"Retweet"}
+																	</>
+																) : (
+																	<>
+																		{"Quote"}
+																	</>
+																)
 															)
 														) : (
 															<>{buttonText[selectedTask.iconType]}</>

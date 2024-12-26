@@ -280,7 +280,7 @@ const VCS = () => {
 																alt='Coin-Icon'
 																width="15"
 															/>
-															<div className="text-sm">{vc.userData?.nextLevelCost || vc.levels[0].cost}</div>
+															<div className="text-sm">{vc.userData?.nextLevelCost.toLocaleString() || vc.levels[0].cost.toLocaleString()}</div>
 														</div>
 													</>
 												)}

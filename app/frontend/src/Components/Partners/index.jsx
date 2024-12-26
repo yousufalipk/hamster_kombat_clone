@@ -11,7 +11,7 @@ import { useUser } from "../../context";
 
 const Partners = () => {
 	const navigate = useNavigate();
-	const { patners, fetchPatners, upgradePatnerLevel, patnerLoader, balance } = useUser();
+	const { patners, fetchPatners, upgradePatnerLevel, patnerLoader, balance, formatLargeNumber } = useUser();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedPatner, setSelectedPatner] = useState(null);
 
@@ -278,7 +278,7 @@ const Partners = () => {
 																alt='Coin-Icon'
 																width="15"
 															/>
-															<div className="text-sm">{patner.userData?.nextLevelCost || patner.levels[0].cost}</div>
+															<div className="text-sm">{patner.userData?.nextLevelCost.toLocaleString() || patner.levels[0].cost.toLocaleString()}</div>
 														</div>
 													</>
 												)}

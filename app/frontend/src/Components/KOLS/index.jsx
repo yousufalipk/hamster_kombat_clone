@@ -10,7 +10,7 @@ import close from "../../assets/dailyreward/close.svg"
 import { useUser } from '../../context/index';
 
 const KOLS = () => {
-	const { fetchKols, upgradeKolsLevel, kols, kolsLoader, balance } = useUser();
+	const { fetchKols, upgradeKolsLevel, kols, kolsLoader, balance, formatLargeNumber } = useUser();
 
 	const navigate = useNavigate();
 
@@ -73,7 +73,7 @@ const KOLS = () => {
 		return (
 			<>
 				<div className="h-[33vh] w-full flex justify-center items-center">
-					<CustomLoader className="animate-spin w-20 h-20 text-white" />
+					<CustomLoader size={100} />
 				</div>
 			</>
 		)
@@ -286,7 +286,7 @@ const KOLS = () => {
 																alt='Coin-Icon'
 																width="15"
 															/>
-															<div className="text-sm">{kol.userData?.nextLevelCost || kol.levels[0].cost}</div>
+															<div className="text-sm">{kol.userData?.nextLevelCost.toLocaleString() || kol.levels[0].cost.toLocaleString()}</div>
 														</div>
 													</>
 												)}

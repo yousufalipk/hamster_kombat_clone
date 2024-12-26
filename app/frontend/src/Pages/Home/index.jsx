@@ -99,7 +99,8 @@ const Home = () => {
 		claimCpmCoins,
 		setAvaliableCpm,
 		levelsData,
-		comboCards
+		comboCards,
+		formatLargeNumber
 	} = useUser();
 
 	const [isRefilling, setIsRefilling] = useState(false);
@@ -603,7 +604,6 @@ const Home = () => {
 				toast.error(res.mess);
 			}
 		} catch (error) {
-			console.log('Internal Server Error!');
 			toast.error('Internal Server Error!');
 		} finally {
 			setButtonLoading(false);
@@ -840,7 +840,7 @@ const Home = () => {
 										<div>
 											<img src={BigCoin} alt="Coin-Icon" width="24" />
 										</div>
-										<div className="text-[#FFF] text-[24px] font-medium">{formatBalance(balance)}</div>
+										<div className="text-[#FFF] text-[24px] font-medium">{balance.toLocaleString()}</div>
 									</div>
 								</div>
 
@@ -1368,7 +1368,7 @@ const Home = () => {
 																					height={30}
 																					className="mt-1"
 																				/>
-																				{energyUpgradeCost[energyLevel + 1]}
+																				{energyUpgradeCost[energyLevel + 1].toLocaleString()}
 																			</p>
 																		</div>
 																	</>
@@ -1398,7 +1398,7 @@ const Home = () => {
 																	handleEnergyUpgrade();
 																}}
 																disabled={buttonLoading}
-																className={`w-full h-12 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableEnergyRefill === 0 && `grayscale`}`}
+																className={`w-full h-12 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
 															>
 																{buttonLoading ? (
 																	<span className="flex justify-center items-center text-5xl font-bold w-full">
@@ -1407,11 +1407,9 @@ const Home = () => {
 																		</p>
 																	</span>
 																) : (
-																	avaliableEnergyRefill === 0 ? (
-																		'Come back tomorrow'
-																	) : (
-																		'Upgrade'
-																	)
+																	<>
+																		{energyLevel >= 9 ? ("Max Level") : ('Upgrade')}
+																	</>
 																)}
 															</button>
 														</div>
@@ -1496,7 +1494,7 @@ const Home = () => {
 																				height={30}
 																				className="mt-1"
 																			/>
-																			{multitapUpgradeCost[multitapLevel + 1]}
+																			{multitapUpgradeCost[multitapLevel + 1].toLocaleString()}
 																		</p>
 																	</div>
 																</>
@@ -1532,7 +1530,7 @@ const Home = () => {
 															</button>
 														</div>
 														<button
-															className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableUnlimitedTaps === 0 && `grayscale`}`}
+															className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
 															onClick={() => {
 																// Upgrade multitap limit
 																handleMultitapUpgrade()
