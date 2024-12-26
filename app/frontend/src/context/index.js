@@ -132,6 +132,8 @@ export const UserProvider = (props) => {
 
     const [rankLoader, setRankLoader] = useState(false);
 
+    const [mainLoader, setMainLoader] = useState(false);
+
     const levelsData = [
         { id: 1, name: 'Adventurous', rangeFrom: 0, rangeTo: 5000 },
         { id: 2, name: 'Energetic', rangeFrom: 5000, rangeTo: 50000 },
@@ -274,7 +276,7 @@ export const UserProvider = (props) => {
     // Initilize User
     const initializeUser = async () => {
         let referrerId = null, isPremium = false, profileUrl = "not set";
-        setLoader(true);
+        setMainLoader(true);
         try {
             let telegramUser;
             if (staticUser === 'true') {
@@ -336,7 +338,7 @@ export const UserProvider = (props) => {
             });
         } finally {
             setUserDataInitlized(true);
-            setLoader(false);
+            setMainLoader(false);
         }
     }
 
@@ -953,7 +955,8 @@ export const UserProvider = (props) => {
             rankLoader,
             setRankLoader,
 
-            formatLargeNumber
+            formatLargeNumber,
+            mainLoader
         }}>
             {props.children}
         </UserContext.Provider>

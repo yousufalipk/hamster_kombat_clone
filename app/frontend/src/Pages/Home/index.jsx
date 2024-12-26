@@ -100,7 +100,6 @@ const Home = () => {
 		setAvaliableCpm,
 		levelsData,
 		comboCards,
-		formatLargeNumber
 	} = useUser();
 
 	const [isRefilling, setIsRefilling] = useState(false);
@@ -1397,7 +1396,7 @@ const Home = () => {
 																onClick={() => {
 																	handleEnergyUpgrade();
 																}}
-																disabled={buttonLoading}
+																disabled={energyLevel >= 9 || buttonLoading}
 																className={`w-full h-12 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
 															>
 																{buttonLoading ? (

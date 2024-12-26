@@ -53,10 +53,6 @@ const Token = () => {
 	};
 
 	useEffect(() => {
-		console.log('Token', token);
-	}, [token])
-
-	useEffect(() => {
 		let interval;
 		if (buttonLoading) {
 			interval = setInterval(() => {
@@ -380,10 +376,11 @@ const Token = () => {
 													<button
 														onClick={() => {
 															window.open(selectedTask.link, '_blank');
+															console.log('title', getFirstWord(selectedTask.title));
 														}}
 														className="bg-white py-2 rounded-md text-black px-6 font-medium"
 													>
-														{getFirstWord(selectedTask.title) === 'subscribe' || getFirstWord(selectedTask.title) === 'quote' || getFirstWord(selectedTask) === 'retweet' ? (
+														{getFirstWord(selectedTask.title) === 'subscribe' || getFirstWord(selectedTask.title) === 'quote' || getFirstWord(selectedTask.title) === 'retweet' ? (
 															getFirstWord(selectedTask.title) === 'subscribe' ? (
 																<>{"Subscribe"}</>
 															) : (
@@ -669,7 +666,7 @@ const Token = () => {
 																<div className="flex text-md">{task.title}</div>
 																<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
 																	<img src={BigCoin} alt="" className="h-4 w-5" />
-																	<span className="text-sm">+{task.reward}</span>
+																	<span className="text-sm">+{task.reward.toLocaleString()}</span>
 																</div>
 															</div>
 															<div>
@@ -733,7 +730,7 @@ const Token = () => {
 																<div className="flex text-md">{task.title}</div>
 																<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
 																	<img src={BigCoin} alt="" className="h-4 w-5" />
-																	<span className="text-sm">+{task.reward}</span>
+																	<span className="text-sm">+{task.reward.toLocaleString()}</span>
 																</div>
 															</div>
 															<div>

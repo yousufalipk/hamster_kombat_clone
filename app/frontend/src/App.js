@@ -6,13 +6,14 @@ import GamePage from "./Pages/Game/Game";
 import Layout from "./Layout/index";
 import { useUser } from "./context/index";
 import axios from 'axios';
+import SplashScreen from './assets/splashScreen.png';
 
 const App = () => {
 	const [isTimeValid, setIsTimeValid] = useState(true);
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 	const apiUrl = process.env.REACT_APP_URL;
 
-	const { loader, loaderErrorMes } = useUser();
+	const { loader, loaderErrorMes, mainLoader } = useUser();
 
 	useEffect(() => {
 		const checkTimeIntegrity = async () => {
@@ -38,6 +39,14 @@ const App = () => {
 
 		checkTimeIntegrity();
 	}, [apiUrl]);
+
+	if (mainLoader) {
+		return (
+			<div className="h-screen w-screen bg-black flex justify-center items-center">
+				<img src={SplashScreen} alt="splash_screen" className="w-full h-full object-cover" />
+			</div>
+		);
+	}
 
 	if (loader) {
 		return (

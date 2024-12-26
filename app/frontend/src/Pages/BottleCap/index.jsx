@@ -228,7 +228,7 @@ const BottleCap = () => {
 														}}
 														className="bg-white py-2 rounded-md text-black px-6 font-medium"
 													>
-														{getFirstWord(selectedTask.title) === 'subscribe' || getFirstWord(selectedTask.title) === 'quote' || getFirstWord(selectedTask) === 'retweet' ? (
+														{getFirstWord(selectedTask.title) === 'subscribe' || getFirstWord(selectedTask.title) === 'quote' || getFirstWord(selectedTask.title) === 'retweet' ? (
 															getFirstWord(selectedTask.title) === 'subscribe' ? (
 																<>{"Subscribe"}</>
 															) : (
@@ -260,7 +260,7 @@ const BottleCap = () => {
 															width={25}
 															height={25}
 														/>
-														{selectedTask.reward} PTAP
+														{selectedTask.reward.toLocaleString()} PTAP
 													</p>
 												</div>
 												{selectedTask.claimedStatus !== 'claimed' ? (
@@ -371,7 +371,7 @@ const BottleCap = () => {
 															width={25}
 															height={25}
 														/>
-														{selectedInviteFriendTask.reward} PTAP
+														{selectedInviteFriendTask.reward.toLocaleString()} PTAP
 													</p>
 												</div>
 												{!selectedInviteFriendTask.claimed ? (
@@ -419,7 +419,7 @@ const BottleCap = () => {
 									/>
 								</div>
 								<div className='text-[#FFF] text-[24px] font-medium'>
-									<p>{balance}</p>
+									<p>{balance.toLocaleString()}</p>
 								</div>
 							</div>
 							<div className='flex pt-3'>
@@ -478,7 +478,7 @@ const BottleCap = () => {
 														<div className="flex text-md">{task.title}</div>
 														<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
 															<img src={BigCoin} alt="" className="h-4 w-5" />
-															<span className="text-sm">+{task.reward}</span>
+															<span className="text-sm">+{task.reward.toLocaleString()}</span>
 														</div>
 													</div>
 													<div>
@@ -545,7 +545,7 @@ const BottleCap = () => {
 														<div className="flex text-md">{task.title}</div>
 														<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
 															<img src={BigCoin} alt="" className="h-4 w-5" />
-															<span className="text-sm">+{task.reward}</span>
+															<span className="text-sm">+{task.reward.toLocaleString()}</span>
 														</div>
 													</div>
 													{task.claimedStatus === 'claimed' ? (
@@ -594,7 +594,7 @@ const BottleCap = () => {
 														<div className="flex text-md">{task.title}</div>
 														<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
 															<img src={BigCoin} alt="" className="h-4 w-5" />
-															<span className="text-sm">+{task.reward}</span>
+															<span className="text-sm">+{task.reward.toLocaleString()}</span>
 														</div>
 													</div>
 													{task.claimedStatus === 'claimed' ? (
