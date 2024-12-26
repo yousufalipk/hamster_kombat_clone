@@ -16,6 +16,7 @@ const levelsData = [
     { id: 13, name: 'Flare', rangeFrom: 1000000000, rangeTo: 3000000000 },
     { id: 14, name: 'The Crypto', rangeFrom: 3000000000, rangeTo: 'max' },
 ];
+const usersLimit = 100;
 
 exports.checkLevelUpgrade = async (userBalance, currentLevel) => {
     try {
@@ -85,8 +86,7 @@ exports.checkLevelUpgrade = async (userBalance, currentLevel) => {
     }
 };
 
-const usersLimit = 100;
-
+/*
 exports.fetchTopUsersForAllLevels = async (req, res) => {
     try {
         const { userId } = req.body;
@@ -142,3 +142,71 @@ exports.fetchTopUsersForAllLevels = async (req, res) => {
         });
     }
 };
+*/
+
+exports.fetchTopUsersForAllLevels = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'UserId is required',
+            });
+        }
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User not found',
+            });
+        }
+
+        const allLevelTopUsers = {};
+
+        for (const { id, name, rangeFrom, rangeTo } of levelsData) {
+            const levelId = id - 1;
+
+            const topUsers = await UserModel.aggregate([
+                {
+                    $match: {
+                        balance: {
+                            $gte: rangeFrom,
+                            $lt: rangeTo === 'max' ? Number.MAX_SAFE_INTEGER : rangeTo,
+                        },
+                    },
+                },
+                { $sort: { balance: -1 } },
+                { $limit: usersLimit - 1 },
+            ]);
+            const isUserInLevel =
+                user.balance >= rangeFrom &&
+                (rangeTo === 'max' || user.balance < rangeTo);
+
+            if (isUserInLevel) {
+                const isUserInTop = topUsers.some(
+                    (u) => String(u._id) === String(user._id)
+                );
+                if (!isUserInTop) {
+                    topUsers.push(user);
+                }
+                topUsers.sort((a, b) => b.balance - a.balance);
+            }
+
+            allLevelTopUsers[levelId] = topUsers.slice(0, usersLimit);
+        }
+
+        res.status(200).json({
+            status: 'success',
+            leaderboard: allLevelTopUsers,
+        });
+    } catch (error) {
+        console.error('Internal Server Error!', error);
+        res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
