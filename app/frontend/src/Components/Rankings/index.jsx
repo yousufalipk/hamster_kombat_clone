@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 import { useUser } from '../../context/index';
 import CustomLoader from '../Loader/Loader';
@@ -70,14 +69,12 @@ const Rankings = () => {
 
 	useEffect(() => {
 		if (level) {
-			console.log('level', level - 1);
 			setPage(level - 1);
 			updateStageImage(level - 1);
 		}
 	}, [level]);
 
 	const updateStageImage = (stage) => {
-		console.log('stage', stage);
 		if (stageImageRef.current) {
 			stageImageRef.current.src = stageImages[stage];
 		}
@@ -119,7 +116,6 @@ const Rankings = () => {
 
 	useEffect(() => {
 		if (topUsers && topUsers[page]) {
-			console.log('TopUsers', topUsers[page]);
 			setCurrentPageUsers(topUsers[page]);
 		}
 	}, [page, topUsers]);
@@ -139,6 +135,28 @@ const Rankings = () => {
 			};
 		}
 	}, [navigate]);
+
+
+	const formatLargeNumber = (value) => {
+		if (value === null || value === undefined || isNaN(value)) return '0';
+
+		const absValue = Math.abs(value);
+		let formattedValue = value;
+
+		if (absValue >= 1e12) {
+			formattedValue = `${(value / 1e12).toFixed(2)}T`;
+		} else if (absValue >= 1e9) {
+			formattedValue = `${(value / 1e9).toFixed(2)}B`;
+		} else if (absValue >= 1e6) {
+			formattedValue = `${(value / 1e6).toFixed(2)}M`;
+		} else if (absValue >= 1e3) {
+			formattedValue = `${(value / 1e3).toFixed(2)}K`;
+		} else {
+			formattedValue = value.toFixed(2);
+		}
+
+		return formattedValue;
+	};
 
 	return (
 		<>
@@ -201,7 +219,7 @@ const Rankings = () => {
 														<p>{currentPageUsers[1].firstName.slice(0, 7)}</p>
 														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 															<img src={Coin} alt="coin" width={15} />
-															{currentPageUsers[1].balance}
+															{formatLargeNumber(currentPageUsers[1].balance)}
 														</div>
 													</>
 												)}
@@ -224,7 +242,7 @@ const Rankings = () => {
 														<p>{currentPageUsers[0].firstName.slice(0, 7)}</p>
 														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 															<img src={Coin} alt="coin" width={18} />
-															{currentPageUsers[0].balance}
+															{formatLargeNumber(currentPageUsers[0].balance)}
 														</div>
 													</>
 												)}
@@ -244,7 +262,7 @@ const Rankings = () => {
 														<p>{currentPageUsers[2].firstName.slice(0, 7)}</p>
 														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 															<img src={Coin} alt="coin" width={18} />
-															{currentPageUsers[2].balance}
+															{formatLargeNumber(currentPageUsers[2].balance)}
 														</div>
 													</>
 												)}
@@ -259,7 +277,7 @@ const Rankings = () => {
 									</button>
 								</div>
 								{/* List of competitors */}
-								<div className='bg-[#1B1B27] pb-3 pt-5 rounded-tl-[14px] rounded-tr-[14px] flex flex-col gap-3 w-[90vw]'>
+								<div className='bg-[#1B1B27] pb-10 pt-5 rounded-tl-[14px] rounded-tr-[14px] flex flex-col gap-3 w-[90vw]'>
 									<div className="flex flex-col gap-4 justify-start items-center min-h-[40vh]">
 										{currentPageUsers.map((user, i) => {
 											if (i <= 2) return null;
@@ -295,7 +313,7 @@ const Rankings = () => {
 																</h1>
 																<div className="flex items-center justify-start gap-1">
 																	<img src={Coin} alt="Coin" width={15} />
-																	<p>{user.balance}</p>
+																	<p>{formatLargeNumber(user.balance)}</p>
 																</div>
 															</div>
 														</div>
@@ -327,7 +345,7 @@ const Rankings = () => {
 														</h1>
 														<div className="flex items-center justify-start gap-1">
 															<img src={Coin} alt="Coin" width={15} />
-															<p>{user.balance}</p>
+															<p>{formatLargeNumber(user.balance)}</p>
 														</div>
 													</div>
 												</div>

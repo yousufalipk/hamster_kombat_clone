@@ -59,7 +59,6 @@ const Wallet = () => {
 
 	const connectWallet = async (address) => {
 		try {
-			await updateWalletAddressToDb(address);
 			setWalletAddress(address);
 		} catch (error) {
 			console.error("Error connecting wallet:", error);
@@ -68,12 +67,21 @@ const Wallet = () => {
 
 	const disconnectWallet = async () => {
 		try {
-			await updateWalletAddressToDb(null);
 			setWalletAddress(null);
 		} catch (error) {
 			console.error("Error disconnecting wallet:", error);
 		}
 	};
+
+	const handleWalletAction = async () => {
+		setButtonLoading(true);
+		if (tonConnectUI.connected) {
+			await tonConnectUI.disconnect();
+		} else {
+			await tonConnectUI.openModal();
+		}
+		setButtonLoading(false);
+	}
 
 	useEffect(() => {
 		const checkWalletConnection = async () => {
@@ -98,7 +106,14 @@ const Wallet = () => {
 			unsubscribe();
 		}
 
-	}, []);
+	}, [tonConnectUI, handleWalletAction]);
+
+	useEffect(() => {
+		const updateWalletAddress = async () => {
+			await updateWalletAddressToDb(walletAddress);
+		}
+		updateWalletAddressToDb();
+	}, [walletAddress])
 
 	useEffect(() => {
 		let interval;
@@ -125,14 +140,6 @@ const Wallet = () => {
 			toast.error("Failed to copy wallet address.");
 		}
 	};
-
-	const handleWalletAction = async () => {
-		if (tonConnectUI.connected) {
-			await tonConnectUI.disconnect();
-		} else {
-			await tonConnectUI.openModal();
-		}
-	}
 
 	return (
 		<>

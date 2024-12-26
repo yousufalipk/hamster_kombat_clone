@@ -83,6 +83,10 @@ export const UserProvider = (props) => {
 
     const [kolsLoader, setKolsLoader] = useState(false);
 
+    const [patnerLoader, setPatnerLoader] = useState(false);
+
+    const [vcLoader, setVcLoader] = useState(false);
+
     const [tgeProjects, setTgeProjects] = useState();
 
     const [currentProjects, setCurrentProjects] = useState();
@@ -145,18 +149,6 @@ export const UserProvider = (props) => {
 
         return () => clearInterval(interval);
     }, []);
-
-
-    // Refill energy over time
-    /*
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setEnergy(prevEnergy => Math.min(prevEnergy + 1, energyLimit));
-        }, 1000);
-
-        return () => clearInterval(interval);
-    }, [energy, setEnergy]);
-    */
 
     // Socket connection
     useEffect(() => {
@@ -610,11 +602,13 @@ export const UserProvider = (props) => {
 
     const fetchPatners = async () => {
         try {
+            setPatnerLoader(true);
             const res = await axios.post(`${apiUrl}/user/fetch-user-patners`, {
                 userId: userId
             });
             if (res.data.status === 'success') {
                 setPatners(res.data.response);
+                setPatnerLoader(false);
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -647,11 +641,13 @@ export const UserProvider = (props) => {
 
     const fetchVcs = async () => {
         try {
+            setVcLoader(true);
             const res = await axios.post(`${apiUrl}/user/fetch-user-vcs`, {
                 userId: userId
             });
             if (res.data.status === 'success') {
                 setVcs(res.data.response);
+                setVcLoader(false);
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -869,14 +865,17 @@ export const UserProvider = (props) => {
             kols,
             fetchKols,
             upgradeKolsLevel,
+            kolsLoader,
 
             patners,
             fetchPatners,
             upgradePatnerLevel,
+            patnerLoader,
 
             vcs,
             fetchVcs,
             upgradeVcLevel,
+            vcLoader,
 
             comboCards,
 
