@@ -25,7 +25,12 @@ const Hammer = () => {
 	//Chooses Launch Pad by default
 	useEffect(() => {
 		setActiveItem("Launch Pad");
-	}, [])
+	}, []);
+
+
+	useEffect(() => {
+		console.log('comboCard', comboCards);
+	}, [comboCards])
 
 
 	return (

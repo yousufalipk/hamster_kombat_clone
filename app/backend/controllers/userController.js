@@ -1529,7 +1529,8 @@ exports.upgradeUserVcLevel = async (req, res) => {
             message: 'Vc level upgraded successfully!',
             balance: user.balance,
             cpm: user.coinsPerMinute.value,
-            vcs: user.vcs
+            vcs: user.vcs,
+            comboCards: user.comboCards
         });
     } catch (error) {
         console.error('Internal Server Error', error);

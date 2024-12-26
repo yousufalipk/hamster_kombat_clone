@@ -46,13 +46,12 @@ const VCS = () => {
 		setSelectedVc(vc);
 	};
 
-	const handleVcUpgrade = async (upgradeCost) => {
+	const handleVcUpgrade = async () => {
 		setButtonLoading(true);
 		try {
 			setProcessing(true);
 			const res = await upgradeVcLevel(selectedVc._id);
 			if (res.success) {
-				navigate('/hammer');
 				toast.success(res.mess);
 			} else {
 				toast.error(res.mess);
