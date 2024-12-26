@@ -218,6 +218,10 @@ const userSchema = new mongoose.Schema({
     walletAddress: {
         type: String,
         default: null
+    },
+    allTimeBalance: {
+        type: Number,
+        default: null
     }
 }, { timestamps: true });
 

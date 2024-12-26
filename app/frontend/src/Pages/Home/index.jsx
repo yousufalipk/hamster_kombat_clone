@@ -43,8 +43,6 @@ import CrossImg from '../../assets/optimizedImages/closeButton.svg';
 
 import DaiyCurrentDayBg from '../../assets/dailyreward/dailyCurrentDay.jpg';
 
-
-
 import PandaCircleIcon from "../../assets/PandaCircleIcon.svg";
 import midAnimationCircle from '../../assets/animation/1.png';
 import finalAnimationCircle from '../../assets/animation/2.png';

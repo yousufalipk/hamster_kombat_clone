@@ -56,6 +56,32 @@ export const UserProvider = (props) => {
     const [currentDay, setCurrentDay] = useState(null);
 
     useEffect(() => {
+        const updateAllTimeBalance = async () => {
+            if (userId) {
+                try {
+                    const res = await axios.post(`${apiUrl}/user/update-all-time-balance`, {
+                        userId: userId,
+                        balance: balance,
+                    });
+                    if (res.data.status === 'success') {
+                        console.log('All Time Balance Updated Successfully!');
+                    } else {
+                        console.log('Error setting all time balance');
+                    }
+                } catch (error) {
+                    console.log('Error updating all time balance!', error);
+                }
+            }
+        };
+
+        updateAllTimeBalance();
+
+        const intervalId = setInterval(updateAllTimeBalance, 5000);
+
+        return () => clearInterval(intervalId);
+    }, [balance]);
+
+    useEffect(() => {
         if (userSocialTasks.length === 0 && userDailyTasks.length === 0) {
             fetchUserTask();
         }

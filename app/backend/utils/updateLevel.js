@@ -61,7 +61,7 @@ exports.checkLevelUpgrade = async (userBalance, currentLevel) => {
             };
         }
 
-        if ((newLevelData.newLevelData.id - 1) <= currentLevel) {
+        if (newLevelData.id <= currentLevel + 1) {
             return {
                 success: true,
                 mess: 'Level upgraded successfully!',
@@ -86,7 +86,6 @@ exports.checkLevelUpgrade = async (userBalance, currentLevel) => {
     }
 };
 
-/*
 exports.fetchTopUsersForAllLevels = async (req, res) => {
     try {
         const { userId } = req.body;
@@ -110,12 +109,12 @@ exports.fetchTopUsersForAllLevels = async (req, res) => {
 
         for (const { id, name, rangeFrom, rangeTo } of levelsData) {
             const topUsers = await UserModel.aggregate([
-                { $match: { balance: { $gte: rangeFrom, $lt: rangeTo === 'max' ? Number.MAX_SAFE_INTEGER : rangeTo } } },
-                { $sort: { balance: -1 } },
+                { $match: { allTimeBalance: { $gte: rangeFrom, $lt: rangeTo === 'max' ? Number.MAX_SAFE_INTEGER : rangeTo } } },
+                { $sort: { allTimeBalance: -1 } },
                 { $limit: usersLimit - 1 },
             ]);
 
-            const isUserInLevel = user.balance >= rangeFrom && (rangeTo === 'max' || user.balance < rangeTo);
+            const isUserInLevel = user.allTimeBalance >= rangeFrom && (rangeTo === 'max' || user.allTimeBalance < rangeTo);
 
             if (isUserInLevel) {
                 const isUserInTop = topUsers.some(u => String(u._id) === String(user._id));
@@ -124,7 +123,7 @@ exports.fetchTopUsersForAllLevels = async (req, res) => {
                     topUsers.push(user);
                 }
 
-                topUsers.sort((a, b) => b.balance - a.balance);
+                topUsers.sort((a, b) => b.allTimeBalance - a.allTimeBalance);
             }
 
             allLevelTopUsers[id - 1] = topUsers.slice(0, usersLimit);
@@ -142,71 +141,3 @@ exports.fetchTopUsersForAllLevels = async (req, res) => {
         });
     }
 };
-*/
-
-exports.fetchTopUsersForAllLevels = async (req, res) => {
-    try {
-        const { userId } = req.body;
-
-        if (!userId) {
-            return res.status(400).json({
-                status: 'failed',
-                message: 'UserId is required',
-            });
-        }
-
-        const user = await UserModel.findById(userId);
-        if (!user) {
-            return res.status(404).json({
-                status: 'failed',
-                message: 'User not found',
-            });
-        }
-
-        const allLevelTopUsers = {};
-
-        for (const { id, name, rangeFrom, rangeTo } of levelsData) {
-            const levelId = id - 1;
-
-            const topUsers = await UserModel.aggregate([
-                {
-                    $match: {
-                        balance: {
-                            $gte: rangeFrom,
-                            $lt: rangeTo === 'max' ? Number.MAX_SAFE_INTEGER : rangeTo,
-                        },
-                    },
-                },
-                { $sort: { balance: -1 } },
-                { $limit: usersLimit - 1 },
-            ]);
-            const isUserInLevel =
-                user.balance >= rangeFrom &&
-                (rangeTo === 'max' || user.balance < rangeTo);
-
-            if (isUserInLevel) {
-                const isUserInTop = topUsers.some(
-                    (u) => String(u._id) === String(user._id)
-                );
-                if (!isUserInTop) {
-                    topUsers.push(user);
-                }
-                topUsers.sort((a, b) => b.balance - a.balance);
-            }
-
-            allLevelTopUsers[levelId] = topUsers.slice(0, usersLimit);
-        }
-
-        res.status(200).json({
-            status: 'success',
-            leaderboard: allLevelTopUsers,
-        });
-    } catch (error) {
-        console.error('Internal Server Error!', error);
-        res.status(500).json({
-            status: 'failed',
-            message: 'Internal Server Error!',
-        });
-    }
-};
-

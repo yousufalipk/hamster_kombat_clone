@@ -1911,3 +1911,46 @@ exports.test = async (req, res) => {
         console.log("Error testing: ", error);
     }
 }
+
+exports.updateAllTimeBalance = async (req, res) => {
+    try {
+        const { userId, balance } = req.body;
+
+        const user = await UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            })
+        }
+
+        let tempAllTimeBalance = 0;
+
+        if (user.allTimeBalance) {
+            if (user.allTimeBalance > balance) {
+                tempAllTimeBalance = user.allTimeBalance;
+            } else {
+                tempAllTimeBalance = balance;
+            }
+        } else {
+            tempAllTimeBalance = balance;
+        }
+
+        user.allTimeBalance = tempAllTimeBalance;
+
+        await user.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'All Time Balance updated succesfuly!'
+        })
+
+    } catch (error) {
+        console.log('Internal Server Error!', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
