@@ -26,9 +26,7 @@ import Coin from "../../assets/BigCoinIcon.svg";
 import ProfilePic from '../../assets/profile.png';
 
 const Rankings = () => {
-	const { topUsers, fetchLeaderboardUsers, level, userId, levelsData } = useUser();
-
-	const [rankLoader, setRankLoader] = useState(null);
+	const { rankLoader, setRankLoader, topUsers, fetchLeaderboardUsers, level, userId, levelsData } = useUser();
 
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 	const navigate = useNavigate();
@@ -52,10 +50,6 @@ const Rankings = () => {
 			};
 		}
 	}, [navigate]);
-
-	useEffect(() => {
-		console.log('topUsers', topUsers);
-	}, [topUsers]);
 
 	const stageImages = {
 		0: SilverStage,
@@ -146,18 +140,16 @@ const Rankings = () => {
 		}
 	}, [navigate]);
 
-	if (rankLoader) {
-		return (
-			<>
-				<div className="h-[100vh] w-[100vw] bg-black flex justify-center items-center">
-					<CustomLoader size={200} />
-				</div>
-			</>
-		)
-	}
-
 	return (
 		<>
+			{rankLoader && (
+				<>
+					<div
+						className="fixed z-50 h-[100vh] w-[100vw] bg-black flex justify-center items-center">
+						<CustomLoader size={200} />
+					</div>
+				</>
+			)}
 			{topUsers && currentPageUsers && (
 				<>
 					<div className='h-[92vh] w-[100vw] z-10 overflow-scroll overflow-x-hidden'>

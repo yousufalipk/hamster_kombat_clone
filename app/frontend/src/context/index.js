@@ -105,6 +105,8 @@ export const UserProvider = (props) => {
 
     const [avaliableCpm, setAvaliableCpm] = useState(0);
 
+    const [rankLoader, setRankLoader] = useState(false);
+
     const levelsData = [
         { id: 1, name: 'Adventurous', rangeFrom: 0, rangeTo: 5000 },
         { id: 2, name: 'Energetic', rangeFrom: 5000, rangeTo: 50000 },
@@ -493,7 +495,7 @@ export const UserProvider = (props) => {
 
     const fetchLeaderboardUsers = async () => {
         try {
-            setLoader(true);
+            setRankLoader(true);
             const response = await axios.post(`${apiUrl}/user/fetch-leaderboard`, {
                 userId: userId
             });
@@ -504,7 +506,7 @@ export const UserProvider = (props) => {
             console.log("Internal Server Error!");
             return ({ success: false, message: 'Internal Server Error!' });
         } finally {
-            setLoader(false);
+            setRankLoader(false);
         }
     }
 
@@ -899,7 +901,10 @@ export const UserProvider = (props) => {
 
             walletAddress,
             setWalletAddress,
-            updateWalletAddressToDb
+            updateWalletAddressToDb,
+
+            rankLoader,
+            setRankLoader
         }}>
             {props.children}
         </UserContext.Provider>
