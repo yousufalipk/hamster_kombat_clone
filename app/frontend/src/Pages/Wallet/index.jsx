@@ -29,7 +29,7 @@ import { useTonConnectUI } from "@tonconnect/ui-react";
 const Wallet = () => {
 	const [tonConnectUI] = useTonConnectUI();
 	const [walletAddress, setWalletAddress] = useState(null);
-	const { balance } = useUser();
+	const { balance, updateWalletAddressToDb } = useUser();
 
 	const [dots, setDots] = useState('');
 	const [buttonLoading, setButtonLoading] = useState(false);
@@ -59,6 +59,12 @@ const Wallet = () => {
 
 	const connectWallet = async (address) => {
 		try {
+			const res = await updateWalletAddressToDb(address);
+			if (res.success) {
+				toast.success(res.mess);
+			} else {
+				toast.error(res.mess);
+			}
 			setWalletAddress(address);
 		} catch (error) {
 			console.error("Error connecting wallet:", error);
@@ -67,6 +73,12 @@ const Wallet = () => {
 
 	const disconnectWallet = async () => {
 		try {
+			const res = await updateWalletAddressToDb(null);
+			if (res.success) {
+				toast.success(res.mess);
+			} else {
+				toast.error(res.mess);
+			}
 			setWalletAddress(null);
 		} catch (error) {
 			console.error("Error disconnecting wallet:", error);

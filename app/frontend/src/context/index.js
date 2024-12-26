@@ -786,9 +786,9 @@ export const UserProvider = (props) => {
         }
     }
 
-    const connectTONWallet = async (walletAddress) => {
+    const updateWalletAddressToDb = async (walletAddress) => {
         try {
-            const res = await axios.post(`${apiUrl}/user/add-wallet-address`, {
+            const res = await axios.post(`${apiUrl}/user/update-wallet-address`, {
                 userId: userId,
                 walletAddress: walletAddress
             });
@@ -796,22 +796,6 @@ export const UserProvider = (props) => {
                 return ({ success: false, mess: 'Wallet Connected Succesfuly!' })
             } else {
                 return ({ success: false, mess: 'Error Connecting Wallet!' })
-            }
-        } catch (error) {
-            console.log('Internal Server Error!');
-            return ({ success: false, mess: 'Internal Server Error!' })
-        }
-    }
-
-    const disconnectTONWallet = async () => {
-        try {
-            const res = await axios.post(`${apiUrl}/user/remove-wallet-address`, {
-                userId: userId
-            });
-            if (res.data.status === 'success') {
-                return ({ success: false, mess: 'Wallet Removed Succesfuly!' })
-            } else {
-                return ({ success: false, mess: 'Error Removing Wallet!' })
             }
         } catch (error) {
             console.log('Internal Server Error!');
@@ -913,10 +897,9 @@ export const UserProvider = (props) => {
             setAvaliableCpm,
             levelsData,
 
-            disconnectTONWallet,
-            connectTONWallet,
             walletAddress,
-            setWalletAddress
+            setWalletAddress,
+            updateWalletAddressToDb
         }}>
             {props.children}
         </UserContext.Provider>

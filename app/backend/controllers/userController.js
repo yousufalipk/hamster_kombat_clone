@@ -1831,7 +1831,7 @@ exports.claimInviteFriendsReward = async (req, res) => {
     }
 }
 
-exports.addWalletAddress = async (req, res) => {
+exports.updateWalletAddress = async (req, res) => {
     try {
         const { userId, walletAddress } = req.body;
 
@@ -1875,35 +1875,6 @@ exports.addWalletAddress = async (req, res) => {
         });
     }
 };
-
-exports.removeWalletAddress = async (req, res) => {
-    try {
-        const { userId } = req.body;
-
-        const user = await UserModel.findById(userId);
-
-        if (!user) {
-            return res.status(200).json({
-                stauts: 'failed',
-                message: 'User not found!'
-            })
-        }
-
-        user.walletAddress = null;
-        await user.save();
-
-        return res.status(200).json({
-            stauts: 'success',
-            message: 'Wallet Removed Successfuly!'
-        })
-    } catch (error) {
-        console.log('Internal Server Error!', error);
-        return res.status(500).json({
-            status: 'failed',
-            message: 'Internal Server Error!'
-        })
-    }
-}
 
 exports.getServerTimeStamp = async (req, res) => {
     try {
