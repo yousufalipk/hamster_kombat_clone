@@ -334,13 +334,18 @@ export const UserProvider = (props) => {
                     const timeDifferenceInMilliseconds = currentDate.getTime() - lastClaimed.getTime();
                     if (timeDifferenceInMilliseconds >= 30000) {
                         setDisableEnergy(false);
+                        setAddCoins(user.multitaps.value);
                         await axios.post(`${apiUrl}/user/toggle-unlimited-taps-status`, {
                             userId: user._id
                         });
                     } else {
                         setDisableEnergy(true);
+                        const tempAddCoinValue = user.multitaps.value * 2;
+                        setAddCoins(tempAddCoinValue);
                         setTimeout(async () => {
                             setDisableEnergy(false);
+                            const tempAddCoinValue = user.multitaps.value;
+                            setAddCoins(tempAddCoinValue);
                             await axios.post(`${apiUrl}/user/toggle-unlimited-taps-status`, {
                                 userId: user._id
                             });
@@ -355,7 +360,6 @@ export const UserProvider = (props) => {
             setEnergyLevel(user.energy.level);
             setEnergyLimit(user.energy.limit);
             setMultitapLevel(user.multitaps.level);
-            setAddCoins(user.multitaps.value);
             setLevelPercentage(percentage);
             navigate('/');
         } catch (error) {
@@ -444,9 +448,11 @@ export const UserProvider = (props) => {
 
                 if (res.data.status === 'success') {
                     setDisableEnergy(true);
+                    setAddCoins((prevAddCoin) => prevAddCoin * 2);
                     setAvaliableUnlimitedTaps((prevTaps) => prevTaps - 1);
                     setTimeout(async () => {
                         setDisableEnergy(false);
+                        setAddCoins((prevAddCoin) => prevAddCoin / 2);
                         const res = await axios.post(`${apiUrl}/user/toggle-unlimited-taps-status`, {
                             userId: userId
                         });

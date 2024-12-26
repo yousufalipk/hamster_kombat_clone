@@ -135,7 +135,7 @@ const Home = () => {
 				}
 				return newEnergy;
 			});
-		}, 500);
+		}, 1000);
 	};
 
 	const refillEnergy = () => {
@@ -613,7 +613,11 @@ const Home = () => {
 	}
 
 	const formatBalance = (balance) => {
-		return parseFloat(balance).toFixed(2);
+		return parseInt(balance);
+	}
+
+	const formatCpm = (cpm) => {
+		return parseFloat(cpm).toFixed(2);
 	}
 
 	return (
@@ -790,34 +794,33 @@ const Home = () => {
 								</div>
 							</div>
 
-
 							{/* Coins Details & Bot Image */}
-							<div className="min-h-[56vh] flex flex-col justify-center items-center">
+							<div className="min-h-[56vh] w-full flex flex-col justify-center items-center">
 
 								{/* Coins per minute & balance */}
-								<div className="flex items-center justify-start w-screen px-5 pt-6 h-[10vh]">
+								<div className="w-full flex items-center justify-start px-5 pt-6 h-[10vh]">
 									{/* Coins Per Minute */}
 									<button
 										onClick={() => { setCpmInfo(true) }}
-										className="z-20 flex flex-col justify-center items-center gap-1">
-										<div className="flex justify-center items-center">
+										className="w-[25%] z-20 flex flex-col justify-center items-center gap-1">
+										<div className="flex justify-start items-center">
 											<div className="">
-												<img className="pl-3" src={SmallCoin} alt="Coin-Icon" />
+												<img src={SmallCoin} alt="Coin-Icon" />
 											</div>
 											<div className="text-[#FFF] text-[11.655px] font-medium">
-												<p>+{formatBalance(formatCoins(coinsPerMinute))}</p>
+												<p>+{formatCpm(formatCoins(coinsPerMinute))}</p>
 											</div>
 										</div>
 										<div className="flex justify-center items-center gap-1 pl-1">
 											<div className="">
 												<img src={InfoIcon} alt="Info-Icons" />
 											</div>
-											<div className="text-[#A4A4A4] text-[10.595px] font-medium">Coins Per Minute</div>
+											<div className="text-[#A4A4A4] text-[10.595px] font-medium">CPM</div>
 										</div>
 									</button>
 
 									{/* Balance */}
-									<div className="mx-10 flex justify-center items-center gap-1">
+									<div className="w-[75%] flex justify-center items-center gap-1">
 										<div>
 											<img src={BigCoin} alt="Coin-Icon" width="24" />
 										</div>
@@ -1337,9 +1340,38 @@ const Home = () => {
 															</div>
 
 															{/* Cost Section */}
-															<div className="w-full h-[6vh] flex justify-center items-center gap-1">
-																<img src={BigCoin} alt="big_coin" width={25} />
-																<p className="text-customOrange text-[30px]">Free</p>
+															<div>
+																{energyLevel < 9 ? (
+																	<>
+																		<div>
+																			<p className="flex justify-center items-center gap-1 text-[30px] text-customOrange">
+																				<img
+																					src={SmallCoin}
+																					alt="Little coin"
+																					width={30}
+																					height={30}
+																					className="mt-1"
+																				/>
+																				{energyUpgradeCost[energyLevel + 1]}
+																			</p>
+																		</div>
+																	</>
+																) : (
+																	<>
+																		<div>
+																			<p className="flex justify-center items-center gap-1 text-2xl text-customOrange">
+																				<img
+																					src={SmallCoin}
+																					alt="Little coin"
+																					width={25}
+																					height={25}
+																					className="mt-1"
+																				/>
+																				0
+																			</p>
+																		</div>
+																	</>
+																)}
 															</div>
 														</div>
 
@@ -1347,9 +1379,9 @@ const Home = () => {
 														<div className="w-full h-[5vh] mt-7">
 															<button
 																onClick={() => {
-																	handleEnergyRefill();
+																	handleEnergyUpgrade();
 																}}
-																disabled={avaliableEnergyRefill === 0 || buttonLoading}
+																disabled={buttonLoading}
 																className={`w-full h-12 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableEnergyRefill === 0 && `grayscale`}`}
 															>
 																{buttonLoading ? (
@@ -1362,7 +1394,7 @@ const Home = () => {
 																	avaliableEnergyRefill === 0 ? (
 																		'Come back tomorrow'
 																	) : (
-																		'Refill'
+																		'Upgrade'
 																	)
 																)}
 															</button>
@@ -1499,7 +1531,7 @@ const Home = () => {
 																</span>
 															) : (
 																<>
-																	{multitapLevel >= 9 ? ("Max Level") : ('Get it')}
+																	{multitapLevel >= 9 ? ("Max Level") : ('Upgrade')}
 																</>
 															)}
 														</button>

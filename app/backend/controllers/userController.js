@@ -818,7 +818,7 @@ exports.upgradeUserProjectLevel = async (req, res) => {
                     };
                     user.comboCards.push(data);
                     if (user.comboCards.length === 2) {
-                        user.balance += 400000;
+                        user.balance += 50000;
                     }
                 }
             }
@@ -1337,7 +1337,7 @@ exports.upgradeUserKolLevel = async (req, res) => {
                     };
                     user.comboCards.push(data);
                     if (user.comboCards.length === 1) {
-                        user.balance += 400000;
+                        user.balance += 50000;
                     }
                 }
             }
@@ -1516,7 +1516,7 @@ exports.upgradeUserVcLevel = async (req, res) => {
                     };
                     user.comboCards.push(data);
                     if (user.comboCards.length === 1) {
-                        user.balance += 400000;
+                        user.balance += 50000;
                     }
                 }
             }
@@ -1694,7 +1694,7 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
                     };
                     user.comboCards.push(data);
                     if (user.comboCards.length === 1) {
-                        user.balance += 400000;
+                        user.balance += 50000;
                     }
                 }
             }

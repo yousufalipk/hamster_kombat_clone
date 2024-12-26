@@ -27,7 +27,6 @@ exports.checkLevelUpgrade = async (userBalance, currentLevel) => {
             return { success: false, mess: 'Invalid current level!' };
         }
 
-        console.log('Level', userBalance, currentLevel);
         const currentLevelData = levelsData[currentLevel];
         if (!currentLevelData) {
             return { success: false, mess: 'Current level not found!' };
@@ -61,14 +60,25 @@ exports.checkLevelUpgrade = async (userBalance, currentLevel) => {
             };
         }
 
-        return {
-            success: true,
-            mess: 'Level upgraded successfully!',
-            data: {
-                currentLevel: newLevelData.id - 1,
-                levelName: newLevelData.name
-            }
-        };
+        if ((newLevelData.newLevelData.id - 1) <= currentLevel) {
+            return {
+                success: true,
+                mess: 'Level upgraded successfully!',
+                data: {
+                    currentLevel: currentLevel,
+                    levelName: levelsData[currentLevel].name
+                }
+            };
+        } else {
+            return {
+                success: true,
+                mess: 'Level upgraded successfully!',
+                data: {
+                    currentLevel: newLevelData.id - 1,
+                    levelName: newLevelData.name
+                }
+            };
+        }
     } catch (error) {
         console.error('Error checking & upgrading level!', error);
         return { success: false, mess: 'Internal Server Error!' };

@@ -142,7 +142,7 @@ const Hammer = () => {
 									/>
 								</div>
 								<div className={`text-[#FFF] text-base font-normal ${comboCards.length >= 2 && `grayscale`}`}>
-									{400000}
+									50,000
 								</div>
 							</div>
 
