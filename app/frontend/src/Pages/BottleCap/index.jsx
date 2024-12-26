@@ -16,6 +16,8 @@ import invite1 from '../../assets/invite/1.svg';
 import invite2 from '../../assets/invite/2.svg';
 import invite3 from '../../assets/invite/3.svg';
 
+import LeftPopupEllipse from '../../assets/optimizedImages/popup/leftEllipse.webp';
+import RightPopupEllipse from '../../assets/optimizedImages/popup/rightEllipse.webp';
 
 import { Link } from 'react-router-dom';
 
@@ -139,6 +141,14 @@ const BottleCap = () => {
 		}
 	}
 
+	function getFirstWord(inputLine) {
+		if (typeof inputLine !== "string") {
+			inputLine = String(inputLine);
+		}
+		const firstWord = inputLine.split(' ')[0];
+		return firstWord.toLowerCase();
+	}
+
 	if (tasksLoader) {
 		return (
 			<>
@@ -156,6 +166,13 @@ const BottleCap = () => {
 					{taskPopUp && selectedTask && (
 						<>
 							<div
+								onClick={() => {
+									setPopupClosing(true);
+									setTimeout(() => {
+										setTaskPopup(false);
+										setPopupClosing(false);
+									}, 500);
+								}}
 								style={{
 									animation: `${popupClosing ? "fadeOut" : "fadeIn"
 										} 0.5s ease-in-out forwards`,
@@ -168,77 +185,103 @@ const BottleCap = () => {
 											} 0.5s ease-in-out forwards`,
 									}}
 								>
-									<div className="relative bg-[#06060E] w-[100vw] rounded-t-[30px]  text-white">
-										<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
-										<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-										<div className="flex flex-col items-center relative">
-											<div className="absolute top-3 right-7"
-												onClick={() => {
-													setPopupClosing(true);
-													setTimeout(() => {
-														setTaskPopup(false);
-														setPopupClosing(false);
-													}, 500);
-												}}
-											>
-												<img src={closebutton} alt="" />
-											</div>
-											<div className="h-1 w-16 bg-[#D9D9D9] rounded-md  mt-2 opacity-70"></div>
-											<div className="flex justify-center flex-col items-center gap-2 mt-3">
-												<img src={iconMapping[selectedTask.iconType]} alt="icon" />
-											</div>
-											<div className="text-xl text-white mt-3">
-												<p>{selectedTask.title}</p>
-											</div>
-											<div className="mt-5">
-												<button
-													onClick={() => {
-														window.open(selectedTask.link, '_blank');
-													}}
-													className="bg-white py-2 rounded-md text-black px-6 font-medium"
-												>
-													{buttonText[selectedTask.iconType]}
-												</button>
-											</div>
-											{selectedTask.claimedStatus === 'pending' && (
-												<div className="text-gray-200 text-sm px-5 text-center mt-4">
-													Please wait {timeDifference} minutes for moderation check to claim the prize
+
+									<div
+										onClick={(e) => e.stopPropagation()}
+										className="popup-content">
+										<div className="relative bg-[#06060E] w-[100vw] rounded-t-[30px]  text-white">
+											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
+											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
+
+											<div className="popup-main flex flex-col items-center relative">
+												{/* Left top ellipse */}
+												<div className="-left-10 -top-20 w-52 h-52 absolute">
+													<img src={LeftPopupEllipse} alt="popup-ellipse" />
 												</div>
-											)}
-											<div className="mt-5">
-												<p className="flex justify-center items-center gap-2 border border-[#242434] py-1  rounded-md text-[#FF8F00] px-6 text-lg font-medium">
-													<img
-														src={LittleCoin}
-														alt="Little coin"
-														width={25}
-														height={25}
-													/>
-													{selectedTask.reward} PTAP
-												</p>
+												{/* Right bottom ellipse */}
+												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
+													<img src={RightPopupEllipse} alt="popup-ellipse" />
+												</div>
+
+												<div className="absolute top-3 right-7"
+													onClick={() => {
+														setPopupClosing(true);
+														setTimeout(() => {
+															setTaskPopup(false);
+															setPopupClosing(false);
+														}, 500);
+													}}
+												>
+													<img src={closebutton} alt="" />
+												</div>
+												<div className="h-1 w-16 bg-[#D9D9D9] rounded-md  mt-2 opacity-70"></div>
+												<div className="flex justify-center flex-col items-center gap-2 mt-3">
+													<img src={iconMapping[selectedTask.iconType]} alt="icon" />
+												</div>
+												<div className="text-xl text-white mt-3">
+													<p>{selectedTask.title}</p>
+												</div>
+												<div className="mt-5">
+													<button
+														onClick={() => {
+															window.open(selectedTask.link, '_blank');
+														}}
+														className="bg-white py-2 rounded-md text-black px-6 font-medium"
+													>
+														{getFirstWord(selectedTask.title) === 'subscribe' || getFirstWord(selectedTask.title) === 'quote' ? (
+															getFirstWord(selectedTask.title) === 'subscribe' ? (
+																<>{"Subscribe"}</>
+															) : (
+																<>{"Quote"}</>
+															)
+														) : (
+															<>{buttonText[selectedTask.iconType]}</>
+														)}
+													</button>
+												</div>
+												{selectedTask.claimedStatus === 'pending' && (
+													<div className="text-gray-200 text-sm px-5 text-center mt-4">
+														Please wait {timeDifference} minutes for moderation check to claim the prize
+													</div>
+												)}
+												<div className="mt-5">
+													<p className="flex justify-center items-center gap-2 border border-[#242434] py-1  rounded-md text-[#FF8F00] px-6 text-lg font-medium">
+														<img
+															src={LittleCoin}
+															alt="Little coin"
+															width={25}
+															height={25}
+														/>
+														{selectedTask.reward} PTAP
+													</p>
+												</div>
+												{selectedTask.claimedStatus !== 'claimed' ? (
+													<>
+														<div className="text-center text-md flex flex-col mt-5 ">
+															<img src={linbottle} alt="" />
+														</div>
+														<div className="flex w-full mt-3 items-center justify-center gap-4 z-40 mb-4 px-3">
+															<button
+																onClick={() => {
+																	handleClaimTask(selectedTask);
+																}}
+																disabled={selectedTask.claimedStatus === 'pending' || buttonLoading}
+																className={`w-full h-10 py-2 bg-gradient-to-b from-[#00B2FF] to-[#2226FF] text-white font-bold rounded-md ${selectedTask.claimedStatus === 'pending' ? 'filter grayscale' : ''}`}
+															>
+																{buttonLoading ? (
+																	<span className="flex justify-center items-center text-5xl font-bold w-full">
+																		<p className="absolute -mt-6 w-full">
+																			{dots}
+																		</p>
+																	</span>
+																) : 'Check'}
+															</button>
+														</div>
+													</>
+												) : (
+													<div className="p-5"></div>
+												)}
 											</div>
-											{selectedTask.claimedStatus !== 'claimed' ? (
-												<>
-													<div className="text-center text-md flex flex-col mt-5 ">
-														<img src={linbottle} alt="" />
-													</div>
-													<div className="flex w-full mt-3 items-center justify-center gap-4 z-40 mb-4 px-3">
-														<button
-															onClick={() => {
-																handleClaimTask(selectedTask);
-															}}
-															disabled={selectedTask.claimedStatus === 'pending' || buttonLoading}
-															className={`w-full h-10 py-2 bg-gradient-to-b from-[#00B2FF] to-[#2226FF] text-white font-bold rounded-md ${selectedTask.claimedStatus === 'pending' ? 'filter grayscale' : ''}`}
-														>
-															{buttonLoading ? (
-																<span className="h-6 font-bold">
-																	{dots}
-																</span>) : 'Check'}
-														</button>
-													</div>
-												</>
-											) : (
-												<div className="p-5"></div>
-											)}
 										</div>
 									</div>
 								</div>
@@ -249,6 +292,13 @@ const BottleCap = () => {
 					{inviteFriendsPopup && selectedInviteFriendTask && (
 						<>
 							<div
+								onClick={() => {
+									setPopupClosing(true);
+									setTimeout(() => {
+										setInviteFriendsPopup(false);
+										setPopupClosing(false);
+									}, 500);
+								}}
 								style={{
 									animation: `${popupClosing ? "fadeOut" : "fadeIn"
 										} 0.5s ease-in-out forwards`,
@@ -264,67 +314,85 @@ const BottleCap = () => {
 									<div className="relative bg-[#06060E] w-[100vw] rounded-t-[30px]  text-white">
 										<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 										<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-										<div className="flex flex-col items-center relative">
-											<div className="absolute top-3 right-7"
-												onClick={() => {
-													setPopupClosing(true);
-													setTimeout(() => {
-														setInviteFriendsPopup(false);
-														setPopupClosing(false);
-													}, 500);
-												}}
-											>
-												<img src={closebutton} alt="" />
-											</div>
-											<div className="h-1 w-16 bg-[#D9D9D9] rounded-md  mt-2 opacity-70"></div>
-											<div className="flex justify-center flex-col items-center gap-2 mt-3">
-												<img src={inviteIconMapping[selectedInviteFriendTask.id]} alt="icon" />
-											</div>
-											<div className="text-xl text-white mt-3">
-												<p>{selectedInviteFriendTask.title}</p>
-											</div>
-											<div className="mt-5">
-												<Link
-													to={`https://t.me/share/url?url=t.me/pandatap_mini_bot/pandatap?startapp=${telegramId}&text=Hey  I just made ${balance} $MFI Points on Panda Tap To Earn Game ! The airdrop is definitely going to be huge ! Join via my referral link and we both can get a headstart.`}
-													className="bg-white py-2 rounded-md text-black px-6 font-medium"
+										<div
+											onClick={(e) => e.stopPropagation()}
+											className="popup-main"
+										>
+											<div className="flex flex-col items-center relative">
+
+												{/* Left top ellipse */}
+												<div className="-left-10 -top-20 w-52 h-52 absolute">
+													<img src={LeftPopupEllipse} alt="popup-ellipse" />
+												</div>
+												{/* Right bottom ellipse */}
+												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
+													<img src={RightPopupEllipse} alt="popup-ellipse" />
+												</div>
+
+												<div className="absolute top-3 right-7"
+													onClick={() => {
+														setPopupClosing(true);
+														setTimeout(() => {
+															setInviteFriendsPopup(false);
+															setPopupClosing(false);
+														}, 500);
+													}}
 												>
-													Invite Friend
-												</Link>
+													<img src={closebutton} alt="" />
+												</div>
+												<div className="h-1 w-16 bg-[#D9D9D9] rounded-md  mt-2 opacity-70"></div>
+												<div className="flex justify-center flex-col items-center gap-2 mt-3">
+													<img src={inviteIconMapping[selectedInviteFriendTask.id]} alt="icon" />
+												</div>
+												<div className="text-xl text-white mt-3">
+													<p>{selectedInviteFriendTask.title}</p>
+												</div>
+												<div className="mt-5">
+													<Link
+														to={`https://t.me/share/url?url=t.me/pandatap_mini_bot/pandatap?startapp=${telegramId}&text=Hey  I just made ${balance} $MFI Points on Panda Tap To Earn Game ! The airdrop is definitely going to be huge ! Join via my referral link and we both can get a headstart.`}
+														className="bg-white py-2 rounded-md text-black px-6 font-medium"
+													>
+														Invite Friend
+													</Link>
+												</div>
+												<div className="mt-5">
+													<p className="flex justify-center items-center gap-2 border border-[#242434] py-1  rounded-md text-[#FF8F00] px-6 text-lg font-medium">
+														<img
+															src={LittleCoin}
+															alt="Little coin"
+															width={25}
+															height={25}
+														/>
+														{selectedInviteFriendTask.reward} PTAP
+													</p>
+												</div>
+												{!selectedInviteFriendTask.claimed ? (
+													<>
+														<div className="text-center text-md flex flex-col mt-5 ">
+															<img src={linbottle} alt="" />
+														</div>
+														<div className="flex w-full mt-3 items-center justify-center gap-4 z-40 mb-4 px-3">
+															<button
+																onClick={() => {
+																	handleClaimInviteReward(selectedInviteFriendTask.id);
+																}}
+																disabled={buttonLoading}
+																className={`w-full py-2 h-10 bg-gradient-to-b from-[#00B2FF] to-[#2226FF] text-white font-bold rounded-md ${selectedInviteFriendTask.claimed ? 'filter grayscale' : ''}`}
+															>
+																{buttonLoading ? (
+																	<span className="flex justify-center items-center text-5xl font-bold w-full">
+																		<p className="absolute -mt-6 w-full">
+																			{dots}
+																		</p>
+																	</span>
+																) : 'Check'}
+															</button>
+														</div>
+													</>
+												) : (
+													<div className="p-5"></div>
+												)}
 											</div>
-											<div className="mt-5">
-												<p className="flex justify-center items-center gap-2 border border-[#242434] py-1  rounded-md text-[#FF8F00] px-6 text-lg font-medium">
-													<img
-														src={LittleCoin}
-														alt="Little coin"
-														width={25}
-														height={25}
-													/>
-													{selectedInviteFriendTask.reward} PTAP
-												</p>
-											</div>
-											{!selectedInviteFriendTask.claimed ? (
-												<>
-													<div className="text-center text-md flex flex-col mt-5 ">
-														<img src={linbottle} alt="" />
-													</div>
-													<div className="flex w-full mt-3 items-center justify-center gap-4 z-40 mb-4 px-3">
-														<button
-															onClick={() => {
-																handleClaimInviteReward(selectedInviteFriendTask.id);
-															}}
-															disabled={buttonLoading}
-															className={`w-full py-2 h-10 bg-gradient-to-b from-[#00B2FF] to-[#2226FF] text-white font-bold rounded-md ${selectedInviteFriendTask.claimed ? 'filter grayscale' : ''}`}
-														>
-															{buttonLoading ? (
-																<span className="h-6 font-bold">
-																	{dots}
-																</span>) : 'Check'}
-														</button>
-													</div>
-												</>
-											) : (
-												<div className="p-5"></div>
-											)}
 										</div>
 									</div>
 								</div>

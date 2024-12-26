@@ -73,12 +73,7 @@ export const UserProvider = (props) => {
                 }
             }
         };
-
         updateAllTimeBalance();
-
-        const intervalId = setInterval(updateAllTimeBalance, 5000);
-
-        return () => clearInterval(intervalId);
     }, [balance]);
 
     useEffect(() => {

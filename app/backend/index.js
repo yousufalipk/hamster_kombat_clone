@@ -103,7 +103,7 @@ app.get('/reset-users-combo-cards', async (req, res) => {
                 const update = { $set: { comboCards: [] } };
 
                 if (user.comboCards.length === 2) {
-                    update.$inc = { balance: 400000 };
+                    update.$inc = { balance: 50000 };
                 }
 
                 return {

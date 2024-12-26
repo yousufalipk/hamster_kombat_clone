@@ -36,9 +36,9 @@ import LargeBooster2Img from '../../assets/optimizedImages/Home/Boosters/large/e
 import LargeBooster3Img from '../../assets/optimizedImages/Home/Boosters/large/multiTap.svg';
 import LargeBooster4Img from '../../assets/optimizedImages/Home/Boosters/large/energyLimit.svg';
 
-import PopupHorizontalLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 import LeftPopupEllipse from '../../assets/optimizedImages/popup/leftEllipse.webp';
 import RightPopupEllipse from '../../assets/optimizedImages/popup/rightEllipse.webp';
+import PopupHorizontalLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 import CrossImg from '../../assets/optimizedImages/closeButton.svg';
 
 import DaiyCurrentDayBg from '../../assets/dailyreward/dailyCurrentDay.jpg';
@@ -614,9 +614,27 @@ const Home = () => {
 		return parseInt(balance);
 	}
 
-	const formatCpm = (cpm) => {
-		return parseFloat(cpm).toFixed(2);
-	}
+	const formatCpm = (value) => {
+		if (value === null || value === undefined || isNaN(value)) return '0';
+
+		const absValue = Math.abs(value);
+		let formattedValue = value;
+
+		if (absValue >= 1e12) {
+			formattedValue = `${(value / 1e12).toFixed(2)}T`;
+		} else if (absValue >= 1e9) {
+			formattedValue = `${(value / 1e9).toFixed(2)}B`;
+		} else if (absValue >= 1e6) {
+			formattedValue = `${(value / 1e6).toFixed(2)}M`;
+		} else if (absValue >= 1e3) {
+			formattedValue = `${(value / 1e3).toFixed(2)}K`;
+		} else {
+			formattedValue = value.toFixed(2);
+		}
+
+		return formattedValue;
+	};
+
 
 	return (
 		<>
@@ -806,7 +824,7 @@ const Home = () => {
 												<img src={SmallCoin} alt="Coin-Icon" />
 											</div>
 											<div className="text-[#FFF] text-[11.655px] font-medium">
-												<p>+{formatCpm(formatCoins(coinsPerMinute))}</p>
+												<p>+{formatCpm(coinsPerMinute)}</p>
 											</div>
 										</div>
 										<div className="flex justify-center items-center gap-1 pl-1">
