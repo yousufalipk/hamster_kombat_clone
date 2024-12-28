@@ -1696,7 +1696,7 @@ const Home = () => {
 																	width={25}
 																	height={25}
 																/>
-																+{formatBalance(avaliableCpm)} PTap
+																+{formatBalance(avaliableCpm)}
 															</p>
 														</div>
 													</div>

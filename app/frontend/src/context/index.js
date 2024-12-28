@@ -341,6 +341,10 @@ export const UserProvider = (props) => {
         }
     }
 
+    useEffect(() => {
+        console.log('Add Coin!', addCoins);
+    }, [addCoins])
+
     const initilizeStates = async (user) => {
         try {
             const percentage = ((user.level + 1) / levelsData.length) * 100;
@@ -394,6 +398,8 @@ export const UserProvider = (props) => {
                             });
                         }, timeDifferenceInMilliseconds)
                     }
+                } else {
+                    setAddCoins(user.multitaps.value);
                 }
             } else {
                 setAddCoins(user.multitaps.value);
@@ -637,7 +643,20 @@ export const UserProvider = (props) => {
                 kolId: kolId
             });
             if (res.data.status === 'success') {
-                await fetchKols();
+                /*
+                const res = await axios.post(`${apiUrl}/user/fetch-one-kol-detail`, {
+                    userId: userId,
+                    kolId: kolId
+                });
+                if (res.data.status === 'success') {
+                    const updatedKol = res.data.kol;
+                    setKols((prevKols) =>
+                        prevKols.map((kol) =>
+                            kol.id === kolId ? { ...kol, level: updatedKol.level } : kol
+                        )
+                    );
+                }
+                    */
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);

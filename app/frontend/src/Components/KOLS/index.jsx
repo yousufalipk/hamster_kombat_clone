@@ -12,8 +12,6 @@ import { useUser } from '../../context/index';
 const KOLS = () => {
 	const { fetchKols, upgradeKolsLevel, kols, kolsLoader, balance, formatLargeNumber } = useUser();
 
-	const navigate = useNavigate();
-
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedKol, setSelectedKol] = useState(null);
 
@@ -21,13 +19,6 @@ const KOLS = () => {
 
 	const [dots, setDots] = useState('');
 	const [buttonLoading, setButtonLoading] = useState(false);
-
-	useEffect(() => {
-		if (selectedKol) {
-			console.log("Balance", balance);
-			console.log("Selected Kol next upgrade cost", selectedKol?.userData?.nextLevelCost || selectedKol.levels[0].cost);
-		}
-	}, [selectedKol])
 
 	useEffect(() => {
 		let interval;
@@ -57,7 +48,6 @@ const KOLS = () => {
 		try {
 			const res = await upgradeKolsLevel(selectedKol._id);
 			if (res.success) {
-				navigate('/hammer');
 				toast.success(res.mess);
 			} else {
 				toast.error(res.mess);
