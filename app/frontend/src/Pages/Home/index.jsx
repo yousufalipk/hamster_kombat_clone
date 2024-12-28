@@ -1485,7 +1485,7 @@ const Home = () => {
 										}}
 									>
 										<div
-											className="relative bg-[#06060E] w-[100vw] h-[58vh] rounded-t-3xl p-6 text-white">
+											className="relative bg-[#06060E] w-[100vw] h-[60vh] rounded-t-3xl p-6 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div
@@ -1499,6 +1499,21 @@ const Home = () => {
 												<div className="-right-10 -bottom-5 w-52 h-52 absolute">
 													<img src={RightPopupEllipse} alt="popup-ellipse" />
 												</div>
+												<button
+													onClick={() => {
+														setPopupClosing(true);
+														setTimeout(() => {
+															setMultitapsPopup(false);
+															setPopupClosing(false);
+														}, 500);
+													}}
+													style={{
+														zIndex: 60
+													}}
+													className="w-12 h-12 absolute right-0 top-0 flex justify-center items-center"
+												>
+													<img src={CrossImg} alt="crossImg" />
+												</button>
 												<div className="popup-main">
 													<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
 													<div className="relative h-[15vh] flex justify-center flex-col items-center gap-2">
