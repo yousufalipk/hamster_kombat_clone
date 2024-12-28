@@ -1220,14 +1220,26 @@ const Home = () => {
 
 														{/* Logo, Title & Desc */}
 														<div className="relative z-50 h-[30vh] flex justify-center flex-col items-center py-4">
-															<img
-																style={{
-																	filter: "drop-shadow(0px 0px 25px #ADFFB7)",
-																}}
-																src={LargeBooster2Img}
-																alt="tap_booster"
-																className="absolute top-3"
-															/>
+															<div className='flex justify-center absolute top-3'>
+																<div>
+																	<div
+																		style={{
+																			borderRadius: '100%',
+																			transform: 'translateZ(0)',
+																			filter: 'drop-shadow(0 0 15px #ADFFB7)',
+																		}}
+																	>
+																		<img
+																			src={LargeBooster2Img}
+																			alt='token_Icon'
+																			width='60'
+																			style={{
+																				borderRadius: '12px',
+																			}}
+																		/>
+																	</div>
+																</div>
+															</div>
 															<div className="absolute bottom-1 flex flex-col gap-4">
 																<h1 className="text-2xl popup-heading text-center">
 																	Energy Refill
@@ -1345,14 +1357,27 @@ const Home = () => {
 
 														{/* Logo, Title & Desc */}
 														<div className="relative z-50 h-[20vh] flex justify-center flex-col items-center py-4">
-															<img
-																style={{
-																	filter: "drop-shadow(0px 0px 25px #9E9E9E)",
-																}}
-																src={LargeBooster4Img}
-																alt="tap_booster"
-																className="absolute top-3"
-															/>
+															<div className='flex justify-center absolute top-3'>
+																<div>
+																	<div
+																		style={{
+																			borderRadius: '100%',
+																			transform: 'translateZ(0)',
+																			filter: 'drop-shadow(0 0 15px #9E9E9E)',
+																		}}
+																	>
+																		<img
+																			src={LargeBooster4Img}
+																			alt='token_Icon'
+																			width='60'
+																			style={{
+																				borderRadius: '12px',
+																			}}
+																		/>
+																	</div>
+																</div>
+															</div>
+
 															<div className="absolute bottom-0 flex flex-col gap-1">
 																<h1 className="text-2xl popup-heading text-center">
 																	Energy Limit
@@ -1482,14 +1507,22 @@ const Home = () => {
 												<div className="popup-main">
 													<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
 													<div className="relative h-[15vh] flex justify-center flex-col items-center gap-2">
-														<img
+														<div
 															style={{
-																filter: "drop-shadow(0px 0px 25px #9E9E9E)",
+																borderRadius: '100%',
+																transform: 'translateZ(0)',
+																filter: 'drop-shadow(0 0 15px #9E9E9E)',
 															}}
-															src={LargeBooster3Img}
-															alt="tap_booster"
-															className="absolute top-2"
-														/>
+														>
+															<img
+																src={LargeBooster4Img}
+																alt='token_Icon'
+																width='60'
+																style={{
+																	borderRadius: '12px',
+																}}
+															/>
+														</div>
 														<h1 className="text-2xl text-center absolute -bottom-6">
 															Multi Tap
 														</h1>
