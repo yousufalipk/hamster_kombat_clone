@@ -11,7 +11,7 @@ import { useUser } from "../../context";
 
 const Partners = () => {
 	const navigate = useNavigate();
-	const { patners, fetchPatners, upgradePatnerLevel, patnerLoader, balance, formatLargeNumber } = useUser();
+	const { patners, fetchPatners, upgradePatnerLevel, patnerLoader, balance, formatNumberWithSuffix } = useUser();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedPatner, setSelectedPatner] = useState(null);
 

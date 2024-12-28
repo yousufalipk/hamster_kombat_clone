@@ -23,11 +23,13 @@ import arrow from '../../assets/token/arrow.svg';
 import cardbg from "../../assets/token/tokencardbg.svg";
 
 import UpgradeSvg from '../UpgradeSvg/UpgradeSvg';
+import PopupDivider from '../PopupDividerSvg/PopupDividerSvg';
+import VerticalDividerSvg from "../VerticalDividerSvg/VerticalDividerSvg";
 
 import SpaceTime from '../../assets/space-time.svg';
 
 const Token = () => {
-	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatLargeNumber } = useUser();
+	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance } = useUser();
 
 	const [isModalOpen, setModalOpen] = useState(false);
 	const [processing, setProcessing] = useState(true);
@@ -472,7 +474,7 @@ const Token = () => {
 						<div className='bg-[#060611] px-4 w-full h-[100vh] overflow-y-scroll overflow-x-hidden'>
 							<div className="text-white flex justify-end items-center gap-2 p-5">
 								<img src={LittleCoin} alt="Coin-Icon" className="" />
-								{balance.toLocaleString()}
+								{formatBalance(balance)}
 							</div>
 
 							{/* Upper Card Portion New */}
@@ -489,7 +491,7 @@ const Token = () => {
 											clipPath:
 												" polygon(0 0, 0 21%, 2% 35%, 2% 65%, 0 79%, 0 100%, 100% 100%, 100% 79%, 98% 65%, 98% 35%, 100% 21%, 100% 0)",
 										}}
-										className="card-container w-full h-[28vh]"
+										className="card-container w-full h-[26vh]"
 										onClick={() => handleTokenBuy()}
 									>
 										<div
@@ -500,7 +502,7 @@ const Token = () => {
 												clipPath:
 													" polygon(0 0, 0 21%, 2% 35%, 2% 65%, 0 79%, 0 100%, 100% 100%, 100% 79%, 98% 65%, 98% 35%, 100% 21%, 100% 0)",
 											}}
-											className="card-container w-full h-[27.5vh]"
+											className="card-container w-full h-[25.5vh]"
 										>
 											<div className="absolute left-10 -top-3">
 												<div className=" relative flex justify-end items-center w-[40vw] h-[30vh]">
@@ -522,31 +524,46 @@ const Token = () => {
 												<div className="w-full h-[25%] flex justify-between items-center">
 													<div className="w-1/2 h-full flex justify-start items-center">
 														{/* Level */}
-														<p
+														<div
 															style={{
-																background: `linear-gradient(to bottom, #00B2FF, #2226FF)`
+																position: 'relative',
+																width: '15vw',
+																marginTop: '0.25rem',
+																borderRadius: '0 0.375rem 0.375rem 0',
+																overflow: 'hidden',
 															}}
-															className="text-base py-1 w-[15vw] bg-slate-900 text-center rounded-r-md text-white mt-1"
+															className="text-base py-1 text-center text-white rounded-r-md"
 														>
-															{token.userData.userLevel !== 'max' ? (`lvl ${token.userData.userLevel || 0}`) : ('Max')}
-														</p>
+															<div
+																style={{
+																	position: 'absolute',
+																	top: 0,
+																	left: 0,
+																	right: 0,
+																	bottom: 0,
+																	background: `linear-gradient(to bottom, ${token.project.fromColor}, ${token.project.toColor})`,
+																	filter: 'brightness(0.9)',
+																	zIndex: -1,
+																}}
+															></div>
+															{token.userData.userLevel !== 'max' ? `lvl ${token.userData.userLevel || 0}` : 'Max'}
+														</div>
 													</div>
 													<div className="relative w-1/2 h-full flex justify-end items-center">
 														{/* upgrade */}
 														<UpgradeSvg token={token} />
-														<p className="absolute left-[40%] bottom-[40%] text-white text-xs">Upgrade</p>
 													</div>
 												</div>
 
 												{/* Token Logo + Name & Balance */}
-												<div className="w-full h-[30%] flex justify-between items-center">
+												<div className="relative w-full h-[25%] flex justify-between items-center">
 													<div className="flex items-center gap-2 ml-8 mt-3">
 														<img
-															className="w-[40px] h-[40px]"
+															className="w-[40px] h-[40px] rounded-full"
 															src={`data:image/jpeg;base64,${token.project.icon.data}`}
 															alt="BigCoin-Icon"
 														/>
-														<div className="text-xl text-white">
+														<div className="text-xl text-white font-medium text-[19px]">
 															<p>{token.project.name}</p>
 														</div>
 													</div>
@@ -562,74 +579,48 @@ const Token = () => {
 															</p>
 														</div>
 													</div>
+													<div className="absolute z-20 -bottom-3">
+														<PopupDivider token={token} />
+													</div>
 												</div>
 
 												{token.userData.userLevel !== 'max' && (
 													<>
 														{/* cost, reward */}
-														<div className="w-full h-[40%] flex justify-between items-center mt-2 ml-8 gap-3 py-1">
-															<div className="w-[25%] h-full flex flex-col justify-start items-start">
+														<div className="w-full h-[40%] flex justify-between items-center mt-3 ml-8 gap-3 py-1">
+															<div className="w-[15%] h-full flex flex-col justify-start items-start">
 																<h1 className="text-[#F39E09]">Cost</h1>
 																<div className="flex gap-1 justify-start items-center text-white">
 																	<img src={LittleCoin} alt="little_coin" width={18} />
-																	<p className="text-[15px] font-medium">{token?.userData?.nextLevelCost.toLocaleString()}</p> <span className="text-[6px] mt-2">PTap</span>
+																	<p className="text-[15px] font-medium">{formatNumberWithSuffix(token?.userData?.nextLevelCost, 0)}</p>
 																</div>
 															</div>
-															<img
-																src={PopupVerticalLine}
-																alt="vertical_line"
-																style={{
-																	filter: "invert(1) grayscale(1) brightness(0.5)",
-																	opacity: "0.8",
-																}}
-															/>
-															<div className="w-[30%] h-full flex flex-col justify-start items-start">
+															<div className="p-2">
+																<VerticalDividerSvg token={token} />
+															</div>
+															<div className="w-[25%] h-full flex flex-col justify-start items-start">
 																<h1 className="text-[#F39E09]">Reward</h1>
-																<div className="flex justify-start items-center text-white">
-																	<p className="text-[12px]">CPM</p>
-																	<img src={SpaceTime} alt="space-time" />
+																<div className="flex justify-start items-center text-white gap-1">
 																	<img src={LittleCoin} alt="little_coin" width={18} />
-																	<p className="text-[15px] font-medium text-[#F39E09]">+{formatLargeNumber(token?.userData?.nextLevelCpm)}</p>
+																	<p className="text-[15px] font-medium text-[#F39E09]">+{formatNumberWithSuffix(token?.userData?.nextLevelCpm)}</p>
+																	<p className="text-[12px]">CPM</p>
 																</div>
 															</div>
-															<div className="w-[50%] h-full flex flex-col justify-center items-center mr-5">
+															<div className="w-[50%] h-full flex flex-col justify-center items-start ml-5">
 																<div className="w-[60%] h-[4vh] flex items-center gap-1 border justify-center border-[#fff9f9] rounded-xl py-1">
 																	<img
 																		width={15}
 																		src={BigCoin}
 																		alt="Coin-Icon"
 																	/>
-																	<div className="text-[#FFF] text-[15px] font-normal text-xs ">
-																		<p> + {token?.userData?.nextLevelReward.toLocaleString()} {token.project.name.match(/[A-Z]/g)?.join('')}</p>
+																	<div className="text-[#FFF] text-[15px] font-normal text-xs">
+																		<p>+{formatNumberWithSuffix(token?.userData?.nextLevelReward, 0)} {token.project.name.match(/[A-Z]/g)?.join('')}</p>
 																	</div>
 																</div>
 															</div>
 														</div>
 													</>
 												)}
-
-												{/* Mid Line */}
-												<div className="absolute bottom-12 left-8">
-													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 464.94 93.53" width={280} height={100}>
-														<defs>
-															<linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="0%">
-																<stop offset="0%" style={{ stopColor: token.project.fromColor, stopOpacity: 1 }} />
-																<stop offset="100%" style={{ stopColor: token.project.toColor, stopOpacity: 1 }} />
-															</linearGradient>
-														</defs>
-														<polyline
-															className="cls-1"
-															points="0 92.53 464.94 92.53 310.98 92.53 310.98 0"
-															style={{
-																stroke: 'url(#gradientStroke)',
-																fill: 'none',
-																strokeWidth: '1',
-																strokeLinejoin: 'miter',
-																strokeLinecap: 'butt',
-															}}
-														/>
-													</svg>
-												</div>
 												{/* Bottom Zig Zag */}
 												<div className="absolute -bottom-2 right-0.5 overflow-hidden">
 													<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 284.32 101.81" width="70" height="50">

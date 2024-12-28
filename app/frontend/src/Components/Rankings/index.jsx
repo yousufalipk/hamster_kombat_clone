@@ -25,7 +25,7 @@ import Coin from "../../assets/BigCoinIcon.svg";
 import ProfilePic from '../../assets/profile.png';
 
 const Rankings = () => {
-	const { rankLoader, setRankLoader, topUsers, fetchLeaderboardUsers, level, userId, levelsData } = useUser();
+	const { rankLoader, setRankLoader, topUsers, fetchLeaderboardUsers, level, userId, levelsData, formatNumberWithSuffix } = useUser();
 
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 	const navigate = useNavigate();
@@ -148,27 +148,6 @@ const Rankings = () => {
 		}
 	}, [navigate]);
 
-	const formatLargeNumber = (value) => {
-		if (value === null || value === undefined || isNaN(value)) return '0';
-
-		const absValue = Math.abs(value);
-		let formattedValue = value;
-
-		if (absValue >= 1e12) {
-			formattedValue = `${(value / 1e12).toFixed(2)}T`;
-		} else if (absValue >= 1e9) {
-			formattedValue = `${(value / 1e9).toFixed(2)}B`;
-		} else if (absValue >= 1e6) {
-			formattedValue = `${(value / 1e6).toFixed(2)}M`;
-		} else if (absValue >= 1e3) {
-			formattedValue = `${(value / 1e3).toFixed(2)}K`;
-		} else {
-			formattedValue = value.toFixed(2);
-		}
-
-		return formattedValue;
-	};
-
 	return (
 		<>
 			{rankLoader && (
@@ -230,7 +209,7 @@ const Rankings = () => {
 														<p>{currentPageUsers[1].firstName.slice(0, 7)}</p>
 														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 															<img src={Coin} alt="coin" width={15} />
-															{formatLargeNumber(currentPageUsers[1].balance)}
+															{formatNumberWithSuffix(currentPageUsers[1].balance, 2)}
 														</div>
 													</>
 												)}
@@ -253,7 +232,7 @@ const Rankings = () => {
 														<p>{currentPageUsers[0].firstName.slice(0, 7)}</p>
 														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 															<img src={Coin} alt="coin" width={18} />
-															{formatLargeNumber(currentPageUsers[0].balance)}
+															{formatNumberWithSuffix(currentPageUsers[0].balance, 2)}
 														</div>
 													</>
 												)}
@@ -273,7 +252,7 @@ const Rankings = () => {
 														<p>{currentPageUsers[2].firstName.slice(0, 7)}</p>
 														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 															<img src={Coin} alt="coin" width={18} />
-															{formatLargeNumber(currentPageUsers[2].balance)}
+															{formatNumberWithSuffix(currentPageUsers[2].balance, 2)}
 														</div>
 													</>
 												)}
@@ -324,7 +303,7 @@ const Rankings = () => {
 																</h1>
 																<div className="flex items-center justify-start gap-1">
 																	<img src={Coin} alt="Coin" width={15} />
-																	<p>{formatLargeNumber(user.balance)}</p>
+																	<p>{formatNumberWithSuffix(user.balance, 2)}</p>
 																</div>
 															</div>
 														</div>
@@ -356,7 +335,7 @@ const Rankings = () => {
 														</h1>
 														<div className="flex items-center justify-start gap-1">
 															<img src={Coin} alt="Coin" width={15} />
-															<p>{formatLargeNumber(user.balance)}</p>
+															<p>{formatNumberWithSuffix(user.balance, 2)}</p>
 														</div>
 													</div>
 												</div>

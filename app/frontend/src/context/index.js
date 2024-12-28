@@ -155,22 +155,22 @@ export const UserProvider = (props) => {
         { id: 14, name: 'The Crypto', rangeFrom: 3000000000, rangeTo: 'max' },
     ];
 
-    const formatLargeNumber = (value) => {
+    const formatNumberWithSuffix = (value, decimals = 2) => {
         if (value === null || value === undefined || isNaN(value)) return '0';
 
         const absValue = Math.abs(value);
         let formattedValue = value;
 
         if (absValue >= 1e12) {
-            formattedValue = `${(value / 1e12).toFixed(2)}T`;
+            formattedValue = `${(value / 1e12).toFixed(decimals)}T`;
         } else if (absValue >= 1e9) {
-            formattedValue = `${(value / 1e9).toFixed(2)}B`;
+            formattedValue = `${(value / 1e9).toFixed(decimals)}B`;
         } else if (absValue >= 1e6) {
-            formattedValue = `${(value / 1e6).toFixed(2)}M`;
+            formattedValue = `${(value / 1e6).toFixed(decimals)}M`;
         } else if (absValue >= 1e3) {
-            formattedValue = `${(value / 1e3).toFixed(2)}K`;
+            formattedValue = `${(value / 1e3).toFixed(decimals)}K`;
         } else {
-            formattedValue = value.toFixed(2);
+            formattedValue = value.toFixed(decimals);
         }
 
         return formattedValue;
@@ -961,10 +961,10 @@ export const UserProvider = (props) => {
             rankLoader,
             setRankLoader,
 
-            formatLargeNumber,
             mainLoader,
             setMainLoader,
-            formatBalance
+            formatBalance,
+            formatNumberWithSuffix
         }}>
             {props.children}
         </UserContext.Provider>

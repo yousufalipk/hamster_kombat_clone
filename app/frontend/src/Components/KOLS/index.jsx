@@ -17,7 +17,7 @@ import CrossImg from '../../assets/optimizedImages/closeButton.svg';
 import PopupVerticalLine from '../../assets/optimizedImages/popup/verticalLine.webp';
 
 const KOLS = () => {
-	const { fetchKols, upgradeKolsLevel, kols, kolsLoader, balance, formatLargeNumber } = useUser();
+	const { fetchKols, upgradeKolsLevel, kols, kolsLoader, balance, formatNumberWithSuffix } = useUser();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedKol, setSelectedKol] = useState(null);
@@ -158,7 +158,7 @@ const KOLS = () => {
 											{/* description */}
 											<div className='my-2'>
 												<p className='text-[14px] font-light text-center'>
-													You will get +{formatLargeNumber(selectedKol?.userData?.nextLevelCpm || selectedKol.levels[0].cpm)} coins per minute against {selectedKol?.userData?.nextLevelCost || selectedKol.levels[0].cost} pandatop coins.
+													You will get +{formatNumberWithSuffix(selectedKol?.userData?.nextLevelCpm || selectedKol.levels[0].cpm, 2)} coins per minute against {selectedKol?.userData?.nextLevelCost || selectedKol.levels[0].cost} pandatop coins.
 												</p>
 											</div>
 
@@ -187,7 +187,7 @@ const KOLS = () => {
 															alt="Little coin"
 															className='w-5'
 														/>
-														<p className="text-sm">+{formatLargeNumber(selectedKol?.userData?.nextLevelCpm || selectedKol.levels[0].cpm)}</p>
+														<p className="text-sm">+{formatNumberWithSuffix(selectedKol?.userData?.nextLevelCpm || selectedKol.levels[0].cpm, 2)}</p>
 													</div>
 													<span className='text-xs font-thin'>CPM</span>
 												</div>
@@ -283,7 +283,7 @@ const KOLS = () => {
 																alt='Coin-Icon'
 															/>
 															<div className="text-xs font-thin text-gray-300">
-																<span className="mr-2 font-semibold text-xs">+{formatLargeNumber(kol.userData?.nextLevelCpm || kol.levels[0].cpm)}</span>
+																<span className="mr-2 font-semibold text-xs">+{formatNumberWithSuffix(kol.userData?.nextLevelCpm || kol.levels[0].cpm, 2)}</span>
 																CPM
 															</div>
 														</>
