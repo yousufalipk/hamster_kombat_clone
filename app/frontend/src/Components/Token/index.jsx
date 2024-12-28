@@ -23,6 +23,8 @@ import arrow from '../../assets/token/arrow.svg';
 import cardbg from "../../assets/token/tokencardbg.svg";
 import loadcoin from "../../assets/token/loadcoin.svg";
 
+import UpgradeSvg from '../UpgradeSvg/UpgradeSvg';
+
 const Token = () => {
 	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatLargeNumber } = useUser();
 
@@ -450,7 +452,100 @@ const Token = () => {
 								<img src={LittleCoin} alt="Coin-Icon" className="" />
 								{balance.toLocaleString()}
 							</div>
-							{/* Upper Card Portion */}
+
+							{/* Upper Card Portion New */}
+							<div>
+								<div>
+									{/* Card */}
+									<button
+										style={{
+											position: "relative",
+											padding: "2px",
+											background:
+												`linear-gradient(to bottom, ${token.project.toColor},${token.project.fromColor})`,
+											borderRadius: "16px",
+											clipPath:
+												" polygon(0 0, 0 21%, 2% 35%, 2% 65%, 0 79%, 0 100%, 100% 100%, 100% 79%, 98% 65%, 98% 35%, 100% 21%, 100% 0)",
+										}}
+										className="card-container w-full h-[28vh]"
+										onClick={() => handleTokenBuy()}
+									>
+										<div
+											style={{
+												position: "relative",
+												background: `linear-gradient(to bottom, ${token.project.fromColor}, ${token.project.toColor})`,
+												borderRadius: "14px",
+												clipPath:
+													" polygon(0 0, 0 21%, 2% 35%, 2% 65%, 0 79%, 0 100%, 100% 100%, 100% 79%, 98% 65%, 98% 35%, 100% 21%, 100% 0)",
+											}}
+											className="card-container w-full h-[27.5vh]"
+										>
+											<div className="absolute left-10 -top-3">
+												<div className=" relative flex justify-end items-center w-[40vw] h-[30vh]">
+													<img
+														src={cardbg}
+														alt=""
+														className="opacity-10"
+													/>
+													<div className=" flex items-center justify-center absolute">
+														<p className="font-italianno text-[6rem]   text-slate-100 opacity-10">
+															{token.project.name.charAt(0)}
+														</p>
+													</div>
+												</div>
+											</div>
+											{/* main body of card */}
+											<div className="w-full h-full">
+												{/* Level & Upgrade button */}
+												<div className="w-full h-[25%] flex justify-between items-center">
+													<div className="w-1/2 h-full flex justify-start items-center">
+														{/* Level */}
+														<p
+															style={{
+																background: `linear-gradient(to bottom, #00B2FF, #2226FF)`
+															}}
+															className="text-base py-1 w-[15vw] bg-slate-900 text-center rounded-r-md text-white mt-1"
+														>
+															{token.userData.userLevel !== 'max' ? (`lvl ${token.userData.userLevel || 0}`) : ('Max')}
+														</p>
+													</div>
+													<div className="w-1/2 h-full flex justify-end items-center">
+														{/* upgrade */}
+														<UpgradeSvg token={token} />
+													</div>
+												</div>
+											</div>
+
+										</div>
+										<div className="absolute bottom-0 right-0.5 overflow-hidden">
+											<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 284.32 101.81" width="70" height="50">
+												<defs>
+													<linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+														<stop offset="0%" style={{ stopColor: token.project.lineFromColor, stopOpacity: 1 }} />
+														<stop offset="100%" style={{ stopColor: token.project.lineToColor, stopOpacity: 1 }} />
+													</linearGradient>
+													<style>
+														{`
+															.cls-1 {
+																fill: none;
+																stroke: url(#gradient1);
+																stroke-width: 3px;
+																stroke-miterlimit: 10;
+																filter: drop-shadow(0px 0px 5px ${token.project.fromColor});
+															}
+														`}
+													</style>
+												</defs>
+												<polyline className="cls-1" points="284.32 30.61 140.94 30.61 111.06 1.5 34.32 1.5" />
+												<polyline className="cls-1" points="284.32 73.5 210.64 73.5 180.77 100.31 83.49 100.31 59.74 73.5 0 73.5" />
+											</svg>
+										</div>
+									</button>
+								</div>
+							</div>
+
+
+							{/* Old Card */}
 							<div>
 								<div>
 									{/* Card */}
@@ -623,6 +718,8 @@ const Token = () => {
 									</button>
 								</div>
 							</div>
+
+
 
 							{/* Tasks Section */}
 							<div className="px-4 py-5 border-t-2 mt-5 rounded-tl-[30px] rounded-tr-[30px] border-[#0099FF] shadow-[#0099ff92]  shadow-lg  ">
