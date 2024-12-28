@@ -396,6 +396,7 @@ export const UserProvider = (props) => {
                     }
                 }
             } else {
+                setAddCoins(user.multitaps.value);
                 setDisableEnergy(user.unlimitedTaps.status);
             }
             setAvaliableUnlimitedTaps(user.unlimitedTaps.available);
