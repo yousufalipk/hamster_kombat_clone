@@ -1484,10 +1484,10 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[57vh] rounded-t-3xl p-4 text-white">
+										<div
+											className="relative bg-[#06060E] w-[100vw] h-[58vh] rounded-t-3xl p-6 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
-
 											<div
 												onClick={(e) => e.stopPropagation()}
 												className="popup-content">
@@ -1563,40 +1563,27 @@ const Home = () => {
 															)}
 														</div>
 													</div>
-													{/* action buttons */}
-													<div className='flex gap-4 justify-center mt-4 w-full'>
-														<div className="absolute top-4 right-5">
-															<button onClick={() => {
-																setPopupClosing(true);
-																setTimeout(() => {
-																	setMultitapsPopup(false);
-																	setPopupClosing(false);
-																}, 500);
-															}}>
-																<img src={CrossImg} alt="" width={25} />
-															</button>
-														</div>
-														<div className="w-full h-full -mt-2">
-															<button
-																className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
-																onClick={() => {
-																	handleMultitapUpgrade()
-																}}
-																disabled={multitapLevel >= 9 || buttonLoading}
-															>
-																{buttonLoading ? (
-																	<span className="flex justify-center items-center text-5xl font-bold w-full">
-																		<p className="absolute -mt-6">
-																			{dots}
-																		</p>
-																	</span>
-																) : (
-																	<>
-																		{multitapLevel >= 9 ? ("Max Level") : ('Upgrade')}
-																	</>
-																)}
-															</button>
-														</div>
+													{/* Button */}
+													<div className="w-full h-[5vh] mt-3">
+														<button
+															className={`w-full h-12 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
+															onClick={() => {
+																handleMultitapUpgrade()
+															}}
+															disabled={multitapLevel >= 9 || buttonLoading}
+														>
+															{buttonLoading ? (
+																<span className="flex justify-center items-center text-5xl font-bold w-full">
+																	<p className="absolute -mt-6 w-full">
+																		{dots}
+																	</p>
+																</span>
+															) : (
+																<>
+																	{multitapLevel >= 9 ? ("Max Level") : ('Upgrade')}
+																</>
+															)}
+														</button>
 													</div>
 												</div>
 											</div>
