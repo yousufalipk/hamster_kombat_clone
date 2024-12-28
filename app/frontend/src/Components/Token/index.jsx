@@ -25,6 +25,8 @@ import loadcoin from "../../assets/token/loadcoin.svg";
 
 import UpgradeSvg from '../UpgradeSvg/UpgradeSvg';
 
+import SpaceTime from '../../assets/space-time.svg';
+
 const Token = () => {
 	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatLargeNumber } = useUser();
 
@@ -495,7 +497,7 @@ const Token = () => {
 												</div>
 											</div>
 											{/* main body of card */}
-											<div className="w-full h-full">
+											<div className="relative w-full h-full">
 												{/* Level & Upgrade button */}
 												<div className="w-full h-[25%] flex justify-between items-center">
 													<div className="w-1/2 h-full flex justify-start items-center">
@@ -514,193 +516,109 @@ const Token = () => {
 														<UpgradeSvg token={token} />
 													</div>
 												</div>
-											</div>
 
-										</div>
-										<div className="absolute bottom-0 right-0.5 overflow-hidden">
-											<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 284.32 101.81" width="70" height="50">
-												<defs>
-													<linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-														<stop offset="0%" style={{ stopColor: token.project.lineFromColor, stopOpacity: 1 }} />
-														<stop offset="100%" style={{ stopColor: token.project.lineToColor, stopOpacity: 1 }} />
-													</linearGradient>
-													<style>
-														{`
-															.cls-1 {
-																fill: none;
-																stroke: url(#gradient1);
-																stroke-width: 3px;
-																stroke-miterlimit: 10;
-																filter: drop-shadow(0px 0px 5px ${token.project.fromColor});
-															}
-														`}
-													</style>
-												</defs>
-												<polyline className="cls-1" points="284.32 30.61 140.94 30.61 111.06 1.5 34.32 1.5" />
-												<polyline className="cls-1" points="284.32 73.5 210.64 73.5 180.77 100.31 83.49 100.31 59.74 73.5 0 73.5" />
-											</svg>
-										</div>
-									</button>
-								</div>
-							</div>
-
-
-							{/* Old Card */}
-							<div>
-								<div>
-									{/* Card */}
-									<button
-										style={{
-											position: "relative",
-											padding: "2px",
-											background:
-												`linear-gradient(to bottom, ${token.project.toColor},${token.project.fromColor})`,
-											borderRadius: "16px",
-											clipPath:
-												" polygon(0 0, 0 21%, 2% 35%, 2% 65%, 0 79%, 0 100%, 100% 100%, 100% 79%, 98% 65%, 98% 35%, 100% 21%, 100% 0)",
-										}}
-										className="card-container w-full h-[28vh]"
-										onClick={() => handleTokenBuy()}
-									>
-										<div
-											style={{
-												position: "relative",
-												background: `linear-gradient(to bottom, ${token.project.fromColor}, ${token.project.toColor})`,
-												borderRadius: "14px",
-												clipPath:
-													" polygon(0 0, 0 21%, 2% 35%, 2% 65%, 0 79%, 0 100%, 100% 100%, 100% 79%, 98% 65%, 98% 35%, 100% 21%, 100% 0)",
-											}}
-											className="card-container w-full h-[27.5vh]"
-										>
-											<div className="absolute left-10 -top-3">
-												<div className=" relative flex justify-end items-center w-[40vw] h-[30vh]">
-													<img
-														src={cardbg}
-														alt=""
-														className="opacity-10"
-													/>
-													<div className=" flex items-center justify-center absolute">
-														<p className="font-italianno text-[6rem]   text-slate-100 opacity-10">
-															{token.project.name.charAt(0)}
+												{/* Token Logo + Name & Balance */}
+												<div className="w-full h-[30%] flex justify-between items-center">
+													<div className="flex items-center gap-2 ml-8 mt-3">
+														<img
+															className="w-[40px] h-[40px]"
+															src={`data:image/jpeg;base64,${token.project.icon.data}`}
+															alt="BigCoin-Icon"
+														/>
+														<div className="text-xl text-white">
+															<p>{token.project.name}</p>
+														</div>
+													</div>
+													<div className="flex flex-col items-start justify-start px-5">
+														<p className="text-[#F39E09] font-semibold text-[13px]">
+															Balance
 														</p>
-													</div>
-												</div>
-											</div>
-											<div className={`rounded-[14px]`}>
-												<div className="justify-between">
-													<div className="w-full">
-														<div className="text-xs  bg-opacity-30 w-full flex justify-between py-1">
-															<p
-																style={{
-																	background: `linear-gradient(to bottom, #00B2FF, #2226FF)`
-																}}
-																className="text-base py-1 w-[15vw] bg-slate-900 text-center rounded-md text-white ml-1 mt-1"
-															>
-																{token.userData.userLevel !== 'max' ? (`lvl ${token.userData.userLevel || 0}`) : ('Max')}
+														<div className="flex gap-1">
+															<img src={BigCoin} alt="Coin-Icon" width={20} />
+															<p className="text-white flex gap-2 justify-end items-end text-[17px]">
+																{token.userData.walletBalance.toLocaleString() || 0}
+																<span className="text-[7px]">{token.project.name.match(/[A-Z]/g)?.join('')}</span>
 															</p>
-
-															{token.userData.userLevel !== 'max' && (
-																<div className="text-[#FFF] flex items-center mr-10 gap-1">
-																	<span>
-																		<img
-																			src={LittleCoin}
-																			alt="Coin-Icon"
-																			className=" w-10 h-8"
-																		/>
-																	</span>
-																	<p className="text-xl">
-																		{token.userData.nextLevelCost.toLocaleString()}
-																	</p>
-																</div>
-															)}
-														</div>
-
-														<div
-															className={`flex justify-between items-center`}
-														>
-															<div className="flex items-center gap-2 ml-8 mt-6">
-																<img
-																	className="w-[40px] h-[40px]"
-																	src={`data:image/jpeg;base64,${token.project.icon.data}`}
-																	alt="BigCoin-Icon"
-																/>
-																<div className="text-xl text-white">
-																	<p>{token.project.name}</p>
-																</div>
-															</div>
-															<div className=" items-center mr-5">
-																<p className="text-[#F39E09] font-semibold">
-																	Balance
-																</p>
-																<div className="flex gap-2">
-																	<img src={BigCoin} alt="Coin-Icon" />
-																	<p className="text-white">
-																		{token.userData.walletBalance.toLocaleString() || 0}
-																		<span className="text-xs">{token.project.name.match(/[A-Z]/g)?.join('')}</span>
-																	</p>
-
-																	<p></p>
-																</div>
-															</div>
-														</div>
-														<div className="absolute bottom-16 left-5">
-															<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 464.94 93.53" width={280} height={100}>
-																<defs>
-																	<linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="0%">
-																		<stop offset="0%" style={{ stopColor: token.project.fromColor, stopOpacity: 1 }} />
-																		<stop offset="100%" style={{ stopColor: token.project.toColor, stopOpacity: 1 }} />
-																	</linearGradient>
-																</defs>
-																<polyline
-																	className="cls-1"
-																	points="0 92.53 464.94 92.53 310.98 92.53 310.98 0"
-																	style={{
-																		stroke: 'url(#gradientStroke)',
-																		fill: 'none',
-																		strokeWidth: '1',
-																		strokeLinejoin: 'miter',
-																		strokeLinecap: 'butt',
-																	}}
-																/>
-															</svg>
 														</div>
 													</div>
+												</div>
 
-													{token.userData.userLevel !== 'max' && (
-														<div className="px-5 mt-5 flex justify-between w-full">
-															<div className="text-[#FFF] text-xs font-normal gap-2 flex items-center w-[60%]">
-																<div>Coins Per Minute</div>
-																<div>
-																	<img src={loadcoin} alt="" width={12} />
-																</div>
-																<div className="text-xl text-[#FF8F00] font-medium">
-																	<p>+{formatLargeNumber(token?.userData?.nextLevelCpm)}</p>
+												{token.userData.userLevel !== 'max' && (
+													<>
+														{/* cost, reward */}
+														<div className="w-full h-[40%] flex justify-between items-center mt-2 ml-8 gap-3 py-1">
+															<div className="w-[25%] h-full flex flex-col justify-start items-start">
+																<h1 className="text-[#F39E09]">Cost</h1>
+																<div className="flex gap-1 justify-start items-center text-white">
+																	<img src={LittleCoin} alt="little_coin" width={18} />
+																	<p className="text-[15px] font-medium">{token?.userData?.nextLevelCost.toLocaleString()}</p> <span className="text-[6px] mt-2">PTap</span>
 																</div>
 															</div>
-															<div className="w-[40%] flex items-center gap-2 border justify-center border-[#fff9f9] rounded-xl py-1">
-																<img
-																	width={15}
-																	src={BigCoin}
-																	alt="Coin-Icon"
-																/>
-																<div className="text-[#FFF] text-[15px] font-normal text-xs ">
-																	<p> + {token?.userData?.nextLevelReward.toLocaleString()} {token.project.name.match(/[A-Z]/g)?.join('')}</p>
+															<img
+																src={PopupVerticalLine}
+																alt="vertical_line"
+																style={{
+																	filter: "invert(1) grayscale(1) brightness(0.5)",
+																	opacity: "0.8",
+																}}
+															/>
+															<div className="w-[30%] h-full flex flex-col justify-start items-start">
+																<h1 className="text-[#F39E09]">Reward</h1>
+																<div className="flex justify-start items-center text-white">
+																	<p className="text-[12px]">CPM</p>
+																	<img src={SpaceTime} alt="space-time" />
+																	<img src={LittleCoin} alt="little_coin" width={18} />
+																	<p className="text-[15px] font-medium text-[#F39E09]">+{formatLargeNumber(token?.userData?.nextLevelCpm)}</p>
+																</div>
+															</div>
+															<div className="w-[50%] h-full flex flex-col justify-center items-center mr-5">
+																<div className="w-[60%] h-[4vh] flex items-center gap-1 border justify-center border-[#fff9f9] rounded-xl py-1">
+																	<img
+																		width={15}
+																		src={BigCoin}
+																		alt="Coin-Icon"
+																	/>
+																	<div className="text-[#FFF] text-[15px] font-normal text-xs ">
+																		<p> + {token?.userData?.nextLevelReward.toLocaleString()} {token.project.name.match(/[A-Z]/g)?.join('')}</p>
+																	</div>
 																</div>
 															</div>
 														</div>
-													)}
+													</>
+												)}
+
+												{/* Mid Line */}
+												<div className="absolute bottom-12 left-8">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 464.94 93.53" width={280} height={100}>
+														<defs>
+															<linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="0%">
+																<stop offset="0%" style={{ stopColor: token.project.fromColor, stopOpacity: 1 }} />
+																<stop offset="100%" style={{ stopColor: token.project.toColor, stopOpacity: 1 }} />
+															</linearGradient>
+														</defs>
+														<polyline
+															className="cls-1"
+															points="0 92.53 464.94 92.53 310.98 92.53 310.98 0"
+															style={{
+																stroke: 'url(#gradientStroke)',
+																fill: 'none',
+																strokeWidth: '1',
+																strokeLinejoin: 'miter',
+																strokeLinecap: 'butt',
+															}}
+														/>
+													</svg>
 												</div>
-											</div>
-										</div>
-										<div className="absolute bottom-0 right-0.5 overflow-hidden">
-											<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 284.32 101.81" width="70" height="50">
-												<defs>
-													<linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-														<stop offset="0%" style={{ stopColor: token.project.lineFromColor, stopOpacity: 1 }} />
-														<stop offset="100%" style={{ stopColor: token.project.lineToColor, stopOpacity: 1 }} />
-													</linearGradient>
-													<style>
-														{`
+												{/* Bottom Zig Zag */}
+												<div className="absolute -bottom-2 right-0.5 overflow-hidden">
+													<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 284.32 101.81" width="70" height="50">
+														<defs>
+															<linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+																<stop offset="0%" style={{ stopColor: token.project.lineFromColor, stopOpacity: 1 }} />
+																<stop offset="100%" style={{ stopColor: token.project.lineToColor, stopOpacity: 1 }} />
+															</linearGradient>
+															<style>
+																{`
 															.cls-1 {
 																fill: none;
 																stroke: url(#gradient1);
@@ -709,17 +627,17 @@ const Token = () => {
 																filter: drop-shadow(0px 0px 5px ${token.project.fromColor});
 															}
 														`}
-													</style>
-												</defs>
-												<polyline className="cls-1" points="284.32 30.61 140.94 30.61 111.06 1.5 34.32 1.5" />
-												<polyline className="cls-1" points="284.32 73.5 210.64 73.5 180.77 100.31 83.49 100.31 59.74 73.5 0 73.5" />
-											</svg>
+															</style>
+														</defs>
+														<polyline className="cls-1" points="284.32 30.61 140.94 30.61 111.06 1.5 34.32 1.5" />
+														<polyline className="cls-1" points="284.32 73.5 210.64 73.5 180.77 100.31 83.49 100.31 59.74 73.5 0 73.5" />
+													</svg>
+												</div>
+											</div>
 										</div>
 									</button>
 								</div>
 							</div>
-
-
 
 							{/* Tasks Section */}
 							<div className="px-4 py-5 border-t-2 mt-5 rounded-tl-[30px] rounded-tr-[30px] border-[#0099FF] shadow-[#0099ff92]  shadow-lg  ">

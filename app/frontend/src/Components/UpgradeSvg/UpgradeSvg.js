@@ -1,8 +1,8 @@
 import React from 'react';
 
 const MySvgComponent = ({ token }) => {
-    const primaryColor = token.project.lineFromColor || '#000';
-    const secondaryColor = token.project.lineToColor || '#FFF';
+    const primaryColor = token.project.toColor || '#000';
+    const secondaryColor = token.project.fromColor || '#FFF';
 
     return (
         <svg width="102" height="41" viewBox="0 0 102 41" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -42,14 +42,14 @@ const MySvgComponent = ({ token }) => {
                     <stop offset="1" stop-color={secondaryColor} />
                 </linearGradient>
                 <radialGradient id="paint2_radial_2140_2272" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(83.9443 16.5001) rotate(90) scale(10.1316)">
-                    <stop stop-color="#000" />
-                    <stop offset="1" stop-color="#000" />
+                    <stop stop-color={primaryColor} />
+                    <stop offset="1" stop-color={secondaryColor} />
                 </radialGradient>
                 <clipPath id="clip0_2140_2272">
-                    <rect width="33" height="33" fill="white" transform="translate(67.4443)" />
+                    <rect width="33" height="33" fill="black" transform="translate(67.4443)" />
                 </clipPath>
                 <clipPath id="clip1_2140_2272">
-                    <rect width="22" height="22" fill="white" transform="translate(73 10)" />
+                    <rect width="22" height="22" fill="black" transform="translate(73 10)" />
                 </clipPath>
             </defs>
         </svg>
