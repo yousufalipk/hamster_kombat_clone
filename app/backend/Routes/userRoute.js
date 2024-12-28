@@ -30,7 +30,8 @@ const {
     updateWalletAddress,
     test,
     getServerTimeStamp,
-    updateAllTimeBalance
+    updateAllTimeBalance,
+    fetchOneKolDetails
 } = require('../controllers/userController');
 
 const {
@@ -69,6 +70,7 @@ router.route('/claim-cpm').post(claimCPM);
 router.route('/get-server-timestamp').get(getServerTimeStamp);
 router.route('/update-wallet-address').post(updateWalletAddress);
 router.route('/update-all-time-balance').post(updateAllTimeBalance);
+router.route('/fetch-one-kol-detail').post(fetchOneKolDetails);
 
 
 // Test

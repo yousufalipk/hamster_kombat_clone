@@ -41,6 +41,19 @@ const Token = () => {
 	const [taskPopUp, setTaskPopup] = useState(false);
 	const [popupClosing, setPopupClosing] = useState(false);
 	const [timeDifference, setTimeDifference] = useState(0);
+	const [shadowColor, setShadowColor] = useState('#fff');
+
+	useEffect(() => {
+		if (selectedTask) {
+			if (selectedTask.iconType === 'youtube') {
+				setShadowColor('#ff8080');
+			} else if (selectedTask.iconType === 'telegram') {
+				setShadowColor('#0099FF');
+			} else {
+				setShadowColor('#fff');
+			}
+		}
+	}, [selectedTask])
 
 	const iconMapping = {
 		twitter: Twitter,
@@ -371,7 +384,13 @@ const Token = () => {
 												</div>
 												<div className="h-1 w-16 bg-[#D9D9D9] rounded-md  mt-2 opacity-70"></div>
 												<div className="flex justify-center flex-col items-center gap-2 mt-3">
-													<img src={iconMapping[selectedTask.iconType]} alt="icon" />
+													<img
+														src={iconMapping[selectedTask.iconType]}
+														alt="icon"
+														style={{
+															filter: `drop-shadow(0px 0px 10px ${shadowColor})`
+														}}
+													/>
 												</div>
 												<div className="text-xl text-white mt-3">
 													<p>{selectedTask.title}</p>
@@ -511,9 +530,10 @@ const Token = () => {
 															{token.userData.userLevel !== 'max' ? (`lvl ${token.userData.userLevel || 0}`) : ('Max')}
 														</p>
 													</div>
-													<div className="w-1/2 h-full flex justify-end items-center">
+													<div className="relative w-1/2 h-full flex justify-end items-center">
 														{/* upgrade */}
 														<UpgradeSvg token={token} />
+														<p className="absolute left-[40%] bottom-[40%] text-white text-xs">Upgrade</p>
 													</div>
 												</div>
 

@@ -1258,6 +1258,61 @@ exports.fetchUserKols = async (req, res) => {
     }
 }
 
+exports.fetchOneKolDetails = async (req, res) => {
+    try {
+        const { kolId, userId } = req.body;
+
+        const kol = await KolModel.findById(kolId, '_id name fromColor toColor tgeDate icon logo levels').lean();
+        if (!kol) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'Kol not found'
+            });
+        }
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User not found'
+            });
+        }
+
+        const userKol = user.kols.find(up => up._id && up._id.equals(kol._id));
+
+        let customIndex = 0;
+        const currentLevel = userKol?.level || null;
+        if (currentLevel !== undefined) {
+            customIndex = currentLevel + 1;
+        }
+
+        const levelCost = kol.levels[customIndex]?.cost || 'max';
+        const levelCpm = kol.levels[customIndex]?.cpm || 'max';
+
+        const enrichedKol = {
+            ...kol,
+            userData: userKol ? {
+                level: userKol.level + 1,
+                nextLevelCost: levelCost,
+                nextLevelCpm: levelCpm
+            } : null,
+        };
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Kol defailed fetch succesfuly!',
+            updatedKol: enrichedKol
+        });
+
+    } catch (error) {
+        console.log("Internal Server Error!", error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        });
+    }
+};
+
 exports.upgradeUserKolLevel = async (req, res) => {
     try {
         const { userId, kolId } = req.body;
