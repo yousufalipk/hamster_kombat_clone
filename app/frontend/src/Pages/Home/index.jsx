@@ -1081,16 +1081,6 @@ const Home = () => {
 																	</div>
 																</div>
 															</div>
-															{/*
-															<img
-																style={{
-																	filter: "drop-shadow(0px 0px 25px #BF95E9)",
-																}}
-																src={LargeBooster1Img}
-																alt="tap_booster"
-																className="absolute top-3"
-															/>
-															*/}
 															<div className="absolute bottom-3 flex flex-col gap-1">
 																<h1 className="text-2xl popup-heading text-center">
 																	Tap Booster
@@ -1183,7 +1173,7 @@ const Home = () => {
 											className="popup-overlay"
 										>
 											<div
-												className="relative bg-[#06060E] w-[100vw] h-[48vh] rounded-t-3xl p-6 text-white">
+												className="relative bg-[#06060E] w-[100vw] h-[50vh] rounded-t-3xl p-6 text-white">
 												<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 												<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 
@@ -1197,8 +1187,7 @@ const Home = () => {
 													<div className="-right-10 -bottom-5 w-52 h-52 absolute">
 														<img src={RightPopupEllipse} alt="popup-ellipse" />
 													</div>
-
-													<div className="popup-main w-full h-full">
+													<div className="popup-main">
 														{/* Cross Button */}
 														<button
 															onClick={() => {
@@ -1219,7 +1208,8 @@ const Home = () => {
 														<h1 className="border-2 rounded-full border-gray-200 w-[20vw] mx-auto absolute top-3 left-[40%]"></h1>
 
 														{/* Logo, Title & Desc */}
-														<div className="relative z-50 h-[30vh] flex justify-center flex-col items-center py-4">
+														<div className="relative z-50 h-[25vh] flex justify-center flex-col items-center py-4">
+
 															<div className='flex justify-center absolute top-3'>
 																<div>
 																	<div
@@ -1232,7 +1222,7 @@ const Home = () => {
 																		<img
 																			src={LargeBooster2Img}
 																			alt='token_Icon'
-																			width='60'
+																			width='45'
 																			style={{
 																				borderRadius: '12px',
 																			}}
@@ -1240,7 +1230,7 @@ const Home = () => {
 																	</div>
 																</div>
 															</div>
-															<div className="absolute bottom-1 flex flex-col gap-4">
+															<div className="absolute bottom-3 flex flex-col gap-1">
 																<h1 className="text-2xl popup-heading text-center">
 																	Energy Refill
 																</h1>
@@ -1251,32 +1241,32 @@ const Home = () => {
 														</div>
 
 														{/* Reward, Line, Cost */}
-														<div className="relative z-50 w-full h-[15vh] flex flex-col items-center gap-2">
+														<div className="relative z-50 w-full h-[15vh] flex flex-col items-center gap-2 py-2">
 
 															{/* Line */}
-															<div className="w-full h-[3vh] flex justify-center items-end">
+															<div className="w-full h-[3vh] flex justify-center items-center">
 																<img src={PopupHorizontalLine} alt="popUp_horizontal_line" />
 															</div>
 
 															{/* Cost Section */}
-															<div className="w-full h-[6vh] flex justify-center items-center gap-1">
+															<div className="w-full h-[6vh] flex justify-center items-center -mt-2 gap-1">
 																<img src={BigCoin} alt="big_coin" width={25} />
 																<p className="text-customOrange text-[30px]">Free</p>
 															</div>
 														</div>
 
 														{/* Buttons */}
-														<div className="w-full h-[5vh] mb-2">
+														<div className="w-full h-[5vh] -mt-7">
 															<button
+																className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableEnergyRefill === 0 && `grayscale`}`}
 																onClick={() => {
 																	handleEnergyRefill();
 																}}
 																disabled={avaliableEnergyRefill === 0 || buttonLoading}
-																className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg ${avaliableEnergyRefill === 0 && `grayscale`}`}
 															>
 																{buttonLoading ? (
 																	<span className="flex justify-center items-center text-5xl font-bold w-full">
-																		<p className="absolute -mt-6 w-full">
+																		<p className="absolute -mt-6">
 																			{dots}
 																		</p>
 																	</span>
@@ -1324,12 +1314,12 @@ const Home = () => {
 											onClick={(e) => e.stopPropagation()}
 										>
 											<div
-												className="relative bg-[#06060E] w-[100vw] h-[54vh] rounded-t-3xl p-6 text-white">
+												className="relative bg-[#06060E] w-[100vw] h-[58vh] rounded-t-3xl p-6 text-white">
 												<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 												<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 
-												{/* Main */}
-												<div className="popup-content w-full h-[45vh]">
+												{/* Main New */}
+												<div className="w-full h-[40vh] flex flex-col">
 													{/* Left top ellipse */}
 													<div className="-left-10 -top-20 w-52 h-52 absolute">
 														<img src={LeftPopupEllipse} alt="popup-ellipse" />
@@ -1338,7 +1328,7 @@ const Home = () => {
 													<div className="-right-10 -bottom-5 w-52 h-52 absolute">
 														<img src={RightPopupEllipse} alt="popup-ellipse" />
 													</div>
-													<div className="popup-main w-full h-full">
+													<div className="popup-main">
 														{/* Cross Button */}
 														<button
 															onClick={() => {
@@ -1348,6 +1338,9 @@ const Home = () => {
 																	setPopupClosing(false);
 																}, 500);
 															}}
+															style={{
+																zIndex: 60
+															}}
 															className="w-12 h-12 absolute right-0 top-0 flex justify-center items-center"
 														>
 															<img src={CrossImg} alt="crossImg" />
@@ -1356,7 +1349,8 @@ const Home = () => {
 														<h1 className="border-2 rounded-full border-gray-200 w-[20vw] mx-auto absolute top-3 left-[40%]"></h1>
 
 														{/* Logo, Title & Desc */}
-														<div className="relative z-50 h-[20vh] flex justify-center flex-col items-center py-4">
+														<div className="relative z-50 h-[25vh] flex justify-center flex-col items-center py-4">
+
 															<div className='flex justify-center absolute top-3'>
 																<div>
 																	<div
@@ -1369,7 +1363,7 @@ const Home = () => {
 																		<img
 																			src={LargeBooster4Img}
 																			alt='token_Icon'
-																			width='60'
+																			width='45'
 																			style={{
 																				borderRadius: '12px',
 																			}}
@@ -1377,25 +1371,26 @@ const Home = () => {
 																	</div>
 																</div>
 															</div>
-
-															<div className="absolute bottom-0 flex flex-col gap-1">
+															<div className="absolute bottom-3 flex flex-col gap-1">
 																<h1 className="text-2xl popup-heading text-center">
 																	Energy Limit
 																</h1>
-																<p className="text-[14px] font-light text-center mt-1">
+																<p className="text-[14px] font-light text-center">
 																	Increase the limit of the energy storage
 																</p>
 															</div>
 														</div>
 
 														{/* Reward, Line, Cost */}
-														<div className="relative z-50 w-full h-[15vh] flex flex-col items-center gap-2 mt-2">
-															{/* Level */}
-															<h1 className="text-xl text-customOrange">Level {energyLevel >= 9 ? ('Max') : (`${energyLevel + 1}`)}</h1>
-															<p>+500 energy limit</p>
+														<div className="relative z-50 w-full h-[15vh] flex flex-col items-center gap-2 py-2">
+
+															<div className="flex flex-col items-center justify-center">
+																<h1 className="text-xl text-customOrange">Level {energyLevel >= 9 ? ('Max') : (`${energyLevel + 1}`)}</h1>
+																<p>+500 energy limit</p>
+															</div>
 
 															{/* Line */}
-															<div className="w-full h-[3vh] flex justify-center items-center mt-2">
+															<div className="w-full h-[3vh] flex justify-center items-center">
 																<img src={PopupHorizontalLine} alt="popUp_horizontal_line" />
 															</div>
 
@@ -1438,11 +1433,11 @@ const Home = () => {
 														{/* Buttons */}
 														<div className="w-full h-[5vh] mt-7">
 															<button
+																className={`w-full h-12 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
 																onClick={() => {
 																	handleEnergyUpgrade();
 																}}
 																disabled={energyLevel >= 9 || buttonLoading}
-																className={`w-full h-12 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
 															>
 																{buttonLoading ? (
 																	<span className="flex justify-center items-center text-5xl font-bold w-full">
@@ -1489,7 +1484,7 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[57vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[56vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 
@@ -1515,8 +1510,8 @@ const Home = () => {
 															}}
 														>
 															<img
-																src={LargeBooster4Img}
-																alt='token_Icon'
+																src={LargeBooster3Img}
+																alt='booster_icon'
 																width='60'
 																style={{
 																	borderRadius: '12px',
@@ -1581,26 +1576,28 @@ const Home = () => {
 																<img src={CrossImg} alt="" width={25} />
 															</button>
 														</div>
-														<button
-															className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
-															onClick={() => {
-																// Upgrade multitap limit
-																handleMultitapUpgrade()
-															}}
-															disabled={multitapLevel >= 9 || buttonLoading}
-														>
-															{buttonLoading ? (
-																<span className="flex justify-center items-center text-5xl font-bold w-full">
-																	<p className="absolute -mt-6">
-																		{dots}
-																	</p>
-																</span>
-															) : (
-																<>
-																	{multitapLevel >= 9 ? ("Max Level") : ('Upgrade')}
-																</>
-															)}
-														</button>
+														<div className="w-full h-full mt-0">
+															<button
+																className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
+																onClick={() => {
+																	// Upgrade multitap limit
+																	handleMultitapUpgrade()
+																}}
+																disabled={multitapLevel >= 9 || buttonLoading}
+															>
+																{buttonLoading ? (
+																	<span className="flex justify-center items-center text-5xl font-bold w-full">
+																		<p className="absolute -mt-6">
+																			{dots}
+																		</p>
+																	</span>
+																) : (
+																	<>
+																		{multitapLevel >= 9 ? ("Max Level") : ('Upgrade')}
+																	</>
+																)}
+															</button>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -1633,7 +1630,7 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[32vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[33vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 											<div
@@ -1658,7 +1655,7 @@ const Home = () => {
 														Coins Per Minute (CPM) defines how many coins users earn automatically every minute, based on their CPM value. Higher CPM means faster passive earnings. Come Back every 1 hour to claim reward!
 													</div>
 													{/* action buttons */}
-													<div className='flex gap-4 justify-center mt-4'>
+													<div className='flex gap-4 justify-center mt-3'>
 														<button
 															className={`w-full h-12 z-50 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-md`}
 															onClick={() => {
@@ -1757,7 +1754,7 @@ const Home = () => {
 														Coins per minute reward is ready!. Come Back every 1 hour to claim reward!
 													</div>
 													{/* action buttons */}
-													<div className='w-full flex gap-4 justify-center my-4'>
+													<div className='w-full flex gap-4 justify-center mt-2'>
 														<button
 															className={`w-full h-12 z-50 font-semibold p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-md`}
 															onClick={() => {
@@ -2019,7 +2016,7 @@ const Home = () => {
 														</div>
 													</div>
 													{/* action buttons */}
-													<div className="flex gap-4 justify-center mt-8">
+													<div className="flex gap-4 justify-center mt-4">
 														<button
 															className="h-10 min-w-16 px-3 p-2 bg-[#242434] rounded-xl text-sm z-50 border-b-4 border-b-[#191922] shadow-zinc-900"
 															onClick={handleDailyRewardClaim}

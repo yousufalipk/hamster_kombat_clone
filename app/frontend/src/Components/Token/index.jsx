@@ -21,7 +21,6 @@ import Instagram from '../../assets/token/instagram.svg';
 
 import arrow from '../../assets/token/arrow.svg';
 import cardbg from "../../assets/token/tokencardbg.svg";
-import loadcoin from "../../assets/token/loadcoin.svg";
 
 import UpgradeSvg from '../UpgradeSvg/UpgradeSvg';
 
@@ -470,7 +469,7 @@ const Token = () => {
 							</>
 						)}
 
-						<div className='bg-[#060611] px-4 w-full h-[100vh] overflow-scroll'>
+						<div className='bg-[#060611] px-4 w-full h-[100vh] overflow-y-scroll overflow-x-hidden'>
 							<div className="text-white flex justify-end items-center gap-2 p-5">
 								<img src={LittleCoin} alt="Coin-Icon" className="" />
 								{balance.toLocaleString()}

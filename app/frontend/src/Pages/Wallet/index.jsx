@@ -29,7 +29,7 @@ import { useTonConnectUI } from "@tonconnect/ui-react";
 const Wallet = () => {
 	const [tonConnectUI] = useTonConnectUI();
 	const [walletAddress, setWalletAddress] = useState(null);
-	const { balance, updateWalletAddressToDb } = useUser();
+	const { balance, updateWalletAddressToDb, formatBalance } = useUser();
 
 	const [dots, setDots] = useState('');
 	const [buttonLoading, setButtonLoading] = useState(false);
@@ -153,7 +153,7 @@ const Wallet = () => {
 					<div className="text-white flex flex-col justify-center items-center">
 						<p className="mb-2 text-gray-200">Avalibale balance</p>
 						<div className="flex gap-2">
-							<h1 className="text-xl font-semibold">{balance}</h1>
+							<h1 className="text-xl font-semibold">{formatBalance(balance)}</h1>
 							<img src={LittleCoin} alt='coin_img' />
 						</div>
 						<p className="text-gray-500">≈ {priceInDollar * balance} $</p>

@@ -46,7 +46,7 @@ const Hammer = () => {
 							<p>{formatBalance(balance)}</p>
 						</div>
 						{/* Two Cards */}
-						<div className='h-[20vh] flex gap-5 justify-center items-center pt-5'>
+						<div className='h-[20vh] flex gap-5 justify-center items-center pt-10'>
 
 							{/* Card 1 */}
 							{comboCards?.length > 0 ? (
