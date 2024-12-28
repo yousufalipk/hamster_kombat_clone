@@ -216,7 +216,13 @@ const BottleCap = () => {
 												</div>
 												<div className="h-1 w-16 bg-[#D9D9D9] rounded-md  mt-2 opacity-70"></div>
 												<div className="flex justify-center flex-col items-center gap-2 mt-3">
-													<img src={iconMapping[selectedTask.iconType]} alt="icon" />
+													<img
+														src={iconMapping[selectedTask.iconType]}
+														alt="icon"
+														style={{
+															filter: "drop-shadow(0px 0px 15px #fff)",
+														}}
+													/>
 												</div>
 												<div className="text-xl text-white mt-3">
 													<p>{selectedTask.title}</p>
@@ -350,7 +356,13 @@ const BottleCap = () => {
 												</div>
 												<div className="h-1 w-16 bg-[#D9D9D9] rounded-md  mt-2 opacity-70"></div>
 												<div className="flex justify-center flex-col items-center gap-2 mt-3">
-													<img src={inviteIconMapping[selectedInviteFriendTask.id]} alt="icon" />
+													<img
+														src={inviteIconMapping[selectedInviteFriendTask.id]}
+														alt="icon"
+														style={{
+															filter: "drop-shadow(0px 0px 15px #fff)",
+														}}
+													/>
 												</div>
 												<div className="text-xl text-white mt-3">
 													<p>{selectedInviteFriendTask.title}</p>
