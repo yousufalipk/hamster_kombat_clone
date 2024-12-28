@@ -838,7 +838,7 @@ export const UserProvider = (props) => {
         try {
             const res = await axios.post(`${apiUrl}/user/update-wallet-address`, {
                 userId: userId,
-                walletAddress: walletAddress
+                walletAddress: walletAddress || null
             });
             if (res.data.status === 'success') {
                 return ({ success: false, mess: 'Wallet Connected Succesfuly!' })

@@ -845,8 +845,8 @@ const Home = () => {
 
 								{/* Bot & Options */}
 								<div
-									className="flex justify-center items-center w-full h-[42vh]">
-
+									className="flex justify-center items-center w-full h-[42vh]"
+								>
 									{/* +1 animation per tap */}
 									{clicks.map((click) => (
 										<div
