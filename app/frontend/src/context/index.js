@@ -338,7 +338,6 @@ export const UserProvider = (props) => {
             });
         } finally {
             setUserDataInitlized(true);
-            setMainLoader(false);
         }
     }
 
@@ -956,7 +955,8 @@ export const UserProvider = (props) => {
             setRankLoader,
 
             formatLargeNumber,
-            mainLoader
+            mainLoader,
+            setMainLoader
         }}>
             {props.children}
         </UserContext.Provider>

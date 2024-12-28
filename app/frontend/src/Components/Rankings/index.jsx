@@ -81,44 +81,56 @@ const Rankings = () => {
 	};
 
 	const handleClickLeft = () => {
-		// setRankLoader(true);
 		if (page > 0) {
-			setPage((prevPage) => prevPage - 1);
-			updateStageImage(page);
-			setTimeout(() => {
-				setRankLoader(false);
-			}, 300)
+			let newPage = page - 1;
+			while (newPage >= 0 && (!topUsers[newPage] || topUsers[newPage].length === 0)) {
+				newPage--;
+			}
+			if (newPage >= 0) {
+				setPage(newPage);
+				updateStageImage(newPage);
+				setTimeout(() => {
+					setRankLoader(false);
+				}, 300);
+			} else {
+				console.log("No more valid pages to the left!");
+			}
 		} else {
-			// setRankLoader(false);
 			console.log("You're at the first page!");
 		}
 	};
 
 	const handleClickRight = () => {
-		//setRankLoader(true);
 		if (page < levelsData.length - 1) {
-			setPage((prevPage) => prevPage + 1);
-			updateStageImage(page);
-			setTimeout(() => {
-				setRankLoader(false);
-			}, 300)
+			let newPage = page + 1;
+			while (newPage < levelsData.length && (!topUsers[newPage] || topUsers[newPage].length === 0)) {
+				newPage++;
+			}
+			if (newPage < levelsData.length) {
+				setPage(newPage);
+				updateStageImage(newPage);
+				setTimeout(() => {
+					setRankLoader(false);
+				}, 300);
+			} else {
+				console.log("No more valid pages to the right!");
+			}
 		} else {
-			//setRankLoader(false);
 			console.log("You're at the last page!");
 		}
 	};
-
-	useEffect(() => {
-		if (!topUsers) {
-			fetchLeaderboardUsers();
-		}
-	}, []);
 
 	useEffect(() => {
 		if (topUsers && topUsers[page]) {
 			setCurrentPageUsers(topUsers[page]);
 		}
 	}, [page, topUsers]);
+
+	useEffect(() => {
+		if (!topUsers) {
+			fetchLeaderboardUsers();
+		}
+	}, []);
 
 	useEffect(() => {
 		if (staticUser === false) {
@@ -135,7 +147,6 @@ const Rankings = () => {
 			};
 		}
 	}, [navigate]);
-
 
 	const formatLargeNumber = (value) => {
 		if (value === null || value === undefined || isNaN(value)) return '0';

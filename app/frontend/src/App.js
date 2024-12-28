@@ -16,7 +16,7 @@ const App = () => {
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 	const apiUrl = process.env.REACT_APP_URL;
 
-	const { loader, loaderErrorMes, mainLoader } = useUser();
+	const { loader, loaderErrorMes, mainLoader, setMainLoader } = useUser();
 
 	const [animation, setAnimation] = useState(0);
 
@@ -37,6 +37,9 @@ const App = () => {
 
 				if (currentStep === percentages.length) {
 					clearInterval(intervalId);
+					setTimeout(() => {
+						setMainLoader(false);
+					}, 1000);
 				}
 			}, interval);
 
@@ -45,6 +48,7 @@ const App = () => {
 			setAnimation(0);
 		}
 	}, [mainLoader]);
+
 
 	useEffect(() => {
 		const checkTimeIntegrity = async () => {
