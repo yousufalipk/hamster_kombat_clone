@@ -338,7 +338,7 @@ export const UserProvider = (props) => {
             });
         } finally {
             setUserDataInitlized(true);
-            setMainLoader(true);
+            setMainLoader(false);
         }
     }
 
