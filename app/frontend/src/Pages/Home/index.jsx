@@ -1484,7 +1484,7 @@ const Home = () => {
 												} 0.5s ease-in-out forwards`,
 										}}
 									>
-										<div className="relative bg-[#06060E] w-[100vw] h-[56vh] rounded-t-3xl p-4 text-white">
+										<div className="relative bg-[#06060E] w-[100vw] h-[57vh] rounded-t-3xl p-4 text-white">
 											<div className="absolute bottom-0 -inset-1 bg-[#23a7ff] rounded-[35px] -z-10"></div>
 											<div className="absolute bottom-0 -inset-2 bg-[#23a7ff] blur rounded-[50px] -z-10"></div>
 
@@ -1529,7 +1529,7 @@ const Home = () => {
 														<div className="py-2">
 															<img src={PopupHorizontalLine} alt="popup_horizontal_line" />
 														</div>
-														<div>
+														<div className="py-1">
 															{multitapLevel < 9 ? (
 																<>
 																	<div>
@@ -1576,11 +1576,10 @@ const Home = () => {
 																<img src={CrossImg} alt="" width={25} />
 															</button>
 														</div>
-														<div className="w-full h-full mt-0">
+														<div className="w-full h-full -mt-2">
 															<button
 																className={`w-full h-12 z-50 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
 																onClick={() => {
-																	// Upgrade multitap limit
 																	handleMultitapUpgrade()
 																}}
 																disabled={multitapLevel >= 9 || buttonLoading}
