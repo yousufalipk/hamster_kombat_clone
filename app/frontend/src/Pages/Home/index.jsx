@@ -1578,8 +1578,9 @@ const Home = () => {
 															)}
 														</div>
 													</div>
+
 													{/* Button */}
-													<div className="w-full h-[5vh] mt-3">
+													<div className="w-full h-[5vh] mt-6">
 														<button
 															className={`w-full h-12 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
 															onClick={() => {
