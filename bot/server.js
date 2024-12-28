@@ -40,6 +40,20 @@ bot.help((ctx) => ctx.reply('Available commands: /start, /help'));
 
 bot.on('text', (ctx) => ctx.reply(`You said: ${ctx.message.text}`));
 
+const retryWebhook = async (url, retryAfter) => {
+	const delay = retryAfter * 1000;
+	console.log(`Too many requests. Retrying after ${retryAfter} seconds...`);
+
+	setTimeout(async () => {
+		try {
+			await bot.telegram.setWebhook(url);
+			console.log(`Webhook successfully set to: ${url}`);
+		} catch (error) {
+			console.error('Error retrying webhook:', error);
+		}
+	}, delay);
+};
+
 const BOT_WEBHOOK_PATH = '/bot';
 app.post(BOT_WEBHOOK_PATH, (req, res) => {
 	bot.handleUpdate(req.body);
@@ -54,6 +68,11 @@ app.listen(PORT, async () => {
 		await bot.telegram.setWebhook(WEBHOOK_URL);
 		console.log(`Webhook set to ${WEBHOOK_URL}`);
 	} catch (error) {
-		console.error('Error setting webhook:', error);
+		if (error.response && error.response.error_code === 429) {
+			const retryAfter = error.response.parameters.retry_after;
+			retryWebhook(WEBHOOK_URL, retryAfter);
+		} else {
+			console.error('Error setting webhook:', error);
+		}
 	}
 });
