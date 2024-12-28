@@ -18,7 +18,7 @@ const App = () => {
 
 	const { loader, loaderErrorMes, mainLoader } = useUser();
 
-	const [animation, setAnimation] = useState(100);
+	const [animation, setAnimation] = useState(0);
 
 	const animationTime = 3;
 
