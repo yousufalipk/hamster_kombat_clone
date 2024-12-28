@@ -55,6 +55,10 @@ export const UserProvider = (props) => {
     const [claimed, setClaimed] = useState([]);
     const [currentDay, setCurrentDay] = useState(null);
 
+    const formatBalance = (balance) => {
+        return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(balance);
+    };
+
     useEffect(() => {
         const updateAllTimeBalance = async () => {
             if (userId) {
@@ -340,10 +344,6 @@ export const UserProvider = (props) => {
             setUserDataInitlized(true);
         }
     }
-
-    useEffect(() => {
-        console.log('Add Coin!', addCoins);
-    }, [addCoins])
 
     const initilizeStates = async (user) => {
         try {
@@ -643,20 +643,7 @@ export const UserProvider = (props) => {
                 kolId: kolId
             });
             if (res.data.status === 'success') {
-                /*
-                const res = await axios.post(`${apiUrl}/user/fetch-one-kol-detail`, {
-                    userId: userId,
-                    kolId: kolId
-                });
-                if (res.data.status === 'success') {
-                    const updatedKol = res.data.kol;
-                    setKols((prevKols) =>
-                        prevKols.map((kol) =>
-                            kol.id === kolId ? { ...kol, level: updatedKol.level } : kol
-                        )
-                    );
-                }
-                    */
+                await fetchKols();
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
@@ -976,7 +963,8 @@ export const UserProvider = (props) => {
 
             formatLargeNumber,
             mainLoader,
-            setMainLoader
+            setMainLoader,
+            formatBalance
         }}>
             {props.children}
         </UserContext.Provider>

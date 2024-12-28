@@ -276,6 +276,7 @@ const Token = () => {
 												<div className='text-xl text-customOrange text-center'>
 													<p>level {token.userData.userLevel + 1}</p>
 												</div>
+
 												<div className='flex justify-center mt-3 gap-4'>
 													<div className='flex justify-center items-center gap-1'>
 														<img
@@ -298,6 +299,7 @@ const Token = () => {
 														<span className='text-xs font-thin'>CPM</span>
 													</div>
 												</div>
+
 												<div className='py-2'>
 													<img src={popupLine} alt="" />
 												</div>

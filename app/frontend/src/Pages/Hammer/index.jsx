@@ -15,7 +15,7 @@ import BigCoin from '../../assets/optimizedImages/BigCoin.svg';
 import SmallCoin from '../../assets/optimizedImages/SmallCoin.svg';
 
 const Hammer = () => {
-	const { comboCards, remaningTime, balance } = useUser();
+	const { comboCards, remaningTime, balance, formatBalance } = useUser();
 	const [activeItem, setActiveItem] = useState(null);
 
 	const handleClick = (item) => {
@@ -43,7 +43,7 @@ const Hammer = () => {
 					<div className='bg-[#0C0C0C] h-[30vh] relative rounded-b-[26px]'>
 						<div className="absolute right-3 top-2 flex justify-end items-end gap-1 text-white">
 							<img src={SmallCoin} alt="smallCoin" width={25} />
-							<p>{balance.toLocaleString()}</p>
+							<p>{formatBalance(balance)}</p>
 						</div>
 						{/* Two Cards */}
 						<div className='h-[20vh] flex gap-5 justify-center items-center pt-5'>

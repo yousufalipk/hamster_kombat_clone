@@ -100,6 +100,7 @@ const Home = () => {
 		setAvaliableCpm,
 		levelsData,
 		comboCards,
+		formatBalance
 	} = useUser();
 
 	const [isRefilling, setIsRefilling] = useState(false);
@@ -609,10 +610,6 @@ const Home = () => {
 		}
 	}
 
-	const formatBalance = (balance) => {
-		return parseInt(balance);
-	}
-
 	const formatCpm = (value) => {
 		if (value === null || value === undefined || isNaN(value)) return '0';
 
@@ -817,7 +814,7 @@ const Home = () => {
 									{/* Coins Per Minute */}
 									<button
 										onClick={() => { setCpmInfo(true) }}
-										className="absolute left-5 w-[25%] z-20 flex flex-col justify-center items-center gap-1">
+										className="absolute w-[25%] z-20 flex flex-col justify-center items-start gap-1">
 										<div className="flex justify-start items-center">
 											<div className="">
 												<img src={SmallCoin} alt="Coin-Icon" />
@@ -826,7 +823,7 @@ const Home = () => {
 												<p>+{formatCpm(coinsPerMinute)}</p>
 											</div>
 										</div>
-										<div className="flex justify-center items-center gap-1 pl-1">
+										<div className="flex justify-center items-center gap-1 pl-3">
 											<div className="">
 												<img src={InfoIcon} alt="Info-Icons" />
 											</div>
@@ -839,7 +836,7 @@ const Home = () => {
 										<div>
 											<img src={BigCoin} alt="Coin-Icon" width="24" />
 										</div>
-										<div className="text-[#FFF] text-[24px] font-medium">{balance.toLocaleString()}</div>
+										<div className="text-[#FFF] text-[24px] font-medium">{formatBalance(balance)}</div>
 									</div>
 								</div>
 
@@ -1063,6 +1060,28 @@ const Home = () => {
 
 														{/* Logo, Title & Desc */}
 														<div className="relative z-50 h-[25vh] flex justify-center flex-col items-center py-4">
+
+															<div className='flex justify-center absolute top-3'>
+																<div>
+																	<div
+																		style={{
+																			borderRadius: '100%',
+																			transform: 'translateZ(0)',
+																			filter: 'drop-shadow(0 0 15px #BF95E9)',
+																		}}
+																	>
+																		<img
+																			src={LargeBooster1Img}
+																			alt='token_Icon'
+																			width='60'
+																			style={{
+																				borderRadius: '12px',
+																			}}
+																		/>
+																	</div>
+																</div>
+															</div>
+															{/*
 															<img
 																style={{
 																	filter: "drop-shadow(0px 0px 25px #BF95E9)",
@@ -1071,6 +1090,7 @@ const Home = () => {
 																alt="tap_booster"
 																className="absolute top-3"
 															/>
+															*/}
 															<div className="absolute bottom-3 flex flex-col gap-1">
 																<h1 className="text-2xl popup-heading text-center">
 																	Tap Booster
