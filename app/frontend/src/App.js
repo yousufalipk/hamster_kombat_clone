@@ -6,7 +6,7 @@ import GamePage from "./Pages/Game/Game";
 import Layout from "./Layout/index";
 import { useUser } from "./context/index";
 import axios from "axios";
-import SplashScreen from "./assets/splashScreen.png";
+import SplashScreen from "./assets/Screen.svg";
 
 import Animation1 from './assets/splashScreen/Animation1.gif';
 import Animation2 from './assets/splashScreen/Animation2.gif';
@@ -77,11 +77,11 @@ const App = () => {
 
 	if (mainLoader) {
 		return (
-			<div className="relative z-10 h-screen w-screen bg-black flex justify-center items-center">
+			<div className="relative z-10 h-screen w-[100vw] bg-black flex justify-center items-center">
 				<img
 					src={SplashScreen}
 					alt="splash_screen"
-					className="w-full h-full object-fill absolute z-20"
+					className="w-full h-full object-fit absolute z-20"
 				/>
 				<div className="absolute z-30 bottom-[15%] w-[80%] h-[10vh] flex flex-col justify-center items-center gap-2">
 					<h1 className="text-[20px] text-white">Loading...</h1>
