@@ -452,12 +452,15 @@ const Token = () => {
 																	handleClaimTask(selectedTask);
 																}}
 																disabled={selectedTask.claimedStatus === 'pending' || buttonLoading}
-																className={`w-full py-2 bg-gradient-to-b from-[#00B2FF] to-[#2226FF] text-white font-bold rounded-md ${selectedTask.claimedStatus === 'pending' ? 'filter grayscale' : ''}`}
+																className={`h-12 w-full py-2 bg-gradient-to-b from-[#00B2FF] to-[#2226FF] text-white font-bold rounded-md ${selectedTask.claimedStatus === 'pending' ? 'filter grayscale' : ''}`}
 															>
 																{buttonLoading ? (
-																	<span className="h-6 font-bold">
-																		{dots}
-																	</span>) : 'Check'}
+																	<span className="flex justify-center items-center font-semibold text-5xl w-full">
+																		<p className="absolute -mt-6">
+																			{dots}
+																		</p>
+																	</span>
+																) : 'Check'}
 															</button>
 														</div>
 													</>
