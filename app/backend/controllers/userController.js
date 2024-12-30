@@ -1557,11 +1557,13 @@ exports.upgradeUserVcLevel = async (req, res) => {
             user.vcs.push(vcData);
         }
 
+
         if (vc.card) {
             if (user.comboCards.length <= 2) {
                 if (user.comboCards.some(card => card.cardId.toString() === vc._id.toString())) {
                     console.log("Combo card already claimed!");
                 } else {
+                    console.log("Claiming Combo!");
                     const data = {
                         cardId: vc._id,
                         name: vc.name,
@@ -1570,7 +1572,7 @@ exports.upgradeUserVcLevel = async (req, res) => {
                         icon: vc.icon.data
                     };
                     user.comboCards.push(data);
-                    if (user.comboCards.length === 1) {
+                    if (user.comboCards.length === 2) {
                         user.balance += 50000;
                     }
                 }
@@ -1741,6 +1743,7 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
                 if (user.comboCards.some(card => card.cardId.toString() === patner._id.toString())) {
                     console.log("Combo card already claimed!");
                 } else {
+                    console.log("Claiming Combo!");
                     const data = {
                         cardId: patner._id,
                         name: patner.name,
@@ -1749,7 +1752,7 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
                         icon: patner.icon.data
                     };
                     user.comboCards.push(data);
-                    if (user.comboCards.length === 1) {
+                    if (user.comboCards.length === 2) {
                         user.balance += 50000;
                     }
                 }
