@@ -7,6 +7,7 @@ module.exports = {
 				'custom-image1': "url('./assets/Footer/footer.png')",
 				'custom-image2': "url('./assets/background/bg.png')",
 				'custom-image3': "url('./assets/game/game_bg.png')",
+				'splash-screen': "url('./assets/Screen.svg')"
 			},
 			boxShadow: {
 				'panda': 'rgba(0, 0, 0, 0.56) 0px 22px 70px 4px',
@@ -38,9 +39,6 @@ module.exports = {
 				lightBlue: '#00B2FF',
 				borderGray: '#242434'
 			},
-			backgroundImage: {
-				'splash-screen': "url('./assets/Screen.svg')"
-			}
 		},
 	},
 	plugins: [],
