@@ -271,7 +271,7 @@ const Token = () => {
 												{/* description */}
 												<div className='my-2'>
 													<p className='text-[14px] font-light text-center mt-1'>
-														You will get +{token?.userData?.nextLevelReward} coins of {token.project.name} coins against {token.userData.nextLevelCost} pandatop coins.
+														You will get +{formatNumberWithSuffix(token?.userData?.nextLevelReward, 0)} coins of {token.project.name} coins against {formatNumberWithSuffix(token.userData.nextLevelCost, 0)} pandatop coins.
 													</p>
 												</div>
 												<div className='text-xl text-customOrange text-center'>
@@ -574,7 +574,7 @@ const Token = () => {
 														<div className="flex gap-1">
 															<img src={BigCoin} alt="Coin-Icon" width={20} />
 															<p className="text-white flex gap-2 justify-end items-end text-[17px]">
-																{token.userData.walletBalance.toLocaleString() || 0}
+																{formatNumberWithSuffix(token.userData.walletBalance, 2)}
 																<span className="text-[7px]">{token.project.name.match(/[A-Z]/g)?.join('')}</span>
 															</p>
 														</div>
@@ -757,7 +757,7 @@ const Token = () => {
 																<div className="flex text-md">{task.title}</div>
 																<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
 																	<img src={BigCoin} alt="" className="h-4 w-5" />
-																	<span className="text-sm">+{task.reward.toLocaleString()}</span>
+																	<span className="text-sm">+{task.reward}</span>
 																</div>
 															</div>
 															<div>
