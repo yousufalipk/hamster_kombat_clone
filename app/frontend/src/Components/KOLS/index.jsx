@@ -4,17 +4,13 @@ import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import AngleIcon from "../../assets/BlackAngle.svg";
 import CustomLoader from '../Loader/Loader';
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
 import close from "../../assets/dailyreward/close.svg"
-import popupLine from "../../assets/token/popupLine.svg";
 
 import { useUser } from '../../context/index';
 
 import LeftPopupEllipse from '../../assets/optimizedImages/popup/leftEllipse.webp';
 import RightPopupEllipse from '../../assets/optimizedImages/popup/rightEllipse.webp';
-import PopupHorizontalLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
-import CrossImg from '../../assets/optimizedImages/closeButton.svg';
-import PopupVerticalLine from '../../assets/optimizedImages/popup/verticalLine.webp';
+import popupLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 
 const KOLS = () => {
 	const { fetchKols, upgradeKolsLevel, kols, kolsLoader, balance, formatNumberWithSuffix } = useUser();
@@ -50,7 +46,7 @@ const KOLS = () => {
 		setSelectedKol(kol);
 	};
 
-	const handleProjectUpgrade = async () => {
+	const handleKolsUpgrade = async () => {
 		setButtonLoading(true);
 		try {
 			const res = await upgradeKolsLevel(selectedKol._id);
@@ -63,12 +59,9 @@ const KOLS = () => {
 			console.log("Internal Server Error", error);
 		} finally {
 			setButtonLoading(false);
+			setIsModalOpen(false);
 		}
 	}
-
-	useEffect(() => {
-		console.log('Selected Kol', selectedKol);
-	}, [selectedKol])
 
 	if (kolsLoader) {
 		return (
@@ -103,10 +96,10 @@ const KOLS = () => {
 									animation: `${popupClosing ? "closePopup" : "openPopup"
 										} 0.5s ease-in-out forwards`,
 								}}
-								className='fixed bottom-0 h-[56vh] w-screen'>
+								className='fixed bottom-0 h-[52vh] w-screen'>
 								<div className="absolute -inset-1 h-[45vh] bg-[#23a7ff] rounded-[35px]"></div>
 								<div className="absolute -inset-2 h-[45vh] bg-[#23a7ff] blur rounded-[50px]"></div>
-								<div className='w-screen bg-[#06060E] h-[56vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+								<div className='w-screen bg-[#06060E] h-[52vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
 									{/* Main Body */}
 									<div className='popup-content mb-5 px-2 mt-5'>
 										{/* Left top ellipse */}
@@ -135,7 +128,7 @@ const KOLS = () => {
 											<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
 											<div className='flex relative justify-center'>
 												{/* logo */}
-												<div className='mx-auto'>
+												<div className="mx-auto w-15 h-15 overflow-hidden">
 													<div
 														style={{
 															borderRadius: '100%',
@@ -144,16 +137,13 @@ const KOLS = () => {
 														}}
 													>
 														{selectedKol && (
-															<>
-																<img
-																	src={`data:image/jpeg;base64,${selectedKol.logo.data}`}
-																	alt='M-Icon'
-																	width='100'
-																	style={{
-																		borderRadius: '12px',
-																	}}
-																/>
-															</>
+															<img
+																src={`data:image/jpeg;base64,${selectedKol.logo.data}`}
+																alt="booster_icon"
+																width={100}
+																height={100}
+																className="w-15 h-15 rounded-full object-cover"
+															/>
 														)}
 													</div>
 												</div>
@@ -208,7 +198,7 @@ const KOLS = () => {
 												<button
 													className={`w-full h-10 py-1 px-3 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm flex justify-center items-center`}
 													onClick={() => {
-														handleProjectUpgrade();
+														handleKolsUpgrade();
 													}}
 													disabled={buttonLoading}
 												>

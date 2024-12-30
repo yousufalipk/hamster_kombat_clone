@@ -4,13 +4,16 @@ import { useNavigate } from "react-router-dom";
 import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import AngleIcon from "../../assets/BlackAngle.svg";
-import close from "../../assets/dailyreward/close.svg"
+import close from "../../assets/dailyreward/close.svg";
+import LeftPopupEllipse from '../../assets/optimizedImages/popup/leftEllipse.webp';
+import RightPopupEllipse from '../../assets/optimizedImages/popup/rightEllipse.webp';
+import popupLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 
 import { toast } from 'react-toastify';
 import { useUser } from "../../context";
 
 const VCS = () => {
-	const { vcs, fetchVcs, upgradeVcLevel, vcLoader, balance } = useUser();
+	const { vcs, fetchVcs, upgradeVcLevel, vcLoader, balance, formatNumberWithSuffix } = useUser();
 
 	const navigate = useNavigate();
 
@@ -60,6 +63,7 @@ const VCS = () => {
 
 		} finally {
 			setButtonLoading(false);
+			setIsModalOpen(false);
 		}
 	}
 
@@ -77,6 +81,7 @@ const VCS = () => {
 		<>
 			{vcs.length > 0 ? (
 				<>
+					{/* New Modal  */}
 					{isModalOpen && (
 						<div
 							style={{
@@ -96,12 +101,20 @@ const VCS = () => {
 									animation: `${popupClosing ? "closePopup" : "openPopup"
 										} 0.5s ease-in-out forwards`,
 								}}
-								className='fixed bottom-0 h-[35vh] w-screen'>
-								<div className="absolute -inset-1 h-[35vh] bg-[#23a7ff] rounded-[35px]"></div>
-								<div className="absolute -inset-2 h-[35vh] bg-[#23a7ff] blur rounded-[50px]"></div>
-								<div className='w-screen bg-[#06060E] h-[35vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+								className='fixed bottom-0 h-[52vh] w-screen'>
+								<div className="absolute -inset-1 h-[45vh] bg-[#23a7ff] rounded-[35px]"></div>
+								<div className="absolute -inset-2 h-[45vh] bg-[#23a7ff] blur rounded-[50px]"></div>
+								<div className='w-screen bg-[#06060E] h-[52vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
 									{/* Main Body */}
-									<div className='mb-5 px-2 mt-10'>
+									<div className='popup-content mb-5 px-2 mt-5'>
+										{/* Left top ellipse */}
+										<div className="-left-10 -top-20 w-52 h-52 absolute">
+											<img src={LeftPopupEllipse} alt="popup-ellipse" />
+										</div>
+										{/* Right bottom ellipse */}
+										<div className="-right-10 -bottom-5 w-52 h-52 absolute">
+											<img src={RightPopupEllipse} alt="popup-ellipse" />
+										</div>
 										<div className="absolute top-4 right-5">
 											<button onClick={() => {
 												setPopupClosing(true);
@@ -114,63 +127,105 @@ const VCS = () => {
 											</button>
 										</div>
 
-										<div className='flex relative justify-center'>
-											{/* logo */}
-											<div className='w-fit pt-2'>
-												<div
-													style={{
-														borderRadius: '100%',
-														transform: 'translateZ(0)',
-														filter: 'drop-shadow(0 0 15px rgba(255, 176, 0, 0.35))',
-													}}
-												>
-													{selectedVc && (
-														<>
+										<div
+											onClick={(e) => e.stopPropagation()}
+											className="popup-main">
+											<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
+											<div className='flex relative justify-center'>
+												{/* logo */}
+												<div className="mx-auto w-15 h-15 overflow-hidden">
+													<div
+														style={{
+															borderRadius: '100%',
+															transform: 'translateZ(0)',
+															filter: 'drop-shadow(0 0 15px rgba(255, 176, 0, 0.35))',
+														}}
+													>
+														{selectedVc && (
 															<img
 																src={`data:image/jpeg;base64,${selectedVc.logo.data}`}
-																alt='M-Icon'
-																width='60'
-																style={{
-																	borderRadius: '12px',
-																}}
+																alt="booster_icon"
+																width={100}
+																height={100}
+																className="w-15 h-15 rounded-full object-cover"
 															/>
-														</>
-													)}
+														)}
+													</div>
 												</div>
 											</div>
-										</div>
-										{/* popup title */}
-										<div className='flex justify-center mt-1'>
-											<h1 className='text-sm font-medium'>{selectedVc.name}</h1>
-										</div>
-										{/* description */}
-										<div className='my-2'>
-											<p className='text-center font-thin text-xs'>
-												You will get +{selectedVc?.userData?.nextLevelCpm || selectedVc.levels[0].cpm} coins per minute against {selectedVc?.userData?.nextLevelCost || selectedVc.levels[0].cost} pandatop coins.
-											</p>
-										</div>
-										{/* action buttons */}
-										<div className="flex flex-col gap-4 mt-3 justify-center p-2 items-center">
-											<button
-												className="w-1/2 h-10 p-2 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm disabled:grayscale disabled:cursor-not-allowed"
-												onClick={handleVcUpgrade}
-												disabled={buttonLoading}
-											>
-												{balance >= (selectedVc?.userData?.nextLevelCost ?? selectedVc.levels[0].cost) ? (
-													<>
-														{buttonLoading ? (
-															<span className="h-6 font-bold">{dots}</span>
-														) : (
-															"Upgrade"
-														)}
-													</>
-												) : (
-													"Insufficient Balance"
-												)}
-											</button>
+											{/* popup title */}
+											<div className='flex justify-center mt-1'>
+												<h1 className='text-2xl popup-heading text-center'>{selectedVc.name}</h1>
+											</div>
+											{/* description */}
+											<div className='my-2'>
+												<p className='text-[14px] font-light text-center'>
+													You will get +{formatNumberWithSuffix(selectedVc?.userData?.nextLevelCpm || selectedVc.levels[0].cpm, 2)} coins per minute against {selectedVc?.userData?.nextLevelCost || selectedVc.levels[0].cost} pandatop coins.
+												</p>
+											</div>
+
+											<div className='text-xl text-customOrange text-center'>
+												<p>level {selectedVc?.userData?.level || 0}</p>
+											</div>
+
+											{/* Next Level Cpm */}
+											<div className='flex gap-1 justify-center items-center mt-3'>
+												<div className='flex justify-center items-center gap-1'>
+													<img
+														src={LittleCoin}
+														alt="Little coin"
+														className='w-5'
+													/>
+													<p className="text-sm">+{formatNumberWithSuffix(selectedVc?.userData?.nextLevelCpm || selectedVc.levels[0].cpm, 2)}</p>
+												</div>
+												<span className='text-xs font-thin'>CPM</span>
+											</div>
+
+											<div className="py-2">
+												<img src={popupLine} alt="" className="pt-2" />
+											</div>
+
+											{/* Cost */}
+											<div>
+												<p className="flex justify-center items-center gap-1 text-2xl text-customOrange">
+													<img
+														src={LittleCoin}
+														alt="Little coin"
+														width={25}
+														height={25}
+														className="mt-1"
+													/>
+													{selectedVc?.userData?.nextLevelCost || selectedVc.levels[0].cost}
+												</p>
+											</div>
+											{/* Buttons */}
+											<div className="w-full h-[5vh] py-3">
+												<button
+													className={`w-full h-10 py-1 px-3 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm flex justify-center items-center`}
+													onClick={() => {
+														handleVcUpgrade();
+													}}
+													disabled={buttonLoading}
+												>
+													{balance >= (selectedVc?.userData?.nextLevelCost ?? selectedVc.levels[0].cost) ? (
+														<>
+															{buttonLoading ? (
+																<span className="flex justify-center items-center font-semibold text-5xl w-full">
+																	<p className="absolute -mt-6">
+																		{dots}
+																	</p>
+																</span>
+															) : (
+																"Upgrade"
+															)}
+														</>
+													) : (
+														"Insufficient Balance"
+													)}
+												</button>
+											</div>
 										</div>
 									</div>
-
 								</div>
 							</div>
 						</div>

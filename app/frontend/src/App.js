@@ -75,13 +75,13 @@ const App = () => {
 		checkTimeIntegrity();
 	}, [apiUrl]);
 
-	if (mainLoader) {
+	if (true) {
 		return (
-			<div className="relative z-10 h-screen w-[100vw] bg-black flex justify-center items-center">
+			<div className="relative z-10 h-[100vh] w-full bg-black flex justify-center items-center">
 				<img
 					src={SplashScreen}
 					alt="splash_screen"
-					className="w-full h-full object-fit absolute z-20"
+					className="absolute -top-10 z-20 object-contain"
 				/>
 				<div className="absolute z-30 bottom-[15%] w-[80%] h-[10vh] flex flex-col justify-center items-center gap-2">
 					<h1 className="text-[20px] text-white">Loading...</h1>
@@ -90,9 +90,22 @@ const App = () => {
 							className="absolute z-50 h-full bg-orange-500 transition-all duration-500"
 							style={{ width: `${animation}%` }}
 						>
-							<img src={Animation1} alt="animation_1" width={60} className={`${animation < 100 ? 'flex' : 'hidden'} z-40 absolute ${animation === 25 && `-right-[40%] -top-[90%]`} ${animation === 50 && `-right-[20%] -top-[90%]`} ${animation === 75 && `-right-[15%] -top-[90%]`} `} />
+							<img
+								src={Animation1}
+								alt="animation_1"
+								width={60}
+								className={`${animation < 100 ? 'flex' : 'hidden'
+									} z-40 absolute ${animation === 25 && `-right-[40%] -top-[90%]`
+									} ${animation === 50 && `-right-[20%] -top-[90%]`} ${animation === 75 && `-right-[15%] -top-[90%]`
+									} `}
+							/>
 						</div>
-						<img src={Animation2} alt="animation_2" className={`${animation < 100 ? 'hidden' : 'flex'} absolute -right-[22%] bottom-0 z-2`} />
+						<img
+							src={Animation2}
+							alt="animation_2"
+							className={`${animation < 100 ? 'hidden' : 'flex'
+								} absolute -right-[22%] bottom-0 z-2`}
+						/>
 					</div>
 				</div>
 			</div>
