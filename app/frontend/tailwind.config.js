@@ -38,6 +38,9 @@ module.exports = {
 				lightBlue: '#00B2FF',
 				borderGray: '#242434'
 			},
+			backgroundImage: {
+				'splash-screen': "url('./assets/Screen.svg')"
+			}
 		},
 	},
 	plugins: [],

@@ -75,15 +75,10 @@ const App = () => {
 		checkTimeIntegrity();
 	}, [apiUrl]);
 
-	if (mainLoader) {
+	if (true) {
 		return (
-			<div className="relative z-10 h-[100vh] w-full bg-black flex justify-center items-center overflow-hidden">
-				<img
-					src={SplashScreen}
-					alt="splash_screen"
-					className="absolute -top-10 z-20 object-contain"
-				/>
-				<div className="absolute z-30 bottom-[15%] w-[80%] h-[10vh] flex flex-col justify-center items-center gap-2">
+			<div className="relative z-10 h-[100vh] w-full bg-splash-screen bg-cover bg-center flex justify-center items-center overflow-hidden">
+				<div className="absolute z-30 bottom-[20%] w-[80%] h-[10vh] flex flex-col justify-center items-center gap-2">
 					<h1 className="text-[20px] text-white">Loading...</h1>
 					<div className="relative z-30 w-full h-[3vh] bg-white rounded-sm">
 						<div
