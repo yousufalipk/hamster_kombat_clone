@@ -102,7 +102,7 @@ const Home = () => {
 		levelsData,
 		comboCards,
 		formatBalance,
-		formatCpm
+		formatNumberWithSuffix
 	} = useUser();
 
 	const [isRefilling, setIsRefilling] = useState(false);
@@ -788,7 +788,7 @@ const Home = () => {
 												<img src={SmallCoin} alt="Coin-Icon" />
 											</div>
 											<div className="text-[#FFF] text-[11.655px] font-medium">
-												<p>+{formatCpm(coinsPerMinute)}</p>
+												<p>+{formatNumberWithSuffix(coinsPerMinute)}</p>
 											</div>
 										</div>
 										<div className="flex justify-center items-center gap-1 pl-3">
@@ -1716,7 +1716,7 @@ const Home = () => {
 																	width={25}
 																	height={25}
 																/>
-																+{formatCpm(avaliableCpm)}
+																+{formatNumberWithSuffix(avaliableCpm)}
 															</p>
 														</div>
 													</div>

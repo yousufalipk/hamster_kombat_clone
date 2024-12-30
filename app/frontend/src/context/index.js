@@ -247,8 +247,8 @@ export const UserProvider = (props) => {
         const currentDate = new Date(timestamp);
         const input = new Date(inputDate);
 
-        const normalizedCurrentDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
-        const normalizedInputDate = `${input.getFullYear()}-${input.getMonth() + 1}-${input.getDate()}`;
+        const normalizedCurrentDate = currentDate.toISOString().split('T')[0];
+        const normalizedInputDate = input.toISOString().split('T')[0];
 
         if (normalizedCurrentDate === normalizedInputDate) {
             return true;
@@ -266,12 +266,13 @@ export const UserProvider = (props) => {
         }
 
         const currentDate = new Date(timestamp);
-        const nextMidnight = new Date(currentDate);
+        const utcCurrentDate = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate(), currentDate.getUTCHours(), currentDate.getUTCMinutes(), currentDate.getUTCSeconds()));
 
-        nextMidnight.setDate(currentDate.getDate() + 1);
-        nextMidnight.setHours(0, 0, 0, 0);
+        const nextMidnight = new Date(utcCurrentDate);
+        nextMidnight.setUTCDate(utcCurrentDate.getUTCDate() + 1);
+        nextMidnight.setUTCHours(0, 0, 0, 0);
 
-        const diff = nextMidnight - currentDate;
+        const diff = nextMidnight - utcCurrentDate;
 
         if (diff <= 0) {
             return "00:00:00";
