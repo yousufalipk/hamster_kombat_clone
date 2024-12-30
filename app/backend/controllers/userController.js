@@ -542,6 +542,9 @@ exports.claimDailyRewards = async (req, res) => {
 
             // check 24 hours if the day is continuing
             const is24hrs = check1day(lastDateClaimed);
+
+            console.log('Last Date Claimed', lastDateClaimed);
+            console.log('is 24 hrs', is24hrs);
             if (is24hrs) {
                 console.log('--> within one day continuing!');
                 return res.status(200).json({

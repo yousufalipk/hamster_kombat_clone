@@ -188,7 +188,7 @@ const KOLS = () => {
 														height={25}
 														className="mt-1"
 													/>
-													{selectedKol?.userData?.nextLevelCost || selectedKol.levels[0].cost}
+													{selectedKol?.userData?.nextLevelCost.toLocaleString() || selectedKol.levels[0].cost.toLocaleString()}
 												</p>
 											</div>
 											{/* Buttons */}

@@ -193,7 +193,7 @@ const VCS = () => {
 														height={25}
 														className="mt-1"
 													/>
-													{selectedVc?.userData?.nextLevelCost || selectedVc.levels[0].cost}
+													{selectedVc?.userData?.nextLevelCost.toLocaleString() || selectedVc.levels[0].cost.toLocaleString()}
 												</p>
 											</div>
 											{/* Buttons */}

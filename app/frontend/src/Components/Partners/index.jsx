@@ -187,7 +187,7 @@ const Partners = () => {
 														height={25}
 														className="mt-1"
 													/>
-													{selectedPatner?.userData?.nextLevelCost || selectedPatner.levels[0].cost}
+													{selectedPatner?.userData?.nextLevelCost.toLocaleString() || selectedPatner.levels[0].cost.toLocaleString()}
 												</p>
 											</div>
 											{/* Buttons */}
