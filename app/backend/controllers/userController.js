@@ -787,8 +787,6 @@ exports.upgradeUserProjectLevel = async (req, res) => {
             });
         }
 
-        console.log("userProject", userProject?.level);
-
         if (userProject) {
             if (userProject?.level || userProject.level === 0) {
                 userProject.level = userProject.level + 1;
@@ -1378,11 +1376,13 @@ exports.upgradeUserKolLevel = async (req, res) => {
         }
 
 
+
         if (kol.card) {
             if (user.comboCards.length <= 2) {
                 if (user.comboCards.some(card => card.cardId.toString() === kol._id.toString())) {
                     console.log("Combo card already claimed!");
                 } else {
+                    console.log("Claiming Combo!");
                     const data = {
                         cardId: kol._id,
                         name: kol.name,
@@ -1391,7 +1391,7 @@ exports.upgradeUserKolLevel = async (req, res) => {
                         icon: kol.icon.data
                     };
                     user.comboCards.push(data);
-                    if (user.comboCards.length === 1) {
+                    if (user.comboCards.length === 2) {
                         user.balance += 50000;
                     }
                 }

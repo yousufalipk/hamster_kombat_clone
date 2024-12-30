@@ -364,6 +364,7 @@ export const UserProvider = (props) => {
 
             if (user.dailyReward.date) {
                 const is1Day = await checkSameDate(user.dailyReward.date);
+                console.log('Check Day!', is1Day);
                 if (is1Day) {
                     setCurrentDay(user.dailyReward.day - 1);
                 } else {
