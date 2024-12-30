@@ -101,10 +101,10 @@ const VCS = () => {
 									animation: `${popupClosing ? "closePopup" : "openPopup"
 										} 0.5s ease-in-out forwards`,
 								}}
-								className='fixed bottom-0 h-[57vh] w-screen'>
+								className='fixed bottom-0 h-[58vh] w-screen'>
 								<div className="absolute -inset-1 h-[45vh] bg-[#23a7ff] rounded-[35px]"></div>
 								<div className="absolute -inset-2 h-[45vh] bg-[#23a7ff] blur rounded-[50px]"></div>
-								<div className='w-screen bg-[#06060E] h-[57vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+								<div className='w-screen bg-[#06060E] h-[58vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
 									{/* Main Body */}
 									<div className='popup-content mb-5 px-2 mt-5'>
 										{/* Left top ellipse */}
@@ -130,7 +130,7 @@ const VCS = () => {
 										<div
 											onClick={(e) => e.stopPropagation()}
 											className="popup-main">
-											<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
+											<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%] rounded-full"></h1>
 											<div className='flex relative justify-center'>
 												{/* logo */}
 												<div className="mx-auto w-20 h-20 overflow-hidden">
@@ -163,7 +163,7 @@ const VCS = () => {
 											</div>
 
 											<div className='text-xl text-customOrange text-center'>
-												<p>level {selectedVc?.userData?.level || 0}</p>
+												<p>Level {selectedVc?.userData?.level || 0}</p>
 											</div>
 
 											{/* Next Level Cpm */}
