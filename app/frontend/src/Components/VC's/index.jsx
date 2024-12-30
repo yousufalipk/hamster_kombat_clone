@@ -101,10 +101,10 @@ const VCS = () => {
 									animation: `${popupClosing ? "closePopup" : "openPopup"
 										} 0.5s ease-in-out forwards`,
 								}}
-								className='fixed bottom-0 h-[56vh] w-screen'>
+								className='fixed bottom-0 h-[57vh] w-screen'>
 								<div className="absolute -inset-1 h-[45vh] bg-[#23a7ff] rounded-[35px]"></div>
 								<div className="absolute -inset-2 h-[45vh] bg-[#23a7ff] blur rounded-[50px]"></div>
-								<div className='w-screen bg-[#06060E] h-[56vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+								<div className='w-screen bg-[#06060E] h-[57vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
 									{/* Main Body */}
 									<div className='popup-content mb-5 px-2 mt-5'>
 										{/* Left top ellipse */}
@@ -197,9 +197,9 @@ const VCS = () => {
 												</p>
 											</div>
 											{/* Buttons */}
-											<div className="w-full h-[5vh] py-3">
+											<div className="w-full h-[5vh] mt-3">
 												<button
-													className={`w-full h-10 py-1 px-3 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm flex justify-center items-center`}
+													className={`w-full h-12 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
 													onClick={() => {
 														handleVcUpgrade();
 													}}

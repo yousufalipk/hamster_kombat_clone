@@ -191,9 +191,9 @@ const Partners = () => {
 												</p>
 											</div>
 											{/* Buttons */}
-											<div className="w-full h-[5vh] py-3">
+											<div className="w-full h-[5vh] mt-3">
 												<button
-													className={`w-full h-10 py-1 px-3 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm flex justify-center items-center`}
+													className={`w-full h-12 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
 													onClick={() => {
 														handlePatnerUpgrade();
 													}}
