@@ -55,6 +55,8 @@ export const UserProvider = (props) => {
     const [claimed, setClaimed] = useState([]);
     const [currentDay, setCurrentDay] = useState(null);
 
+    const [playComboAnimation, setPlayComboAnimation] = useState(false);
+
     useEffect(() => {
         const updateAllTimeBalance = async () => {
             if (userId) {
@@ -598,6 +600,12 @@ export const UserProvider = (props) => {
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
+                if (res.data.playAnimation) {
+                    setPlayComboAnimation(true);
+                    setTimeout(() => {
+                        setPlayComboAnimation(false);
+                    }, 10000) // 10 sec
+                }
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -655,6 +663,12 @@ export const UserProvider = (props) => {
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
+                if (res.data.playAnimation) {
+                    setPlayComboAnimation(true);
+                    setTimeout(() => {
+                        setPlayComboAnimation(false);
+                    }, 10000) // 10 sec
+                }
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -694,6 +708,12 @@ export const UserProvider = (props) => {
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
+                if (res.data.playAnimation) {
+                    setPlayComboAnimation(true);
+                    setTimeout(() => {
+                        setPlayComboAnimation(false);
+                    }, 10000) // 10 sec
+                }
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -733,6 +753,12 @@ export const UserProvider = (props) => {
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
+                if (res.data.playAnimation) {
+                    setPlayComboAnimation(true);
+                    setTimeout(() => {
+                        setPlayComboAnimation(false);
+                    }, 10000) // 10 sec
+                }
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
