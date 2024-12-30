@@ -75,9 +75,9 @@ const App = () => {
 		checkTimeIntegrity();
 	}, [apiUrl]);
 
-	if (true) {
+	if (mainLoader) {
 		return (
-			<div className="relative z-10 h-[100vh] w-full bg-black flex justify-center items-center">
+			<div className="relative z-10 h-[100vh] w-full bg-black flex justify-center items-center overflow-hidden">
 				<img
 					src={SplashScreen}
 					alt="splash_screen"
@@ -114,7 +114,7 @@ const App = () => {
 
 	if (loader) {
 		return (
-			<div className="h-screen w-screen bg-black flex justify-center items-center">
+			<div className="overflow-hidden h-screen w-screen bg-black flex justify-center items-center">
 				<CustomLoader size={200} />
 			</div>
 		);
@@ -122,7 +122,7 @@ const App = () => {
 
 	if (!isTimeValid) {
 		return (
-			<div className="h-[100vh] w-[100vw] bg-black text-white flex flex-col gap-2 justify-center items-center text-center">
+			<div className="overflow-hidden h-[100vh] w-[100vw] bg-black text-white flex flex-col gap-2 justify-center items-center text-center">
 				<div className="w-[80%] h-[80%] border-2 rounded-2xl border-white p-10 flex flex-col gap-5 justify-center items-center">
 					<h1 className="text-2xl font-bold">⚠️ Time Error Detected</h1>
 					<p className="text-lg font-light">
@@ -135,7 +135,7 @@ const App = () => {
 
 	if (loaderErrorMes) {
 		return (
-			<div className="h-screen w-screen bg-black flex justify-center items-center">
+			<div className="overflow-hidden h-screen w-screen bg-black flex justify-center items-center">
 				<div className="flex flex-col gap-3 justify-center items-center border-2 h-[90vh] w-[90vw] rounded-3xl bg-white p-8">
 					<span className="text-2xl text-red-700 text-center font-bold">
 						{loaderErrorMes.mess}

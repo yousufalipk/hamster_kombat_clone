@@ -55,10 +55,6 @@ export const UserProvider = (props) => {
     const [claimed, setClaimed] = useState([]);
     const [currentDay, setCurrentDay] = useState(null);
 
-    const formatBalance = (balance) => {
-        return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(balance);
-    };
-
     useEffect(() => {
         const updateAllTimeBalance = async () => {
             if (userId) {
@@ -174,6 +170,17 @@ export const UserProvider = (props) => {
         }
 
         return formattedValue;
+    };
+
+    const formatCpm = (value) => {
+        if (isNaN(value)) {
+            return "Invalid input";
+        }
+        return parseFloat(value).toFixed(2);
+    }
+
+    const formatBalance = (balance) => {
+        return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(balance);
     };
 
     useEffect(() => {
@@ -964,8 +971,10 @@ export const UserProvider = (props) => {
 
             mainLoader,
             setMainLoader,
+
             formatBalance,
-            formatNumberWithSuffix
+            formatNumberWithSuffix,
+            formatCpm
         }}>
             {props.children}
         </UserContext.Provider>

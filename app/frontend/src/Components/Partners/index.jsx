@@ -12,7 +12,7 @@ import popupLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 import { useUser } from "../../context";
 
 const Partners = () => {
-	const { patners, fetchPatners, upgradePatnerLevel, patnerLoader, balance, formatNumberWithSuffix } = useUser();
+	const { patners, fetchPatners, upgradePatnerLevel, patnerLoader, balance, formatNumberWithSuffix, formatCpm } = useUser();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedPatner, setSelectedPatner] = useState(null);
 
@@ -95,10 +95,10 @@ const Partners = () => {
 									animation: `${popupClosing ? "closePopup" : "openPopup"
 										} 0.5s ease-in-out forwards`,
 								}}
-								className='fixed bottom-0 h-[52vh] w-screen'>
+								className='fixed bottom-0 h-[56vh] w-screen'>
 								<div className="absolute -inset-1 h-[45vh] bg-[#23a7ff] rounded-[35px]"></div>
 								<div className="absolute -inset-2 h-[45vh] bg-[#23a7ff] blur rounded-[50px]"></div>
-								<div className='w-screen bg-[#06060E] h-[52vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+								<div className='w-screen bg-[#06060E] h-[56vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
 									{/* Main Body */}
 									<div className='popup-content mb-5 px-2 mt-5'>
 										{/* Left top ellipse */}
@@ -127,7 +127,7 @@ const Partners = () => {
 											<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
 											<div className='flex relative justify-center'>
 												{/* logo */}
-												<div className="mx-auto w-15 h-15 overflow-hidden">
+												<div className="mx-auto w-20 h-20 overflow-hidden">
 													<div
 														style={{
 															borderRadius: '100%',
@@ -139,9 +139,7 @@ const Partners = () => {
 															<img
 																src={`data:image/jpeg;base64,${selectedPatner.logo.data}`}
 																alt="booster_icon"
-																width={100}
-																height={100}
-																className="w-15 h-15 rounded-full object-cover"
+																className="w-full h-full object-cover rounded-full"
 															/>
 														)}
 													</div>
@@ -154,7 +152,7 @@ const Partners = () => {
 											{/* description */}
 											<div className='my-2'>
 												<p className='text-[14px] font-light text-center'>
-													You will get +{formatNumberWithSuffix(selectedPatner?.userData?.nextLevelCpm || selectedPatner.levels[0].cpm, 2)} coins per minute against {selectedPatner?.userData?.nextLevelCost || selectedPatner.levels[0].cost} pandatop coins.
+													You will get +{formatCpm(selectedPatner?.userData?.nextLevelCpm || selectedPatner.levels[0].cpm)} coins per minute against {selectedPatner?.userData?.nextLevelCost || selectedPatner.levels[0].cost} pandatop coins.
 												</p>
 											</div>
 
@@ -170,7 +168,7 @@ const Partners = () => {
 														alt="Little coin"
 														className='w-5'
 													/>
-													<p className="text-sm">+{formatNumberWithSuffix(selectedPatner?.userData?.nextLevelCpm || selectedPatner.levels[0].cpm, 2)}</p>
+													<p className="text-sm">+{formatCpm(selectedPatner?.userData?.nextLevelCpm || selectedPatner.levels[0].cpm)}</p>
 												</div>
 												<span className='text-xs font-thin'>CPM</span>
 											</div>
@@ -282,8 +280,8 @@ const Partners = () => {
 																alt='Coin-Icon'
 															/>
 															<div className="text-xs font-thin text-gray-300">
-																<span className="mr-2 font-semibold text-xs">+{patner.userData?.nextLevelCpm || patner.levels[0].cpm}</span>
-																Coin Per Minute
+																<span className="mr-2 font-semibold text-xs">+{formatCpm(patner.userData?.nextLevelCpm || patner.levels[0].cpm)}</span>
+																CPM
 															</div>
 														</>
 													)}
