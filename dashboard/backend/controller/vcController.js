@@ -73,8 +73,8 @@ exports.addVc = async (req, res) => {
                 const prevLevel = levels[i - 1];
                 levels.push({
                     level: i + 1,
-                    cost: prevLevel.cost + costMultiplier,
-                    cpm: prevLevel.cpm + cpmMultiplier,
+                    cost: prevLevel.cost * costMultiplier,
+                    cpm: prevLevel.cpm * cpmMultiplier,
                 });
             }
         }
@@ -189,16 +189,14 @@ exports.updateVc = async (req, res) => {
                 levels.push({
                     level: i + 1,
                     cost: baseCost,
-                    reward: baseReward,
                     cpm: baseCpm,
                 });
             } else {
                 const prevLevel = levels[i - 1];
                 levels.push({
                     level: i + 1,
-                    cost: prevLevel.cost + costMultiplier,
-                    reward: prevLevel.reward + rewardMultiplier,
-                    cpm: prevLevel.cpm + cpmMultiplier,
+                    cost: prevLevel.cost * costMultiplier,
+                    cpm: prevLevel.cpm * cpmMultiplier,
                 });
             }
         }

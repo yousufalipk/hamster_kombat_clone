@@ -63,12 +63,9 @@ const KOLS = () => {
 			console.log("Internal Server Error", error);
 		} finally {
 			setButtonLoading(false);
+			setIsModalOpen(false);
 		}
 	}
-
-	useEffect(() => {
-		console.log('Selected Kol', selectedKol);
-	}, [selectedKol])
 
 	if (kolsLoader) {
 		return (
@@ -152,6 +149,7 @@ const KOLS = () => {
 																	style={{
 																		borderRadius: '12px',
 																	}}
+																	className="w-20 h-20 overflow-hidden"
 																/>
 															</>
 														)}
@@ -170,7 +168,7 @@ const KOLS = () => {
 											</div>
 
 											<div className='text-xl text-customOrange text-center'>
-												<p>level {selectedKol?.userData?.level || 0}</p>
+												<p>level {selectedKol?.userData?.level + 1 || 0}</p>
 											</div>
 
 											{/* Next Level Cpm */}
