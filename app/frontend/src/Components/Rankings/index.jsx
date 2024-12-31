@@ -172,7 +172,11 @@ const Rankings = () => {
 							</div>
 							<div className="relative z-10">
 								<div className="w-full h-[10vh] flex justify-end items-center">
-									<div className="flex justify-center items-center text-white font-semibold gap-1">
+									<div
+										onClick={() => {
+											navigate('/levels');
+										}}
+										className="flex justify-center items-center text-white font-semibold gap-1">
 										<img src={BadgeIcon} alt="badge_icon" />
 										<p className="capitalize">{levelsData[page].name}</p>
 									</div>

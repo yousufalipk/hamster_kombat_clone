@@ -27,7 +27,7 @@ import PopupDivider from '../PopupDividerSvg/PopupDividerSvg';
 import VerticalDividerSvg from "../VerticalDividerSvg/VerticalDividerSvg";
 
 const Token = () => {
-	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance, formatCpm } = useUser();
+	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance, formatCpm, playComboAnimation } = useUser();
 
 	const [isModalOpen, setModalOpen] = useState(false);
 	const [processing, setProcessing] = useState(true);
@@ -196,6 +196,18 @@ const Token = () => {
 				{processing && (
 					<div className="h-[100vh] w-[100vw] z-50 bg-black opacity-50 flex justify-center items-center">
 						<CustomLoader size={200} />
+					</div>
+				)}
+
+				{playComboAnimation === 1 && (
+					<div className="h-[100vh] w-[100vw] z-50 bg-black opacity-50 flex justify-center items-center">
+						Got 1 Combo Card!
+					</div>
+				)}
+
+				{playComboAnimation === 2 && (
+					<div className="h-[100vh] w-[100vw] z-50 bg-black opacity-50 flex justify-center items-center">
+						Got 1 Combo Card!
 					</div>
 				)}
 

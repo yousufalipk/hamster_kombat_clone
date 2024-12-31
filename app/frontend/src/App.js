@@ -6,14 +6,12 @@ import GamePage from "./Pages/Game/Game";
 import Layout from "./Layout/index";
 import { useUser } from "./context/index";
 import axios from "axios";
-import SplashScreen from "./assets/Screen.svg";
 
 import Animation1 from './assets/splashScreen/Animation1.gif';
 import Animation2 from './assets/splashScreen/Animation2.gif';
 
 const App = () => {
 	const [isTimeValid, setIsTimeValid] = useState(true);
-	const staticUser = process.env.REACT_APP_STATIC_USER;
 	const apiUrl = process.env.REACT_APP_URL;
 
 	const { loader, loaderErrorMes, mainLoader, setMainLoader } = useUser();

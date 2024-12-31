@@ -58,6 +58,10 @@ export const UserProvider = (props) => {
     const [playComboAnimation, setPlayComboAnimation] = useState(false);
 
     useEffect(() => {
+        console.log('Play Combo Animation', playComboAnimation);
+    }, [playComboAnimation])
+
+    useEffect(() => {
         const updateAllTimeBalance = async () => {
             if (userId) {
                 try {
@@ -152,6 +156,10 @@ export const UserProvider = (props) => {
         { id: 13, name: 'Flare', rangeFrom: 1000000000, rangeTo: 3000000000 },
         { id: 14, name: 'The Crypto', rangeFrom: 3000000000, rangeTo: 'max' },
     ];
+
+    useEffect(() => {
+        console.log('Kols', kols);
+    }, [kols])
 
     const formatNumberWithSuffix = (value, decimals = 2) => {
         if (value === null || value === undefined || isNaN(value)) return '0';
@@ -602,9 +610,9 @@ export const UserProvider = (props) => {
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
                 if (res.data.playAnimation) {
-                    setPlayComboAnimation(true);
+                    setPlayComboAnimation(res.data.playAnimation);
                     setTimeout(() => {
-                        setPlayComboAnimation(false);
+                        setPlayComboAnimation(null);
                     }, 10000) // 10 sec
                 }
                 return ({ success: true, mess: res.data.message });
@@ -660,14 +668,23 @@ export const UserProvider = (props) => {
                 kolId: kolId
             });
             if (res.data.status === 'success') {
-                await fetchKols();
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
+                // Updated Kol Data in kols array 
+
+                const updatedKol = res.data.updatedKol;
+
+                setKols((prevKols) =>
+                    prevKols.map((kol) =>
+                        kol._id === updatedKol._id ? { ...kol, ...updatedKol } : kol
+                    )
+                );
+
                 if (res.data.playAnimation) {
-                    setPlayComboAnimation(true);
+                    setPlayComboAnimation(res.data.playAnimation);
                     setTimeout(() => {
-                        setPlayComboAnimation(false);
+                        setPlayComboAnimation(null);
                     }, 10000) // 10 sec
                 }
                 return ({ success: true, mess: res.data.message });
@@ -710,9 +727,9 @@ export const UserProvider = (props) => {
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
                 if (res.data.playAnimation) {
-                    setPlayComboAnimation(true);
+                    setPlayComboAnimation(res.data.playAnimation);
                     setTimeout(() => {
-                        setPlayComboAnimation(false);
+                        setPlayComboAnimation(null);
                     }, 10000) // 10 sec
                 }
                 return ({ success: true, mess: res.data.message });
@@ -755,9 +772,9 @@ export const UserProvider = (props) => {
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
                 if (res.data.playAnimation) {
-                    setPlayComboAnimation(true);
+                    setPlayComboAnimation(res.data.playAnimation);
                     setTimeout(() => {
-                        setPlayComboAnimation(false);
+                        setPlayComboAnimation(null);
                     }, 10000) // 10 sec
                 }
                 return ({ success: true, mess: res.data.message });
@@ -1001,7 +1018,9 @@ export const UserProvider = (props) => {
 
             formatBalance,
             formatNumberWithSuffix,
-            formatCpm
+            formatCpm,
+
+            playComboAnimation
         }}>
             {props.children}
         </UserContext.Provider>

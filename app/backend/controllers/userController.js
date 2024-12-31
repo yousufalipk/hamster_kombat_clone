@@ -819,10 +819,11 @@ exports.upgradeUserProjectLevel = async (req, res) => {
                         toColor: project.toColor,
                         icon: project.icon.data
                     };
+                    playAnimation = 1;
                     user.comboCards.push(data);
                     if (user.comboCards.length === 2) {
                         user.balance += 50000;
-                        playAnimation = true;
+                        playAnimation = 2;
                     }
                 }
             }
@@ -1397,16 +1398,34 @@ exports.upgradeUserKolLevel = async (req, res) => {
                         toColor: kol.toColor,
                         icon: kol.icon.data
                     };
+                    playAnimation = 1;
                     user.comboCards.push(data);
                     if (user.comboCards.length === 2) {
                         user.balance += 50000;
-                        playAnimation = true;
+                        playAnimation = 2;
                     }
                 }
             }
         }
 
         await user.save();
+
+        const userData = {
+            level: userKol.level + 1,
+            nextLevelCost: kol.levels[customIndex + 1]?.cost,
+            nextLevelCpm: kol.levels[customIndex + 1]?.cpm
+        }
+
+        const updatedKol = {
+            ...kol.toObject(),
+            userData: (
+                kol?.levels?.length &&
+                Array.isArray(kol.levels) &&
+                userKol?.level + 1 >= kol.levels.length
+            )
+                ? null
+                : userData
+        };
 
         return res.status(200).json({
             status: 'success',
@@ -1415,7 +1434,8 @@ exports.upgradeUserKolLevel = async (req, res) => {
             cpm: user.coinsPerMinute.value,
             kols: user.kols,
             comboCards: user.comboCards,
-            playAnimation: playAnimation
+            playAnimation: playAnimation,
+            updatedKol: updatedKol
         });
     } catch (error) {
         console.error('Internal Server Error', error);
@@ -1581,10 +1601,11 @@ exports.upgradeUserVcLevel = async (req, res) => {
                         toColor: vc.toColor,
                         icon: vc.icon.data
                     };
+                    playAnimation = 1;
                     user.comboCards.push(data);
                     if (user.comboCards.length === 2) {
                         user.balance += 50000;
-                        playAnimation = true;
+                        playAnimation = 2;
                     }
                 }
             }
@@ -1765,10 +1786,11 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
                         toColor: patner.toColor,
                         icon: patner.icon.data
                     };
+                    playAnimation = 1;
                     user.comboCards.push(data);
                     if (user.comboCards.length === 2) {
                         user.balance += 50000;
-                        playAnimation = true;
+                        playAnimation = 2;
                     }
                 }
             }

@@ -61,7 +61,6 @@ import leftbox from '../../assets/dailyreward/gift1.svg';
 import rightbox from '../../assets/dailyreward/gift2.svg';
 
 import CommingSoon from '../../assets/root/comingSoon.svg';
-import { use } from "react";
 
 const Home = () => {
 

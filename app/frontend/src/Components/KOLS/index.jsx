@@ -158,7 +158,7 @@ const KOLS = () => {
 											</div>
 
 											<div className='text-xl text-customOrange text-center'>
-												<p>Level {selectedKol?.userData?.level || 0}</p>
+												<p>Level {selectedKol?.userData?.level + 1 || 1}</p>
 											</div >
 
 											{/* Next Level Cpm */}
@@ -262,7 +262,6 @@ const KOLS = () => {
 																	background: `linear-gradient(to left, ${kol.fromColor}, ${kol.toColor})`,
 																}}
 															>
-
 																lvl {kol?.userData?.level || 0}
 															</div>
 														</>

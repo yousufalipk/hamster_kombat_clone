@@ -25,7 +25,7 @@ import CustomLoader from '../../Components/Loader/Loader';
 
 
 const BottleCap = () => {
-	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, setUserSocialTasks, userDailyTasks, setUserDailyTasks, balance, fetchInviteFriends, inviteFriends, claimInviteFriendTask } = useUser();
+	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, setUserSocialTasks, userDailyTasks, setUserDailyTasks, balance, fetchInviteFriends, inviteFriends, claimInviteFriendTask, username } = useUser();
 
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [taskPopUp, setTaskPopup] = useState(false);
@@ -159,6 +159,16 @@ const BottleCap = () => {
 		)
 	}
 
+	const generateTwitterLink = (baseLink, username) => {
+		const url = new URL(baseLink);
+		const sharedText = url.searchParams.get('text');
+
+		const updatedText = `${username} ${sharedText}`;
+		url.searchParams.set('text', updatedText);
+
+		return url.toString();
+	}
+
 	return (
 		<>
 			<div className='h-[100vh] w-[100vw] bg-gradient-to-t from-[#1B1B27] to-black '>
@@ -230,7 +240,12 @@ const BottleCap = () => {
 												<div className="mt-5">
 													<button
 														onClick={() => {
-															window.open(selectedTask.link, '_blank');
+															if (getFirstWord(selectedTask.title) === 'quote') {
+																const newLink = generateTwitterLink(selectedTask.link, username);
+																window.open(newLink, '_blank');
+															} else {
+																window.open(selectedTask.link, '_blank');
+															}
 														}}
 														className="bg-white py-2 rounded-md text-black px-6 font-medium"
 													>

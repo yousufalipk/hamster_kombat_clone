@@ -9,6 +9,7 @@ import Wallet from '../Pages/Wallet/index';
 import Footer from '../Components/Footer';
 
 import Rankings from '../Components/Rankings/index';
+import LevelsPage from '../Components/Levels/Levels';
 
 import EllipseImg from '../assets/root/ellipse.png';
 
@@ -26,6 +27,7 @@ const Layout = () => {
                         <Route path="/hammer" element={<Hammer />} />
                         <Route path="/invite-friends" element={<InviteFriends />} />
                         <Route path="/rankings" element={<Rankings />} />
+                        <Route path="/levels" element={<LevelsPage />} />
                     </Routes>
                 </div>
                 <div>
