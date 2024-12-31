@@ -4,20 +4,16 @@ import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import AngleIcon from "../../assets/BlackAngle.svg";
 import CustomLoader from '../Loader/Loader';
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
 import close from "../../assets/dailyreward/close.svg"
-import popupLine from "../../assets/token/popupLine.svg";
 
 import { useUser } from '../../context/index';
 
 import LeftPopupEllipse from '../../assets/optimizedImages/popup/leftEllipse.webp';
 import RightPopupEllipse from '../../assets/optimizedImages/popup/rightEllipse.webp';
-import PopupHorizontalLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
-import CrossImg from '../../assets/optimizedImages/closeButton.svg';
-import PopupVerticalLine from '../../assets/optimizedImages/popup/verticalLine.webp';
+import popupLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 
 const KOLS = () => {
-	const { fetchKols, upgradeKolsLevel, kols, kolsLoader, balance, formatNumberWithSuffix } = useUser();
+	const { fetchKols, upgradeKolsLevel, kols, kolsLoader, balance, formatNumberWithSuffix, formatCpm } = useUser();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedKol, setSelectedKol] = useState(null);
@@ -50,7 +46,7 @@ const KOLS = () => {
 		setSelectedKol(kol);
 	};
 
-	const handleProjectUpgrade = async () => {
+	const handleKolsUpgrade = async () => {
 		setButtonLoading(true);
 		try {
 			const res = await upgradeKolsLevel(selectedKol._id);
@@ -100,10 +96,10 @@ const KOLS = () => {
 									animation: `${popupClosing ? "closePopup" : "openPopup"
 										} 0.5s ease-in-out forwards`,
 								}}
-								className='fixed bottom-0 h-[56vh] w-screen'>
+								className='fixed bottom-0 h-[58vh] w-screen'>
 								<div className="absolute -inset-1 h-[45vh] bg-[#23a7ff] rounded-[35px]"></div>
 								<div className="absolute -inset-2 h-[45vh] bg-[#23a7ff] blur rounded-[50px]"></div>
-								<div className='w-screen bg-[#06060E] h-[56vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+								<div className='w-screen bg-[#06060E] h-[58vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
 									{/* Main Body */}
 									<div className='popup-content mb-5 px-2 mt-5'>
 										{/* Left top ellipse */}
@@ -129,10 +125,10 @@ const KOLS = () => {
 										<div
 											onClick={(e) => e.stopPropagation()}
 											className="popup-main">
-											<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%]"></h1>
+											<h1 className="border-2 border-gray-200 w-[20vw] mx-auto absolute top-2 left-[40%] rounded-full"></h1>
 											<div className='flex relative justify-center'>
 												{/* logo */}
-												<div className='mx-auto'>
+												<div className="mx-auto w-20 h-20 overflow-hidden">
 													<div
 														style={{
 															borderRadius: '100%',
@@ -141,17 +137,11 @@ const KOLS = () => {
 														}}
 													>
 														{selectedKol && (
-															<>
-																<img
-																	src={`data:image/jpeg;base64,${selectedKol.logo.data}`}
-																	alt='M-Icon'
-																	width='100'
-																	style={{
-																		borderRadius: '12px',
-																	}}
-																	className="w-20 h-20 overflow-hidden"
-																/>
-															</>
+															<img
+																src={`data:image/jpeg;base64,${selectedKol.logo.data}`}
+																alt="booster_icon"
+																className="w-full h-full object-cover rounded-full"
+															/>
 														)}
 													</div>
 												</div>
@@ -163,23 +153,23 @@ const KOLS = () => {
 											{/* description */}
 											<div className='my-2'>
 												<p className='text-[14px] font-light text-center'>
-													You will get +{formatNumberWithSuffix(selectedKol?.userData?.nextLevelCpm || selectedKol.levels[0].cpm, 2)} coins per minute against {selectedKol?.userData?.nextLevelCost || selectedKol.levels[0].cost} pandatop coins.
+													You will get +{formatCpm(selectedKol?.userData?.nextLevelCpm || selectedKol.levels[0].cpm)} coins per minute against {selectedKol?.userData?.nextLevelCost || selectedKol.levels[0].cost} pandatop coins.
 												</p>
 											</div>
 
 											<div className='text-xl text-customOrange text-center'>
-												<p>level {selectedKol?.userData?.level + 1 || 0}</p>
-											</div>
+												<p>Level {selectedKol?.userData?.level || 0}</p>
+											</div >
 
 											{/* Next Level Cpm */}
-											<div className='flex gap-1 justify-center items-center mt-3'>
+											<div div className='flex gap-1 justify-center items-center mt-3' >
 												<div className='flex justify-center items-center gap-1'>
 													<img
 														src={LittleCoin}
 														alt="Little coin"
 														className='w-5'
 													/>
-													<p className="text-sm">+{formatNumberWithSuffix(selectedKol?.userData?.nextLevelCpm || selectedKol.levels[0].cpm, 2)}</p>
+													<p className="text-sm">+{formatCpm(selectedKol?.userData?.nextLevelCpm || selectedKol.levels[0].cpm)}</p>
 												</div>
 												<span className='text-xs font-thin'>CPM</span>
 											</div>
@@ -198,15 +188,15 @@ const KOLS = () => {
 														height={25}
 														className="mt-1"
 													/>
-													{selectedKol?.userData?.nextLevelCost || selectedKol.levels[0].cost}
+													{selectedKol?.userData?.nextLevelCost.toLocaleString() || selectedKol.levels[0].cost.toLocaleString()}
 												</p>
 											</div>
 											{/* Buttons */}
-											<div className="w-full h-[5vh] py-3">
+											<div className="w-full h-[5vh] mt-3">
 												<button
-													className={`w-full h-10 py-1 px-3 bg-gradient-to-t from-[#2226FF] to-[#00B2FF] rounded-lg text-sm flex justify-center items-center`}
+													className={`w-full h-12 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
 													onClick={() => {
-														handleProjectUpgrade();
+														handleKolsUpgrade();
 													}}
 													disabled={buttonLoading}
 												>
@@ -227,11 +217,11 @@ const KOLS = () => {
 													)}
 												</button>
 											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+										</div >
+									</div >
+								</div >
+							</div >
+						</div >
 					)}
 
 					<div className='h-[45vh] overflow-scroll'>
@@ -292,7 +282,7 @@ const KOLS = () => {
 																alt='Coin-Icon'
 															/>
 															<div className="text-xs font-thin text-gray-300">
-																<span className="mr-2 font-semibold text-xs">+{formatNumberWithSuffix(kol.userData?.nextLevelCpm || kol.levels[0].cpm, 2)}</span>
+																<span className="mr-2 font-semibold text-xs">+{formatCpm(kol.userData?.nextLevelCpm || kol.levels[0].cpm)}</span>
 																CPM
 															</div>
 														</>

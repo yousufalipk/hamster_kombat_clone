@@ -501,7 +501,7 @@ exports.claimDailyRewards = async (req, res) => {
             const currentDate = new Date();
 
             user.dailyReward.claimed.push(0);
-            user.dailyReward.date = currentDate;
+            user.dailyReward.date = currentDate.toUTCString();
             user.dailyReward.day++;
             user.dailyReward.reward = reward[user.dailyReward.day];
             user.balance += toClaimReward;
@@ -542,6 +542,9 @@ exports.claimDailyRewards = async (req, res) => {
 
             // check 24 hours if the day is continuing
             const is24hrs = check1day(lastDateClaimed);
+
+            console.log('Last Date Claimed', lastDateClaimed);
+            console.log('is 24 hrs', is24hrs);
             if (is24hrs) {
                 console.log('--> within one day continuing!');
                 return res.status(200).json({
@@ -801,6 +804,8 @@ exports.upgradeUserProjectLevel = async (req, res) => {
             user.projects.push(projectData);
         }
 
+        let playAnimation = false;
+
         if (project.card) {
             if (user.comboCards.length <= 2) {
                 if (user.comboCards.some(card => card.cardId.toString() === project._id.toString())) {
@@ -817,6 +822,7 @@ exports.upgradeUserProjectLevel = async (req, res) => {
                     user.comboCards.push(data);
                     if (user.comboCards.length === 2) {
                         user.balance += 50000;
+                        playAnimation = true;
                     }
                 }
             }
@@ -831,7 +837,8 @@ exports.upgradeUserProjectLevel = async (req, res) => {
             cpm: user.coinsPerMinute.value,
             wallet: user.wallet,
             projects: user.projects,
-            comboCards: user.comboCards
+            comboCards: user.comboCards,
+            playAnimation: playAnimation
         });
     } catch (error) {
         console.error('Internal Server Error', error);
@@ -1376,7 +1383,7 @@ exports.upgradeUserKolLevel = async (req, res) => {
         }
 
 
-
+        let playAnimation = false;
         if (kol.card) {
             if (user.comboCards.length <= 2) {
                 if (user.comboCards.some(card => card.cardId.toString() === kol._id.toString())) {
@@ -1393,6 +1400,7 @@ exports.upgradeUserKolLevel = async (req, res) => {
                     user.comboCards.push(data);
                     if (user.comboCards.length === 2) {
                         user.balance += 50000;
+                        playAnimation = true;
                     }
                 }
             }
@@ -1406,7 +1414,8 @@ exports.upgradeUserKolLevel = async (req, res) => {
             balance: user.balance,
             cpm: user.coinsPerMinute.value,
             kols: user.kols,
-            comboCards: user.comboCards
+            comboCards: user.comboCards,
+            playAnimation: playAnimation
         });
     } catch (error) {
         console.error('Internal Server Error', error);
@@ -1557,6 +1566,7 @@ exports.upgradeUserVcLevel = async (req, res) => {
             user.vcs.push(vcData);
         }
 
+        let playAnimation = false;
 
         if (vc.card) {
             if (user.comboCards.length <= 2) {
@@ -1574,6 +1584,7 @@ exports.upgradeUserVcLevel = async (req, res) => {
                     user.comboCards.push(data);
                     if (user.comboCards.length === 2) {
                         user.balance += 50000;
+                        playAnimation = true;
                     }
                 }
             }
@@ -1587,7 +1598,8 @@ exports.upgradeUserVcLevel = async (req, res) => {
             balance: user.balance,
             cpm: user.coinsPerMinute.value,
             vcs: user.vcs,
-            comboCards: user.comboCards
+            comboCards: user.comboCards,
+            playAnimation: playAnimation
         });
     } catch (error) {
         console.error('Internal Server Error', error);
@@ -1738,6 +1750,8 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
             user.patners.push(patnerData);
         }
 
+        let playAnimation = false;
+
         if (patner.card) {
             if (user.comboCards.length <= 2) {
                 if (user.comboCards.some(card => card.cardId.toString() === patner._id.toString())) {
@@ -1754,6 +1768,7 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
                     user.comboCards.push(data);
                     if (user.comboCards.length === 2) {
                         user.balance += 50000;
+                        playAnimation = true;
                     }
                 }
             }
@@ -1767,7 +1782,8 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
             balance: user.balance,
             cpm: user.coinsPerMinute.value,
             patners: user.patners,
-            comboCards: user.comboCards
+            comboCards: user.comboCards,
+            playAnimation: playAnimation
         });
     } catch (error) {
         console.error('Internal Server Error', error);

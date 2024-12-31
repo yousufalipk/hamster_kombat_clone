@@ -55,9 +55,7 @@ export const UserProvider = (props) => {
     const [claimed, setClaimed] = useState([]);
     const [currentDay, setCurrentDay] = useState(null);
 
-    const formatBalance = (balance) => {
-        return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(balance);
-    };
+    const [playComboAnimation, setPlayComboAnimation] = useState(false);
 
     useEffect(() => {
         const updateAllTimeBalance = async () => {
@@ -176,6 +174,17 @@ export const UserProvider = (props) => {
         return formattedValue;
     };
 
+    const formatCpm = (value) => {
+        if (isNaN(value)) {
+            return "Invalid input";
+        }
+        return parseFloat(value).toFixed(2);
+    }
+
+    const formatBalance = (balance) => {
+        return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(balance);
+    };
+
     useEffect(() => {
         if (!userId) {
             initializeUser();
@@ -238,8 +247,8 @@ export const UserProvider = (props) => {
         const currentDate = new Date(timestamp);
         const input = new Date(inputDate);
 
-        const normalizedCurrentDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
-        const normalizedInputDate = `${input.getFullYear()}-${input.getMonth() + 1}-${input.getDate()}`;
+        const normalizedCurrentDate = currentDate.toISOString().split('T')[0];
+        const normalizedInputDate = input.toISOString().split('T')[0];
 
         if (normalizedCurrentDate === normalizedInputDate) {
             return true;
@@ -257,12 +266,13 @@ export const UserProvider = (props) => {
         }
 
         const currentDate = new Date(timestamp);
-        const nextMidnight = new Date(currentDate);
+        const utcCurrentDate = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate(), currentDate.getUTCHours(), currentDate.getUTCMinutes(), currentDate.getUTCSeconds()));
 
-        nextMidnight.setDate(currentDate.getDate() + 1);
-        nextMidnight.setHours(0, 0, 0, 0);
+        const nextMidnight = new Date(utcCurrentDate);
+        nextMidnight.setUTCDate(utcCurrentDate.getUTCDate() + 1);
+        nextMidnight.setUTCHours(0, 0, 0, 0);
 
-        const diff = nextMidnight - currentDate;
+        const diff = nextMidnight - utcCurrentDate;
 
         if (diff <= 0) {
             return "00:00:00";
@@ -591,6 +601,12 @@ export const UserProvider = (props) => {
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
+                if (res.data.playAnimation) {
+                    setPlayComboAnimation(true);
+                    setTimeout(() => {
+                        setPlayComboAnimation(false);
+                    }, 10000) // 10 sec
+                }
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -648,6 +664,12 @@ export const UserProvider = (props) => {
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
+                if (res.data.playAnimation) {
+                    setPlayComboAnimation(true);
+                    setTimeout(() => {
+                        setPlayComboAnimation(false);
+                    }, 10000) // 10 sec
+                }
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -687,6 +709,12 @@ export const UserProvider = (props) => {
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
+                if (res.data.playAnimation) {
+                    setPlayComboAnimation(true);
+                    setTimeout(() => {
+                        setPlayComboAnimation(false);
+                    }, 10000) // 10 sec
+                }
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -726,6 +754,12 @@ export const UserProvider = (props) => {
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
+                if (res.data.playAnimation) {
+                    setPlayComboAnimation(true);
+                    setTimeout(() => {
+                        setPlayComboAnimation(false);
+                    }, 10000) // 10 sec
+                }
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -964,8 +998,10 @@ export const UserProvider = (props) => {
 
             mainLoader,
             setMainLoader,
+
             formatBalance,
-            formatNumberWithSuffix
+            formatNumberWithSuffix,
+            formatCpm
         }}>
             {props.children}
         </UserContext.Provider>

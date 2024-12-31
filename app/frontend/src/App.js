@@ -77,22 +77,30 @@ const App = () => {
 
 	if (mainLoader) {
 		return (
-			<div className="relative z-10 h-screen w-[100vw] bg-black flex justify-center items-center">
-				<img
-					src={SplashScreen}
-					alt="splash_screen"
-					className="w-full h-full object-fit absolute z-20"
-				/>
-				<div className="absolute z-30 bottom-[15%] w-[80%] h-[10vh] flex flex-col justify-center items-center gap-2">
+			<div className="relative z-10 h-[100vh] w-full bg-splash-screen bg-cover bg-center flex justify-center items-center overflow-hidden">
+				<div className="absolute z-30 bottom-[20%] w-[80%] h-[10vh] flex flex-col justify-center items-center gap-2">
 					<h1 className="text-[20px] text-white">Loading...</h1>
 					<div className="relative z-30 w-full h-[3vh] bg-white rounded-sm">
 						<div
 							className="absolute z-50 h-full bg-orange-500 transition-all duration-500"
 							style={{ width: `${animation}%` }}
 						>
-							<img src={Animation1} alt="animation_1" width={60} className={`${animation < 100 ? 'flex' : 'hidden'} z-40 absolute ${animation === 25 && `-right-[40%] -top-[90%]`} ${animation === 50 && `-right-[20%] -top-[90%]`} ${animation === 75 && `-right-[15%] -top-[90%]`} `} />
+							<img
+								src={Animation1}
+								alt="animation_1"
+								width={60}
+								className={`${animation < 100 ? 'flex' : 'hidden'
+									} z-40 absolute ${animation === 25 && `-right-[40%] -top-[90%]`
+									} ${animation === 50 && `-right-[20%] -top-[90%]`} ${animation === 75 && `-right-[15%] -top-[90%]`
+									} `}
+							/>
 						</div>
-						<img src={Animation2} alt="animation_2" className={`${animation < 100 ? 'hidden' : 'flex'} absolute -right-[22%] bottom-0 z-2`} />
+						<img
+							src={Animation2}
+							alt="animation_2"
+							className={`${animation < 100 ? 'hidden' : 'flex'
+								} absolute -right-[22%] bottom-0 z-2`}
+						/>
 					</div>
 				</div>
 			</div>
@@ -101,7 +109,7 @@ const App = () => {
 
 	if (loader) {
 		return (
-			<div className="h-screen w-screen bg-black flex justify-center items-center">
+			<div className="overflow-hidden h-screen w-screen bg-black flex justify-center items-center">
 				<CustomLoader size={200} />
 			</div>
 		);
@@ -109,7 +117,7 @@ const App = () => {
 
 	if (!isTimeValid) {
 		return (
-			<div className="h-[100vh] w-[100vw] bg-black text-white flex flex-col gap-2 justify-center items-center text-center">
+			<div className="overflow-hidden h-[100vh] w-[100vw] bg-black text-white flex flex-col gap-2 justify-center items-center text-center">
 				<div className="w-[80%] h-[80%] border-2 rounded-2xl border-white p-10 flex flex-col gap-5 justify-center items-center">
 					<h1 className="text-2xl font-bold">⚠️ Time Error Detected</h1>
 					<p className="text-lg font-light">
@@ -122,7 +130,7 @@ const App = () => {
 
 	if (loaderErrorMes) {
 		return (
-			<div className="h-screen w-screen bg-black flex justify-center items-center">
+			<div className="overflow-hidden h-screen w-screen bg-black flex justify-center items-center">
 				<div className="flex flex-col gap-3 justify-center items-center border-2 h-[90vh] w-[90vw] rounded-3xl bg-white p-8">
 					<span className="text-2xl text-red-700 text-center font-bold">
 						{loaderErrorMes.mess}

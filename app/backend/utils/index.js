@@ -64,12 +64,10 @@ exports.check1day = (inputDate) => {
     const currentDate = new Date();
     const input = new Date(inputDate);
 
-    currentDate.setHours(0, 0, 0, 0);
-    input.setHours(0, 0, 0, 0);
+    const currentUTC = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate()));
+    const inputUTC = new Date(Date.UTC(input.getUTCFullYear(), input.getUTCMonth(), input.getUTCDate()));
 
-    const diffDays = Math.floor((currentDate - input) / (24 * 60 * 60 * 1000));
-
-    if (diffDays === 0) {
+    if (currentUTC.getTime() === inputUTC.getTime()) {
         console.log("The date is within 1 day (same day)!");
         return true;
     } else {
@@ -82,12 +80,12 @@ exports.check2days = (inputDate) => {
     const currentDate = new Date();
     const input = new Date(inputDate);
 
-    currentDate.setHours(0, 0, 0, 0);
-    input.setHours(0, 0, 0, 0);
+    const currentUTC = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate()));
+    const inputUTC = new Date(Date.UTC(input.getUTCFullYear(), input.getUTCMonth(), input.getUTCDate()));
 
-    const diffDays = Math.floor((currentDate - input) / (24 * 60 * 60 * 1000));
+    const diffDays = Math.floor((currentUTC - inputUTC) / (24 * 60 * 60 * 1000));
 
-    if (diffDays >= 0 && diffDays <= 1) {
+    if (diffDays >= 0 && diffDays <= 2) {
         return true;
     } else {
         return false;
@@ -98,10 +96,10 @@ exports.check1week = (inputDate) => {
     const currentDate = new Date();
     const input = new Date(inputDate);
 
-    currentDate.setHours(0, 0, 0, 0);
-    input.setHours(0, 0, 0, 0);
+    const currentUTC = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate()));
+    const inputUTC = new Date(Date.UTC(input.getUTCFullYear(), input.getUTCMonth(), input.getUTCDate()));
 
-    const diffDays = Math.floor((currentDate - input) / (24 * 60 * 60 * 1000));
+    const diffDays = Math.floor((currentUTC - inputUTC) / (24 * 60 * 60 * 1000));
 
     if (diffDays >= 0 && diffDays <= 6) {
         return true;

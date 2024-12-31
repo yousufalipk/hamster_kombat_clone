@@ -11,7 +11,7 @@ import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import linbottle from '../../assets/token/LineBottle.svg'
 import closebutton from "../../assets/token/closebutton.svg"
 
-import popupLine from "../../assets/token/popupLine.svg";
+import popupLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 import PopupVerticalLine from '../../assets/optimizedImages/popup/verticalLine.webp';
 
 import Twitter from '../../assets/token/twitter.svg';
@@ -26,10 +26,8 @@ import UpgradeSvg from '../UpgradeSvg/UpgradeSvg';
 import PopupDivider from '../PopupDividerSvg/PopupDividerSvg';
 import VerticalDividerSvg from "../VerticalDividerSvg/VerticalDividerSvg";
 
-import SpaceTime from '../../assets/space-time.svg';
-
 const Token = () => {
-	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance } = useUser();
+	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance, formatCpm } = useUser();
 
 	const [isModalOpen, setModalOpen] = useState(false);
 	const [processing, setProcessing] = useState(true);
@@ -225,12 +223,12 @@ const Token = () => {
 											animation: `${popupClosing ? "closePopup" : "openPopup"
 												} 0.5s ease-in-out forwards`,
 										}}
-										className='fixed bottom-0 h-[53vh] w-screen'>
+										className='fixed bottom-0 h-[55vh] w-screen'>
 										<div className="absolute -inset-1 h-[53vh] bg-[#23a7ff] rounded-[35px]"></div>
 										<div className="absolute -inset-2 h-[53vh] bg-[#23a7ff] blur rounded-[50px]"></div>
 										<div
 											onClick={(e) => e.stopPropagation()}
-											className='w-screen bg-[#06060E] h-[53vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
+											className='w-screen bg-[#06060E] h-[55vh] fixed bottom-0 rounded-t-3xl p-5 text-white'>
 											<div className="absolute top-3 right-5 z-20"
 												onClick={() => {
 													setPopupClosing(true);
@@ -271,7 +269,7 @@ const Token = () => {
 												{/* description */}
 												<div className='my-2'>
 													<p className='text-[14px] font-light text-center mt-1'>
-														You will get +{token?.userData?.nextLevelReward} coins of {token.project.name} coins against {token.userData.nextLevelCost} pandatop coins.
+														You will get +{formatNumberWithSuffix(token?.userData?.nextLevelReward, 0)} coins of {token.project.name} coins against {formatNumberWithSuffix(token.userData.nextLevelCost, 0)} pandatop coins.
 													</p>
 												</div>
 												<div className='text-xl text-customOrange text-center'>
@@ -295,7 +293,7 @@ const Token = () => {
 																alt="Little coin"
 																className='w-5'
 															/>
-															<p className="text-sm">+{token.userData.nextLevelCpm}</p>
+															<p className="text-sm">+{formatCpm(token.userData.nextLevelCpm)}</p>
 														</div>
 														<span className='text-xs font-thin'>CPM</span>
 													</div>
@@ -577,7 +575,7 @@ const Token = () => {
 														<div className="flex gap-1">
 															<img src={BigCoin} alt="Coin-Icon" width={20} />
 															<p className="text-white flex gap-2 justify-end items-end text-[17px]">
-																{token.userData.walletBalance.toLocaleString() || 0}
+																{formatNumberWithSuffix(token.userData.walletBalance, 2)}
 																<span className="text-[7px]">{token.project.name.match(/[A-Z]/g)?.join('')}</span>
 															</p>
 														</div>
@@ -760,7 +758,7 @@ const Token = () => {
 																<div className="flex text-md">{task.title}</div>
 																<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
 																	<img src={BigCoin} alt="" className="h-4 w-5" />
-																	<span className="text-sm">+{task.reward.toLocaleString()}</span>
+																	<span className="text-sm">+{task.reward}</span>
 																</div>
 															</div>
 															<div>

@@ -61,6 +61,7 @@ import leftbox from '../../assets/dailyreward/gift1.svg';
 import rightbox from '../../assets/dailyreward/gift2.svg';
 
 import CommingSoon from '../../assets/root/comingSoon.svg';
+import { use } from "react";
 
 const Home = () => {
 
@@ -100,7 +101,8 @@ const Home = () => {
 		setAvaliableCpm,
 		levelsData,
 		comboCards,
-		formatBalance
+		formatBalance,
+		formatNumberWithSuffix
 	} = useUser();
 
 	const [isRefilling, setIsRefilling] = useState(false);
@@ -108,8 +110,6 @@ const Home = () => {
 	const accumulatedEnergyRef = useRef(energy);
 
 	const refillIntervalRef = useRef(null);
-
-	const refillTimeoutRef = useRef(null);
 
 	const refillDuration = 800;
 
@@ -198,6 +198,10 @@ const Home = () => {
 		12: Panda13,
 		13: Panda14,
 	};
+
+	useEffect(() => {
+		console.log('Level', level);
+	}, [level]);
 
 	const energyUpgradeCost = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
 	const multitapUpgradeCost = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000];
@@ -499,20 +503,6 @@ const Home = () => {
 		*/
 	];
 
-	const formatCoins = (coinsPerMinute) => {
-		if (coinsPerMinute < 1e3) {
-			return coinsPerMinute.toString();
-		} else if (coinsPerMinute < 1e6) {
-			return (coinsPerMinute / 1e3).toFixed(1) + "k";
-		} else if (coinsPerMinute < 1e9) {
-			return (coinsPerMinute / 1e6).toFixed(1) + "M";
-		} else if (coinsPerMinute < 1e12) {
-			return (coinsPerMinute / 1e9).toFixed(1) + "B";
-		} else {
-			return (coinsPerMinute / 1e12).toFixed(1) + "T";
-		}
-	}
-
 	const handleUnlimitedTaps = async () => {
 		try {
 			setButtonLoading(true);
@@ -609,28 +599,6 @@ const Home = () => {
 			setButtonLoading(false);
 		}
 	}
-
-	const formatCpm = (value) => {
-		if (value === null || value === undefined || isNaN(value)) return '0';
-
-		const absValue = Math.abs(value);
-		let formattedValue = value;
-
-		if (absValue >= 1e12) {
-			formattedValue = `${(value / 1e12).toFixed(2)}T`;
-		} else if (absValue >= 1e9) {
-			formattedValue = `${(value / 1e9).toFixed(2)}B`;
-		} else if (absValue >= 1e6) {
-			formattedValue = `${(value / 1e6).toFixed(2)}M`;
-		} else if (absValue >= 1e3) {
-			formattedValue = `${(value / 1e3).toFixed(2)}K`;
-		} else {
-			formattedValue = value.toFixed(2);
-		}
-
-		return formattedValue;
-	};
-
 
 	return (
 		<>
@@ -820,7 +788,7 @@ const Home = () => {
 												<img src={SmallCoin} alt="Coin-Icon" />
 											</div>
 											<div className="text-[#FFF] text-[11.655px] font-medium">
-												<p>+{formatCpm(coinsPerMinute)}</p>
+												<p>+{formatNumberWithSuffix(coinsPerMinute)}</p>
 											</div>
 										</div>
 										<div className="flex justify-center items-center gap-1 pl-3">
@@ -898,7 +866,7 @@ const Home = () => {
 												</div>
 												<div className="absolute z-40">
 													<img
-														src={pandaMapping[level]}
+														src={pandaMapping[level - 1]}
 														alt="Panda-Icon"
 														className={`rounded-full transition-transform ease-out duration-150 ${isTapped ? "scale-110" : ""
 															}`}
@@ -1748,7 +1716,7 @@ const Home = () => {
 																	width={25}
 																	height={25}
 																/>
-																+{formatBalance(avaliableCpm)}
+																+{formatNumberWithSuffix(avaliableCpm)}
 															</p>
 														</div>
 													</div>
