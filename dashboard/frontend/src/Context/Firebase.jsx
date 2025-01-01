@@ -42,6 +42,8 @@ export const FirebaseProvider = (props) => {
 
     const [dailyTasks, setDailyTasks] = useState([]);
 
+    const [patnerTasks, setPatnerTasks] = useState([]);
+
     const refreshAuth = async () => {
         try {
             const refreshToken = localStorage.getItem('refreshToken');
@@ -843,6 +845,18 @@ export const FirebaseProvider = (props) => {
         }
     }
 
+    const fetchPatnerTasks = async () => {
+        try {
+            const res = await axios.get(`${apiUrl}/task/fetch-patner`);
+            if (res.data.status === 'success') {
+                setPatnerTasks(res.data.patnerTasks);
+            }
+        } catch (error) {
+            console.log("Error fetching daily tasks");
+            return ({ success: false, mess: "Internal Server Error!" });
+        }
+    }
+
     const addTask = async (taskType, iconType, title, link, reward) => {
         try {
             const res = await axios.post(`${apiUrl}/task/create`, {
@@ -856,7 +870,11 @@ export const FirebaseProvider = (props) => {
                 if (taskType === 'social') {
                     await fetchSocialTasks();
                 } else {
-                    await fetchDailyTasks();
+                    if (taskType === 'daily') {
+                        await fetchDailyTasks();
+                    } else {
+                        await fetchPatnerTasks();
+                    }
                 }
                 return ({ success: true, mess: res.data.message });
             } else {
@@ -886,8 +904,15 @@ export const FirebaseProvider = (props) => {
                 newTasksReward: reward
             });
             if (res.data.status === 'success') {
-                await fetchSocialTasks();
-                await fetchDailyTasks();
+                if (taskType === 'social') {
+                    await fetchSocialTasks();
+                } else {
+                    if (taskType === 'daily') {
+                        await fetchDailyTasks();
+                    } else {
+                        await fetchPatnerTasks();
+                    }
+                }
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -980,11 +1005,13 @@ export const FirebaseProvider = (props) => {
 
             fetchSocialTasks,
             fetchDailyTasks,
+            fetchPatnerTasks,
             addTask,
             updateTask,
             removeTask,
             socialTasks,
-            dailyTasks
+            dailyTasks,
+            patnerTasks
 
         }}>
             {props.children}

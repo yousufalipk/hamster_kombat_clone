@@ -12,13 +12,14 @@ const ManageTasks = () => {
     const {
         fetchSocialTasks,
         fetchDailyTasks,
+        fetchPatnerTasks,
         addTask,
         updateTask,
         removeTask,
         socialTasks,
-        dailyTasks
+        dailyTasks,
+        patnerTasks
     } = useFirebase();
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (socialTasks.length === 0) {
@@ -27,12 +28,14 @@ const ManageTasks = () => {
         if (dailyTasks.length === 0) {
             fetchDailyTasks();
         }
+        if (patnerTasks.length === 0) {
+            fetchPatnerTasks();
+        }
     }, [])
 
     const [addTaskPopup, setAddTaskPopup] = useState(false);
     const [updateTaskPopup, setUpdateTaskPopup] = useState(false);
     const [updateTaskId, setUpdateTaskId] = useState(null);
-    const [prevUpdateData, setPrevUpdateData] = useState(null);
 
     const formik = useFormik({
         initialValues: {
@@ -113,9 +116,9 @@ const ManageTasks = () => {
                     </div>
                 </div>
                 <hr className="my-5 border-gray-300 w-full" />
-                <div className="mx-2 my-10">
+                <div className="mx-2 my-10 overflow-scroll">
                     {socialTasks && (
-                        <div className='h-[40vh] overflow-scroll'>
+                        <div>
                             <h1 className='font-semibold'>Social Tasks</h1>
                             <table className="min-w-full bg-transparent border-collapse border border-gray-200 my-5">
                                 <thead>
@@ -163,8 +166,8 @@ const ManageTasks = () => {
                         </div>
                     )}
                     {dailyTasks && (
-                        <div className='h-[40vh] overflow-scroll'>
-                            <h1 className='font-semibold'>Social Tasks</h1>
+                        <div>
+                            <h1 className='font-semibold'>Daily Tasks</h1>
                             <table className="min-w-full bg-transparent border-collapse border border-gray-200 my-5">
                                 <thead>
                                     <tr>
@@ -181,6 +184,54 @@ const ManageTasks = () => {
                                 {dailyTasks && (
                                     <tbody>
                                         {dailyTasks.map((cls, i) => (
+                                            <tr key={cls._id}>
+                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{i + 1}</td>
+                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.taskType}</td>
+                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.iconType}</td>
+                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.title}</td>
+                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.link}</td>
+                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.reward}</td>
+                                                <td
+                                                    className="px-6 py-4 border-b border-gray-200 text-sm text-center"
+                                                    onClick={() => {
+                                                        setUpdateTaskId(cls);
+                                                        setUpdateTaskPopup(true);
+                                                    }}
+                                                >
+                                                    <FaRegEdit className="text-bluebtn w-5 h-5 hover:text-gray-500 mx-auto" />
+                                                </td>
+                                                <td
+                                                    className="px-6 py-4 border-b border-gray-200 text-sm text-center"
+                                                    onClick={() => handleDeleteTask(cls._id, cls.taskType)}
+                                                >
+                                                    <RiDeleteBin5Line className="text-bluebtn w-5 h-5 hover:text-gray-700 mx-auto" />
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                )}
+                            </table>
+                        </div>
+                    )}
+                    {patnerTasks && (
+                        <div>
+                            <h1 className='font-semibold'>Patner Tasks</h1>
+                            <table className="min-w-full bg-transparent border-collapse border border-gray-200 my-5">
+                                <thead>
+                                    <tr>
+                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">SR.No</th>
+                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Task Type</th>
+                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Icon Type</th>
+                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Title</th>
+                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Link</th>
+                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Reward</th>
+                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Edit</th>
+                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Delete</th>
+                                    </tr>
+                                </thead>
+                                {patnerTasks && (
+                                    <tbody>
+                                        {patnerTasks.map((cls, i) => (
                                             <tr key={cls._id}>
                                                 <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{i + 1}</td>
                                                 <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.taskType}</td>
@@ -250,6 +301,7 @@ const ManageTasks = () => {
                                 <option value='' disabled>Select Type</option>
                                 <option value='social'>Social</option>
                                 <option value='daily'>Daily</option>
+                                <option value='patner'>Patner</option>
                             </select>
                             {formik.errors.taskType && formik.touched.taskType && (
                                 <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.taskType}</p>

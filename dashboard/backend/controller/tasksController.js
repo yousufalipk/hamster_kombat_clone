@@ -54,6 +54,33 @@ exports.fetchDailyTasks = async (req, res) => {
     }
 };
 
+exports.fetchPatnerTasks = async (req, res) => {
+    try {
+        const tasks = await TasksModel.find({ taskType: 'patner' });
+
+        if (tasks.length === 0) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'No Patner Task Found!',
+                tasks: tasks
+            });
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Patner Tasks Found!',
+            patnerTasks: tasks
+        });
+
+    } catch (error) {
+        console.error("Error fetching social tasks:", error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        });
+    }
+};
+
 exports.createTask = async (req, res) => {
     try {
         const { taskType, iconType, title, link, reward } = req.body;

@@ -6,7 +6,8 @@ const {
     fetchDailyTasks,
     createTask,
     updateTask,
-    deleteTask
+    deleteTask,
+    fetchPatnerTasks
 } = require('../controller/tasksController');
 
 
@@ -15,6 +16,8 @@ const {
 router.route('/fetch-social').get(fetchSocialTasks);
 
 router.route('/fetch-daily').get(fetchDailyTasks);
+
+router.route('/fetch-patner').get(fetchPatnerTasks);
 
 router.route('/create').post(createTask);
 
