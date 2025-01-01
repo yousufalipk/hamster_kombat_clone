@@ -1411,7 +1411,7 @@ exports.upgradeUserKolLevel = async (req, res) => {
         await user.save();
 
         const userData = {
-            level: userKol.level + 1,
+            level: userKol?.level ? userKol.level + 1 : 1,
             nextLevelCost: kol.levels[customIndex + 1]?.cost,
             nextLevelCpm: kol.levels[customIndex + 1]?.cpm
         }
@@ -1419,12 +1419,18 @@ exports.upgradeUserKolLevel = async (req, res) => {
         const updatedKol = {
             ...kol.toObject(),
             userData: (
-                kol?.levels?.length &&
-                Array.isArray(kol.levels) &&
-                userKol?.level + 1 >= kol.levels.length
+                Array.isArray(kol?.levels) &&
+                (userKol?.level + 1) >= kol.levels.length
             )
-                ? null
-                : userData
+                ? {
+                    ...userData,
+                    level: kol.levels.length,
+                    nextLevelCost: 'MAX',
+                    nextLevelCpm: 'MAX'
+                }
+                : {
+                    ...userData,
+                }
         };
 
         return res.status(200).json({
@@ -1613,6 +1619,30 @@ exports.upgradeUserVcLevel = async (req, res) => {
 
         await user.save();
 
+
+        const userData = {
+            level: userVc?.level ? userVc.level + 1 : 1,
+            nextLevelCost: vc.levels[customIndex + 1]?.cost,
+            nextLevelCpm: vc.levels[customIndex + 1]?.cpm
+        }
+
+        const updatedVc = {
+            ...vc.toObject(),
+            userData: (
+                Array.isArray(vc?.levels) &&
+                (userVc?.level + 1) >= vc.levels.length
+            )
+                ? {
+                    ...userData,
+                    level: vc.levels.length,
+                    nextLevelCost: 'MAX',
+                    nextLevelCpm: 'MAX'
+                }
+                : {
+                    ...userData,
+                }
+        };
+
         return res.status(200).json({
             status: 'success',
             message: 'Vc level upgraded successfully!',
@@ -1620,7 +1650,8 @@ exports.upgradeUserVcLevel = async (req, res) => {
             cpm: user.coinsPerMinute.value,
             vcs: user.vcs,
             comboCards: user.comboCards,
-            playAnimation: playAnimation
+            playAnimation: playAnimation,
+            updatedVc: updatedVc
         });
     } catch (error) {
         console.error('Internal Server Error', error);
@@ -1798,6 +1829,30 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
 
         await user.save();
 
+        const userData = {
+            level: userPatner?.level ? userPatner.level + 1 : 1,
+            nextLevelCost: patner.levels[customIndex + 1]?.cost,
+            nextLevelCpm: patner.levels[customIndex + 1]?.cpm
+        }
+
+        const updatedPatner = {
+            ...patner.toObject(),
+            userData: (
+                Array.isArray(patner?.levels) &&
+                (userPatner?.level + 1) >= patner.levels.length
+            )
+                ? {
+                    ...userData,
+                    level: patner.levels.length,
+                    nextLevelCost: 'MAX',
+                    nextLevelCpm: 'MAX'
+                }
+                : {
+                    ...userData,
+                }
+        };
+
+
         return res.status(200).json({
             status: 'success',
             message: 'Patner level upgraded successfully!',
@@ -1805,7 +1860,8 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
             cpm: user.coinsPerMinute.value,
             patners: user.patners,
             comboCards: user.comboCards,
-            playAnimation: playAnimation
+            playAnimation: playAnimation,
+            updatedPatner: updatedPatner
         });
     } catch (error) {
         console.error('Internal Server Error', error);

@@ -19,7 +19,6 @@ const VCS = () => {
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedVc, setSelectedVc] = useState(null);
-	const [processing, setProcessing] = useState(null);
 
 	const [popupClosing, setPopupClosing] = useState(false);
 
@@ -52,7 +51,6 @@ const VCS = () => {
 	const handleVcUpgrade = async () => {
 		setButtonLoading(true);
 		try {
-			setProcessing(true);
 			const res = await upgradeVcLevel(selectedVc._id);
 			if (res.success) {
 				toast.success(res.mess);
@@ -163,7 +161,7 @@ const VCS = () => {
 											</div>
 
 											<div className='text-xl text-customOrange text-center'>
-												<p>Level {selectedVc?.userData?.level || 0}</p>
+												<p>Level {selectedVc?.userData?.level + 1 || 1}</p>
 											</div>
 
 											{/* Next Level Cpm */}
@@ -309,7 +307,7 @@ const VCS = () => {
 																<button
 																	className="text-xs font-thin"
 																	onClick={() => handleUpgrade(vc, vc?.userData?.nextLevelCost || vc.levels[0].cost)}
-																	disabled={processing}
+																	disabled={buttonLoading}
 																>
 																	Upgrade
 																</button>

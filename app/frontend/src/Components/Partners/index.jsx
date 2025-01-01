@@ -157,7 +157,7 @@ const Partners = () => {
 											</div>
 
 											<div className='text-xl text-customOrange text-center'>
-												<p>Level {selectedPatner?.userData?.level || 0}</p>
+												<p>Level {selectedPatner?.userData?.level + 1 || 1}</p>
 											</div>
 
 											{/* Next Level Cpm */}

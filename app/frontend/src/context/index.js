@@ -722,10 +722,18 @@ export const UserProvider = (props) => {
                 patnerId: patnerId
             });
             if (res.data.status === 'success') {
-                await fetchPatners();
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
+
+                const updatedPatner = res.data.updatedPatner;
+
+                setPatners((prevPatners) =>
+                    prevPatners.map((patner) =>
+                        patner._id === updatedPatner._id ? { ...patner, ...updatedPatner } : patner
+                    )
+                );
+
                 if (res.data.playAnimation) {
                     setPlayComboAnimation(res.data.playAnimation);
                     setTimeout(() => {
@@ -767,10 +775,20 @@ export const UserProvider = (props) => {
                 vcId: vcId
             });
             if (res.data.status === 'success') {
-                await fetchVcs();
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
+
+                // Updated Vc Data in kols array 
+
+                const updatedVc = res.data.updatedVc;
+
+                setVcs((prevVcs) =>
+                    prevVcs.map((vc) =>
+                        vc._id === updatedVc._id ? { ...vc, ...updatedVc } : vc
+                    )
+                );
+
                 if (res.data.playAnimation) {
                     setPlayComboAnimation(res.data.playAnimation);
                     setTimeout(() => {
