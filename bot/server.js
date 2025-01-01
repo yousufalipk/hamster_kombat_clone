@@ -2,8 +2,6 @@ const express = require('express');
 const { Telegraf } = require('telegraf');
 const { PORT, BOT_TOKEN, ANNOUNCEMENT_CHANNEL_URL, TELEGRAM_CHAT_URL, GAME_BOT_URL } = require('./Config/env');
 
-console.log('Bot Token ', BOT_TOKEN);
-
 const bot = new Telegraf(BOT_TOKEN);
 
 const app = express();
