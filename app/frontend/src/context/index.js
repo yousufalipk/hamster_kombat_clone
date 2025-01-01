@@ -157,10 +157,6 @@ export const UserProvider = (props) => {
         { id: 14, name: 'The Crypto', rangeFrom: 3000000000, rangeTo: 'max' },
     ];
 
-    useEffect(() => {
-        console.log('Kols', kols);
-    }, [kols])
-
     const formatNumberWithSuffix = (value, decimals = 2) => {
         if (value === null || value === undefined || isNaN(value)) return '0';
 
