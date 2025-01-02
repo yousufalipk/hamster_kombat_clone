@@ -1198,6 +1198,7 @@ exports.fetchUserTasks = async (req, res) => {
         const categorizedTasks = {
             daily: enhancedTasks.filter((task) => task.taskType === 'daily'),
             social: enhancedTasks.filter((task) => task.taskType === 'social'),
+            partner: enhancedTasks.filter((task) => task.taskType === 'partner'),
         };
 
         return res.status(200).json({

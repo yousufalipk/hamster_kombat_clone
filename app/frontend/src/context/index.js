@@ -132,6 +132,8 @@ export const UserProvider = (props) => {
 
     const [userDailyTasks, setUserDailyTasks] = useState([]);
 
+    const [userPatnerTask, setUserPatnerTask] = useState([]);
+
     const [inviteFriends, setInviteFriends] = useState([]);
 
     const [avaliableCpm, setAvaliableCpm] = useState(0);
@@ -843,6 +845,7 @@ export const UserProvider = (props) => {
             if (res.data.status === 'success') {
                 setUserSocialTasks(res.data.tasks.social);
                 setUserDailyTasks(res.data.tasks.daily);
+                setUserPatnerTask(res.data.tasks.partner);
                 return ({ success: true, data: res.data.tasks });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -1009,6 +1012,8 @@ export const UserProvider = (props) => {
             setUserSocialTasks,
             userDailyTasks,
             setUserDailyTasks,
+            setUserPatnerTask,
+            userPatnerTask,
 
             fetchInviteFriends,
             inviteFriends,

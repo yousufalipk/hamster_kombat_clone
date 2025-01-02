@@ -25,7 +25,7 @@ import CustomLoader from '../../Components/Loader/Loader';
 
 
 const BottleCap = () => {
-	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, setUserSocialTasks, userDailyTasks, setUserDailyTasks, balance, fetchInviteFriends, inviteFriends, claimInviteFriendTask, username } = useUser();
+	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, setUserSocialTasks, userDailyTasks, setUserDailyTasks, userPatnerTask, setUserPatnerTask, balance, inviteFriends, claimInviteFriendTask, username, formatNumberWithSuffix } = useUser();
 
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [taskPopUp, setTaskPopup] = useState(false);
@@ -97,6 +97,7 @@ const BottleCap = () => {
 				if (res2.success) {
 					setUserDailyTasks(res2.data.daily);
 					setUserSocialTasks(res2.data.social);
+					setUserPatnerTask(res2.data.partner);
 					const updatedDailyTask = res2.data.daily.find((t) => t._id === selectedTask._id);
 					const updatedSocialTask = res2.data.social.find((t) => t._id === selectedTask._id);
 					if (updatedDailyTask) {
@@ -446,7 +447,7 @@ const BottleCap = () => {
 									/>
 								</div>
 								<div className='text-[#FFF] text-[24px] font-medium'>
-									<p>{balance.toLocaleString()}</p>
+									<p>{formatNumberWithSuffix(balance, 2)}</p>
 								</div>
 							</div>
 							<div className='flex pt-3'>
@@ -470,7 +471,7 @@ const BottleCap = () => {
 							<p className="text-[#9595A9] text-lg ">Daily Task</p>
 						</div>
 						{/* Pandatop News Cards */}
-						{userDailyTasks.length > 0 ? (
+						{userDailyTasks?.length > 0 ? (
 							<div>
 								{userDailyTasks.map((task, index) => {
 									return (
@@ -534,10 +535,77 @@ const BottleCap = () => {
 						)}
 						{/* Heading 2 */}
 						<div>
+							<p className="text-[#9595A9] text-lg ">Partner Task</p>
+						</div>
+						{/* Pandatop News Cards */}
+						{userPatnerTask?.length > 0 ? (
+							<div>
+								{userPatnerTask.map((task, index) => {
+									return (
+										<div
+											onClick={() => {
+												setTaskPopup(true);
+												setSelectedTask(task);
+												if (task.claimedStatus === 'pending') {
+													const currentTime = new Date();
+													const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
+													const remaningMin = 30 - Math.floor(timeDifference);
+													if (remaningMin <= 0) {
+														setSelectedTask((prevTask) => ({
+															...prevTask,
+															claimedStatus: true,
+														}));
+													}
+													setTimeDifference(30 - Math.floor(timeDifference));
+												}
+											}}
+											key={index}
+											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+										>
+											<div className="flex gap-3 justify-center items-center py-1 w-full">
+												{/* Icon */}
+												<div className="flex flex-shrink-0 ">
+													<img src={iconMapping[task.iconType]} alt="icon" width={40} height={40} />
+												</div>
+												{/* Name */}
+												<div className="flex justify-between items-center w-full">
+													<div>
+														<div className="flex text-md">{task.title}</div>
+														<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
+															<img src={BigCoin} alt="" className="h-4 w-5" />
+															<span className="text-sm">+{task.reward.toLocaleString()}</span>
+														</div>
+													</div>
+													<div>
+														{task.claimedStatus === 'claimed' ? (
+															<>
+																<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+																	<circle cx="19.5" cy="17.5" r="12" stroke="#224E00" fill="#5dd15f" />
+																	<path d="M13.4802 17.8884C13.3544 18.0136 13.2546 18.1624 13.1865 18.3263C13.1184 18.4902 13.0834 18.6659 13.0834 18.8433C13.0834 19.0208 13.1184 19.1965 13.1865 19.3604C13.2546 19.5242 13.3544 19.673 13.4802 19.7982L16.344 22.6611C16.4692 22.7868 16.6179 22.8865 16.7817 22.9545C16.9455 23.0225 17.1211 23.0575 17.2984 23.0575C17.4758 23.0575 17.6514 23.0225 17.8152 22.9545C17.979 22.8865 18.1277 22.7868 18.2529 22.6611L24.9993 15.9156C25.1251 15.7905 25.2249 15.6416 25.293 15.4778C25.3611 15.3139 25.3961 15.1382 25.3961 14.9607C25.3961 14.7833 25.3611 14.6076 25.293 14.4437C25.2249 14.2798 25.1251 14.131 24.9993 14.0058C24.8741 13.8801 24.7253 13.7803 24.5615 13.7122C24.3976 13.6441 24.2219 13.609 24.0444 13.609C23.8669 13.609 23.6912 13.6441 23.5274 13.7122C23.3635 13.7803 23.2147 13.8801 23.0895 14.0058L17.2989 19.7973L15.39 17.8893C15.2648 17.7636 15.116 17.6638 14.9521 17.5957C14.7883 17.5276 14.6126 17.4925 14.4351 17.4925C14.2576 17.4925 14.0819 17.5276 13.9181 17.5957C13.7542 17.6638 13.6054 17.7627 13.4802 17.8884Z" fill="#ffffff" />
+																</svg>
+															</>
+														) : (
+															<>
+																<img src={arrow} alt="arrow" width={15} />
+															</>
+														)}
+													</div>
+												</div>
+											</div>
+										</div>
+									);
+								})}
+							</div>
+						) : (
+							<div className="h-[30vh] w-full flex justify-center items-center">
+							</div>
+						)}
+						{/* Heading 3 */}
+						<div>
 							<p className="text-[#9595A9] text-lg ">Social Media</p>
 						</div>
 						{/* Pandatop News Cards */}
-						{userSocialTasks.length > 0 ? (
+						{userSocialTasks?.length > 0 ? (
 							<div>
 								{userSocialTasks.map((task, index) => {
 									return (

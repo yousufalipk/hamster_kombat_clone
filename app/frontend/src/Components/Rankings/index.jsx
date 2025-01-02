@@ -25,7 +25,7 @@ import Coin from "../../assets/BigCoinIcon.svg";
 import ProfilePic from '../../assets/profile.png';
 
 const Rankings = () => {
-	const { rankLoader, setRankLoader, topUsers, fetchLeaderboardUsers, level, userId, levelsData, formatNumberWithSuffix } = useUser();
+	const { rankLoader, setRankLoader, topUsers, fetchLeaderboardUsers, level, userId, levelsData, formatNumberWithSuffix, formatBalance } = useUser();
 
 	const staticUser = process.env.REACT_APP_STATIC_USER;
 	const navigate = useNavigate();
@@ -213,7 +213,7 @@ const Rankings = () => {
 														<p>{currentPageUsers[1].firstName.slice(0, 7)}</p>
 														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 															<img src={Coin} alt="coin" width={15} />
-															{formatNumberWithSuffix(currentPageUsers[1].balance, 2)}
+															{formatNumberWithSuffix(currentPageUsers[1].allTimeBalance, 2)}
 														</div>
 													</>
 												)}
@@ -236,7 +236,7 @@ const Rankings = () => {
 														<p>{currentPageUsers[0].firstName.slice(0, 7)}</p>
 														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 															<img src={Coin} alt="coin" width={18} />
-															{formatNumberWithSuffix(currentPageUsers[0].balance, 2)}
+															{formatNumberWithSuffix(currentPageUsers[0].allTimeBalance, 2)}
 														</div>
 													</>
 												)}
@@ -256,7 +256,7 @@ const Rankings = () => {
 														<p>{currentPageUsers[2].firstName.slice(0, 7)}</p>
 														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 															<img src={Coin} alt="coin" width={18} />
-															{formatNumberWithSuffix(currentPageUsers[2].balance, 2)}
+															{formatNumberWithSuffix(currentPageUsers[2].allTimeBalance, 2)}
 														</div>
 													</>
 												)}
@@ -307,7 +307,7 @@ const Rankings = () => {
 																</h1>
 																<div className="flex items-center justify-start gap-1">
 																	<img src={Coin} alt="Coin" width={15} />
-																	<p>{formatNumberWithSuffix(user.balance, 2)}</p>
+																	<p>{formatBalance(user.allTimeBalance)}</p>
 																</div>
 															</div>
 														</div>
@@ -339,7 +339,7 @@ const Rankings = () => {
 														</h1>
 														<div className="flex items-center justify-start gap-1">
 															<img src={Coin} alt="Coin" width={15} />
-															<p>{formatNumberWithSuffix(user.balance, 2)}</p>
+															<p>{formatBalance(user.allTimeBalance)}</p>
 														</div>
 													</div>
 												</div>
