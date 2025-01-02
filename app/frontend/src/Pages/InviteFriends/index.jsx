@@ -18,7 +18,7 @@ const InviteFriends = () => {
 	};
 
 	const copyToClipboard = async () => {
-		const reflink = `https://t.me/pandatap_mini_bot/pandatap?startapp=${telegramId}`;
+		const reflink = `https://t.me/pandatapbot/startapp?startapp=${telegramId}`;
 
 		const textArea = document.createElement("textarea");
 		textArea.value = reflink;
@@ -219,7 +219,7 @@ const InviteFriends = () => {
 										/>
 									</div>
 									<Link
-										to={`https://t.me/share/url?url=t.me/pandatap_mini_bot/pandatap?startapp=${telegramId}&text=:tada: Welcome ${username} to PandaTap! :panda_face: Ready to see how high you can climb? Tap away and watch your fortunes grow! Step into the world of PandaTap and begin your journey from the ground up to the prestigious Founder level! Upgrade your cards and level up by tapping and completing various tasks within the app. And remember, adventures are best with friends. :handshake: Invite your friends: more friends — more profit! :money_with_wings:`}
+										to={`https://t.me/share/url?url=t.me/pandatapbot/startapp?startapp=${telegramId}&text=:tada: Welcome ${username} to PandaTap! :panda_face: Ready to see how high you can climb? Tap away and watch your fortunes grow! Step into the world of PandaTap and begin your journey from the ground up to the prestigious Founder level! Upgrade your cards and level up by tapping and completing various tasks within the app. And remember, adventures are best with friends. :handshake: Invite your friends: more friends — more profit! :money_with_wings:`}
 										className='text-md font-semibold'
 									>
 										Invite a Friend

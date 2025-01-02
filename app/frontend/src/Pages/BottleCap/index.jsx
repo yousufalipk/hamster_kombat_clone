@@ -385,7 +385,7 @@ const BottleCap = () => {
 												</div>
 												<div className="mt-5">
 													<Link
-														to={`https://t.me/share/url?url=t.me/pandatap_mini_bot/pandatap?startapp=${telegramId}&text=Hey  I just made ${balance} $MFI Points on Panda Tap To Earn Game ! The airdrop is definitely going to be huge ! Join via my referral link and we both can get a headstart.`}
+														to={`https://t.me/share/url?url=t.me/pandatapbot/startapp?startapp=${telegramId}&text=Hey  I just made ${balance} $MFI Points on Panda Tap To Earn Game ! The airdrop is definitely going to be huge ! Join via my referral link and we both can get a headstart.`}
 														className="bg-white py-2 rounded-md text-black px-6 font-medium"
 													>
 														Invite Friend
