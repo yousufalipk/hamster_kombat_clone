@@ -9,14 +9,20 @@ import RightArrowIcon from '../../assets/leaderboard/right.svg';
 
 import BackgroundImg from '../../assets/optimizedImages/Home/bg.svg';
 
-import SilverStage from '../../assets/leaderboard/stages/silver.svg';
-import GoldStage from '../../assets/leaderboard/stages/gold.svg';
-import DaimondStage from '../../assets/leaderboard/stages/daimond.svg';
-import PlatinumStage from '../../assets/leaderboard/stages/platinum.svg';
-import LegendaryStage from '../../assets/leaderboard/stages/legendary.svg';
-import MasterStage from '../../assets/leaderboard/stages/master.svg';
-import GrandMasterStage from '../../assets/leaderboard/stages/grandMaster.svg';
-import EpicStage from '../../assets/leaderboard/stages/epic.svg';
+import Stage1 from '../../assets/leaderboard/stages/stage1.svg';
+import Stage2 from '../../assets/leaderboard/stages/stage2.svg';
+import Stage3 from '../../assets/leaderboard/stages/stage3.svg';
+import Stage4 from '../../assets/leaderboard/stages/stage4.svg';
+import Stage5 from '../../assets/leaderboard/stages/stage5.svg';
+import Stage6 from '../../assets/leaderboard/stages/stage6.svg';
+import Stage7 from '../../assets/leaderboard/stages/stage7.svg';
+import Stage8 from '../../assets/leaderboard/stages/stage8.svg';
+import Stage9 from '../../assets/leaderboard/stages/stage9.svg';
+import Stage10 from '../../assets/leaderboard/stages/stage10.svg';
+import Stage11 from '../../assets/leaderboard/stages/stage11.svg';
+import Stage12 from '../../assets/leaderboard/stages/stage12.svg';
+import Stage13 from '../../assets/leaderboard/stages/stage13.svg';
+import Stage14 from '../../assets/leaderboard/stages/stage14.svg';
 
 import KingCrown from '../../assets/leaderboard/king.svg';
 import BadgeIcon from '../../assets/leaderboard/badge.svg';
@@ -51,20 +57,20 @@ const Rankings = () => {
 	}, [navigate]);
 
 	const stageImages = {
-		0: SilverStage,
-		1: GoldStage,
-		2: DaimondStage,
-		3: PlatinumStage,
-		4: LegendaryStage,
-		5: MasterStage,
-		6: GrandMasterStage,
-		7: EpicStage,
-		8: EpicStage,
-		9: EpicStage,
-		10: EpicStage,
-		11: EpicStage,
-		12: EpicStage,
-		13: EpicStage,
+		0: Stage1,
+		1: Stage2,
+		2: Stage3,
+		3: Stage4,
+		4: Stage5,
+		5: Stage6,
+		6: Stage7,
+		7: Stage8,
+		8: Stage9,
+		9: Stage10,
+		10: Stage11,
+		11: Stage12,
+		12: Stage13,
+		13: Stage14
 	};
 
 	useEffect(() => {
