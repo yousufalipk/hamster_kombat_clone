@@ -56,9 +56,9 @@ exports.fetchDailyTasks = async (req, res) => {
 
 exports.fetchPatnerTasks = async (req, res) => {
     try {
-        const tasks = await TasksModel.find({ taskType: 'patner' });
-
+        const tasks = await TasksModel.find({ taskType: 'partner' });
         if (tasks.length === 0) {
+            console.log('No taks')
             return res.status(200).json({
                 status: 'failed',
                 message: 'No Patner Task Found!',

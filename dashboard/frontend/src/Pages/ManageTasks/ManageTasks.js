@@ -301,7 +301,7 @@ const ManageTasks = () => {
                                 <option value='' disabled>Select Type</option>
                                 <option value='social'>Social</option>
                                 <option value='daily'>Daily</option>
-                                <option value='patner'>Patner</option>
+                                <option value='partner'>Partner</option>
                             </select>
                             {formik.errors.taskType && formik.touched.taskType && (
                                 <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.taskType}</p>
