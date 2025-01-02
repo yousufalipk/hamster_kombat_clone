@@ -493,7 +493,7 @@ const BottleCap = () => {
 												}
 											}}
 											key={index}
-											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus === 'claimed' ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
 										>
 											<div className="flex gap-3 justify-center items-center py-1 w-full">
 												{/* Icon */}
@@ -560,7 +560,7 @@ const BottleCap = () => {
 												}
 											}}
 											key={index}
-											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus === 'claimed' ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
 										>
 											<div className="flex gap-3 justify-center items-center py-1 w-full">
 												{/* Icon */}
@@ -627,7 +627,7 @@ const BottleCap = () => {
 												}
 											}}
 											key={index}
-											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus === 'claimed' ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
 										>
 											<div className="flex gap-3 justify-center items-center py-1 w-full">
 												{/* Icon */}
@@ -676,7 +676,7 @@ const BottleCap = () => {
 												setInviteFriendsPopup(true);
 											}}
 											key={index}
-											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimed ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimed === 'claimed' ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
 										>
 											<div className="flex gap-3 justify-center items-center py-1 w-full">
 												{/* Icon */}
@@ -692,7 +692,7 @@ const BottleCap = () => {
 															<span className="text-sm">+{task.reward.toLocaleString()}</span>
 														</div>
 													</div>
-													{task.claimed ? (
+													{task.claimed === 'claimed' ? (
 														<>
 															<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
 																<circle cx="19.5" cy="17.5" r="12" stroke="#224E00" fill="#5dd15f" />
