@@ -13,6 +13,7 @@ import AdminLayout from './Layouts/AdminLayout/AdminLayout';
 
 import ProtectedRoute from './Components/Protected/Protected';
 
+
 function App() {
   const { isAuth, loading, refreshAuth } = useFirebase();
 
