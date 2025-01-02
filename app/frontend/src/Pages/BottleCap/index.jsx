@@ -25,7 +25,7 @@ import CustomLoader from '../../Components/Loader/Loader';
 
 
 const BottleCap = () => {
-	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, setUserSocialTasks, userDailyTasks, setUserDailyTasks, userPatnerTask, setUserPatnerTask, balance, inviteFriends, claimInviteFriendTask, username, formatNumberWithSuffix } = useUser();
+	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, setUserSocialTasks, userDailyTasks, setUserDailyTasks, userPatnerTask, setUserPatnerTask, balance, inviteFriends, claimInviteFriendTask, username, formatNumberWithSuffix, formatBalance } = useUser();
 
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [taskPopUp, setTaskPopup] = useState(false);
@@ -451,7 +451,7 @@ const BottleCap = () => {
 									/>
 								</div>
 								<div className='text-[#FFF] text-[24px] font-medium'>
-									<p>{formatNumberWithSuffix(balance, 2)}</p>
+									<p>{formatBalance(balance)}</p>
 								</div>
 							</div>
 							<div className='flex pt-3'>
@@ -497,7 +497,7 @@ const BottleCap = () => {
 												}
 											}}
 											key={index}
-											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus === 'claimed' ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
 										>
 											<div className="flex gap-3 justify-center items-center py-1 w-full">
 												{/* Icon */}
@@ -564,7 +564,7 @@ const BottleCap = () => {
 												}
 											}}
 											key={index}
-											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus === 'claimed' ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
 										>
 											<div className="flex gap-3 justify-center items-center py-1 w-full">
 												{/* Icon */}
@@ -631,7 +631,7 @@ const BottleCap = () => {
 												}
 											}}
 											key={index}
-											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus === 'claimed' ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
 										>
 											<div className="flex gap-3 justify-center items-center py-1 w-full">
 												{/* Icon */}
@@ -680,7 +680,7 @@ const BottleCap = () => {
 												setInviteFriendsPopup(true);
 											}}
 											key={index}
-											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimed === 'claimed' ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimed ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
 										>
 											<div className="flex gap-3 justify-center items-center py-1 w-full">
 												{/* Icon */}

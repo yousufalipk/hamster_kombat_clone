@@ -693,7 +693,7 @@ const Token = () => {
 														}
 													}}
 													key={index}
-													className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus === 'claimed' ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+													className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
 												>
 													<div className="flex gap-3 justify-center items-center py-1 w-full">
 														{/* Icon */}
@@ -757,7 +757,7 @@ const Token = () => {
 														}
 													}}
 													key={index}
-													className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus === 'claimed' ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+													className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
 												>
 													<div className="flex gap-3 justify-center items-center py-1 w-full">
 														{/* Icon */}
