@@ -163,124 +163,128 @@ const Levels = () => {
                     </div>
                 </div>
             </div>
-            <div className="w-[90%] h-[80vh] absolute z-10 top-20 pb-10 overflow-y-scroll text-white">
-                {levelsData.map((lev, index) => {
-                    return (
-                        <>
-                            {/* Completed Level */}
-                            {index + 1 < level && (
-                                <div
-                                    key={index}
-                                    className="relative w-full h-[8vh] mt-3 p-2 rounded-xl bg-[##2b2c3f] flex justify-start items-center"
-                                    style={{
-                                        border: "2px solid transparent",
-                                        borderImage: "linear-gradient(to right, black 10%, #A9A9A9 50%, black 100%)",
-                                        borderImageSlice: 1,
-                                        boxSizing: "border-box",
-                                        padding: "6px",
-                                    }}
-                                >
-                                    <img src={LevelUp} alt="levelup" className="absolute z-10 -top-1 -right-1" />
-                                    <div className="relative w-[20%] h-full">
-                                        <img src={stickerMapping[index]} alt="sticker" width={40} className="absolute -top-1 left-3" />
-                                    </div>
-                                    <div className="w-full h-full flex flex-col justify-center items-center gap-1">
-                                        <div className="w-full h-1/2 flex justify-center items-center gap-1">
-                                            <h1 className="text-white font-bold">{lev.name}</h1>
-                                            <img src={pandaMapping[index]} alt="panda" width={18} />
-                                        </div>
-                                        <div
-                                            className="relative z-0 w-[85%] h-full"
-                                            style={{
-                                                background: "radial-gradient(circle, #0575B7, #023451)"
-                                            }}
-                                        >
-                                            <div className="w-full h-full absolute top-0 z-10 flex justify-between items-center p-2 text-[12px]">
-                                                <p>LEVEL {index + 1}</p>
-                                                <p className="flex justify-end items-center gap-1">
-                                                    <img src={SmallCoin} alt="smallcoin" width={15} />
-                                                    {formatNumber(levelsData[index].rangeFrom)}-
-                                                    {levelsData[index].rangeTo !== "max" ? formatNumber(levelsData[index].rangeTo) : "MAX"}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div >
-                            )}
 
-                            {/* Current Level */}
-                            {index + 1 === level && (
-                                <div
-                                    key={index}
-                                    className="relative w-full h-[8vh] mt-3 p-2 rounded-xl flex justify-start items-center shadow-[#0199FF] shadow-md bg-[#999da6]"
-                                    style={{
-                                        border: "2px solid transparent",
-                                        borderImage: "linear-gradient(to right, black 10%, #A9A9A9 50%, black 100%)",
-                                        borderImageSlice: 1,
-                                        boxSizing: "border-box",
-                                        padding: "6px",
-                                    }}
-                                >
-                                    <div className="relative w-[20%] h-full">
-                                        <img src={stickerMapping[index]} alt="sticker" width={40} className="absolute -top-1 left-3" />
-                                    </div>
-                                    <div className="w-full h-full flex flex-col justify-center items-center gap-1">
-                                        <div className="w-full h-1/2 flex justify-center items-center gap-1">
-                                            <h1 className="font-bold text-black">{lev.name}</h1>
-                                            <img src={pandaMapping[index]} alt="panda" width={18} />
+            <div className='relative w-full h-[82vh] z-0 flex justify-center items-center mt-5'>
+                <img src={LevelsBackground} alt="leaderboard_bg" className='absolute top-0 w-full h-full object-fit object-center z-20' />
+                <div className="w-[90%] h-[80vh] absolute z-10 py-20 overflow-y-scroll text-white">
+                    {levelsData.map((lev, index) => {
+                        return (
+                            <>
+                                {/* Completed Level */}
+                                {index + 1 < level && (
+                                    <div
+                                        key={index}
+                                        className="relative w-full h-[8vh] mt-3 p-2 rounded-xl bg-[##2b2c3f] flex justify-start items-center"
+                                        style={{
+                                            border: "2px solid transparent",
+                                            borderImage: "linear-gradient(to right, black 10%, #A9A9A9 50%, black 100%)",
+                                            borderImageSlice: 1,
+                                            boxSizing: "border-box",
+                                            padding: "6px",
+                                        }}
+                                    >
+                                        <img src={LevelUp} alt="levelup" className="absolute z-10 -top-1 -right-1" />
+                                        <div className="relative w-[20%] h-full">
+                                            <img src={stickerMapping[index]} alt="sticker" width={40} className="absolute -top-1 left-3" />
                                         </div>
-                                        <div className="relative z-0 w-[85%] h-full bg-black">
-                                            <div className="w-full h-full absolute top-0 z-10 flex justify-between items-center p-2 text-[12px]">
-                                                <p>LEVEL {index + 1}</p>
-                                                <p className="flex justify-end items-center gap-1">
-                                                    <img src={SmallCoin} alt="smallcoin" width={15} />
-                                                    {formatNumber(levelsData[index].rangeFrom)}-
-                                                    {levelsData[index].rangeTo !== "max" ? formatNumber(levelsData[index].rangeTo) : "MAX"}
-                                                </p>
+                                        <div className="w-full h-full flex flex-col justify-center items-center gap-1">
+                                            <div className="w-full h-1/2 flex justify-center items-center gap-1">
+                                                <h1 className="text-white font-bold">{lev.name}</h1>
+                                                <img src={pandaMapping[index]} alt="panda" width={18} />
+                                            </div>
+                                            <div
+                                                className="relative z-0 w-[85%] h-full"
+                                                style={{
+                                                    background: "radial-gradient(circle, #0575B7, #023451)"
+                                                }}
+                                            >
+                                                <div className="w-full h-full absolute top-0 z-10 flex justify-between items-center p-2 text-[12px]">
+                                                    <p>LEVEL {index + 1}</p>
+                                                    <p className="flex justify-end items-center gap-1">
+                                                        <img src={SmallCoin} alt="smallcoin" width={15} />
+                                                        {formatNumber(levelsData[index].rangeFrom)}-
+                                                        {levelsData[index].rangeTo !== "max" ? formatNumber(levelsData[index].rangeTo) : "MAX"}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            )}
+                                    </div >
+                                )}
 
-                            {/* Next Level */}
-                            {index + 1 > level && (
-                                <div
-                                    key={index}
-                                    className="relative w-full h-[8vh] mt-3 p-2 rounded-xl bg-[#484a59] flex justify-start items-center"
-                                    style={{
-                                        border: "2px solid transparent",
-                                        borderImage: "linear-gradient(to right, black 10%, #A9A9A9 50%, black 100%)",
-                                        borderImageSlice: 1,
-                                        boxSizing: "border-box",
-                                        padding: "6px",
-                                    }}
-                                >
-                                    <img src={Lock} alt="lock" className="absolute right-4 top-2 z-10" />
-                                    <div className="relative w-[20%] h-full">
-                                        <img src={stickerMapping[index]} alt="sticker" width={40} className="absolute -top-1 left-3" />
-                                    </div>
-                                    <div className="w-full h-full flex flex-col justify-center items-center gap-1">
-                                        <div className="w-full h-1/2 flex justify-center items-center gap-1">
-                                            <h1 className="font-bold text-white">{lev.name}</h1>
-                                            <img src={pandaMapping[index]} alt="panda" width={18} />
+                                {/* Current Level */}
+                                {index + 1 === level && (
+                                    <div
+                                        key={index}
+                                        className="relative w-full h-[8vh] mt-3 p-2 rounded-xl flex justify-start items-center shadow-[#0199FF] shadow-md bg-[#999da6]"
+                                        style={{
+                                            border: "2px solid transparent",
+                                            borderImage: "linear-gradient(to right, black 10%, #A9A9A9 50%, black 100%)",
+                                            borderImageSlice: 1,
+                                            boxSizing: "border-box",
+                                            padding: "6px",
+                                        }}
+                                    >
+                                        <div className="relative w-[20%] h-full">
+                                            <img src={stickerMapping[index]} alt="sticker" width={40} className="absolute -top-1 left-3" />
                                         </div>
-                                        <div className="relative z-0 w-[85%] h-full bg-black">
-                                            <div className="w-full h-full absolute top-0 z-10 flex justify-between items-center p-2 text-[12px]">
-                                                <p>LEVEL {index + 1}</p>
-                                                <p className="flex justify-end items-center gap-1">
-                                                    <img src={SmallCoin} alt="smallcoin" width={15} />
-                                                    {formatNumber(levelsData[index].rangeFrom)}-
-                                                    {levelsData[index].rangeTo !== "max" ? formatNumber(levelsData[index].rangeTo) : "MAX"}
-                                                </p>
+                                        <div className="w-full h-full flex flex-col justify-center items-center gap-1">
+                                            <div className="w-full h-1/2 flex justify-center items-center gap-1">
+                                                <h1 className="font-bold text-black">{lev.name}</h1>
+                                                <img src={pandaMapping[index]} alt="panda" width={18} />
+                                            </div>
+                                            <div className="relative z-0 w-[85%] h-full bg-black">
+                                                <div className="w-full h-full absolute top-0 z-10 flex justify-between items-center p-2 text-[12px]">
+                                                    <p>LEVEL {index + 1}</p>
+                                                    <p className="flex justify-end items-center gap-1">
+                                                        <img src={SmallCoin} alt="smallcoin" width={15} />
+                                                        {formatNumber(levelsData[index].rangeFrom)}-
+                                                        {levelsData[index].rangeTo !== "max" ? formatNumber(levelsData[index].rangeTo) : "MAX"}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            )}
-                        </>
-                    );
-                })}
+                                )}
+
+                                {/* Next Level */}
+                                {index + 1 > level && (
+                                    <div
+                                        key={index}
+                                        className="relative w-full h-[8vh] mt-3 p-2 rounded-xl bg-[#484a59] flex justify-start items-center"
+                                        style={{
+                                            border: "2px solid transparent",
+                                            borderImage: "linear-gradient(to right, black 10%, #A9A9A9 50%, black 100%)",
+                                            borderImageSlice: 1,
+                                            boxSizing: "border-box",
+                                            padding: "6px",
+                                        }}
+                                    >
+                                        <img src={Lock} alt="lock" className="absolute right-4 top-2 z-10" />
+                                        <div className="relative w-[20%] h-full">
+                                            <img src={stickerMapping[index]} alt="sticker" width={40} className="absolute -top-1 left-3" />
+                                        </div>
+                                        <div className="w-full h-full flex flex-col justify-center items-center gap-1">
+                                            <div className="w-full h-1/2 flex justify-center items-center gap-1">
+                                                <h1 className="font-bold text-white">{lev.name}</h1>
+                                                <img src={pandaMapping[index]} alt="panda" width={18} />
+                                            </div>
+                                            <div className="relative z-0 w-[85%] h-full bg-black">
+                                                <div className="w-full h-full absolute top-0 z-10 flex justify-between items-center p-2 text-[12px]">
+                                                    <p>LEVEL {index + 1}</p>
+                                                    <p className="flex justify-end items-center gap-1">
+                                                        <img src={SmallCoin} alt="smallcoin" width={15} />
+                                                        {formatNumber(levelsData[index].rangeFrom)}-
+                                                        {levelsData[index].rangeTo !== "max" ? formatNumber(levelsData[index].rangeTo) : "MAX"}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </>
+                        );
+                    })}
+                </div>
             </div>
         </div >
     )

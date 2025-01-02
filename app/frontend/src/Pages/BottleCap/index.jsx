@@ -79,12 +79,16 @@ const BottleCap = () => {
 		try {
 			setButtonLoading(true);
 			if (!selectedTask?.claimedStatus) {
-				console.log('setting status to true!');
 				setSelectedTask((prevTask) => ({
 					...prevTask,
 					claimedStatus: true,
 				}));
-				window.open(selectedTask.link, '_blank');
+				if (getFirstWord(selectedTask.title) === 'quote') {
+					const newLink = generateTwitterLink(selectedTask.link, username);
+					window.open(newLink, '_blank');
+				} else {
+					window.open(selectedTask.link, '_blank');
+				}
 				return;
 			}
 			const res = await claimUserTask(selectedTask._id);
