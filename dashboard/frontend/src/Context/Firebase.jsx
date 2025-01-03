@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { Await, useNavigate } from "react-router-dom";
 
 const FirebaseContext = createContext(null);
 
@@ -822,8 +822,8 @@ export const FirebaseProvider = (props) => {
     const fetchSocialTasks = async () => {
         try {
             const res = await axios.get(`${apiUrl}/task/fetch-social`);
+            console.log("social Takss", res.data);
             if (res.data.status === 'success') {
-                console.log("social Takss", res.data.socialTasks);
                 setSocialTasks(res.data.socialTasks);
             }
         } catch (error) {
@@ -857,28 +857,55 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    const addTask = async (taskType, iconType, title, link, reward) => {
+    const addTask = async (taskType, iconType, title, link, reward, priority) => {
+        console.log('Priority', priority);
         try {
-            const res = await axios.post(`${apiUrl}/task/create`, {
-                taskType: taskType,
-                iconType: iconType,
-                title: title,
-                link: link,
-                reward: reward
-            });
-            if (res.data.status === 'success') {
-                if (taskType === 'social') {
+            let res;
+            if (taskType === 'social') {
+                res = await axios.post(`${apiUrl}/task/create-social`, {
+                    taskType: taskType,
+                    iconType: iconType,
+                    title: title,
+                    link: link,
+                    reward: reward,
+                    priority: priority
+                });
+                if (res.data.status === 'success') {
                     await fetchSocialTasks();
+                    return ({ success: true, mess: res.data.message });
                 } else {
-                    if (taskType === 'daily') {
-                        await fetchDailyTasks();
-                    } else {
-                        await fetchPatnerTasks();
-                    }
+                    return ({ success: false, mess: res.data.message });
                 }
-                return ({ success: true, mess: res.data.message });
-            } else {
-                return ({ success: false, mess: res.data.message });
+            } else if (taskType === 'daily') {
+                res = await axios.post(`${apiUrl}/task/create-daily`, {
+                    taskType: taskType,
+                    iconType: iconType,
+                    title: title,
+                    link: link,
+                    reward: reward,
+                    priority: priority
+                });
+                if (res.data.status === 'success') {
+                    await fetchDailyTasks();
+                    return ({ success: true, mess: res.data.message });
+                } else {
+                    return ({ success: false, mess: res.data.message });
+                }
+            } else if (taskType === 'partner') {
+                res = await axios.post(`${apiUrl}/task/create-partner`, {
+                    taskType: taskType,
+                    iconType: iconType,
+                    title: title,
+                    link: link,
+                    reward: reward,
+                    priority: priority
+                });
+                if (res.data.status === 'success') {
+                    await fetchPatnerTasks();
+                    return ({ success: true, mess: res.data.message });
+                } else {
+                    return ({ success: false, mess: res.data.message });
+                }
             }
         } catch (error) {
             console.log("Internal Server Error", error);
@@ -886,36 +913,62 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    const updateTask = async (task, taskType, iconType, title, link, reward) => {
+    const updateTask = async (task, taskType, title, link, reward, priority) => {
         try {
-            if (task.taskType != taskType) {
-                if (task.taskType === 'social') {
-                    setSocialTasks(prevTasks => prevTasks.filter(t => t._id !== task._id));
+            if (taskType === 'social') {
+                const res = await axios.post(`${apiUrl}/task/update-social`, {
+                    taskId: task._id,
+                    newTaskTitle: title,
+                    newTaskLink: link,
+                    newTasksReward: reward,
+                    newPriority: priority
+                });
+                if (res.data.status === 'success') {
+                    setSocialTasks((prevTasks) =>
+                        prevTasks.map((task) =>
+                            task._id === res.data.task._id ? res.data.task : task
+                        )
+                    );
+                    return ({ success: true, mess: res.data.message });
                 } else {
-                    setDailyTasks(prevTasks => prevTasks.filter(t => t._id !== task._id));
+                    return ({ success: false, mess: res.data.message });
                 }
-            }
-            const res = await axios.post(`${apiUrl}/task/update`, {
-                taskId: task._id,
-                newTaskType: taskType,
-                newTaskIconType: iconType,
-                newTaskTitle: title,
-                newTaskLink: link,
-                newTasksReward: reward
-            });
-            if (res.data.status === 'success') {
-                if (taskType === 'social') {
-                    await fetchSocialTasks();
+            } else if (taskType === 'daily') {
+                const res = await axios.post(`${apiUrl}/task/update-daily`, {
+                    taskId: task._id,
+                    newTaskTitle: title,
+                    newTaskLink: link,
+                    newTasksReward: reward,
+                    newPriority: priority
+                });
+                if (res.data.status === 'success') {
+                    setDailyTasks((prevTasks) =>
+                        prevTasks.map((task) =>
+                            task._id === res.data.task._id ? res.data.task : task
+                        )
+                    );
+                    return ({ success: true, mess: res.data.message });
                 } else {
-                    if (taskType === 'daily') {
-                        await fetchDailyTasks();
-                    } else {
-                        await fetchPatnerTasks();
-                    }
+                    return ({ success: false, mess: res.data.message });
                 }
-                return ({ success: true, mess: res.data.message });
-            } else {
-                return ({ success: false, mess: res.data.message });
+            } else if (taskType === 'partner') {
+                const res = await axios.post(`${apiUrl}/task/update-partner`, {
+                    taskId: task._id,
+                    newTaskTitle: title,
+                    newTaskLink: link,
+                    newTasksReward: reward,
+                    newPriority: priority
+                });
+                if (res.data.status === 'success') {
+                    setPatnerTasks((prevTasks) =>
+                        prevTasks.map((task) =>
+                            task._id === res.data.task._id ? res.data.task : task
+                        )
+                    );
+                    return ({ success: true, mess: res.data.message });
+                } else {
+                    return ({ success: false, mess: res.data.message });
+                }
             }
         } catch (error) {
             console.log("Internal Server Error", error);
@@ -923,20 +976,20 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    const removeTask = async (taskId, iconType) => {
-        console.log("Deleting Tasks", taskId, iconType);
+    const removeTask = async (taskId, taskType) => {
         try {
             const res = await axios.delete(`${apiUrl}/task/remove`, {
                 data: {
                     taskId: taskId,
                 }
             });
-            console.log("res", res.data);
             if (res.data.status === 'success') {
-                if (iconType === 'social') {
+                if (taskType === 'social') {
                     await fetchSocialTasks();
-                } else {
+                } else if (taskType === 'daily') {
                     await fetchDailyTasks();
+                } else if (taskType === 'partner') {
+                    await fetchPatnerTasks();
                 }
                 return ({ success: true, mess: res.data.message });
             } else {
@@ -944,6 +997,43 @@ export const FirebaseProvider = (props) => {
             }
         } catch (error) {
             console.log("Internal Server Error!", error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
+    const toggleTaskStatus = async (taskId, taskType) => {
+        try {
+            const res = await axios.post(`${apiUrl}/task/toggle-task-status`, {
+                taskId: taskId,
+                taskType: taskType
+            });
+            let updatedStatus = res.data.updatedStatus;
+            if (res.data.status === 'success') {
+                if (taskType === 'social') {
+                    setSocialTasks((prevTasks) =>
+                        prevTasks.map((task) =>
+                            task._id === taskId ? { ...task, status: updatedStatus } : task
+                        )
+                    );
+                } else if (taskType === 'daily') {
+                    setDailyTasks((prevTasks) =>
+                        prevTasks.map((task) =>
+                            task._id === taskId ? { ...task, status: updatedStatus } : task
+                        )
+                    );
+                } else if (taskType === 'partner') {
+                    setPatnerTasks((prevTasks) =>
+                        prevTasks.map((task) =>
+                            task._id === taskId ? { ...task, status: updatedStatus } : task
+                        )
+                    );
+                }
+                return ({ success: true, mess: 'Task status updated successfully!' });
+            } else {
+                return ({ success: false, mess: 'Error updating task status!' });
+            }
+        } catch (error) {
+            console.log('Internal Server Errro!', error);
             return ({ success: false, mess: 'Internal Server Error!' });
         }
     }
@@ -1009,6 +1099,7 @@ export const FirebaseProvider = (props) => {
             addTask,
             updateTask,
             removeTask,
+            toggleTaskStatus,
             socialTasks,
             dailyTasks,
             patnerTasks
