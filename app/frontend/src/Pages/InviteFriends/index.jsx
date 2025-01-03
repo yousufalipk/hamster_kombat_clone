@@ -219,7 +219,7 @@ const InviteFriends = () => {
 										/>
 									</div>
 									<Link
-										to={`https://t.me/share/url?url=t.me/pandatapbot/startapp?startapp=${telegramId}&text=:tada: Welcome ${username} to PandaTap! :panda_face: Ready to see how high you can climb? Tap away and watch your fortunes grow! Step into the world of PandaTap and begin your journey from the ground up to the prestigious Founder level! Upgrade your cards and level up by tapping and completing various tasks within the app. And remember, adventures are best with friends. :handshake: Invite your friends: more friends — more profit! :money_with_wings:`}
+										to={`https://t.me/share/url?url=t.me/pandatapbot/startapp?startapp=${telegramId}&text=%F0%9F%8E%89%20Welcome%20${username}%20to%20PandaTap!%20%F0%9F%90%BC%20Ready%20to%20see%20how%20high%20you%20can%20climb%3F%20Tap%20away%20and%20watch%20your%20fortunes%20grow!%20Step%20into%20the%20world%20of%20PandaTap%20and%20begin%20your%20journey%20from%20the%20ground%20up%20to%20the%20prestigious%20Founder%20level!%20Upgrade%20your%20cards%20and%20level%20up%20by%20tapping%20and%20completing%20various%20tasks%20within%20the%20app.%20And%20remember%2C%20adventures%20are%20best%20with%20friends.%20%F0%9F%99%8C%20Invite%20your%20friends%3A%20more%20friends%20%E2%80%94%20more%20profit!%20%F0%9F%92%B8`}
 										className='text-md font-semibold'
 									>
 										Invite a Friend

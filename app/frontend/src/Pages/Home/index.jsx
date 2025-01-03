@@ -101,7 +101,11 @@ const Home = () => {
 		levelsData,
 		comboCards,
 		formatBalance,
-		formatNumberWithSuffix
+		formatNumberWithSuffix,
+		energyUpgradeCost,
+		energyLimits,
+		multitapUpgradeCost,
+		multitapValues
 	} = useUser();
 
 	const [isRefilling, setIsRefilling] = useState(false);
@@ -197,13 +201,6 @@ const Home = () => {
 		12: Panda13,
 		13: Panda14,
 	};
-
-	useEffect(() => {
-		console.log('Level', level);
-	}, [level]);
-
-	const energyUpgradeCost = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
-	const multitapUpgradeCost = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000];
 
 	const days = [0, 1, 2, 3, 4, 5, 6];
 	const reward = [500, 1000, 1500, 2000, 2500, 3000, 3500];
@@ -1352,7 +1349,7 @@ const Home = () => {
 														<div className="relative z-50 w-full h-[15vh] flex flex-col items-center gap-2 py-2">
 
 															<div className="flex flex-col items-center justify-center">
-																<h1 className="text-xl text-customOrange">Level {energyLevel >= 9 ? ('Max') : (`${energyLevel + 1}`)}</h1>
+																<h1 className="text-xl text-customOrange">Level {energyLevel >= energyLimits.length - 1 ? ('Max') : (`${energyLevel + 1}`)}</h1>
 																<p>+500 energy limit</p>
 															</div>
 
@@ -1363,7 +1360,7 @@ const Home = () => {
 
 															{/* Cost Section */}
 															<div>
-																{energyLevel < 9 ? (
+																{energyLevel < energyLimits.length - 1 ? (
 																	<>
 																		<div>
 																			<p className="flex justify-center items-center gap-1 text-[30px] text-customOrange">
@@ -1404,7 +1401,7 @@ const Home = () => {
 																onClick={() => {
 																	handleEnergyUpgrade();
 																}}
-																disabled={energyLevel >= 9 || buttonLoading}
+																disabled={energyLevel >= energyLimits.length - 1 || buttonLoading}
 															>
 																{buttonLoading ? (
 																	<span className="flex justify-center items-center text-5xl font-bold w-full">
@@ -1414,7 +1411,7 @@ const Home = () => {
 																	</span>
 																) : (
 																	<>
-																		{energyLevel >= 9 ? ("Max Level") : ('Upgrade')}
+																		{energyLevel >= energyLimits.length - 1 ? ("Max Level") : ('Upgrade')}
 																	</>
 																)}
 															</button>
@@ -1506,13 +1503,13 @@ const Home = () => {
 													</div>
 													<div className="mt-7 text-center text-sm px-4 text-gray-300 flex flex-col items-center justify-center gap-2">
 														<p>Increase amount of Tap you can earn per one tap</p>
-														<h1 className="text-xl text-customOrange">Level {multitapLevel >= 9 ? ('Max') : (`${multitapLevel + 2}`)}</h1>
+														<h1 className="text-xl text-customOrange">Level {multitapLevel >= multitapValues.length - 1 ? ('Max') : (`${multitapLevel + 2}`)}</h1>
 														<p>+1 per tap for each level</p>
 														<div className="py-2">
 															<img src={PopupHorizontalLine} alt="popup_horizontal_line" />
 														</div>
 														<div className="py-1">
-															{multitapLevel < 9 ? (
+															{multitapLevel < multitapValues.length - 1 ? (
 																<>
 																	<div>
 																		<p className="flex justify-center items-center gap-1 text-[30px] text-customOrange">
@@ -1553,7 +1550,7 @@ const Home = () => {
 															onClick={() => {
 																handleMultitapUpgrade()
 															}}
-															disabled={multitapLevel >= 9 || buttonLoading}
+															disabled={multitapLevel >= multitapValues.length - 1 || buttonLoading}
 														>
 															{buttonLoading ? (
 																<span className="flex justify-center items-center text-5xl font-bold w-full">
@@ -1563,7 +1560,7 @@ const Home = () => {
 																</span>
 															) : (
 																<>
-																	{multitapLevel >= 9 ? ("Max Level") : ('Upgrade')}
+																	{multitapLevel >= multitapValues.length - 1 ? ("Max Level") : ('Upgrade')}
 																</>
 															)}
 														</button>

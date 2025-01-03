@@ -75,8 +75,8 @@ io.on('connection', (socket) => {
 });
 
 // Start Server
-server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+server.listen(PORT || 8080, () => {
+    console.log(`Server is running on port ${PORT || 8080}`);
 });
 
 // Routers

@@ -29,11 +29,11 @@ const {
     getProfilePhoto
 } = require('../utils/user');
 
-const energyUpgradeCost = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
-const energyLimits = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000];
+const energyUpgradeCost = [0, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000, 256000, 512000, 1024000, 2048000, 4096000, 8192000, 16384000, 32768000];
+const energyLimits = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000];
 
-const multitapUpgradeCost = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000];
-const multitapValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const multitapUpgradeCost = [0, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000, 256000, 512000, 1024000, 2048000, 4096000, 8192000, 16384000, 32768000];
+const multitapValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 
 const day = [0, 1, 2, 3, 4, 5, 6];
 const reward = [500, 1000, 1500, 2000, 2500, 3000, 3500];
@@ -277,7 +277,7 @@ exports.energyLevelUpgrade = async (req, res) => {
             })
         }
 
-        if (user.energy.level === 9) {
+        if (user.energy.level === energyLimits.length - 1) {
             return res.status(200).json({
                 status: 'failed',
                 message: 'Max level reached!'
@@ -324,7 +324,7 @@ exports.multiTapLevelUpgrade = async (req, res) => {
             })
         }
 
-        if (user.multitaps.level === 9) {
+        if (user.multitaps.level === multitapValues.length - 1) {
             return res.status(200).json({
                 status: 'failed',
                 message: 'Max level reached!'

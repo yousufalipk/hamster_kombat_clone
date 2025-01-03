@@ -159,6 +159,12 @@ export const UserProvider = (props) => {
         { id: 14, name: 'The Crypto', rangeFrom: 3000000000, rangeTo: 'max' },
     ];
 
+    const energyUpgradeCost = [0, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000, 256000, 512000, 1024000, 2048000, 4096000, 8192000, 16384000, 32768000];
+    const energyLimits = [1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000];
+
+    const multitapUpgradeCost = [0, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000, 256000, 512000, 1024000, 2048000, 4096000, 8192000, 16384000, 32768000];
+    const multitapValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+
     const formatNumberWithSuffix = (value, decimals = 2) => {
         if (value === null || value === undefined || isNaN(value)) return '0';
 
@@ -436,7 +442,7 @@ export const UserProvider = (props) => {
 
     const energyUpgrade = async () => {
         try {
-            if (energyLevel === 9) {
+            if (energyLevel === energyLimits.length - 1) {
                 console.log('Max level reached!');
                 return;
             }
@@ -457,7 +463,7 @@ export const UserProvider = (props) => {
 
     const multitapUpgrade = async () => {
         try {
-            if (multitapLevel === 9) {
+            if (multitapLevel === multitapValues.length - 1) {
                 console.log('Max level reached!');
                 return;
             }
@@ -1039,7 +1045,13 @@ export const UserProvider = (props) => {
             formatNumberWithSuffix,
             formatCpm,
 
-            playComboAnimation
+            playComboAnimation,
+
+            energyUpgradeCost,
+            energyLimits,
+            multitapUpgradeCost,
+            multitapValues
+
         }}>
             {props.children}
         </UserContext.Provider>
