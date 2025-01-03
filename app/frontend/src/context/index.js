@@ -826,11 +826,12 @@ export const UserProvider = (props) => {
         }
     }
 
-    const claimUserTask = async (taskId) => {
+    const claimUserTask = async (taskId, taskType) => {
         try {
             const res = await axios.post(`${apiUrl}/user/claim-user-task`, {
                 userId: userId,
-                taskId: taskId
+                taskId: taskId,
+                taskType: taskType
             });
             if (res.data.status === 'success') {
                 return ({ success: true, mess: res.data.message, data: res.data });
@@ -849,10 +850,11 @@ export const UserProvider = (props) => {
                 userId: userId,
             })
             if (res.data.status === 'success') {
-                setUserSocialTasks(res.data.tasks.social);
-                setUserDailyTasks(res.data.tasks.daily);
-                setUserPatnerTask(res.data.tasks.partner);
-                return ({ success: true, data: res.data.tasks });
+                console.log('RESPONSE ', res.data);
+                setUserSocialTasks(res.data.socialTasks);
+                setUserDailyTasks(res.data.dailyTasks);
+                setUserPatnerTask(res.data.partnerTasks);
+                return ({ success: true, data: res.data.tasks, daily: res.data.dailyTasks, social: res.data.socialTasks, partner: res.data.partnerTasks });
             } else {
                 return ({ success: false, mess: res.data.message });
             }

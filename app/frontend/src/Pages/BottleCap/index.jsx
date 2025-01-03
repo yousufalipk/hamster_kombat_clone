@@ -25,7 +25,7 @@ import CustomLoader from '../../Components/Loader/Loader';
 
 
 const BottleCap = () => {
-	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, setUserSocialTasks, userDailyTasks, setUserDailyTasks, userPatnerTask, setUserPatnerTask, balance, inviteFriends, claimInviteFriendTask, username, formatNumberWithSuffix, formatBalance } = useUser();
+	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, userDailyTasks, userPatnerTask, balance, inviteFriends, claimInviteFriendTask, username, formatNumberWithSuffix, formatBalance } = useUser();
 
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [taskPopUp, setTaskPopup] = useState(false);
@@ -38,7 +38,6 @@ const BottleCap = () => {
 	const [selectedInviteFriendTask, setSelectedInviteFriendTask] = useState(false);
 
 	const [tasksLoader, setTaskLoader] = useState(false);
-
 
 	const iconMapping = {
 		twitter: Twitter,
@@ -75,6 +74,10 @@ const BottleCap = () => {
 		return () => clearInterval(interval);
 	}, [buttonLoading]);
 
+	useEffect(() => {
+		console.log('Selected Task', selectedTask);
+	}, [selectedTask])
+
 	const handleClaimTask = async () => {
 		try {
 			setButtonLoading(true);
@@ -91,25 +94,30 @@ const BottleCap = () => {
 				}
 				return;
 			}
-			const res = await claimUserTask(selectedTask._id);
+			const res = await claimUserTask(selectedTask._id, selectedTask.taskType);
 			if (res.success) {
 				if (res.data.claimedStatus === 'pending') {
 					setTimeDifference(30);
 				}
 				const res2 = await fetchUserTask();
-				console.log(res2.success);
 				if (res2.success) {
-					setUserDailyTasks(res2.data.daily);
-					setUserSocialTasks(res2.data.social);
-					setUserPatnerTask(res2.data.partner);
-					const updatedDailyTask = res2.data.daily.find((t) => t._id === selectedTask._id);
-					const updatedSocialTask = res2.data.social.find((t) => t._id === selectedTask._id);
+					const updatedDailyTask = res2.daily.find((t) => t._id === selectedTask._id);
+					const updatedSocialTask = res2.social.find((t) => t._id === selectedTask._id);
+					const updatedPatnerTask = res2.partner.find((t) => t._id === selectedTask._id);
+
 					if (updatedDailyTask) {
+						console.log('Daily Task found!', updatedDailyTask);
 						setSelectedTask(updatedDailyTask);
 					}
 
 					if (updatedSocialTask) {
+						console.log('Social Task found!', updatedSocialTask);
 						setSelectedTask(updatedSocialTask);
+					}
+
+					if (updatedPatnerTask) {
+						console.log('Partner Task found!', updatedPatnerTask);
+						setSelectedTask(updatedPatnerTask);
 					}
 				}
 				toast.success(res.mess);
@@ -477,7 +485,7 @@ const BottleCap = () => {
 						{/* Pandatop News Cards */}
 						{userDailyTasks?.length > 0 ? (
 							<div>
-								{userDailyTasks.map((task, index) => {
+								{userDailyTasks.sort((a, b) => a.priority - b.priority).map((task, index) => {
 									return (
 										<div
 											onClick={() => {
@@ -544,7 +552,7 @@ const BottleCap = () => {
 						{/* Pandatop News Cards */}
 						{userPatnerTask?.length > 0 ? (
 							<div>
-								{userPatnerTask.map((task, index) => {
+								{userPatnerTask.sort((a, b) => a.priority - b.priority).map((task, index) => {
 									return (
 										<div
 											onClick={() => {
@@ -611,7 +619,7 @@ const BottleCap = () => {
 						{/* Pandatop News Cards */}
 						{userSocialTasks?.length > 0 ? (
 							<div>
-								{userSocialTasks.map((task, index) => {
+								{userSocialTasks.sort((a, b) => a.priority - b.priority).map((task, index) => {
 									return (
 										<div
 											onClick={() => {

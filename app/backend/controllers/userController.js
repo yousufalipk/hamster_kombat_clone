@@ -4,6 +4,9 @@ const KolModel = require('../models/kolsSchema');
 const PatnerModel = require('../models/patnersSchema');
 const VcModel = require('../models/vcSchema');
 const TaskModel = require('../models/tasksSchema');
+const SocialTaskModel = require('../models/socialTaskSchema');
+const DailyTaskModel = require('../models/dailyTaskSchema');
+const PartnerTaskModel = require('../models/patnerTaskSchema');
 const { TELEGRAM_BOT_TOKEN } = require('../config/env');
 const { Telegraf } = require("telegraf");
 const { getIo, userSocketMap } = require('../utils/socketHelper');
@@ -1073,7 +1076,7 @@ exports.claimProjectTask = async (req, res) => {
 
 exports.claimUserTask = async (req, res) => {
     try {
-        const { userId, taskId } = req.body;
+        const { userId, taskId, taskType } = req.body;
 
         if (!userId || !taskId) {
             return res.status(400).json({
@@ -1083,7 +1086,15 @@ exports.claimUserTask = async (req, res) => {
         }
 
         const user = await UserModel.findById(userId);
-        const task = await TaskModel.findById(taskId);
+
+        let task;
+        if (taskType === 'social') {
+            task = await SocialTaskModel.findById(taskId);
+        } else if (taskType === 'daily') {
+            task = await DailyTaskModel.findById(taskId);
+        } else if (taskType === 'partner') {
+            task = await PartnerTaskModel.findById(taskId);
+        }
 
         if (!user || !task) {
             return res.status(404).json({
@@ -1167,15 +1178,11 @@ exports.fetchUserTasks = async (req, res) => {
             });
         }
 
-        const tasks = await TaskModel.find();
-        if (tasks.length === 0) {
-            return res.status(200).json({
-                status: 'failed',
-                message: 'Tasks not found!',
-            });
-        }
+        const socialTasks = await SocialTaskModel.find({ status: true });
+        const dailyTasks = await DailyTaskModel.find({ status: true });
+        const partnerTasks = await PartnerTaskModel.find({ status: true });
 
-        const enhancedTasks = tasks.map((task) => {
+        const enhancedSocialTasks = socialTasks.map((task) => {
             const userTask = user.tasks.find(
                 (userTask) =>
                     userTask.taskId && userTask.taskId.toString() === task._id.toString()
@@ -1195,15 +1202,51 @@ exports.fetchUserTasks = async (req, res) => {
             };
         });
 
-        const categorizedTasks = {
-            daily: enhancedTasks.filter((task) => task.taskType === 'daily'),
-            social: enhancedTasks.filter((task) => task.taskType === 'social'),
-            partner: enhancedTasks.filter((task) => task.taskType === 'partner'),
-        };
+        const enhancedDailyTasks = dailyTasks.map((task) => {
+            const userTask = user.tasks.find(
+                (userTask) =>
+                    userTask.taskId && userTask.taskId.toString() === task._id.toString()
+            );
+
+            if (userTask) {
+                return {
+                    ...task.toObject(),
+                    claimedStatus: userTask.claimedStatus || false,
+                    claimedDate: userTask.claimedDate || null,
+                };
+            }
+
+            return {
+                ...task.toObject(),
+                claimedStatus: false,
+            };
+        });
+
+        const enhancedPatnerTasks = partnerTasks.map((task) => {
+            const userTask = user.tasks.find(
+                (userTask) =>
+                    userTask.taskId && userTask.taskId.toString() === task._id.toString()
+            );
+
+            if (userTask) {
+                return {
+                    ...task.toObject(),
+                    claimedStatus: userTask.claimedStatus || false,
+                    claimedDate: userTask.claimedDate || null,
+                };
+            }
+
+            return {
+                ...task.toObject(),
+                claimedStatus: false,
+            };
+        });
 
         return res.status(200).json({
             status: 'success',
-            tasks: categorizedTasks,
+            socialTasks: enhancedSocialTasks,
+            dailyTasks: enhancedDailyTasks,
+            partnerTasks: enhancedPatnerTasks,
         });
     } catch (error) {
         console.error('Internal Server Error', error);
