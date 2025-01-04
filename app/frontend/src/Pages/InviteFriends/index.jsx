@@ -145,7 +145,7 @@ const InviteFriends = () => {
 							) : (
 								<>
 									{/* Friends List Cards */}
-									{referrals.map((user, index) => {
+									{referrals.slice(0, 100).map((user, index) => {
 										const username = `${user.firstName || ''} ${user.lastName || ''}`;
 										return (
 											<div
