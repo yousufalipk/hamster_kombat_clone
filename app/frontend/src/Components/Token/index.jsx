@@ -321,7 +321,7 @@ const Token = () => {
 														width={30}
 														height={30}
 													/>
-													<span className='text-[#FF9500] text-xl'>{token.userData.nextLevelCost.toLocaleString()}</span>
+													<span className='text-[#FF9500] text-xl'>{parseInt(token.userData.nextLevelCost.toLocaleString())}</span>
 												</div>
 
 												{/* Buttons */}
@@ -406,7 +406,7 @@ const Token = () => {
 													/>
 												</div>
 												<div className="text-xl text-white mt-3">
-													<p>{selectedTask.title}</p>
+													<p className="text-center">{selectedTask.title}</p>
 												</div>
 												<div className="mt-5">
 													<button
@@ -448,7 +448,7 @@ const Token = () => {
 															width={25}
 															height={25}
 														/>
-														{selectedTask.reward.toLocaleString()} {token.project.name.match(/[A-Z]/g)?.join('')}
+														{selectedTask.reward.toLocaleString()}
 													</p>
 												</div>
 												{selectedTask.claimedStatus !== 'claimed' ? (
@@ -587,7 +587,7 @@ const Token = () => {
 														<div className="flex gap-1">
 															<img src={BigCoin} alt="Coin-Icon" width={20} />
 															<p className="text-white flex gap-2 justify-end items-end text-[17px]">
-																{formatNumberWithSuffix(token.userData.walletBalance, 2)}
+																{parseInt(token.userData.walletBalance.toLocaleString())}
 																<span className="text-[7px]">{token.project.name.match(/[A-Z]/g)?.join('')}</span>
 															</p>
 														</div>
@@ -702,14 +702,14 @@ const Token = () => {
 														</div>
 														{/* Name */}
 														<div className="flex justify-between items-center w-full">
-															<div>
+															<div className="w-[85%]">
 																<div className="flex text-md">{task.title}</div>
 																<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
 																	<img src={BigCoin} alt="" className="h-4 w-5" />
 																	<span className="text-sm">+{task.reward.toLocaleString()}</span>
 																</div>
 															</div>
-															<div>
+															<div className="w-[15%] flex justify-end items-center">
 																{task.claimedStatus === 'claimed' ? (
 																	<>
 																		<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
@@ -766,14 +766,14 @@ const Token = () => {
 														</div>
 														{/* Name */}
 														<div className="flex justify-between items-center w-full">
-															<div>
+															<div className="w-[85%]">
 																<div className="flex text-md">{task.title}</div>
 																<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
 																	<img src={BigCoin} alt="" className="h-4 w-5" />
 																	<span className="text-sm">+{task.reward}</span>
 																</div>
 															</div>
-															<div>
+															<div className="w-[15%] flex justify-end items-center">
 																{task.claimedStatus === 'claimed' ? (
 																	<>
 																		<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">

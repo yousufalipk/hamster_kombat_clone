@@ -228,7 +228,7 @@ const VCS = () => {
 					)}
 
 					<div className='h-[45vh] overflow-scroll'>
-						{vcs.map((vc, index) => {
+						{vcs?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((vc, index) => {
 							return (
 								<div
 									key={index}
@@ -324,7 +324,7 @@ const VCS = () => {
 													</>
 												) : (
 													<>
-														<div className="flex justify-end gap-1">
+														<div className="relative flex justify-end gap-1 z-50">
 															<img
 																src={BigCoin}
 																alt='Coin-Icon'

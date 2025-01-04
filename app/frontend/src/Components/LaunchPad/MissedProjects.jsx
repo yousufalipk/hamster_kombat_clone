@@ -30,7 +30,7 @@ const Card = ({ name, logo1, logo2, balance, level, toColor, fromColor }) => (
 					width="17"
 				/>
 			</div>
-			<div className='text-[16px]'>{balance.toLocaleString()}</div>
+			<div className='text-[16px]'>{parseInt(balance.toLocaleString())}</div>
 		</div>
 		<div
 			className="mt-2 text-[8px] font-medium bg-[rgba(0,0,0,0.3)] w-fit p-1 rounded-[5px]">

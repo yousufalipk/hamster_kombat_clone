@@ -224,7 +224,7 @@ const Partners = () => {
 					)}
 
 					<div className='h-[45vh] overflow-scroll'>
-						{patners.map((patner, index) => {
+						{patners?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((patner, index) => {
 							return (
 								<div
 									key={index}
@@ -320,7 +320,7 @@ const Partners = () => {
 													</>
 												) : (
 													<>
-														<div className="flex justify-end gap-1">
+														<div className="relative flex justify-end gap-1 z-50">
 															<img
 																src={BigCoin}
 																alt='Coin-Icon'

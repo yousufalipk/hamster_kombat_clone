@@ -32,7 +32,7 @@ const Card = ({ name, logo1, logo2, balance, level, fromColor, toColor }) => (
 					width="17"
 				/>
 			</div>
-			<div className='text-[16px]'>{balance.toLocaleString()}</div>
+			<div className='text-[16px]'>{parseInt(balance.toLocaleString())}</div>
 		</div>
 		<div
 			className="mt-2 text-[8px] font-medium bg-[rgba(0,0,0,0.3)] w-fit p-1 rounded-[5px]">
@@ -72,7 +72,7 @@ const Current = () => {
 		<>
 			{currentProjects ? (
 				<div className='grid grid-cols-2 gap-3 h-[37vh]'>
-					{currentProjects?.map((project, index) => {
+					{currentProjects?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((project, index) => {
 						return (
 							<div
 								key={index}

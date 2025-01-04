@@ -49,7 +49,7 @@ const TGE = () => {
 						width="17"
 					/>
 				</div>
-				<div className='text-[16px]'>{balance.toLocaleString()}</div>
+				<div className='text-[16px]'>{parseInt(balance.toLocaleString())}</div>
 			</div>
 			<div className="flex items-center justify-start w-[22vh] mt-2 gap-2">
 				{/* level */}
