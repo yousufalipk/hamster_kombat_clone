@@ -105,6 +105,64 @@ exports.fetchTopUsersForAllLevels = async (req, res) => {
             });
         }
 
+        const allTopUsers = await UserModel.aggregate([
+            { $match: { allTimeBalance: { $gte: 0 } } },
+            { $sort: { allTimeBalance: -1 } },
+            { $limit: usersLimit },
+            { $project: { _id: 1, firstName: 1, allTimeBalance: 1, lastName: 1 } }
+        ]);
+
+        const allLevelTopUsers = {};
+
+        for (const { id, name, rangeFrom, rangeTo } of levelsData) {
+            const levelTopUsers = allTopUsers.filter(user => {
+                return user.allTimeBalance >= rangeFrom && (rangeTo === 'max' || user.allTimeBalance < rangeTo);
+            });
+
+            const isUserInLevel = user.allTimeBalance >= rangeFrom && (rangeTo === 'max' || user.allTimeBalance < rangeTo);
+            if (isUserInLevel) {
+                const isUserInTop = levelTopUsers.some(u => String(u._id) === String(user._id));
+                if (!isUserInTop) {
+                    levelTopUsers.push(user);
+                }
+            }
+
+            allLevelTopUsers[id - 1] = levelTopUsers.slice(0, usersLimit);
+        }
+
+        res.status(200).json({
+            status: 'success',
+            leaderboard: allLevelTopUsers
+        });
+    } catch (error) {
+        console.error("Internal Server Error!", error);
+        res.status(500).json({
+            status: 'failed',
+            message: "Internal Server Error!"
+        });
+    }
+};
+
+/*
+exports.fetchTopUsersForAllLevels = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'UserId is required'
+            });
+        }
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User not found'
+            });
+        }
+
         const allLevelTopUsers = {};
 
         for (const { id, name, rangeFrom, rangeTo } of levelsData) {
@@ -141,3 +199,4 @@ exports.fetchTopUsersForAllLevels = async (req, res) => {
         });
     }
 };
+*/
