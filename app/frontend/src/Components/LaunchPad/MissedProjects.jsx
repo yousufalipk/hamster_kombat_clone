@@ -16,7 +16,7 @@ const Card = ({ name, logo1, logo2, balance, level, toColor, fromColor }) => (
 			</div>
 			<div className=''>
 				<img
-					src={`data:image/jpeg;base64,${logo1}`}
+					src={logo1}
 					alt={`${name}-Icon`}
 					width="25"
 				/>

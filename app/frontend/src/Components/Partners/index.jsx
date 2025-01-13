@@ -137,7 +137,7 @@ const Partners = () => {
 													>
 														{selectedPatner && (
 															<img
-																src={`data:image/jpeg;base64,${selectedPatner.logo.data}`}
+																src={selectedPatner.logo.data}
 																alt="booster_icon"
 																className="w-full h-full object-cover rounded-full"
 															/>
@@ -333,14 +333,14 @@ const Partners = () => {
 												<div className="flex">
 													<div className="w-3/5 flex justify-end items-end h-[10vh]">
 														<img
-															src={`data:image/jpeg;base64,${patner.logo.data}`}
+															src={patner.logo.data}
 															alt=''
 															width='85'
 														/>
 													</div>
 													<div className="w-2/5 flex justify-end items-end h-[10vh]">
 														<img
-															src={`data:image/jpeg;base64,${patner.icon.data}`}
+															src={patner.icon.data}
 															alt=''
 															width='85'
 														/>

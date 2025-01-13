@@ -86,7 +86,7 @@ const Card = ({
                                             <>
                                                 <img
                                                     className="w-[40px] h-[40px]"
-                                                    src={`data:image/jpeg;base64,${icon.data}`}
+                                                    src={icon.data}
                                                     alt="BigCoin-Icon"
                                                 />
                                             </>

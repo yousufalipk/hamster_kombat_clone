@@ -141,7 +141,7 @@ const VCS = () => {
 													>
 														{selectedVc && (
 															<img
-																src={`data:image/jpeg;base64,${selectedVc.logo.data}`}
+																src={selectedVc.logo.data}
 																alt="booster_icon"
 																className="w-full h-full object-cover rounded-full"
 															/>
@@ -337,14 +337,14 @@ const VCS = () => {
 												<div className="flex">
 													<div className="w-3/5 flex justify-end items-end h-[10vh]">
 														<img
-															src={`data:image/jpeg;base64,${vc.logo.data}`}
+															src={vc.logo.data}
 															alt=''
 															width='85'
 														/>
 													</div>
 													<div className="w-2/5 flex justify-end items-end h-[10vh]">
 														<img
-															src={`data:image/jpeg;base64,${vc.icon.data}`}
+															src={vc.icon.data}
 															alt=''
 															width='85'
 														/>

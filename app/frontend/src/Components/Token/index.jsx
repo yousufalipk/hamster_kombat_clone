@@ -264,7 +264,7 @@ const Token = () => {
 															}}
 														>
 															<img
-																src={`data:image/jpeg;base64,${token.project.icon.data}`}
+																src={token.project.icon.data}
 																alt='token_Icon'
 																width='60'
 																style={{
@@ -573,7 +573,7 @@ const Token = () => {
 													<div className="flex items-center gap-2 ml-8 mt-3">
 														<img
 															className="w-[40px] h-[40px] rounded-full"
-															src={`data:image/jpeg;base64,${token.project.icon.data}`}
+															src={token.project.icon.data}
 															alt="BigCoin-Icon"
 														/>
 														<div className="text-xl text-white font-medium text-[19px]">

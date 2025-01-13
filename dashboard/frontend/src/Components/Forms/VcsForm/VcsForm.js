@@ -203,7 +203,7 @@ const VcFrom = () => {
                                     {logo ? (
                                         <>
                                             <img
-                                                src={`data:image/jpeg;base64,${logo.data}`}
+                                                src={logo.data}
                                                 alt={name ? `${name}-logo` : "Image"}
                                                 width={85}
                                                 className='absolute bottom-0 right-[7vw]'
@@ -221,7 +221,7 @@ const VcFrom = () => {
                                     {icon ? (
                                         <>
                                             <img
-                                                src={`data:image/jpeg;base64,${icon.data}`}
+                                                src={icon.data}
                                                 alt={name ? `${name}-icon` : "Image"}
                                                 width={85}
                                                 className='absolute bottom-0'

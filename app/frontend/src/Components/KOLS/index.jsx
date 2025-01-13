@@ -138,7 +138,7 @@ const KOLS = () => {
 													>
 														{selectedKol && (
 															<img
-																src={`data:image/jpeg;base64,${selectedKol.logo.data}`}
+																src={selectedKol.logo.data}
 																alt="booster_icon"
 																className="w-full h-full object-cover rounded-full"
 															/>
@@ -334,14 +334,14 @@ const KOLS = () => {
 												<div className="flex">
 													<div className="w-3/5 flex justify-end items-end h-[10vh]">
 														<img
-															src={`data:image/jpeg;base64,${kol.logo.data}`}
+															src={kol.logo.data}
 															alt=''
 															width='85'
 														/>
 													</div>
 													<div className="w-2/5 flex justify-end items-end h-[10vh]">
 														<img
-															src={`data:image/jpeg;base64,${kol.icon.data}`}
+															src={kol.icon.data}
 															alt=''
 															width='85'
 														/>
