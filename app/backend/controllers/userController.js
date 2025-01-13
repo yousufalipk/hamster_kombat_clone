@@ -2059,7 +2059,7 @@ exports.updateWalletAddress = async (req, res) => {
         }
 
         if (user.walletAddress) {
-            user.walletAddress = walletAddress || null;
+            user.walletAddress = walletAddress ? walletAddress : null;
             await user.save();
             return res.status(200).json({
                 status: 'success',
