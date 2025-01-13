@@ -6,6 +6,7 @@ const bot = new Telegraf(BOT_TOKEN);
 const app = express();
 app.use(express.json());
 
+
 bot.start((ctx) => {
 	const username = ctx.from.username || 'there';
 	const welcomeMessage = `
