@@ -93,7 +93,6 @@ const getTaskDetailsById = (id) => {
 
 // Initialize User
 
-/*
 exports.initializeUser = async (req, res) => {
     try {
 
@@ -112,7 +111,7 @@ exports.initializeUser = async (req, res) => {
             const photoResponse = await getProfilePhoto(telegramId);
             if (photoResponse.success) {
                 isUser.profilePic = photoResponse.photo;
-                await isUser.save();
+                isUser.save();
             }
             return res.status(200).json({
                 status: 'success',
@@ -249,57 +248,6 @@ exports.initializeUser = async (req, res) => {
         });
     }
 }
-*/
-
-exports.initializeUser = async (req, res) => {
-    try {
-        const { telegramId, firstName, lastName, username, referrerId, isPremium } = req.body;
-
-        let isUser = await UserModel.findOne({ telegramId });
-        const currentDate = new Date();
-        let balance = 0;
-        let profilePhoto = 'not set';
-
-        const setProfilePhoto = async () => {
-            const photoResponse = await getProfilePhoto(telegramId);
-            if (photoResponse.success) {
-                profilePhoto = photoResponse.photo;
-            }
-        };
-
-        if (isUser && isUser.profilePic === 'not set') {
-            await setProfilePhoto();
-            isUser.profilePic = profilePhoto;
-            await isUser.save();
-            return res.status(200).json({ status: 'success', message: 'Profile photo updated.' });
-        }
-
-        if (!isUser) {
-            await setProfilePhoto();
-            balance = referrerId ? (isPremium ? 25000 : 10000) : 0;
-            await createUser(telegramId, firstName, lastName, username, profilePhoto, balance);
-        } else {
-            await resetUser(isUser);
-            isUser = await handleCoinsPerMinute(isUser);
-        }
-
-        if (referrerId) {
-            await updateReferrals(referrerId, telegramId, firstName, lastName, balance, profilePhoto);
-        }
-
-        return res.status(200).json({
-            status: 'success',
-            message: 'User initialized successfully!',
-            user: isUser,
-            cpm: balanceToAdd > 0,
-            balanceToAdd: balanceToAdd || 0
-        });
-
-    } catch (error) {
-        console.error("Error during user initialization:", error);
-        return res.status(500).json({ status: 'failed', message: 'Internal Server Error' });
-    }
-};
 
 const createUser = async (telegramId, firstName, lastName, username, profilePhoto, balance) => {
     const newUser = new UserModel({
