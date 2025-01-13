@@ -1,4 +1,13 @@
 const VcsModel = require('../models/vcSchema');
+const { CLOUD_NAME, API_KEY, API_SECRET } = require('../config/env');
+
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+    cloud_name: CLOUD_NAME,
+    api_key: API_KEY,
+    api_secret: API_SECRET,
+});
 
 exports.fetchVcs = async (req, res) => {
     try {
@@ -43,18 +52,30 @@ exports.addVc = async (req, res) => {
             ? icon.data.split(',')[1]
             : icon.data;
 
+        const IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
+            folder: 'vcsIcons'
+        });
+
+        if (!IconUploadResult || !IconUploadResult.secure_url) {
+            return res.status(500).json({
+                status: 'failed',
+                message: "Vcs Icon upload to Cloudinary failed!",
+            });
+        }
+
         const base64DataLogo = logo.data.startsWith('data:image')
             ? logo.data.split(',')[1]
             : logo.data;
 
-        const bufferIcon = Buffer.from(base64DataIcon, 'base64');
-        const bufferLogo = Buffer.from(base64DataLogo, 'base64');
 
-        const maxSize = 1 * 1024 * 1024;
-        if (bufferIcon.length > maxSize || bufferLogo.length > maxSize) {
-            return res.status(200).json({
+        const LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {
+            folder: 'vcsLogos'
+        });
+
+        if (!LogoUploadResult || !LogoUploadResult.secure_url) {
+            return res.status(500).json({
                 status: 'failed',
-                message: "Image size exceeds the maximum allowed size (1MB).",
+                message: "Vcs Logos upload to Cloudinary failed!",
             });
         }
 
@@ -83,12 +104,12 @@ exports.addVc = async (req, res) => {
             name,
             icon: {
                 name: icon.name,
-                data: icon.data,
+                data: IconUploadResult.secure_url,
                 contentType: icon.contentType,
             },
             logo: {
                 name: logo.name,
-                data: logo.data,
+                data: LogoUploadResult.secure_url,
                 contentType: logo.contentType,
             },
             fromColor,
@@ -153,22 +174,35 @@ exports.updateVc = async (req, res) => {
             });
         }
 
+
         const base64DataIcon = icon.data.startsWith('data:image')
             ? icon.data.split(',')[1]
             : icon.data;
+
+        const IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
+            folder: 'vcsIcons'
+        });
+
+        if (!IconUploadResult || !IconUploadResult.secure_url) {
+            return res.status(500).json({
+                status: 'failed',
+                message: "Vcs Icon upload to Cloudinary failed!",
+            });
+        }
 
         const base64DataLogo = logo.data.startsWith('data:image')
             ? logo.data.split(',')[1]
             : logo.data;
 
-        const bufferIcon = Buffer.from(base64DataIcon, 'base64');
-        const bufferLogo = Buffer.from(base64DataLogo, 'base64');
 
-        const maxSize = 1 * 1024 * 1024;
-        if (bufferIcon.length > maxSize || bufferLogo.length > maxSize) {
-            return res.status(200).json({
+        const LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {
+            folder: 'vcsLogos'
+        });
+
+        if (!LogoUploadResult || !LogoUploadResult.secure_url) {
+            return res.status(500).json({
                 status: 'failed',
-                message: "Image size exceeds the maximum allowed size (1MB).",
+                message: "Vcs Logos upload to Cloudinary failed!",
             });
         }
 
@@ -204,12 +238,12 @@ exports.updateVc = async (req, res) => {
         vc.name = name;
         vc.icon = {
             name: icon.name,
-            data: icon.data,
+            data: IconUploadResult.secure_url,
             contentType: icon.contentType,
         };
         vc.logo = {
             name: logo.name,
-            data: logo.data,
+            data: LogoUploadResult.secure_url,
             contentType: logo.contentType,
         };
         vc.fromColor = fromColor;

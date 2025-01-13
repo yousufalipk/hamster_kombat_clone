@@ -1,4 +1,13 @@
 const KolsModel = require('../models/kolsSchema');
+const { CLOUD_NAME, API_KEY, API_SECRET } = require('../config/env');
+
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+    cloud_name: CLOUD_NAME,
+    api_key: API_KEY,
+    api_secret: API_SECRET,
+});
 
 exports.fetchKols = async (req, res) => {
     try {
@@ -43,18 +52,30 @@ exports.addKols = async (req, res) => {
             ? icon.data.split(',')[1]
             : icon.data;
 
+        const IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
+            folder: 'kolsIcons'
+        });
+
+        if (!IconUploadResult || !IconUploadResult.secure_url) {
+            return res.status(500).json({
+                status: 'failed',
+                message: "Kols Icon upload to Cloudinary failed!",
+            });
+        }
+
         const base64DataLogo = logo.data.startsWith('data:image')
             ? logo.data.split(',')[1]
             : logo.data;
 
-        const bufferIcon = Buffer.from(base64DataIcon, 'base64');
-        const bufferLogo = Buffer.from(base64DataLogo, 'base64');
 
-        const maxSize = 1 * 1024 * 1024;
-        if (bufferIcon.length > maxSize || bufferLogo.length > maxSize) {
-            return res.status(200).json({
+        const LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {
+            folder: 'kolsLogos'
+        });
+
+        if (!LogoUploadResult || !LogoUploadResult.secure_url) {
+            return res.status(500).json({
                 status: 'failed',
-                message: "Image size exceeds the maximum allowed size (1MB).",
+                message: "Kols Logos upload to Cloudinary failed!",
             });
         }
 
@@ -83,12 +104,12 @@ exports.addKols = async (req, res) => {
             name,
             icon: {
                 name: icon.name,
-                data: icon.data,
+                data: IconUploadResult.secure_url,
                 contentType: icon.contentType,
             },
             logo: {
                 name: logo.name,
-                data: logo.data,
+                data: LogoUploadResult.secure_url,
                 contentType: logo.contentType,
             },
             fromColor,
@@ -157,12 +178,32 @@ exports.updateKols = async (req, res) => {
             ? icon.data.split(',')[1]
             : icon.data;
 
+        const IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
+            folder: 'kolsIcons'
+        });
+
+        if (!IconUploadResult || !IconUploadResult.secure_url) {
+            return res.status(500).json({
+                status: 'failed',
+                message: "Kols Icon upload to Cloudinary failed!",
+            });
+        }
+
         const base64DataLogo = logo.data.startsWith('data:image')
             ? logo.data.split(',')[1]
             : logo.data;
 
-        const bufferIcon = Buffer.from(base64DataIcon, 'base64');
-        const bufferLogo = Buffer.from(base64DataLogo, 'base64');
+
+        const LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {
+            folder: 'kolsLogos'
+        });
+
+        if (!LogoUploadResult || !LogoUploadResult.secure_url) {
+            return res.status(500).json({
+                status: 'failed',
+                message: "Kols Logos upload to Cloudinary failed!",
+            });
+        }
 
         const maxSize = 1 * 1024 * 1024;
         if (bufferIcon.length > maxSize || bufferLogo.length > maxSize) {
@@ -204,12 +245,12 @@ exports.updateKols = async (req, res) => {
         kol.name = name;
         kol.icon = {
             name: icon.name,
-            data: icon.data,
+            data: IconUploadResult.secure_url,
             contentType: icon.contentType,
         };
         kol.logo = {
             name: logo.name,
-            data: logo.data,
+            data: LogoUploadResult.secure_url,
             contentType: logo.contentType,
         };
         kol.fromColor = fromColor;

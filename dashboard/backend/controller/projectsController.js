@@ -1,5 +1,14 @@
 const ProjectModel = require('../models/projectSchema');
 const mongoose = require('mongoose');
+const { CLOUD_NAME, API_KEY, API_SECRET } = require('../config/env');
+
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+    cloud_name: CLOUD_NAME,
+    api_key: API_KEY,
+    api_secret: API_SECRET,
+});
 
 exports.createProject = async (req, res) => {
     try {
@@ -21,13 +30,14 @@ exports.createProject = async (req, res) => {
             ? icon.data.split(',')[1]
             : icon.data;
 
-        const buffer = Buffer.from(base64Data, 'base64');
+        const uploadResult = await cloudinary.uploader.upload(base64Data, {
+            folder: 'projects'
+        });
 
-        const maxSize = 1 * 1024 * 1024;
-        if (buffer.length > maxSize) {
-            return res.status(400).json({
+        if (!uploadResult || !uploadResult.secure_url) {
+            return res.status(500).json({
                 status: 'failed',
-                message: "Image size exceeds the maximum allowed size (1MB).",
+                message: "Image upload to Cloudinary failed!",
             });
         }
 
@@ -58,7 +68,7 @@ exports.createProject = async (req, res) => {
             name,
             icon: {
                 name: icon.name,
-                data: icon.data,
+                data: uploadResult.secure_url,
                 contentType: icon.contentType,
             },
             fromColor,
@@ -184,13 +194,14 @@ exports.updateProject = async (req, res) => {
             ? icon.data.split(',')[1]
             : icon.data;
 
-        const buffer = Buffer.from(base64Data, 'base64');
+        const uploadResult = await cloudinary.uploader.upload(base64Data, {
+            folder: 'projects'
+        });
 
-        const maxSize = 1 * 1024 * 1024;
-        if (buffer.length > maxSize) {
-            return res.status(400).json({
+        if (!uploadResult || !uploadResult.secure_url) {
+            return res.status(500).json({
                 status: 'failed',
-                message: "Image size exceeds the maximum allowed size (1MB).",
+                message: "Image upload to Cloudinary failed!",
             });
         }
 
@@ -228,7 +239,7 @@ exports.updateProject = async (req, res) => {
         project.name = name;
         project.icon = {
             name: icon.name,
-            data: icon.data,
+            data: uploadResult.secure_url,
             contentType: icon.contentType,
         };
         project.fromColor = fromColor;

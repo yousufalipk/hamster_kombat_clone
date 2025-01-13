@@ -1,4 +1,13 @@
 const PatnerModel = require('../models/patnersSchema');
+const { CLOUD_NAME, API_KEY, API_SECRET } = require('../config/env');
+
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+    cloud_name: CLOUD_NAME,
+    api_key: API_KEY,
+    api_secret: API_SECRET,
+});
 
 exports.fetchPatners = async (req, res) => {
     try {
@@ -43,18 +52,30 @@ exports.addPatner = async (req, res) => {
             ? icon.data.split(',')[1]
             : icon.data;
 
+        const IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
+            folder: 'partnersIcons'
+        });
+
+        if (!IconUploadResult || !IconUploadResult.secure_url) {
+            return res.status(500).json({
+                status: 'failed',
+                message: "Patner Icon upload to Cloudinary failed!",
+            });
+        }
+
         const base64DataLogo = logo.data.startsWith('data:image')
             ? logo.data.split(',')[1]
             : logo.data;
 
-        const bufferIcon = Buffer.from(base64DataIcon, 'base64');
-        const bufferLogo = Buffer.from(base64DataLogo, 'base64');
 
-        const maxSize = 1 * 1024 * 1024;
-        if (bufferIcon.length > maxSize || bufferLogo.length > maxSize) {
-            return res.status(200).json({
+        const LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {
+            folder: 'partnersLogos'
+        });
+
+        if (!LogoUploadResult || !LogoUploadResult.secure_url) {
+            return res.status(500).json({
                 status: 'failed',
-                message: "Image size exceeds the maximum allowed size (1MB).",
+                message: "Kols Logos upload to Cloudinary failed!",
             });
         }
 
@@ -83,12 +104,12 @@ exports.addPatner = async (req, res) => {
             name,
             icon: {
                 name: icon.name,
-                data: icon.data,
+                data: IconUploadResult.secure_url,
                 contentType: icon.contentType,
             },
             logo: {
                 name: logo.name,
-                data: logo.data,
+                data: LogoUploadResult.secure_url,
                 contentType: logo.contentType,
             },
             fromColor,
@@ -157,18 +178,30 @@ exports.updatePatner = async (req, res) => {
             ? icon.data.split(',')[1]
             : icon.data;
 
+        const IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
+            folder: 'partnersIcons'
+        });
+
+        if (!IconUploadResult || !IconUploadResult.secure_url) {
+            return res.status(500).json({
+                status: 'failed',
+                message: "Patner Icon upload to Cloudinary failed!",
+            });
+        }
+
         const base64DataLogo = logo.data.startsWith('data:image')
             ? logo.data.split(',')[1]
             : logo.data;
 
-        const bufferIcon = Buffer.from(base64DataIcon, 'base64');
-        const bufferLogo = Buffer.from(base64DataLogo, 'base64');
 
-        const maxSize = 1 * 1024 * 1024;
-        if (bufferIcon.length > maxSize || bufferLogo.length > maxSize) {
-            return res.status(200).json({
+        const LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {
+            folder: 'partnersLogos'
+        });
+
+        if (!LogoUploadResult || !LogoUploadResult.secure_url) {
+            return res.status(500).json({
                 status: 'failed',
-                message: "Image size exceeds the maximum allowed size (1MB).",
+                message: "Kols Logos upload to Cloudinary failed!",
             });
         }
 
@@ -204,12 +237,12 @@ exports.updatePatner = async (req, res) => {
         patner.name = name;
         patner.icon = {
             name: icon.name,
-            data: icon.data,
+            data: IconUploadResult.secure_url,
             contentType: icon.contentType,
         };
         patner.logo = {
             name: logo.name,
-            data: logo.data,
+            data: LogoUploadResult.secure_url,
             contentType: logo.contentType,
         };
         patner.fromColor = fromColor;
