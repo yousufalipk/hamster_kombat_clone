@@ -2,13 +2,16 @@ const mongoose = require('mongoose');
 const { MONGO_DB_URI } = require('./env');
 
 const connectToDb = () => {
-    mongoose.connect(MONGO_DB_URI)
-        .then((val) => {
-            console.log("Database Connected Successfuly!");
+    mongoose.connect(MONGO_DB_URI, {
+        serverSelectionTimeoutMS: 10000,
+        socketTimeoutMS: 10000,
+    })
+        .then(() => {
+            console.log("Database Connected Successfully!");
         })
-        .catch((val) => {
-            console.log("Error connecting Database!", val);
-        })
-}
+        .catch((err) => {
+            console.error("Error connecting Database!", err);
+        });
+};
 
 module.exports = connectToDb;
