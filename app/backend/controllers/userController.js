@@ -92,6 +92,8 @@ const getTaskDetailsById = (id) => {
 */
 
 // Initialize User
+
+/*
 exports.initializeUser = async (req, res) => {
     try {
 
@@ -247,6 +249,118 @@ exports.initializeUser = async (req, res) => {
         });
     }
 }
+*/
+
+exports.initializeUser = async (req, res) => {
+    try {
+        const { telegramId, firstName, lastName, username, referrerId, isPremium } = req.body;
+
+        let isUser = await UserModel.findOne({ telegramId });
+        const currentDate = new Date();
+        let balance = 0;
+        let profilePhoto = 'not set';
+
+        const setProfilePhoto = async () => {
+            const photoResponse = await getProfilePhoto(telegramId);
+            if (photoResponse.success) {
+                profilePhoto = photoResponse.photo;
+            }
+        };
+
+        if (isUser && isUser.profilePic === 'not set') {
+            await setProfilePhoto();
+            isUser.profilePic = profilePhoto;
+            await isUser.save();
+            return res.status(200).json({ status: 'success', message: 'Profile photo updated.' });
+        }
+
+        if (!isUser) {
+            await setProfilePhoto();
+            balance = referrerId ? (isPremium ? 25000 : 10000) : 0;
+            await createUser(telegramId, firstName, lastName, username, profilePhoto, balance);
+        } else {
+            await resetUser(isUser);
+            isUser = await handleCoinsPerMinute(isUser);
+        }
+
+        if (referrerId) {
+            await updateReferrals(referrerId, telegramId, firstName, lastName, balance, profilePhoto);
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'User initialized successfully!',
+            user: isUser,
+            cpm: balanceToAdd > 0,
+            balanceToAdd: balanceToAdd || 0
+        });
+
+    } catch (error) {
+        console.error("Error during user initialization:", error);
+        return res.status(500).json({ status: 'failed', message: 'Internal Server Error' });
+    }
+};
+
+const createUser = async (telegramId, firstName, lastName, username, profilePhoto, balance) => {
+    const newUser = new UserModel({
+        telegramId,
+        firstName,
+        lastName,
+        username,
+        pic: null,
+        level: 0,
+        balance,
+        energy: { level: 0, limit: 1500 },
+        multitaps: { level: 0, value: 1 },
+        unlimitedTaps: { status: false, available: 5 },
+        energyRefill: { available: 3 },
+        dailyReward: { claimed: [], day: 0, reward: 500 },
+        coinsPerMinute: { value: 0, lastClaimed: currentDate },
+        referrals: [],
+        profilePic: profilePhoto
+    });
+    await newUser.save();
+};
+
+const resetUser = async (user) => {
+    let res1 = resetBoosters(user);
+    let res2 = resetDailyRewards(res1);
+    let res3 = resetComboCards(res2);
+    await res3.save();
+    return res3;
+};
+
+const handleCoinsPerMinute = async (user) => {
+    if (user.coinsPerMinute.value !== 0) {
+        return await getCoinsPerMinute(user);
+    }
+    return user;
+};
+
+const updateReferrals = async (referrerId, telegramId, firstName, lastName, balance, profilePhoto) => {
+    const referrer = await UserModel.findOne({ telegramId: referrerId });
+    if (!referrer) {
+        console.log("Referrer not found!");
+        return;
+    }
+
+    const referralData = {
+        telegramId,
+        firstName,
+        lastName,
+        reward: balance,
+        profilePic: profilePhoto
+    };
+    referrer.referrals.push(referralData);
+    referrer.balance += balance;
+
+    const socketId = userSocketMap.get(referrer.telegramId);
+    if (socketId) {
+        const io = getIo();
+        io.to(socketId).emit('refresh', referrer);
+    }
+    await referrer.save();
+};
 
 exports.claimCPM = async (req, res) => {
     try {
