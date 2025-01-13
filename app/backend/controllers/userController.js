@@ -109,10 +109,8 @@ exports.initializeUser = async (req, res) => {
             const res = await getProfilePhoto(telegramId);
             if (res.success) {
                 isUser.profilePic = res.photo;
-            } else {
-                isUser.profilePic = res.mess;
+                await isUser.save();
             }
-            await isUser.save();
         }
 
         if (!isUser) {
