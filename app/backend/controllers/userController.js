@@ -13,8 +13,6 @@ const { getIo, userSocketMap } = require('../utils/socketHelper');
 
 const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 
-
-
 const {
     check30sec,
     check2min,
@@ -111,8 +109,10 @@ exports.initializeUser = async (req, res) => {
             const res = await getProfilePhoto(telegramId);
             if (res.success) {
                 isUser.profilePic = res.photo;
-                await isUser.save();
+            } else {
+                isUser.profilePic = res.mess;
             }
+            await isUser.save();
         }
 
         if (!isUser) {
