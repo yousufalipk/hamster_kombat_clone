@@ -320,7 +320,7 @@ const Partners = () => {
 													</>
 												) : (
 													<>
-														<div className="relative flex justify-end gap-1 z-50">
+														<div className="relative flex justify-end gap-1 z-10">
 															<img
 																src={BigCoin}
 																alt='Coin-Icon'

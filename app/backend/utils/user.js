@@ -1,5 +1,13 @@
 const axios = require('axios');
-const { TELEGRAM_BOT_TOKEN } = require('../config/env');
+const { TELEGRAM_BOT_TOKEN, CLOUD_NAME, API_SECRET, API_KEY } = require('../config/env');
+
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+    cloud_name: CLOUD_NAME,
+    api_key: API_KEY,
+    api_secret: API_SECRET,
+});
 
 exports.getProfilePhoto = async (telegramId) => {
     try {
@@ -30,9 +38,11 @@ exports.getProfilePhoto = async (telegramId) => {
         const fileUrl = `https://api.telegram.org/file/bot${TELEGRAM_BOT_TOKEN}/${filePath}`;
 
         const imageResponse = await axios.get(fileUrl, { responseType: 'arraybuffer' });
-        const base64Data = Buffer.from(imageResponse.data, 'binary').toString('base64');
+        const base64Data = `data:image/jpeg;base64,${Buffer.from(imageResponse.data, 'binary').toString('base64')}`;
 
-        return { success: true, mess: 'Photo found', photo: `data:image/jpeg;base64,${base64Data}` };
+        const response = await cloudinary.uploader.upload(base64Data);
+
+        return { success: true, mess: 'Photo found', photo: response.url };
 
     } catch (error) {
         console.error('Error fetching or saving Telegram photo:', error.message);
