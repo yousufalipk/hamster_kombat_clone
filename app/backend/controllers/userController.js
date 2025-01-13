@@ -113,11 +113,9 @@ exports.initializeUser = async (req, res) => {
                 isUser.profilePic = photoResponse.photo;
                 isUser.save();
             }
-            return res.status(200).json({
-                status: 'success',
-                mes: 'true'
-            });
         }
+
+        let balanceToAdd;
 
         if (!isUser) {
             const res = await getProfilePhoto(telegramId);
@@ -151,16 +149,12 @@ exports.initializeUser = async (req, res) => {
                 // Emiting balance update to reffere user
                 const socketId = userSocketMap.get(refRes.telegramId);
                 if (socketId) {
-                    console.log("Socket id backend", socketId);
                     const io = getIo();
-                    console.log("IO", io);
                     io.to(socketId).emit('refresh', refRes);
                 }
                 await refRes.save();
             }
         }
-
-        let balanceToAdd;
         if (!isUser) {
             isUser = new UserModel({
                 telegramId,
@@ -199,7 +193,7 @@ exports.initializeUser = async (req, res) => {
             });
             isUser = await isUser.save();
         } else {
-            let res1, res2, res3, res4;
+            let res1, res2, res3;
             res1 = resetBoosters(isUser);
             res2 = resetDailyRewards(res1);
             res3 = resetComboCards(res2);
@@ -248,67 +242,6 @@ exports.initializeUser = async (req, res) => {
         });
     }
 }
-
-const createUser = async (telegramId, firstName, lastName, username, profilePhoto, balance) => {
-    const newUser = new UserModel({
-        telegramId,
-        firstName,
-        lastName,
-        username,
-        pic: null,
-        level: 0,
-        balance,
-        energy: { level: 0, limit: 1500 },
-        multitaps: { level: 0, value: 1 },
-        unlimitedTaps: { status: false, available: 5 },
-        energyRefill: { available: 3 },
-        dailyReward: { claimed: [], day: 0, reward: 500 },
-        coinsPerMinute: { value: 0, lastClaimed: currentDate },
-        referrals: [],
-        profilePic: profilePhoto
-    });
-    await newUser.save();
-};
-
-const resetUser = async (user) => {
-    let res1 = resetBoosters(user);
-    let res2 = resetDailyRewards(res1);
-    let res3 = resetComboCards(res2);
-    await res3.save();
-    return res3;
-};
-
-const handleCoinsPerMinute = async (user) => {
-    if (user.coinsPerMinute.value !== 0) {
-        return await getCoinsPerMinute(user);
-    }
-    return user;
-};
-
-const updateReferrals = async (referrerId, telegramId, firstName, lastName, balance, profilePhoto) => {
-    const referrer = await UserModel.findOne({ telegramId: referrerId });
-    if (!referrer) {
-        console.log("Referrer not found!");
-        return;
-    }
-
-    const referralData = {
-        telegramId,
-        firstName,
-        lastName,
-        reward: balance,
-        profilePic: profilePhoto
-    };
-    referrer.referrals.push(referralData);
-    referrer.balance += balance;
-
-    const socketId = userSocketMap.get(referrer.telegramId);
-    if (socketId) {
-        const io = getIo();
-        io.to(socketId).emit('refresh', referrer);
-    }
-    await referrer.save();
-};
 
 exports.claimCPM = async (req, res) => {
     try {
