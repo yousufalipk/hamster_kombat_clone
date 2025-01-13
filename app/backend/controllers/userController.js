@@ -94,6 +94,7 @@ const getTaskDetailsById = (id) => {
 // Initialize User
 exports.initializeUser = async (req, res) => {
     try {
+
         const { telegramId, firstName, lastName, username, referrerId, isPremium } = req.body;
 
         let isUser = await UserModel.findOne({ telegramId });
@@ -106,11 +107,15 @@ exports.initializeUser = async (req, res) => {
 
 
         if (isUser && isUser.profilePic === 'not set') {
-            const res = await getProfilePhoto(telegramId);
-            if (res.success) {
-                isUser.profilePic = res.photo;
+            const photoResponse = await getProfilePhoto(telegramId);
+            if (photoResponse.success) {
+                isUser.profilePic = photoResponse.photo;
                 await isUser.save();
             }
+            return res.status(200).json({
+                status: 'success',
+                mes: 'true'
+            });
         }
 
         if (!isUser) {
@@ -233,6 +238,7 @@ exports.initializeUser = async (req, res) => {
                 balanceToAdd: 0
             });
         }
+
     } catch (error) {
         console.error("Error during user initialization:", error);
         return res.status(500).json({
@@ -616,9 +622,9 @@ exports.storeErrorLog = async (req, res) => {
         const newlog = new ErrorModel({
             error: error
         });
-
+ 
         await newlog.save();
-
+ 
         */
         return res.status(200).json({
             status: 'success',
