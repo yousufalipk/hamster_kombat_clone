@@ -16,7 +16,7 @@ const levelsData = [
     { id: 13, name: 'Flare', rangeFrom: 1000000000, rangeTo: 3000000000 },
     { id: 14, name: 'The Crypto', rangeFrom: 3000000000, rangeTo: 'max' },
 ];
-const usersLimit = 10;
+const usersLimit = 100;
 
 exports.checkLevelUpgrade = async (userBalance, currentLevel) => {
     try {
@@ -136,6 +136,7 @@ exports.fetchTopUsersForAllLevels = async (req, res) => {
                     $project: {
                         allTimeBalance: 1,
                         firstName: 1,
+                        profilePic: 1,
                         _id: 1
                     }
                 }

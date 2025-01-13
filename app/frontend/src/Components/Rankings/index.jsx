@@ -207,7 +207,6 @@ const Rankings = () => {
 											<div className="left w-[25vw] mt-10 flex flex-col items-center gap-1">
 												{currentPageUsers[1] && (
 													<>
-														{/*
 														{currentPageUsers[1].profilePic === 'not set' ? (
 															<>
 																<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
@@ -217,8 +216,6 @@ const Rankings = () => {
 																<img src={currentPageUsers[1].profilePic} alt="img" width={50} className="rounded-full" />
 															</>
 														)}
-															*/}
-														<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
 														<p>{currentPageUsers[1].firstName.slice(0, 7)}</p>
 														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 															<img src={Coin} alt="coin" width={15} />
@@ -230,7 +227,6 @@ const Rankings = () => {
 											<div className="mid w-[25vw] mt-4 flex flex-col items-center gap-1 relative">
 												{currentPageUsers[0] && (
 													<>
-														{/*
 														{currentPageUsers[0].profilePic === 'not set' ? (
 															<>
 																<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
@@ -243,8 +239,6 @@ const Rankings = () => {
 																</div>
 															</>
 														)}
-															*/}
-														<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
 														<p>{currentPageUsers[0].firstName.slice(0, 7)}</p>
 														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 															<img src={Coin} alt="coin" width={18} />
@@ -256,7 +250,6 @@ const Rankings = () => {
 											<div className="right w-[25vw] mt-12 flex flex-col items-center gap-1">
 												{currentPageUsers[2] && (
 													<>
-														{/*
 														{currentPageUsers[2].profilePic === 'not set' ? (
 															<>
 																<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
@@ -266,8 +259,6 @@ const Rankings = () => {
 																<img src={currentPageUsers[2].profilePic} alt="img" width={50} className="rounded-full" />
 															</>
 														)}
-															*/}
-														<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
 														<p>{currentPageUsers[2].firstName.slice(0, 7)}</p>
 														<div className="flex justify-center items-center gap-1 bg-gray-800 rounded-lg p-1 text-sm">
 															<img src={Coin} alt="coin" width={18} />
@@ -303,11 +294,10 @@ const Rankings = () => {
 														<div className="flex items-center gap-3 py-1 px-3 w-full">
 															<div className="w-[10%] flex justify-center items-center overflow-hidden">
 																<span className="rounded-full border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
-																	{i}
+																	{i + 1}
 																</span>
 															</div>
 															<div className="w-[25%] flex justify-start items-center overflow-hidden">
-																{/*
 																{user.profilePic === "not set" ? (
 																	<div className="w-14 h-14 flex justify-center items-center rounded-full bg-black text-white text-md">
 																		<p>{user.firstName.slice(0, 1)}</p>
@@ -315,8 +305,6 @@ const Rankings = () => {
 																) : (
 																	<img src={user.profilePic} alt="Profile" width={50} className="rounded-full" />
 																)}
-																	*/}
-																<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
 															</div>
 															<div className="w-[65%] flex flex-col justify-center items-start gap-2 text-white overflow-hidden">
 																<h1>
@@ -337,11 +325,10 @@ const Rankings = () => {
 												>
 													<div className="w-[10%] flex justify-center items-center overflow-hidden">
 														<span className="rounded-full border-2 border-gray-600 p-2 text-xs flex justify-center items-center text-gray-400 w-5 h-5">
-															{i}
+															{i + 1}
 														</span>
 													</div>
 													<div className="w-[25%] flex justify-start items-center overflow-hidden">
-														{/*
 														{user.profilePic === "not set" ? (
 															<div className="w-14 h-14 flex justify-center items-center rounded-full bg-black text-white text-md">
 																<p>{user.firstName.slice(0, 1)}</p>
@@ -349,8 +336,6 @@ const Rankings = () => {
 														) : (
 															<img src={user.profilePic} alt="Profile" width={50} className="rounded-full" />
 														)}
-															*/}
-														<img src={ProfilePic} alt="img" width={70} className="rounded-full" />
 													</div>
 													<div className="w-[65%] flex flex-col justify-center items-start gap-2 text-white overflow-hidden">
 														<h1>
