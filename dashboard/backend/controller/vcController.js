@@ -48,9 +48,10 @@ exports.addVc = async (req, res) => {
             });
         }
 
+
         const base64DataIcon = icon.data.startsWith('data:image')
-            ? icon.data.split(',')[1]
-            : icon.data;
+            ? icon.data
+            : `data:image/${icon.contentType.split('/')[1]};base64,${icon.data}`;
 
         const IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
             folder: 'vcsIcons'
@@ -64,8 +65,8 @@ exports.addVc = async (req, res) => {
         }
 
         const base64DataLogo = logo.data.startsWith('data:image')
-            ? logo.data.split(',')[1]
-            : logo.data;
+            ? logo.data
+            : `data:image/${logo.contentType.split('/')[1]};base64,${logo.data}`;
 
 
         const LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {
@@ -174,10 +175,9 @@ exports.updateVc = async (req, res) => {
             });
         }
 
-
         const base64DataIcon = icon.data.startsWith('data:image')
-            ? icon.data.split(',')[1]
-            : icon.data;
+            ? icon.data
+            : `data:image/${icon.contentType.split('/')[1]};base64,${icon.data}`;
 
         const IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
             folder: 'vcsIcons'
@@ -191,8 +191,8 @@ exports.updateVc = async (req, res) => {
         }
 
         const base64DataLogo = logo.data.startsWith('data:image')
-            ? logo.data.split(',')[1]
-            : logo.data;
+            ? logo.data
+            : `data:image/${logo.contentType.split('/')[1]};base64,${logo.data}`;
 
 
         const LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {

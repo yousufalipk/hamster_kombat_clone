@@ -27,11 +27,11 @@ exports.createProject = async (req, res) => {
         }
 
         const base64Data = icon.data.startsWith('data:image')
-            ? icon.data.split(',')[1]
-            : icon.data;
+            ? icon.data
+            : `data:image/${icon.contentType.split('/')[1]};base64,${icon.data}`;
 
         const uploadResult = await cloudinary.uploader.upload(base64Data, {
-            folder: 'projects'
+            folder: 'projects',
         });
 
         if (!uploadResult || !uploadResult.secure_url) {
@@ -191,8 +191,8 @@ exports.updateProject = async (req, res) => {
         }
 
         const base64Data = icon.data.startsWith('data:image')
-            ? icon.data.split(',')[1]
-            : icon.data;
+            ? icon.data
+            : `data:image/${icon.contentType.split('/')[1]};base64,${icon.data}`;
 
         const uploadResult = await cloudinary.uploader.upload(base64Data, {
             folder: 'projects'

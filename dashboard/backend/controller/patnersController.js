@@ -49,8 +49,8 @@ exports.addPatner = async (req, res) => {
         }
 
         const base64DataIcon = icon.data.startsWith('data:image')
-            ? icon.data.split(',')[1]
-            : icon.data;
+            ? icon.data
+            : `data:image/${icon.contentType.split('/')[1]};base64,${icon.data}`;
 
         const IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
             folder: 'partnersIcons'
@@ -59,13 +59,13 @@ exports.addPatner = async (req, res) => {
         if (!IconUploadResult || !IconUploadResult.secure_url) {
             return res.status(500).json({
                 status: 'failed',
-                message: "Patner Icon upload to Cloudinary failed!",
+                message: "Partners Icon upload to Cloudinary failed!",
             });
         }
 
         const base64DataLogo = logo.data.startsWith('data:image')
-            ? logo.data.split(',')[1]
-            : logo.data;
+            ? logo.data
+            : `data:image/${logo.contentType.split('/')[1]};base64,${logo.data}`;
 
 
         const LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {
@@ -75,7 +75,7 @@ exports.addPatner = async (req, res) => {
         if (!LogoUploadResult || !LogoUploadResult.secure_url) {
             return res.status(500).json({
                 status: 'failed',
-                message: "Kols Logos upload to Cloudinary failed!",
+                message: "Patners Logos upload to Cloudinary failed!",
             });
         }
 
@@ -175,8 +175,8 @@ exports.updatePatner = async (req, res) => {
         }
 
         const base64DataIcon = icon.data.startsWith('data:image')
-            ? icon.data.split(',')[1]
-            : icon.data;
+            ? icon.data
+            : `data:image/${icon.contentType.split('/')[1]};base64,${icon.data}`;
 
         const IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
             folder: 'partnersIcons'
@@ -185,13 +185,13 @@ exports.updatePatner = async (req, res) => {
         if (!IconUploadResult || !IconUploadResult.secure_url) {
             return res.status(500).json({
                 status: 'failed',
-                message: "Patner Icon upload to Cloudinary failed!",
+                message: "Partners Icon upload to Cloudinary failed!",
             });
         }
 
         const base64DataLogo = logo.data.startsWith('data:image')
-            ? logo.data.split(',')[1]
-            : logo.data;
+            ? logo.data
+            : `data:image/${logo.contentType.split('/')[1]};base64,${logo.data}`;
 
 
         const LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {
@@ -201,7 +201,7 @@ exports.updatePatner = async (req, res) => {
         if (!LogoUploadResult || !LogoUploadResult.secure_url) {
             return res.status(500).json({
                 status: 'failed',
-                message: "Kols Logos upload to Cloudinary failed!",
+                message: "Patners Logos upload to Cloudinary failed!",
             });
         }
 

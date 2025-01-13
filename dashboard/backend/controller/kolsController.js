@@ -49,8 +49,8 @@ exports.addKols = async (req, res) => {
         }
 
         const base64DataIcon = icon.data.startsWith('data:image')
-            ? icon.data.split(',')[1]
-            : icon.data;
+            ? icon.data
+            : `data:image/${icon.contentType.split('/')[1]};base64,${icon.data}`;
 
         const IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
             folder: 'kolsIcons'
@@ -64,8 +64,8 @@ exports.addKols = async (req, res) => {
         }
 
         const base64DataLogo = logo.data.startsWith('data:image')
-            ? logo.data.split(',')[1]
-            : logo.data;
+            ? logo.data
+            : `data:image/${logo.contentType.split('/')[1]};base64,${logo.data}`;
 
 
         const LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {
@@ -175,8 +175,8 @@ exports.updateKols = async (req, res) => {
         }
 
         const base64DataIcon = icon.data.startsWith('data:image')
-            ? icon.data.split(',')[1]
-            : icon.data;
+            ? icon.data
+            : `data:image/${icon.contentType.split('/')[1]};base64,${icon.data}`;
 
         const IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
             folder: 'kolsIcons'
@@ -190,8 +190,8 @@ exports.updateKols = async (req, res) => {
         }
 
         const base64DataLogo = logo.data.startsWith('data:image')
-            ? logo.data.split(',')[1]
-            : logo.data;
+            ? logo.data
+            : `data:image/${logo.contentType.split('/')[1]};base64,${logo.data}`;
 
 
         const LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {
@@ -202,22 +202,6 @@ exports.updateKols = async (req, res) => {
             return res.status(500).json({
                 status: 'failed',
                 message: "Kols Logos upload to Cloudinary failed!",
-            });
-        }
-
-        const maxSize = 1 * 1024 * 1024;
-        if (bufferIcon.length > maxSize || bufferLogo.length > maxSize) {
-            return res.status(200).json({
-                status: 'failed',
-                message: "Image size exceeds the maximum allowed size (1MB).",
-            });
-        }
-
-        const kol = await KolsModel.findById(kolId);
-        if (!kol) {
-            return res.status(200).json({
-                status: 'failed',
-                message: "Kol not found!",
             });
         }
 
