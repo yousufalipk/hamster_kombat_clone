@@ -2042,7 +2042,7 @@ exports.updateWalletAddress = async (req, res) => {
     try {
         const { userId, walletAddress } = req.body;
 
-        if (!userId || !walletAddress) {
+        if (!userId) {
             return res.status(400).json({
                 status: 'failed',
                 message: 'User ID and Wallet Address are required!'
@@ -2059,7 +2059,7 @@ exports.updateWalletAddress = async (req, res) => {
         }
 
         if (user.walletAddress) {
-            user.walletAddress = walletAddress;
+            user.walletAddress = walletAddress || null;
             await user.save();
             return res.status(200).json({
                 status: 'success',

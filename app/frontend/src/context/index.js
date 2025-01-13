@@ -918,11 +918,19 @@ export const UserProvider = (props) => {
     }
 
     const updateWalletAddressToDb = async (walletAddress) => {
+        console.log('Wallet Address', walletAddress);
+        let res;
         try {
-            const res = await axios.post(`${apiUrl}/user/update-wallet-address`, {
-                userId: userId,
-                walletAddress: walletAddress || null
-            });
+            if (walletAddress) {
+                res = await axios.post(`${apiUrl}/user/update-wallet-address`, {
+                    userId: userId,
+                    walletAddress: walletAddress
+                });
+            } else {
+                res = await axios.post(`${apiUrl}/user/update-wallet-address`, {
+                    userId: userId
+                });
+            }
             if (res.data.status === 'success') {
                 return ({ success: false, mess: 'Wallet Connected Succesfuly!' })
             } else {

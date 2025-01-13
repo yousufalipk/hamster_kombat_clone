@@ -110,7 +110,6 @@ const Wallet = () => {
 
 	useEffect(() => {
 		const updateWalletAddress = async () => {
-			console.log('Wallet Address', walletAddress);
 			await updateWalletAddressToDb(walletAddress);
 		}
 		updateWalletAddress();
