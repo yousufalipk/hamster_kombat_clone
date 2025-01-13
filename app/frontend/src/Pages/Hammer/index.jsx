@@ -28,11 +28,6 @@ const Hammer = () => {
 	}, []);
 
 
-	useEffect(() => {
-		console.log('comboCard', comboCards);
-	}, [comboCards])
-
-
 	return (
 		<>
 			<div className='relative h-[86vh] w-[100vw] overflow-y-scroll overflow-x-hidden'>
@@ -63,7 +58,7 @@ const Hammer = () => {
 											width={50}
 											height={50}
 										/>
-										<span className="text-white font-semibold">{comboCards[0].name}</span>
+										<span className="text-white text-[10px] px-2 text-center">{comboCards[0].name}</span>
 									</div>
 								</>
 							) : (
@@ -96,7 +91,7 @@ const Hammer = () => {
 											width={50}
 											height={50}
 										/>
-										<span className="text-white font-semibold">{comboCards[1].name}</span>
+										<span className="text-white text-[10px] px-2 text-center">{comboCards[1].name}</span>
 									</div>
 								</>
 							) : (
