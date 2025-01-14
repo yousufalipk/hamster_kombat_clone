@@ -13,10 +13,13 @@ import Animation2 from './assets/splashScreen/Animation2.gif';
 const App = () => {
 	const [isTimeValid, setIsTimeValid] = useState(true);
 	const apiUrl = process.env.REACT_APP_URL;
+	const maintenanceMode = process.env.REACT_APP_MAINTENANCE_MODE;
 
 	const { loader, loaderErrorMes, mainLoader, setMainLoader } = useUser();
 
 	const [animation, setAnimation] = useState(0);
+
+	const [dots, setDots] = useState('');
 
 	const animationTime = 3;
 
@@ -46,6 +49,14 @@ const App = () => {
 			setAnimation(0);
 		}
 	}, [mainLoader]);
+
+	useEffect(() => {
+		let interval;
+		interval = setInterval(() => {
+			setDots(prev => (prev.length < 4 ? prev + '.' : ''));
+		}, 300);
+		return () => clearInterval(interval);
+	}, []);
 
 
 	useEffect(() => {
@@ -133,7 +144,20 @@ const App = () => {
 					<span className="text-2xl text-red-700 text-center font-bold">
 						{loaderErrorMes.mess}
 					</span>
-					<p className="text-xl text-white text-center">Try reloading!</p>
+					<p className="text-xl text-gray-700 text-center w-full">Researting{dots}</p>
+				</div>
+			</div>
+		);
+	}
+
+	if (maintenanceMode === 'true') {
+		return (
+			<div className="overflow-hidden h-[100vh] w-[100vw] bg-black text-white flex flex-col gap-2 justify-center items-center text-center">
+				<div className="w-[80%] h-[80%] border-2 rounded-2xl border-white p-10 flex flex-col gap-5 justify-center items-center">
+					<h1 className="text-2xl font-bold">⚠️ We're Making Things Better!</h1>
+					<p className="text-lg font-light">
+						Our app is currently undergoing maintenance to serve you better. Please check back soon!
+					</p>
 				</div>
 			</div>
 		);

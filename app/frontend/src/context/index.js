@@ -57,40 +57,6 @@ export const UserProvider = (props) => {
 
     const [playComboAnimation, setPlayComboAnimation] = useState(false);
 
-    useEffect(() => {
-        console.log('Play Combo Animation', playComboAnimation);
-    }, [playComboAnimation])
-
-    useEffect(() => {
-        const updateAllTimeBalance = async () => {
-            if (userId) {
-                try {
-                    const res = await axios.post(`${apiUrl}/user/update-all-time-balance`, {
-                        userId: userId,
-                        balance: balance,
-                    });
-                    if (res.data.status === 'success') {
-                        console.log('All Time Balance Updated Successfully!');
-                    } else {
-                        console.log('Error setting all time balance');
-                    }
-                } catch (error) {
-                    console.log('Error updating all time balance!', error);
-                }
-            }
-        };
-        updateAllTimeBalance();
-    }, [balance]);
-
-    useEffect(() => {
-        if (userSocialTasks.length === 0 && userDailyTasks.length === 0) {
-            fetchUserTask();
-        }
-        if (inviteFriends.length === 0) {
-            fetchInviteFriends();
-        }
-    }, [userId]);
-
     // Leaderboard 
 
     const [topUsers, setTopUsers] = useState(null);
@@ -165,37 +131,58 @@ export const UserProvider = (props) => {
     const multitapUpgradeCost = [0, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000, 256000, 512000, 1024000, 2048000, 4096000, 8192000, 16384000, 32768000];
     const multitapValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 
-    const formatNumberWithSuffix = (value, decimals = 2) => {
-        if (value === null || value === undefined || isNaN(value)) return '0';
 
-        const absValue = Math.abs(value);
-        let formattedValue = value;
-
-        if (absValue >= 1e12) {
-            formattedValue = `${(value / 1e12).toFixed(decimals)}T`;
-        } else if (absValue >= 1e9) {
-            formattedValue = `${(value / 1e9).toFixed(decimals)}B`;
-        } else if (absValue >= 1e6) {
-            formattedValue = `${(value / 1e6).toFixed(decimals)}M`;
-        } else if (absValue >= 1e3) {
-            formattedValue = `${(value / 1e3).toFixed(decimals)}K`;
-        } else {
-            formattedValue = value.toFixed(decimals);
+    // Play combo animation
+    useEffect(() => {
+        if (playComboAnimation === 1) {
+            console.log('Got 1st combo card animation!');
+        } else if (playComboAnimation === 2) {
+            console.log('Got 2nd combo card animation!');
         }
+    }, [playComboAnimation])
 
-        return formattedValue;
-    };
 
-    const formatCpm = (value) => {
-        if (isNaN(value)) {
-            return "Invalid input";
+    // Update All time balance
+    useEffect(() => {
+        const updateAllTimeBalance = async () => {
+            if (userId) {
+                try {
+                    const res = await axios.post(`${apiUrl}/user/update-all-time-balance`, {
+                        userId: userId,
+                        balance: balance,
+                    });
+                    if (res.data.status !== 'success') {
+                        console.log('Error setting all time balance');
+                    }
+                } catch (error) {
+                    console.log('Error updating all time balance!', error);
+                }
+            }
+        };
+        updateAllTimeBalance();
+    }, [balance]);
+
+    // Fetch user task & invite friend taksk on initialy
+    useEffect(() => {
+        if (userSocialTasks.length === 0 && userDailyTasks.length === 0) {
+            fetchUserTask();
         }
-        return parseFloat(value).toFixed(2);
-    }
+        if (inviteFriends.length === 0) {
+            fetchInviteFriends();
+        }
+    }, [userId]);
 
-    const formatBalance = (balance) => {
-        return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(balance);
-    };
+    // Check for errors to reload app 
+    useEffect(() => {
+        if (loaderErrorMes) {
+            console.log('Reload Requesting!');
+            setTimeout(() => {
+                console.log('Realoading!');
+                window.location.reload();
+            }, 8000)
+        }
+    }, [loaderErrorMes]);
+
 
     useEffect(() => {
         if (!userId) {
@@ -248,6 +235,39 @@ export const UserProvider = (props) => {
             };
         }
     }, [apiUrl, userId]);
+
+
+    const formatNumberWithSuffix = (value, decimals = 2) => {
+        if (value === null || value === undefined || isNaN(value)) return '0';
+
+        const absValue = Math.abs(value);
+        let formattedValue = value;
+
+        if (absValue >= 1e12) {
+            formattedValue = `${(value / 1e12).toFixed(decimals)}T`;
+        } else if (absValue >= 1e9) {
+            formattedValue = `${(value / 1e9).toFixed(decimals)}B`;
+        } else if (absValue >= 1e6) {
+            formattedValue = `${(value / 1e6).toFixed(decimals)}M`;
+        } else if (absValue >= 1e3) {
+            formattedValue = `${(value / 1e3).toFixed(decimals)}K`;
+        } else {
+            formattedValue = value.toFixed(decimals);
+        }
+
+        return formattedValue;
+    };
+
+    const formatCpm = (value) => {
+        if (isNaN(value)) {
+            return "Invalid input";
+        }
+        return parseFloat(value).toFixed(2);
+    }
+
+    const formatBalance = (balance) => {
+        return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(balance);
+    };
 
     const checkSameDate = async (inputDate) => {
         let timestamp;
@@ -357,7 +377,6 @@ export const UserProvider = (props) => {
                 });
             }
         } catch (error) {
-            console.log("Error initlitializing user", error);
             setLoaderErrorMes({
                 mess: "Error Initilizing User!",
                 error: ""
@@ -386,7 +405,6 @@ export const UserProvider = (props) => {
 
             if (user.dailyReward.date) {
                 const is1Day = await checkSameDate(user.dailyReward.date);
-                console.log('Check Day!', is1Day);
                 if (is1Day) {
                     setCurrentDay(user.dailyReward.day - 1);
                 } else {
@@ -850,7 +868,6 @@ export const UserProvider = (props) => {
                 userId: userId,
             })
             if (res.data.status === 'success') {
-                console.log('RESPONSE ', res.data);
                 setUserSocialTasks(res.data.socialTasks);
                 setUserDailyTasks(res.data.dailyTasks);
                 setUserPatnerTask(res.data.partnerTasks);
