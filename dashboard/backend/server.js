@@ -49,26 +49,23 @@ app.listen(PORT, () => {
 
 app.get('/random-card-status-update', async (req, res) => {
     try {
-        const previousCardCollaborators = await Promise.all([
-            ProjectModel.find({ card: true, tgeDate: null }, { _id: 1 }),
-            KolsModel.find({ card: true }, { _id: 1 }),
-            PatnersModel.find({ card: true }, { _id: 1 }),
-            VcModel.find({ card: true }, { _id: 1 })
-        ]);
-
-        const previousCardIds = previousCardCollaborators.flat().map(doc => doc._id);
-
-        await Promise.all([
+        const updatePreviousCards = [
             ProjectModel.updateMany({ card: true }, { card: false }),
             KolsModel.updateMany({ card: true }, { card: false }),
             PatnersModel.updateMany({ card: true }, { card: false }),
             VcModel.updateMany({ card: true }, { card: false })
-        ]);
+        ];
 
-        const projects = await ProjectModel.find({ _id: { $nin: previousCardIds } }, { _id: 1, createdAt: 1 }).lean();
-        const kols = await KolsModel.find({ _id: { $nin: previousCardIds } }, { _id: 1, createdAt: 1 }).lean();
-        const partners = await PatnersModel.find({ _id: { $nin: previousCardIds } }, { _id: 1, createdAt: 1 }).lean();
-        const vcs = await VcModel.find({ _id: { $nin: previousCardIds } }, { _id: 1, createdAt: 1 }).lean();
+        await Promise.all(updatePreviousCards);
+
+        const fetchCollaborators = [
+            ProjectModel.find({ card: false }, { _id: 1, createdAt: 1 }).sort({ createdAt: -1 }).limit(10).lean(),
+            KolsModel.find({ card: false }, { _id: 1, createdAt: 1 }).sort({ createdAt: -1 }).limit(10).lean(),
+            PatnersModel.find({ card: false }, { _id: 1, createdAt: 1 }).sort({ createdAt: -1 }).limit(10).lean(),
+            VcModel.find({ card: false }, { _id: 1, createdAt: 1 }).sort({ createdAt: -1 }).limit(10).lean()
+        ];
+
+        const [projects, kols, partners, vcs] = await Promise.all(fetchCollaborators);
 
         const allCollaborators = [
             ...projects.map(doc => ({ ...doc, type: 'project' })),
@@ -77,19 +74,19 @@ app.get('/random-card-status-update', async (req, res) => {
             ...vcs.map(doc => ({ ...doc, type: 'vc' }))
         ];
 
-        const recentTenCollaborators = allCollaborators
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-            .slice(0, 10);
-
-        if (recentTenCollaborators.length === 0) {
+        if (allCollaborators.length === 0) {
             return res.status(200).json({
                 status: 'Failed',
                 message: 'No collaborators found for selection.'
             });
         }
 
+        const recentTenCollaborators = allCollaborators
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            .slice(0, 10);
+
         const randomIndices = new Set();
-        while (randomIndices.size < 2) {
+        while (randomIndices.size < Math.min(2, recentTenCollaborators.length)) {
             randomIndices.add(Math.floor(Math.random() * recentTenCollaborators.length));
         }
 
@@ -104,17 +101,18 @@ app.get('/random-card-status-update', async (req, res) => {
                 case 'vc': Model = VcModel; break;
             }
 
-            await Model.findByIdAndUpdate(collaborator._id, { card: true });
+            return Model.findByIdAndUpdate(collaborator._id, { card: true });
         });
 
         await Promise.all(updatePromises);
 
         return res.status(200).json({
             status: 'success',
-            message: 'Random card status update completed!'
+            message: 'Random card status update completed!',
+            selectedCollaborators
         });
-
     } catch (error) {
+        console.error('Error in random-card-status-update:', error);
         return res.status(500).json({
             status: 'failed',
             message: 'Internal Server Error'
