@@ -7,11 +7,20 @@ const TaskModel = require('../models/tasksSchema');
 const SocialTaskModel = require('../models/socialTaskSchema');
 const DailyTaskModel = require('../models/dailyTaskSchema');
 const PartnerTaskModel = require('../models/patnerTaskSchema');
-const { TELEGRAM_BOT_TOKEN } = require('../config/env');
+const { TELEGRAM_BOT_TOKEN, CLOUD_NAME, API_SECRET, API_KEY } = require('../config/env');
 const { Telegraf } = require("telegraf");
 const { getIo, userSocketMap } = require('../utils/socketHelper');
 
 const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
+
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+    cloud_name: CLOUD_NAME,
+    api_key: API_KEY,
+    api_secret: API_SECRET,
+});
+
 
 const {
     check30sec,
@@ -2161,3 +2170,178 @@ exports.updateAllTimeBalance = async (req, res) => {
         })
     }
 }
+
+const uploadToCloudinary = async (base64Image) => {
+    try {
+        const result = await cloudinary.uploader.upload(base64Image, {
+            folder: 'telegram_profile_photos',
+            resource_type: 'image',
+        });
+        return result.secure_url;
+    } catch (error) {
+        console.error("Error uploading to Cloudinary:", error);
+        return null;
+    }
+}
+
+
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+//Function to remove all photos cloduinary
+exports.deleteFilesInFolder = async () => {
+    try {
+        let next_cursor = null;
+        let allPublicIds = [];
+        let deletedFilesCount = 0;
+
+        do {
+            const result = await cloudinary.api.resources({
+                type: 'upload',
+                prefix: 'telegram_profile_photos/',
+                max_results: 500,
+                next_cursor: next_cursor,
+            });
+
+            const publicIds = result.resources.map(resource => resource.public_id);
+            allPublicIds = allPublicIds.concat(publicIds);
+            next_cursor = result.next_cursor;
+        } while (next_cursor);
+
+        if (allPublicIds.length > 0) {
+            const batchSize = 100;
+            for (let i = 0; i < allPublicIds.length; i += batchSize) {
+                const batch = allPublicIds.slice(i, i + batchSize);
+                try {
+                    const deleteResults = await cloudinary.api.delete_resources(batch);
+                    deletedFilesCount += deleteResults.deleted.length;
+                    console.log(`Deleted ${batch.length} files:`, deleteResults);
+
+                    await delay(1000);
+                } catch (deleteError) {
+                    console.error(`Error deleting batch starting from index ${i}:`, deleteError);
+                }
+            }
+            console.log(`Total files deleted: ${deletedFilesCount}`);
+        } else {
+            console.log('No files found in the folder to delete.');
+        }
+    } catch (error) {
+        console.error('Error retrieving or deleting files:', error);
+    }
+}
+
+const batchSize = 100;
+
+// Migrate All user pics to cloudinary
+exports.migrateProfilePics = async (req, res) => {
+    try {
+        let skip = 0;
+        while (true) {
+            const users = await UserModel.find()
+                .skip(skip)
+                .limit(batchSize);
+
+            if (users.length === 0) {
+                return res.status(200).json({
+                    status: 'success',
+                    message: 'Image Migradted Succesfully!'
+                })
+                console.log('Migration complete!');
+                break;
+            }
+
+            const updatePromises = users.map(async (user) => {
+                if (user.profilePic && user.profilePic !== 'not set') {
+                    if (user.profilePic.startsWith('data:image')) {
+                        const cloudinaryUrl = await uploadToCloudinary(user.profilePic);
+                        if (cloudinaryUrl) {
+                            user.profilePic = cloudinaryUrl;
+                            await user.save();
+                        }
+                    }
+                }
+
+                if (user.referrals && user.referrals.length > 0) {
+                    user.referrals.forEach(async (referral) => {
+                        if (referral.profilePic && referral.profilePic !== 'not set') {
+                            if (referral.profilePic.startsWith('data:image')) {
+                                const cloudinaryUrl = await uploadToCloudinary(referral.profilePic);
+                                if (cloudinaryUrl) {
+                                    referral.profilePic = cloudinaryUrl;
+                                }
+                            }
+                        }
+                    });
+
+                    await user.save();
+                }
+            });
+
+            await Promise.all(updatePromises);
+
+            skip += batchSize;
+        }
+        return res.status(200).json({
+            status: 'success',
+            message: 'Image Migradted Succesfully!'
+        })
+    } catch (error) {
+        console.log('Internal Server Error!', error);
+    }
+}
+
+
+// Now replace refferals image with new link
+exports.migrateRefferalsProfile = async (req, res) => {
+    try {
+        const users = await UserModel.find().select('telegramId profilePic');
+        const userMap = new Map();
+        users.forEach(user => userMap.set(user.telegramId, user.profilePic));
+
+        const BATCH_SIZE = 100;
+        let batchStart = 0;
+
+        const processBatch = async (batchStart) => {
+            const usersToUpdate = await UserModel.find().skip(batchStart).limit(BATCH_SIZE);
+
+            const bulkOps = [];
+
+            usersToUpdate.forEach(user => {
+                let updatedReferrals = user.referrals.map(referral => {
+                    if (referral.telegramId && userMap.has(referral.telegramId)) {
+                        referral.profilePic = userMap.get(referral.telegramId);
+                    }
+                    return referral;
+                });
+
+                bulkOps.push({
+                    updateOne: {
+                        filter: { _id: user._id },
+                        update: { $set: { referrals: updatedReferrals } },
+                    }
+                });
+            });
+
+            if (bulkOps.length > 0) {
+                await UserModel.bulkWrite(bulkOps);
+            }
+
+            if (usersToUpdate.length === BATCH_SIZE) {
+                await processBatch(batchStart + BATCH_SIZE);
+            }
+        };
+
+        await processBatch(batchStart);
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Successfully updated!'
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        });
+    }
+};

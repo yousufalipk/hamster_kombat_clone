@@ -38,9 +38,6 @@ const App = () => {
 
 				if (currentStep === percentages.length) {
 					clearInterval(intervalId);
-					setTimeout(() => {
-						setMainLoader(false);
-					}, 1000);
 				}
 			}, interval);
 

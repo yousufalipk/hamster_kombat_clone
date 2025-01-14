@@ -236,7 +236,6 @@ export const UserProvider = (props) => {
         }
     }, [apiUrl, userId]);
 
-
     const formatNumberWithSuffix = (value, decimals = 2) => {
         if (value === null || value === undefined || isNaN(value)) return '0';
 
@@ -327,7 +326,7 @@ export const UserProvider = (props) => {
             let telegramUser;
             if (staticUser === 'true') {
                 telegramUser = {
-                    id: "5840841171",
+                    id: "1529198067",
                     username: "yousuf_bhatti1",
                     first_name: "Yousuf",
                     last_name: "Bhatti 1",
@@ -452,6 +451,7 @@ export const UserProvider = (props) => {
             setEnergyLimit(user.energy.limit);
             setMultitapLevel(user.multitaps.level);
             setLevelPercentage(percentage);
+            setMainLoader(false);
             navigate('/');
         } catch (error) {
             console.log('Error initializing states!');
