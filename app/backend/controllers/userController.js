@@ -111,7 +111,6 @@ exports.initializeUser = async (req, res) => {
             const photoResponse = await getProfilePhoto(telegramId);
             if (photoResponse.success) {
                 isUser.profilePic = photoResponse.photo;
-                isUser.save();
             }
         }
 
@@ -202,7 +201,6 @@ exports.initializeUser = async (req, res) => {
                 balanceToAdd = await getCoinsPerMinute(res3);
             }
 
-            await res3.save();
             isUser = res3;
 
             if (isUser.unlimitedTaps.status === true) {
@@ -211,12 +209,14 @@ exports.initializeUser = async (req, res) => {
 
                 if (!is2mins) {
                     isUser.unlimitedTaps.status = false;
-                    await isUser.save();
                 }
             }
         }
 
+        await isUser.save();
+
         if (balanceToAdd > 0) {
+
             return res.status(200).json({
                 status: 'success',
                 message: 'User initialized successfully!',

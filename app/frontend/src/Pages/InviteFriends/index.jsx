@@ -134,7 +134,7 @@ const InviteFriends = () => {
 								<p>Friends</p>
 							</div>
 
-							{referrals.length === 0 ? (
+							{!referrals ? (
 								<>
 									<h1
 										className="text-xs text-center my-5 h-[10vh]"
