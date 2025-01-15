@@ -719,7 +719,7 @@ export const BottleCap = () => {
 									)}
 								</div>
 							)}
-							{selectedPage === 'Special' && (
+							{selectedPage === 'Social' && (
 								<div className="w-full flex flex-col justify-start items-center">
 									{/* Pandatop News Cards */}
 									{userSocialTasks?.length > 0 ? (
