@@ -588,7 +588,7 @@ export const BottleCap = () => {
 								<div className="w-full h-full flex flex-col justify-start items-center">
 									{/* Partners Cards */}
 									{userPatnerTask?.length > 0 ? (
-										<div>
+										<div className="w-full">
 											{userPatnerTask.sort((a, b) => a.priority - b.priority).map((task, index) => {
 												return (
 													<div
@@ -656,7 +656,7 @@ export const BottleCap = () => {
 								<div className="w-full h-full flex flex-col justify-start items-center">
 									{/* Daiy Cards */}
 									{userDailyTasks?.length > 0 ? (
-										<div>
+										<div className="w-full">
 											{userDailyTasks.sort((a, b) => a.priority - b.priority).map((task, index) => {
 												return (
 													<div
