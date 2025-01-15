@@ -501,13 +501,13 @@ export const BottleCap = () => {
 						</>
 					)}
 
-					<div className="absolute top-3 right-3 flex justify-center items-center gap-1 text-white">
+					<div className="top-3 right-3 flex justify-end items-center mr-2 mt-2 gap-1 text-white">
 						<img src={BigCoin} alt="" width={22} />
 						{formatBalance(balance)}
 					</div>
 
-					<div className="w-[90%] mx-auto h-full flex flex-col justify-start items-center text-white py-10 gap-5">
-						<h1 className="text-[32px] font-semibold">
+					<div className="w-[90%] mx-auto h-full flex flex-col justify-start items-center text-white pb-10 bt-7 gap-5">
+						<h1 className="text-[32px]">
 							Tasks
 						</h1>
 						<div className="w-full h-[6vh] rounded-full border border-gray-500 flex justify-between items-center p-1 gap-1">
