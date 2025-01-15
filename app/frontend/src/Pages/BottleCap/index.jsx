@@ -137,7 +137,7 @@ const BottleCap = () => {
 			if (res.success) {
 				toast.success(res.mess);
 				await fetchInviteFriends();
-				setBalance((prevBalance) => prevBalance + selectedTask.reward);
+				setBalance((prevBalance) => prevBalance + selectedInviteFriendTask.reward);
 				setSelectedInviteFriendTask((prevTask) => ({
 					...prevTask,
 					claimed: true,
