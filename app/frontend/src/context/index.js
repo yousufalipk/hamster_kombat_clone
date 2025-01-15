@@ -328,7 +328,7 @@ export const UserProvider = (props) => {
             let telegramUser;
             if (staticUser === 'true') {
                 telegramUser = {
-                    id: "7656476553",
+                    id: "5840841171",
                     username: "yousuf_bhatti1",
                     first_name: "Yousuf",
                     last_name: "Bhatti 1",

@@ -25,7 +25,7 @@ import CustomLoader from '../../Components/Loader/Loader';
 
 
 const BottleCap = () => {
-	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, userDailyTasks, userPatnerTask, balance, inviteFriends, claimInviteFriendTask, username, formatNumberWithSuffix, formatBalance } = useUser();
+	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, userDailyTasks, userPatnerTask, balance, inviteFriends, claimInviteFriendTask, username, setBalance, formatBalance, fetchInviteFriends } = useUser();
 
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [taskPopUp, setTaskPopup] = useState(false);
@@ -106,27 +106,25 @@ const BottleCap = () => {
 					const updatedPatnerTask = res2.partner.find((t) => t._id === selectedTask._id);
 
 					if (updatedDailyTask) {
-						console.log('Daily Task found!', updatedDailyTask);
 						setSelectedTask(updatedDailyTask);
 					}
 
 					if (updatedSocialTask) {
-						console.log('Social Task found!', updatedSocialTask);
 						setSelectedTask(updatedSocialTask);
 					}
 
 					if (updatedPatnerTask) {
-						console.log('Partner Task found!', updatedPatnerTask);
 						setSelectedTask(updatedPatnerTask);
 					}
 				}
+				setBalance((prevBalance) => prevBalance + selectedTask.reward);
 				toast.success(res.mess);
 			} else {
 				toast.error(res.mess);
 			}
 		} catch (error) {
 			console.log("Internal Server Error", error);
-			toast.error('Internal Server Error! 2222');
+			toast.error('Internal Server Error!');
 		} finally {
 			setButtonLoading(false);
 		}
@@ -138,7 +136,8 @@ const BottleCap = () => {
 			const res = await claimInviteFriendTask(rewardId);
 			if (res.success) {
 				toast.success(res.mess);
-				console.log("setting state true");
+				await fetchInviteFriends();
+				setBalance((prevBalance) => prevBalance + selectedTask.reward);
 				setSelectedInviteFriendTask((prevTask) => ({
 					...prevTask,
 					claimed: true,
