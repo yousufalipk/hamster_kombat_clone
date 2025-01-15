@@ -60,7 +60,7 @@ export const BottleCap = () => {
 		},
 		{
 			id: 4,
-			text: "Special"
+			text: "Social"
 		},
 	]
 
@@ -85,7 +85,7 @@ export const BottleCap = () => {
 		} else if (id === 3) {
 			setSelectedPage('Partners');
 		} else if (id === 4) {
-			setSelectedPage('Special');
+			setSelectedPage('Social');
 		}
 	}
 
