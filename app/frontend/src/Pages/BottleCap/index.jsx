@@ -117,7 +117,9 @@ const BottleCap = () => {
 						setSelectedTask(updatedPatnerTask);
 					}
 				}
-				setBalance((prevBalance) => prevBalance + selectedTask.reward);
+				if (res.data.claimedStatus !== 'pending') {
+					setBalance((prevBalance) => prevBalance + selectedTask.reward);
+				}
 				toast.success(res.mess);
 			} else {
 				toast.error(res.mess);
