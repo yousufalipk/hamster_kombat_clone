@@ -41,20 +41,22 @@ export const BottleCap = () => {
 
 	const [tasksLoader, setTaskLoader] = useState(false);
 
-	const [selectedPage, setSelectedPage] = useState('Main');
+	const [selectedPage, setSelectedPage] = useState('Daily');
 
 	const buttons = [
+		/*
 		{
 			id: 1,
 			text: "Main"
 		},
+		*/
 		{
 			id: 2,
-			text: "Partners"
+			text: "Daily"
 		},
 		{
 			id: 3,
-			text: "Daily"
+			text: "Partners"
 		},
 		{
 			id: 4,
@@ -79,9 +81,9 @@ export const BottleCap = () => {
 		if (id === 1) {
 			setSelectedPage('Main');
 		} else if (id === 2) {
-			setSelectedPage('Partners');
-		} else if (id === 3) {
 			setSelectedPage('Daily');
+		} else if (id === 3) {
+			setSelectedPage('Partners');
 		} else if (id === 4) {
 			setSelectedPage('Special');
 		}
@@ -499,19 +501,32 @@ export const BottleCap = () => {
 						</>
 					)}
 
+					<div className="absolute top-3 right-3 flex justify-center items-center gap-1 text-white">
+						<img src={BigCoin} alt="" width={22} />
+						{formatBalance(balance)}
+					</div>
+
 					<div className="w-[90%] mx-auto h-full flex flex-col justify-start items-center text-white py-10 gap-5">
 						<h1 className="text-[32px] font-semibold">
 							Tasks
 						</h1>
-						<div className="w-full h-[5vh] rounded-full border border-gray-500 flex justify-between items-center px-2 py-1">
+						<div className="w-full h-[6vh] rounded-full border border-gray-500 flex justify-between items-center p-1 gap-1">
 							{buttons.map((btn) => {
+								let count;
+								if (btn.id === 2) {
+									count = userDailyTasks?.length || 0
+								} else if (btn.id === 3) {
+									count = userPatnerTask?.length || 0
+								} else if (btn.id === 4) {
+									count = ((userSocialTasks?.length || 0) + (inviteFriends.length || 0))
+								}
 								return (
 									<button
 										key={btn.id}
-										className={`bg-transparent px-3 rounded-full ${selectedPage === btn.text && 'bg-white text-black'}`}
+										className={`bg-transparent rounded-full text-center w-[33%] ${selectedPage === btn.text && 'bg-white text-black'}`}
 										onClick={() => handleTogglePage(btn.id)}
 									>
-										{btn.text}
+										{btn.text} {`(${count})`}
 									</button>
 								)
 							})}
@@ -571,9 +586,6 @@ export const BottleCap = () => {
 							{/* Partners Page */}
 							{selectedPage === 'Partners' && (
 								<div className="w-full h-full flex flex-col justify-start items-center">
-									<div>
-										<p className="text-[#9595A9] text-lg ">Partner Task</p>
-									</div>
 									{/* Partners Cards */}
 									{userPatnerTask?.length > 0 ? (
 										<div>
@@ -642,10 +654,6 @@ export const BottleCap = () => {
 							{/* Daily Page */}
 							{selectedPage === 'Daily' && (
 								<div className="w-full h-full flex flex-col justify-start items-center">
-									<div>
-										<p className="text-[#9595A9] text-lg ">Daily Task</p>
-									</div>
-
 									{/* Daiy Cards */}
 									{userDailyTasks?.length > 0 ? (
 										<div>
@@ -713,9 +721,6 @@ export const BottleCap = () => {
 							)}
 							{selectedPage === 'Special' && (
 								<div className="w-full flex flex-col justify-start items-center">
-									<div>
-										<p className="text-[#9595A9] text-lg ">Social Media</p>
-									</div>
 									{/* Pandatop News Cards */}
 									{userSocialTasks?.length > 0 ? (
 										<div className="w-full h-full">
@@ -788,7 +793,7 @@ export const BottleCap = () => {
 															setInviteFriendsPopup(true);
 														}}
 														key={index}
-														className={`w-full bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimed ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+														className={`w-full bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimed ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-1.5`}
 													>
 														<div className="flex gap-3 justify-center items-center py-1 w-full">
 															{/* Icon */}
