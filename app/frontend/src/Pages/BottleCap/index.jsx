@@ -294,7 +294,7 @@ const BottleCap = () => {
 															width={25}
 															height={25}
 														/>
-														{selectedTask.reward.toLocaleString()} PTAP
+														{selectedTask.reward.toLocaleString()}
 													</p>
 												</div>
 												{selectedTask.claimedStatus !== 'claimed' ? (
@@ -411,7 +411,7 @@ const BottleCap = () => {
 															width={25}
 															height={25}
 														/>
-														{selectedInviteFriendTask.reward.toLocaleString()} PTAP
+														{selectedInviteFriendTask.reward.toLocaleString()}
 													</p>
 												</div>
 												{!selectedInviteFriendTask.claimed ? (
@@ -704,7 +704,7 @@ const BottleCap = () => {
 															<span className="text-sm">+{task.reward.toLocaleString()}</span>
 														</div>
 													</div>
-													{task.claimed === 'claimed' ? (
+													{task.claimed ? (
 														<>
 															<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
 																<circle cx="19.5" cy="17.5" r="12" stroke="#224E00" fill="#5dd15f" />

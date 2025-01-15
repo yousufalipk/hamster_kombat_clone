@@ -27,7 +27,6 @@ const Hammer = () => {
 		setActiveItem("Launch Pad");
 	}, []);
 
-
 	return (
 		<>
 			<div className='relative h-[86vh] w-[100vw] overflow-y-scroll overflow-x-hidden'>
@@ -53,12 +52,12 @@ const Hammer = () => {
 										className="w-[22vw] h-[13vh] rounded-xl border-gradient flex flex-col justify-center items-center"
 									>
 										<img
-											src={comboCards[0].icon}
+											src={`data:image/jpeg;base64,${comboCards[0].icon}`}
 											alt="icon"
 											width={50}
 											height={50}
 										/>
-										<span className="text-white text-[10px] px-2 text-center">{comboCards[0].name}</span>
+										<span className="text-white font-semibold">{comboCards[0].name}</span>
 									</div>
 								</>
 							) : (
@@ -86,12 +85,12 @@ const Hammer = () => {
 										className="w-[22vw] h-[13vh] rounded-xl border-gradient flex flex-col justify-center items-center"
 									>
 										<img
-											src={comboCards[1].icon}
+											src={`data:image/jpeg;base64,${comboCards[1].icon}`}
 											alt="icon"
 											width={50}
 											height={50}
 										/>
-										<span className="text-white text-[10px] px-2 text-center">{comboCards[1].name}</span>
+										<span className="text-white font-semibold">{comboCards[1].name}</span>
 									</div>
 								</>
 							) : (

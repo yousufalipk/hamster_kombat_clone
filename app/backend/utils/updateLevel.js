@@ -169,4 +169,3 @@ exports.fetchTopUsersForAllLevels = async (req, res) => {
         });
     }
 };
-

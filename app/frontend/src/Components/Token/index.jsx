@@ -321,7 +321,7 @@ const Token = () => {
 														width={30}
 														height={30}
 													/>
-													<span className='text-[#FF9500] text-xl'>{parseInt(token.userData.nextLevelCost.toLocaleString())}</span>
+													<span className='text-[#FF9500] text-xl'>{formatBalance(token.userData.nextLevelCost)}</span>
 												</div>
 
 												{/* Buttons */}
@@ -587,7 +587,7 @@ const Token = () => {
 														<div className="flex gap-1">
 															<img src={BigCoin} alt="Coin-Icon" width={20} />
 															<p className="text-white flex gap-2 justify-end items-end text-[17px]">
-																{parseInt(token.userData.walletBalance.toLocaleString())}
+																{formatBalance(token.userData.walletBalance)}
 																<span className="text-[7px]">{token.project.name.match(/[A-Z]/g)?.join('')}</span>
 															</p>
 														</div>

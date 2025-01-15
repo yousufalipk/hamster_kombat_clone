@@ -10,7 +10,7 @@ import PopUp from '../PopUp/popup1';
 let tgeToggle = 'launchpad';
 
 const TGE = () => {
-	const { isModalOpen, setModalOpen, setSendData, tgeProjects, projectLoader } = useUser();
+	const { isModalOpen, setModalOpen, setSendData, tgeProjects, projectLoader, formatBalance } = useUser();
 
 	const handleToggleChange = (id, toggleValue) => {
 		setModalOpen(true);
@@ -23,7 +23,7 @@ const TGE = () => {
 	};
 
 	// Card Component
-	const Card = ({ id, name, logo1, logo2, balance, level, fromColor, toColor, tgeToggle }) => (
+	const Card = ({ id, name, logo1, logo2, balance, level, fromColor, toColor, tgeToggle, formatBalance }) => (
 		<div className="h-[17vh] px-3 py-2 rounded-[20px] text-[#FFF]"
 			style={{
 				background: `linear-gradient(to left, ${fromColor}, ${toColor})`,
@@ -49,7 +49,7 @@ const TGE = () => {
 						width="17"
 					/>
 				</div>
-				<div className='text-[16px]'>{parseInt(balance.toLocaleString())}</div>
+				<div className='text-[16px]'>{formatBalance(balance)}</div>
 			</div>
 			<div className="flex items-center justify-start w-[22vh] mt-2 gap-2">
 				{/* level */}
@@ -126,6 +126,7 @@ const TGE = () => {
 								fromColor={project.fromColor}
 								toColor={project.toColor}
 								tgeToggle={tgeToggle}
+								formatBalance={formatBalance}
 							/>
 						))}
 					</div>

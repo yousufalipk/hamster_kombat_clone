@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import Coin from "../../assets/BigCoinIcon.svg";
 import FriendsPic from "../../assets/FriendsPic.png";
@@ -11,7 +11,27 @@ import { useUser } from '../../context/index';
 import { Link } from 'react-router-dom';
 
 const InviteFriends = () => {
-	const { telegramId, username, referrals } = useUser();
+	const { telegramId, username, referrals, fetchRefferals, refLoader } = useUser();
+
+	const [dots, setDots] = useState('');
+
+	useEffect(() => {
+		let interval;
+		if (refLoader) {
+			interval = setInterval(() => {
+				setDots(prev => (prev.length < 4 ? prev + '.' : ''));
+			}, 300);
+		} else {
+			setDots('');
+		}
+		return () => clearInterval(interval);
+	}, [refLoader]);
+
+	useEffect(() => {
+		if (referrals.length === 0) {
+			fetchRefferals();
+		}
+	}, [])
 
 	const formatBalanceWithCommas = (balance) => {
 		return balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -134,18 +154,31 @@ const InviteFriends = () => {
 								<p>Friends</p>
 							</div>
 
-							{!referrals ? (
+							{referrals.length === 0 ? (
 								<>
-									<h1
-										className="text-xs text-center my-5 h-[10vh]"
-									>
-										No referral yet
-									</h1>
+									{refLoader ? (
+										<>
+											<span className="flex justify-center items-center text-5xl font-bold w-full">
+												<p className="absolute -mt-6">
+													{dots}
+												</p>
+											</span>
+										</>
+									) : (
+										<>
+											<h1
+												className="text-xs text-center my-5 h-[10vh]"
+											>
+												No referral yet
+											</h1>
+										</>
+									)}
+
 								</>
 							) : (
 								<>
 									{/* Friends List Cards */}
-									{referrals.map((user, index) => {
+									{referrals.slice(0, 100).map((user, index) => {
 										const username = `${user.firstName || ''} ${user.lastName || ''}`;
 										return (
 											<div
@@ -242,7 +275,7 @@ const InviteFriends = () => {
 						</div>
 					</div>
 				</div>
-			</div>
+			</div >
 		</>
 	);
 };
