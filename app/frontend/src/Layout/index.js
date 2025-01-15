@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import Home from '../Pages/Home/index';
-import BottleCap from '../Pages/BottleCap/index';
+import { BottleCap } from '../Pages/BottleCap/index.jsx';
 import Hammer from '../Pages/Hammer/index';
 import InviteFriends from '../Pages/InviteFriends/index';
 import Wallet from '../Pages/Wallet/index';

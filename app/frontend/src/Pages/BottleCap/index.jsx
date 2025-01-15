@@ -23,8 +23,10 @@ import { Link } from 'react-router-dom';
 
 import CustomLoader from '../../Components/Loader/Loader';
 
+import TonIcon from '../../assets/tonIcon.svg';
 
-const BottleCap = () => {
+
+export const BottleCap = () => {
 	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, userDailyTasks, userPatnerTask, balance, inviteFriends, claimInviteFriendTask, username, setBalance, formatBalance, fetchInviteFriends } = useUser();
 
 	const [selectedTask, setSelectedTask] = useState(null);
@@ -38,6 +40,52 @@ const BottleCap = () => {
 	const [selectedInviteFriendTask, setSelectedInviteFriendTask] = useState(false);
 
 	const [tasksLoader, setTaskLoader] = useState(false);
+
+	const [selectedPage, setSelectedPage] = useState('Main');
+
+	const buttons = [
+		{
+			id: 1,
+			text: "Main"
+		},
+		{
+			id: 2,
+			text: "Partners"
+		},
+		{
+			id: 3,
+			text: "Daily"
+		},
+		{
+			id: 4,
+			text: "Special"
+		},
+	]
+
+	const mainCards = [
+		{
+			title: 'Promote PandaTap',
+			reward: '+5,00',
+			claimed: true
+		},
+		{
+			title: 'Promote PandaTap',
+			reward: '+5,00',
+			claimed: false
+		},
+	]
+
+	const handleTogglePage = (id) => {
+		if (id === 1) {
+			setSelectedPage('Main');
+		} else if (id === 2) {
+			setSelectedPage('Partners');
+		} else if (id === 3) {
+			setSelectedPage('Daily');
+		} else if (id === 4) {
+			setSelectedPage('Special');
+		}
+	}
 
 	const iconMapping = {
 		twitter: Twitter,
@@ -187,6 +235,7 @@ const BottleCap = () => {
 		<>
 			<div className='h-[100vh] w-[100vw] bg-gradient-to-t from-[#1B1B27] to-black '>
 				<div className="h-[90vh] w-[100vw] overflow-y-scroll overflow-x-hidden">
+					{/* Task Popup */}
 					{taskPopUp && selectedTask && (
 						<>
 							<div
@@ -332,6 +381,7 @@ const BottleCap = () => {
 						</>
 					)}
 
+					{/* Invite friend poup */}
 					{inviteFriendsPopup && selectedInviteFriendTask && (
 						<>
 							<div
@@ -449,283 +499,335 @@ const BottleCap = () => {
 						</>
 					)}
 
-					{/* Upper Card */}
-					<div className='relative h-[30vh] py-5'>
-						<div className=' w-full px-12 flex flex-col justify-center items-center relative'>
-							<div className='flex items-center justify-center gap-2'>
-								<div className=''>
-									<img
-										src={BigCoin}
-										alt='BigCoin-Icon'
-									/>
+					<div className="w-[90%] mx-auto h-full flex flex-col justify-start items-center text-white py-10 gap-5">
+						<h1 className="text-[32px] font-semibold">
+							Tasks
+						</h1>
+						<div className="w-full h-[5vh] rounded-full border border-gray-500 flex justify-between items-center px-2 py-1">
+							{buttons.map((btn) => {
+								return (
+									<button
+										key={btn.id}
+										className={`bg-transparent px-3 rounded-full ${selectedPage === btn.text && 'bg-white text-black'}`}
+										onClick={() => handleTogglePage(btn.id)}
+									>
+										{btn.text}
+									</button>
+								)
+							})}
+						</div>
+						<div className="w-full h-full rounded-2xl">
+							{/* Main Page */}
+							{selectedPage === 'Main' && (
+								<div className="w-full h-full flex flex-col justify-start items-center">
+									{mainCards?.length > 0 ? (
+										<div className="w-full">
+											{mainCards.map((card, index) => {
+												return (
+													<div
+														key={index}
+														className={`bg-[#1B1B27] w-full text-white flex justify-between items-center border ${card.claimed ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+													>
+														<div className="flex gap-3 justify-center items-center py-1 w-full">
+															{/* Icon */}
+															<div className="flex flex-shrink-0 ">
+																<img src={TonIcon} alt="icon" width={40} height={40} />
+															</div>
+															{/* Name */}
+															<div className="flex justify-between items-center w-full">
+																<div className="w-[60%]">
+																	<div className="flex text-md">{card.title}</div>
+																</div>
+																<div className="w-[30%] gap-1rounded-md text-lg flex items-center ">
+																	<span className="text-sm">{card.reward}</span>
+																	<img src={TonIcon} alt="" width={25} />
+																</div>
+																<div className="w-[10%] flex justify-center items-center">
+																	{card.claimed ? (
+																		<>
+																			<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+																				<circle cx="19.5" cy="17.5" r="12" stroke="#224E00" fill="#5dd15f" />
+																				<path d="M13.4802 17.8884C13.3544 18.0136 13.2546 18.1624 13.1865 18.3263C13.1184 18.4902 13.0834 18.6659 13.0834 18.8433C13.0834 19.0208 13.1184 19.1965 13.1865 19.3604C13.2546 19.5242 13.3544 19.673 13.4802 19.7982L16.344 22.6611C16.4692 22.7868 16.6179 22.8865 16.7817 22.9545C16.9455 23.0225 17.1211 23.0575 17.2984 23.0575C17.4758 23.0575 17.6514 23.0225 17.8152 22.9545C17.979 22.8865 18.1277 22.7868 18.2529 22.6611L24.9993 15.9156C25.1251 15.7905 25.2249 15.6416 25.293 15.4778C25.3611 15.3139 25.3961 15.1382 25.3961 14.9607C25.3961 14.7833 25.3611 14.6076 25.293 14.4437C25.2249 14.2798 25.1251 14.131 24.9993 14.0058C24.8741 13.8801 24.7253 13.7803 24.5615 13.7122C24.3976 13.6441 24.2219 13.609 24.0444 13.609C23.8669 13.609 23.6912 13.6441 23.5274 13.7122C23.3635 13.7803 23.2147 13.8801 23.0895 14.0058L17.2989 19.7973L15.39 17.8893C15.2648 17.7636 15.116 17.6638 14.9521 17.5957C14.7883 17.5276 14.6126 17.4925 14.4351 17.4925C14.2576 17.4925 14.0819 17.5276 13.9181 17.5957C13.7542 17.6638 13.6054 17.7627 13.4802 17.8884Z" fill="#ffffff" />
+																			</svg>
+																		</>
+																	) : (
+																		<>
+																			<img src={arrow} alt="arrow" width={14} />
+																		</>
+																	)}
+																</div>
+															</div>
+														</div>
+													</div>
+												);
+											})}
+										</div>
+									) : (
+										<div className="h-[30vh] w-full flex justify-center items-center">
+										</div>
+									)}
 								</div>
-								<div className='text-[#FFF] text-[24px] font-medium'>
-									<p>{formatBalance(balance)}</p>
+							)}
+							{/* Partners Page */}
+							{selectedPage === 'Partners' && (
+								<div className="w-full h-full flex flex-col justify-start items-center">
+									<div>
+										<p className="text-[#9595A9] text-lg ">Partner Task</p>
+									</div>
+									{/* Partners Cards */}
+									{userPatnerTask?.length > 0 ? (
+										<div>
+											{userPatnerTask.sort((a, b) => a.priority - b.priority).map((task, index) => {
+												return (
+													<div
+														onClick={() => {
+															setTaskPopup(true);
+															setSelectedTask(task);
+															if (task.claimedStatus === 'pending') {
+																const currentTime = new Date();
+																const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
+																const remaningMin = 30 - Math.floor(timeDifference);
+																if (remaningMin <= 0) {
+																	setSelectedTask((prevTask) => ({
+																		...prevTask,
+																		claimedStatus: true,
+																	}));
+																}
+																setTimeDifference(30 - Math.floor(timeDifference));
+															}
+														}}
+														key={index}
+														className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+													>
+														<div className="flex gap-3 justify-center items-center py-1 w-full">
+															{/* Icon */}
+															<div className="flex flex-shrink-0 ">
+																<img src={iconMapping[task.iconType]} alt="icon" width={40} height={40} />
+															</div>
+															{/* Name */}
+															<div className="flex justify-between items-center w-full">
+																<div>
+																	<div className="flex text-md">{task.title}</div>
+																	<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
+																		<img src={BigCoin} alt="" className="h-4 w-5" />
+																		<span className="text-sm">+{task.reward.toLocaleString()}</span>
+																	</div>
+																</div>
+																<div>
+																	{task.claimedStatus === 'claimed' ? (
+																		<>
+																			<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+																				<circle cx="19.5" cy="17.5" r="12" stroke="#224E00" fill="#5dd15f" />
+																				<path d="M13.4802 17.8884C13.3544 18.0136 13.2546 18.1624 13.1865 18.3263C13.1184 18.4902 13.0834 18.6659 13.0834 18.8433C13.0834 19.0208 13.1184 19.1965 13.1865 19.3604C13.2546 19.5242 13.3544 19.673 13.4802 19.7982L16.344 22.6611C16.4692 22.7868 16.6179 22.8865 16.7817 22.9545C16.9455 23.0225 17.1211 23.0575 17.2984 23.0575C17.4758 23.0575 17.6514 23.0225 17.8152 22.9545C17.979 22.8865 18.1277 22.7868 18.2529 22.6611L24.9993 15.9156C25.1251 15.7905 25.2249 15.6416 25.293 15.4778C25.3611 15.3139 25.3961 15.1382 25.3961 14.9607C25.3961 14.7833 25.3611 14.6076 25.293 14.4437C25.2249 14.2798 25.1251 14.131 24.9993 14.0058C24.8741 13.8801 24.7253 13.7803 24.5615 13.7122C24.3976 13.6441 24.2219 13.609 24.0444 13.609C23.8669 13.609 23.6912 13.6441 23.5274 13.7122C23.3635 13.7803 23.2147 13.8801 23.0895 14.0058L17.2989 19.7973L15.39 17.8893C15.2648 17.7636 15.116 17.6638 14.9521 17.5957C14.7883 17.5276 14.6126 17.4925 14.4351 17.4925C14.2576 17.4925 14.0819 17.5276 13.9181 17.5957C13.7542 17.6638 13.6054 17.7627 13.4802 17.8884Z" fill="#ffffff" />
+																			</svg>
+																		</>
+																	) : (
+																		<>
+																			<img src={arrow} alt="arrow" width={15} />
+																		</>
+																	)}
+																</div>
+															</div>
+														</div>
+													</div>
+												);
+											})}
+										</div>
+									) : (
+										<div className="h-[30vh] w-full flex justify-center items-center">
+										</div>
+									)}
 								</div>
-							</div>
-							<div className='flex pt-3'>
-								<div className='mx-auto bg-[#0199FF] w-20 p-1 rounded-full  shadow-[0_0_20px_0px_rgba(0,0,0,0.2)] shadow-[#0199FF]'>
-									<img
-										src={padaIcon}
-										alt='Panda-Pic'
-									/>
+							)}
+							{/* Daily Page */}
+							{selectedPage === 'Daily' && (
+								<div className="w-full h-full flex flex-col justify-start items-center">
+									<div>
+										<p className="text-[#9595A9] text-lg ">Daily Task</p>
+									</div>
+
+									{/* Daiy Cards */}
+									{userDailyTasks?.length > 0 ? (
+										<div>
+											{userDailyTasks.sort((a, b) => a.priority - b.priority).map((task, index) => {
+												return (
+													<div
+														onClick={() => {
+															setTaskPopup(true);
+															setSelectedTask(task);
+															if (task.claimedStatus === 'pending') {
+																const currentTime = new Date();
+																const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
+																const remaningMin = 30 - Math.floor(timeDifference);
+																if (remaningMin <= 0) {
+																	setSelectedTask((prevTask) => ({
+																		...prevTask,
+																		claimedStatus: true,
+																	}));
+																}
+																setTimeDifference(30 - Math.floor(timeDifference));
+															}
+														}}
+														key={index}
+														className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+													>
+														<div className="flex gap-3 justify-center items-center py-1 w-full">
+															{/* Icon */}
+															<div className="flex flex-shrink-0 ">
+																<img src={iconMapping[task.iconType]} alt="icon" width={40} height={40} />
+															</div>
+															{/* Name */}
+															<div className="flex justify-between items-center w-full">
+																<div>
+																	<div className="flex text-md">{task.title}</div>
+																	<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
+																		<img src={BigCoin} alt="" className="h-4 w-5" />
+																		<span className="text-sm">+{task.reward.toLocaleString()}</span>
+																	</div>
+																</div>
+																<div>
+																	{task.claimedStatus === 'claimed' ? (
+																		<>
+																			<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+																				<circle cx="19.5" cy="17.5" r="12" stroke="#224E00" fill="#5dd15f" />
+																				<path d="M13.4802 17.8884C13.3544 18.0136 13.2546 18.1624 13.1865 18.3263C13.1184 18.4902 13.0834 18.6659 13.0834 18.8433C13.0834 19.0208 13.1184 19.1965 13.1865 19.3604C13.2546 19.5242 13.3544 19.673 13.4802 19.7982L16.344 22.6611C16.4692 22.7868 16.6179 22.8865 16.7817 22.9545C16.9455 23.0225 17.1211 23.0575 17.2984 23.0575C17.4758 23.0575 17.6514 23.0225 17.8152 22.9545C17.979 22.8865 18.1277 22.7868 18.2529 22.6611L24.9993 15.9156C25.1251 15.7905 25.2249 15.6416 25.293 15.4778C25.3611 15.3139 25.3961 15.1382 25.3961 14.9607C25.3961 14.7833 25.3611 14.6076 25.293 14.4437C25.2249 14.2798 25.1251 14.131 24.9993 14.0058C24.8741 13.8801 24.7253 13.7803 24.5615 13.7122C24.3976 13.6441 24.2219 13.609 24.0444 13.609C23.8669 13.609 23.6912 13.6441 23.5274 13.7122C23.3635 13.7803 23.2147 13.8801 23.0895 14.0058L17.2989 19.7973L15.39 17.8893C15.2648 17.7636 15.116 17.6638 14.9521 17.5957C14.7883 17.5276 14.6126 17.4925 14.4351 17.4925C14.2576 17.4925 14.0819 17.5276 13.9181 17.5957C13.7542 17.6638 13.6054 17.7627 13.4802 17.8884Z" fill="#ffffff" />
+																			</svg>
+																		</>
+																	) : (
+																		<>
+																			<img src={arrow} alt="arrow" width={15} />
+																		</>
+																	)}
+																</div>
+															</div>
+														</div>
+													</div>
+												);
+											})}
+										</div>
+									) : (
+										<div className="h-[30vh] w-full flex justify-center items-center">
+										</div>
+									)}
 								</div>
-							</div>
-							<div className="text-white mt-3 text-lg font-semibold text-center">
-								<p>Complete tasks and Earn more!</p>
-							</div>
-						</div>
-					</div>
+							)}
+							{selectedPage === 'Special' && (
+								<div className="w-full flex flex-col justify-start items-center">
+									<div>
+										<p className="text-[#9595A9] text-lg ">Social Media</p>
+									</div>
+									{/* Pandatop News Cards */}
+									{userSocialTasks?.length > 0 ? (
+										<div className="w-full h-full">
+											{userSocialTasks.sort((a, b) => a.priority - b.priority).map((task, index) => {
+												return (
+													<div
+														onClick={() => {
+															setTaskPopup(true);
+															setSelectedTask(task);
+															if (task.claimedStatus === 'pending') {
+																const currentTime = new Date();
+																const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
+																const remaningMin = 30 - Math.floor(timeDifference);
+																if (remaningMin <= 0) {
+																	setSelectedTask((prevTask) => ({
+																		...prevTask,
+																		claimedStatus: true,
+																	}));
+																}
+																setTimeDifference(30 - Math.floor(timeDifference));
+															}
+														}}
+														key={index}
+														className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+													>
+														<div className="flex gap-3 justify-center items-center py-1 w-full">
+															{/* Icon */}
+															<div className="flex flex-shrink-0 ">
+																<img src={iconMapping[task.iconType]} alt="icon" width={40} height={40} />
+															</div>
+															{/* Name */}
+															<div className="flex justify-between items-center w-full">
+																<div>
+																	<div className="flex text-md">{task.title}</div>
+																	<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
+																		<img src={BigCoin} alt="" className="h-4 w-5" />
+																		<span className="text-sm">+{task.reward.toLocaleString()}</span>
+																	</div>
+																</div>
+																{task.claimedStatus === 'claimed' ? (
+																	<>
+																		<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+																			<circle cx="19.5" cy="17.5" r="12" stroke="#224E00" fill="#5dd15f" />
+																			<path d="M13.4802 17.8884C13.3544 18.0136 13.2546 18.1624 13.1865 18.3263C13.1184 18.4902 13.0834 18.6659 13.0834 18.8433C13.0834 19.0208 13.1184 19.1965 13.1865 19.3604C13.2546 19.5242 13.3544 19.673 13.4802 19.7982L16.344 22.6611C16.4692 22.7868 16.6179 22.8865 16.7817 22.9545C16.9455 23.0225 17.1211 23.0575 17.2984 23.0575C17.4758 23.0575 17.6514 23.0225 17.8152 22.9545C17.979 22.8865 18.1277 22.7868 18.2529 22.6611L24.9993 15.9156C25.1251 15.7905 25.2249 15.6416 25.293 15.4778C25.3611 15.3139 25.3961 15.1382 25.3961 14.9607C25.3961 14.7833 25.3611 14.6076 25.293 14.4437C25.2249 14.2798 25.1251 14.131 24.9993 14.0058C24.8741 13.8801 24.7253 13.7803 24.5615 13.7122C24.3976 13.6441 24.2219 13.609 24.0444 13.609C23.8669 13.609 23.6912 13.6441 23.5274 13.7122C23.3635 13.7803 23.2147 13.8801 23.0895 14.0058L17.2989 19.7973L15.39 17.8893C15.2648 17.7636 15.116 17.6638 14.9521 17.5957C14.7883 17.5276 14.6126 17.4925 14.4351 17.4925C14.2576 17.4925 14.0819 17.5276 13.9181 17.5957C13.7542 17.6638 13.6054 17.7627 13.4802 17.8884Z" fill="#ffffff" />
+																		</svg>
+																	</>
+																) : (
+																	<>
+																		<img src={arrow} alt="arrow" width={15} />
+																	</>
+																)}
+															</div>
+														</div>
+													</div>
+												);
+											})}
+										</div>
+									) : (
+										<div className="h-[30vh] w-full flex justify-center items-center">
+										</div>
+									)}
 
-					{/* Tasks Section */}
-					<div className="h-full relative z-10 border-6 px-4 pt-5 border-t-2 mt-5 rounded-tl-[30px] rounded-tr-[30px] border-[#0099FF] shadow-[#0099ff92]">
-						{/* Heading 1 */}
-						<div>
-							<p className="text-[#9595A9] text-lg ">Daily Task</p>
-						</div>
-						{/* Pandatop News Cards */}
-						{userDailyTasks?.length > 0 ? (
-							<div>
-								{userDailyTasks.sort((a, b) => a.priority - b.priority).map((task, index) => {
-									return (
-										<div
-											onClick={() => {
-												setTaskPopup(true);
-												setSelectedTask(task);
-												if (task.claimedStatus === 'pending') {
-													const currentTime = new Date();
-													const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
-													const remaningMin = 30 - Math.floor(timeDifference);
-													if (remaningMin <= 0) {
-														setSelectedTask((prevTask) => ({
-															...prevTask,
-															claimedStatus: true,
-														}));
-													}
-													setTimeDifference(30 - Math.floor(timeDifference));
-												}
-											}}
-											key={index}
-											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
-										>
-											<div className="flex gap-3 justify-center items-center py-1 w-full">
-												{/* Icon */}
-												<div className="flex flex-shrink-0 ">
-													<img src={iconMapping[task.iconType]} alt="icon" width={40} height={40} />
-												</div>
-												{/* Name */}
-												<div className="flex justify-between items-center w-full">
-													<div>
-														<div className="flex text-md">{task.title}</div>
-														<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
-															<img src={BigCoin} alt="" className="h-4 w-5" />
-															<span className="text-sm">+{task.reward.toLocaleString()}</span>
+									{inviteFriends && (
+										<>
+											{inviteFriends.map((task, index) => {
+												return (
+													<div
+														onClick={() => {
+															setSelectedInviteFriendTask(task);
+															setInviteFriendsPopup(true);
+														}}
+														key={index}
+														className={`w-full bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimed ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
+													>
+														<div className="flex gap-3 justify-center items-center py-1 w-full">
+															{/* Icon */}
+															<div className="flex flex-shrink-0 ">
+																<img src={inviteIconMapping[task.id]} alt="icon" width={40} height={40} />
+															</div>
+															{/* Name */}
+															<div className="flex justify-between items-center w-full">
+																<div>
+																	<div className="flex text-md">{task.title}</div>
+																	<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
+																		<img src={BigCoin} alt="" className="h-4 w-5" />
+																		<span className="text-sm">+{task.reward.toLocaleString()}</span>
+																	</div>
+																</div>
+																{task.claimed ? (
+																	<>
+																		<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+																			<circle cx="19.5" cy="17.5" r="12" stroke="#224E00" fill="#5dd15f" />
+																			<path d="M13.4802 17.8884C13.3544 18.0136 13.2546 18.1624 13.1865 18.3263C13.1184 18.4902 13.0834 18.6659 13.0834 18.8433C13.0834 19.0208 13.1184 19.1965 13.1865 19.3604C13.2546 19.5242 13.3544 19.673 13.4802 19.7982L16.344 22.6611C16.4692 22.7868 16.6179 22.8865 16.7817 22.9545C16.9455 23.0225 17.1211 23.0575 17.2984 23.0575C17.4758 23.0575 17.6514 23.0225 17.8152 22.9545C17.979 22.8865 18.1277 22.7868 18.2529 22.6611L24.9993 15.9156C25.1251 15.7905 25.2249 15.6416 25.293 15.4778C25.3611 15.3139 25.3961 15.1382 25.3961 14.9607C25.3961 14.7833 25.3611 14.6076 25.293 14.4437C25.2249 14.2798 25.1251 14.131 24.9993 14.0058C24.8741 13.8801 24.7253 13.7803 24.5615 13.7122C24.3976 13.6441 24.2219 13.609 24.0444 13.609C23.8669 13.609 23.6912 13.6441 23.5274 13.7122C23.3635 13.7803 23.2147 13.8801 23.0895 14.0058L17.2989 19.7973L15.39 17.8893C15.2648 17.7636 15.116 17.6638 14.9521 17.5957C14.7883 17.5276 14.6126 17.4925 14.4351 17.4925C14.2576 17.4925 14.0819 17.5276 13.9181 17.5957C13.7542 17.6638 13.6054 17.7627 13.4802 17.8884Z" fill="#ffffff" />
+																		</svg>
+																	</>
+																) : (
+																	<>
+																		<img src={arrow} alt="arrow" width={15} />
+																	</>
+																)}
+															</div>
 														</div>
 													</div>
-													<div>
-														{task.claimedStatus === 'claimed' ? (
-															<>
-																<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-																	<circle cx="19.5" cy="17.5" r="12" stroke="#224E00" fill="#5dd15f" />
-																	<path d="M13.4802 17.8884C13.3544 18.0136 13.2546 18.1624 13.1865 18.3263C13.1184 18.4902 13.0834 18.6659 13.0834 18.8433C13.0834 19.0208 13.1184 19.1965 13.1865 19.3604C13.2546 19.5242 13.3544 19.673 13.4802 19.7982L16.344 22.6611C16.4692 22.7868 16.6179 22.8865 16.7817 22.9545C16.9455 23.0225 17.1211 23.0575 17.2984 23.0575C17.4758 23.0575 17.6514 23.0225 17.8152 22.9545C17.979 22.8865 18.1277 22.7868 18.2529 22.6611L24.9993 15.9156C25.1251 15.7905 25.2249 15.6416 25.293 15.4778C25.3611 15.3139 25.3961 15.1382 25.3961 14.9607C25.3961 14.7833 25.3611 14.6076 25.293 14.4437C25.2249 14.2798 25.1251 14.131 24.9993 14.0058C24.8741 13.8801 24.7253 13.7803 24.5615 13.7122C24.3976 13.6441 24.2219 13.609 24.0444 13.609C23.8669 13.609 23.6912 13.6441 23.5274 13.7122C23.3635 13.7803 23.2147 13.8801 23.0895 14.0058L17.2989 19.7973L15.39 17.8893C15.2648 17.7636 15.116 17.6638 14.9521 17.5957C14.7883 17.5276 14.6126 17.4925 14.4351 17.4925C14.2576 17.4925 14.0819 17.5276 13.9181 17.5957C13.7542 17.6638 13.6054 17.7627 13.4802 17.8884Z" fill="#ffffff" />
-																</svg>
-															</>
-														) : (
-															<>
-																<img src={arrow} alt="arrow" width={15} />
-															</>
-														)}
-													</div>
-												</div>
-											</div>
-										</div>
-									);
-								})}
-							</div>
-						) : (
-							<div className="h-[30vh] w-full flex justify-center items-center">
-							</div>
-						)}
-						{/* Heading 2 */}
-						<div>
-							<p className="text-[#9595A9] text-lg ">Partner Task</p>
-						</div>
-						{/* Pandatop News Cards */}
-						{userPatnerTask?.length > 0 ? (
-							<div>
-								{userPatnerTask.sort((a, b) => a.priority - b.priority).map((task, index) => {
-									return (
-										<div
-											onClick={() => {
-												setTaskPopup(true);
-												setSelectedTask(task);
-												if (task.claimedStatus === 'pending') {
-													const currentTime = new Date();
-													const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
-													const remaningMin = 30 - Math.floor(timeDifference);
-													if (remaningMin <= 0) {
-														setSelectedTask((prevTask) => ({
-															...prevTask,
-															claimedStatus: true,
-														}));
-													}
-													setTimeDifference(30 - Math.floor(timeDifference));
-												}
-											}}
-											key={index}
-											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
-										>
-											<div className="flex gap-3 justify-center items-center py-1 w-full">
-												{/* Icon */}
-												<div className="flex flex-shrink-0 ">
-													<img src={iconMapping[task.iconType]} alt="icon" width={40} height={40} />
-												</div>
-												{/* Name */}
-												<div className="flex justify-between items-center w-full">
-													<div>
-														<div className="flex text-md">{task.title}</div>
-														<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
-															<img src={BigCoin} alt="" className="h-4 w-5" />
-															<span className="text-sm">+{task.reward.toLocaleString()}</span>
-														</div>
-													</div>
-													<div>
-														{task.claimedStatus === 'claimed' ? (
-															<>
-																<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-																	<circle cx="19.5" cy="17.5" r="12" stroke="#224E00" fill="#5dd15f" />
-																	<path d="M13.4802 17.8884C13.3544 18.0136 13.2546 18.1624 13.1865 18.3263C13.1184 18.4902 13.0834 18.6659 13.0834 18.8433C13.0834 19.0208 13.1184 19.1965 13.1865 19.3604C13.2546 19.5242 13.3544 19.673 13.4802 19.7982L16.344 22.6611C16.4692 22.7868 16.6179 22.8865 16.7817 22.9545C16.9455 23.0225 17.1211 23.0575 17.2984 23.0575C17.4758 23.0575 17.6514 23.0225 17.8152 22.9545C17.979 22.8865 18.1277 22.7868 18.2529 22.6611L24.9993 15.9156C25.1251 15.7905 25.2249 15.6416 25.293 15.4778C25.3611 15.3139 25.3961 15.1382 25.3961 14.9607C25.3961 14.7833 25.3611 14.6076 25.293 14.4437C25.2249 14.2798 25.1251 14.131 24.9993 14.0058C24.8741 13.8801 24.7253 13.7803 24.5615 13.7122C24.3976 13.6441 24.2219 13.609 24.0444 13.609C23.8669 13.609 23.6912 13.6441 23.5274 13.7122C23.3635 13.7803 23.2147 13.8801 23.0895 14.0058L17.2989 19.7973L15.39 17.8893C15.2648 17.7636 15.116 17.6638 14.9521 17.5957C14.7883 17.5276 14.6126 17.4925 14.4351 17.4925C14.2576 17.4925 14.0819 17.5276 13.9181 17.5957C13.7542 17.6638 13.6054 17.7627 13.4802 17.8884Z" fill="#ffffff" />
-																</svg>
-															</>
-														) : (
-															<>
-																<img src={arrow} alt="arrow" width={15} />
-															</>
-														)}
-													</div>
-												</div>
-											</div>
-										</div>
-									);
-								})}
-							</div>
-						) : (
-							<div className="h-[30vh] w-full flex justify-center items-center">
-							</div>
-						)}
-						{/* Heading 3 */}
-						<div>
-							<p className="text-[#9595A9] text-lg ">Social Media</p>
-						</div>
-						{/* Pandatop News Cards */}
-						{userSocialTasks?.length > 0 ? (
-							<div>
-								{userSocialTasks.sort((a, b) => a.priority - b.priority).map((task, index) => {
-									return (
-										<div
-											onClick={() => {
-												setTaskPopup(true);
-												setSelectedTask(task);
-												if (task.claimedStatus === 'pending') {
-													const currentTime = new Date();
-													const timeDifference = (currentTime - new Date(task.claimedDate)) / (1000 * 60);
-													const remaningMin = 30 - Math.floor(timeDifference);
-													if (remaningMin <= 0) {
-														setSelectedTask((prevTask) => ({
-															...prevTask,
-															claimedStatus: true,
-														}));
-													}
-													setTimeDifference(30 - Math.floor(timeDifference));
-												}
-											}}
-											key={index}
-											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimedStatus ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
-										>
-											<div className="flex gap-3 justify-center items-center py-1 w-full">
-												{/* Icon */}
-												<div className="flex flex-shrink-0 ">
-													<img src={iconMapping[task.iconType]} alt="icon" width={40} height={40} />
-												</div>
-												{/* Name */}
-												<div className="flex justify-between items-center w-full">
-													<div>
-														<div className="flex text-md">{task.title}</div>
-														<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
-															<img src={BigCoin} alt="" className="h-4 w-5" />
-															<span className="text-sm">+{task.reward.toLocaleString()}</span>
-														</div>
-													</div>
-													{task.claimedStatus === 'claimed' ? (
-														<>
-															<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-																<circle cx="19.5" cy="17.5" r="12" stroke="#224E00" fill="#5dd15f" />
-																<path d="M13.4802 17.8884C13.3544 18.0136 13.2546 18.1624 13.1865 18.3263C13.1184 18.4902 13.0834 18.6659 13.0834 18.8433C13.0834 19.0208 13.1184 19.1965 13.1865 19.3604C13.2546 19.5242 13.3544 19.673 13.4802 19.7982L16.344 22.6611C16.4692 22.7868 16.6179 22.8865 16.7817 22.9545C16.9455 23.0225 17.1211 23.0575 17.2984 23.0575C17.4758 23.0575 17.6514 23.0225 17.8152 22.9545C17.979 22.8865 18.1277 22.7868 18.2529 22.6611L24.9993 15.9156C25.1251 15.7905 25.2249 15.6416 25.293 15.4778C25.3611 15.3139 25.3961 15.1382 25.3961 14.9607C25.3961 14.7833 25.3611 14.6076 25.293 14.4437C25.2249 14.2798 25.1251 14.131 24.9993 14.0058C24.8741 13.8801 24.7253 13.7803 24.5615 13.7122C24.3976 13.6441 24.2219 13.609 24.0444 13.609C23.8669 13.609 23.6912 13.6441 23.5274 13.7122C23.3635 13.7803 23.2147 13.8801 23.0895 14.0058L17.2989 19.7973L15.39 17.8893C15.2648 17.7636 15.116 17.6638 14.9521 17.5957C14.7883 17.5276 14.6126 17.4925 14.4351 17.4925C14.2576 17.4925 14.0819 17.5276 13.9181 17.5957C13.7542 17.6638 13.6054 17.7627 13.4802 17.8884Z" fill="#ffffff" />
-															</svg>
-														</>
-													) : (
-														<>
-															<img src={arrow} alt="arrow" width={15} />
-														</>
-													)}
-												</div>
-											</div>
-										</div>
-									);
-								})}
-							</div>
-						) : (
-							<div className="h-[30vh] w-full flex justify-center items-center">
-							</div>
-						)}
+												);
+											})}
+										</>
+									)}
+									<div className="w-full h-[4vh]">
 
-						{inviteFriends && (
-							<>
-								{inviteFriends.map((task, index) => {
-									return (
-										<div
-											onClick={() => {
-												setSelectedInviteFriendTask(task);
-												setInviteFriendsPopup(true);
-											}}
-											key={index}
-											className={`bg-[#1B1B27] text-white flex justify-between items-center border ${task.claimed ? `border-[#5dd15f] shadow-[#5dd15f] shadow-md` : `border-[#0099FF] shadow-[#0199FF] shadow-md`} rounded-[14px] gap-4 py-2 px-3 my-3`}
-										>
-											<div className="flex gap-3 justify-center items-center py-1 w-full">
-												{/* Icon */}
-												<div className="flex flex-shrink-0 ">
-													<img src={inviteIconMapping[task.id]} alt="icon" width={40} height={40} />
-												</div>
-												{/* Name */}
-												<div className="flex justify-between items-center w-full">
-													<div>
-														<div className="flex text-md">{task.title}</div>
-														<div className=" text-[#FF8F00] gap-1 rounded-md text-lg flex items-center ">
-															<img src={BigCoin} alt="" className="h-4 w-5" />
-															<span className="text-sm">+{task.reward.toLocaleString()}</span>
-														</div>
-													</div>
-													{task.claimed ? (
-														<>
-															<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-																<circle cx="19.5" cy="17.5" r="12" stroke="#224E00" fill="#5dd15f" />
-																<path d="M13.4802 17.8884C13.3544 18.0136 13.2546 18.1624 13.1865 18.3263C13.1184 18.4902 13.0834 18.6659 13.0834 18.8433C13.0834 19.0208 13.1184 19.1965 13.1865 19.3604C13.2546 19.5242 13.3544 19.673 13.4802 19.7982L16.344 22.6611C16.4692 22.7868 16.6179 22.8865 16.7817 22.9545C16.9455 23.0225 17.1211 23.0575 17.2984 23.0575C17.4758 23.0575 17.6514 23.0225 17.8152 22.9545C17.979 22.8865 18.1277 22.7868 18.2529 22.6611L24.9993 15.9156C25.1251 15.7905 25.2249 15.6416 25.293 15.4778C25.3611 15.3139 25.3961 15.1382 25.3961 14.9607C25.3961 14.7833 25.3611 14.6076 25.293 14.4437C25.2249 14.2798 25.1251 14.131 24.9993 14.0058C24.8741 13.8801 24.7253 13.7803 24.5615 13.7122C24.3976 13.6441 24.2219 13.609 24.0444 13.609C23.8669 13.609 23.6912 13.6441 23.5274 13.7122C23.3635 13.7803 23.2147 13.8801 23.0895 14.0058L17.2989 19.7973L15.39 17.8893C15.2648 17.7636 15.116 17.6638 14.9521 17.5957C14.7883 17.5276 14.6126 17.4925 14.4351 17.4925C14.2576 17.4925 14.0819 17.5276 13.9181 17.5957C13.7542 17.6638 13.6054 17.7627 13.4802 17.8884Z" fill="#ffffff" />
-															</svg>
-														</>
-													) : (
-														<>
-															<img src={arrow} alt="arrow" width={15} />
-														</>
-													)}
-												</div>
-											</div>
-										</div>
-									);
-								})}
-							</>
-						)}
-						<div className="w-full h-[4vh]">
-
+									</div>
+								</div>
+							)}
 						</div>
 					</div>
 				</div >
@@ -733,4 +835,3 @@ const BottleCap = () => {
 		</>
 	);
 };
-export default BottleCap;
