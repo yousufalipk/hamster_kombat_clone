@@ -34,7 +34,8 @@ const {
     fetchOneKolDetails,
     migrateProfilePics,
     migrateRefferalsProfile,
-    deleteFilesInFolder
+    deleteFilesInFolder,
+    getRefferals
 } = require('../controllers/userController');
 
 const {
@@ -45,6 +46,7 @@ const router = express.Router();
 
 
 router.route('/fetch-user').post(initializeUser);
+router.route('/get-refferals').post(getRefferals);
 router.route('/energy-level-upgrade').post(energyLevelUpgrade);
 router.route('/multitap-level-upgrade').post(multiTapLevelUpgrade);
 router.route('/claim-unlimited-taps').post(unlimitedTaps);

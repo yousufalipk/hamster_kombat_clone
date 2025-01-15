@@ -80,6 +80,8 @@ export const UserProvider = (props) => {
 
     const [vcLoader, setVcLoader] = useState(false);
 
+    const [refLoader, setRefLoader] = useState(false);
+
     const [tgeProjects, setTgeProjects] = useState();
 
     const [currentProjects, setCurrentProjects] = useState();
@@ -326,7 +328,7 @@ export const UserProvider = (props) => {
             let telegramUser;
             if (staticUser === 'true') {
                 telegramUser = {
-                    id: "1529198067",
+                    id: "7656476553",
                     username: "yousuf_bhatti1",
                     first_name: "Yousuf",
                     last_name: "Bhatti 1",
@@ -959,6 +961,24 @@ export const UserProvider = (props) => {
         }
     }
 
+    const fetchRefferals = async () => {
+        try {
+            setRefLoader(true);
+            const res = await axios.post(`${apiUrl}/user/get-refferals`, {
+                userId: userId
+            });
+            if (res.data.status === 'success') {
+                setReferrals(res.data.referrals);
+            }
+        } catch (error) {
+            console.log('Internal Server Error!');
+            return ({ success: false, mess: 'Internal Server Error' });
+        } finally {
+            setRefLoader(false);
+        }
+    }
+
+
     return (
         <UserContext.Provider value={{
             initializeUser,
@@ -1077,8 +1097,10 @@ export const UserProvider = (props) => {
             energyUpgradeCost,
             energyLimits,
             multitapUpgradeCost,
-            multitapValues
+            multitapValues,
 
+            fetchRefferals,
+            refLoader
         }}>
             {props.children}
         </UserContext.Provider>

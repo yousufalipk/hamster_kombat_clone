@@ -2345,3 +2345,30 @@ exports.migrateRefferalsProfile = async (req, res) => {
         });
     }
 };
+
+exports.getRefferals = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const { referrals } = await UserModel.findById(userId).lean();
+
+        if (!referrals) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            })
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Refferals Found!',
+            referrals: referrals
+        })
+    } catch (error) {
+        console.log('Internal Server Error!', error);
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
