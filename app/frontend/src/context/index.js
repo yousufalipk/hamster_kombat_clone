@@ -1020,7 +1020,7 @@ export const UserProvider = (props) => {
                 isToastInProgress.current = false;
                 processNextToast();
             }, 500);
-        }, 3000);
+        }, 300000);
     };
 
     const closeToast = () => {
@@ -1166,24 +1166,28 @@ export const UserProvider = (props) => {
             ${toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'} 
             ${isExiting ? 'animate-toastOut' : 'animate-toastIn'}`}
                 >
-                    <div className={`flex justify-between items-center gap-2 ${isExiting ? 'opacity-0' : ''}`}>
+                    <div className={`relative flex justify-between items-center gap-2 px-2 py-1 ${isExiting ? 'opacity-0' : ''}`}>
                         <span
-                            className={`w-[90%] text-center overflow-hidden text-md transition-opacity duration-500 ${isTextVisible ? 'opacity-100' : 'opacity-0'}`}
+                            style={{
+                                wordSpacing: '-0.1rem',
+                            }}
+                            className={`w-[90%] text-justify leading-5 tracking-tighter text-md transition-opacity duration-500 ${isTextVisible ? 'opacity-100' : 'opacity-0'}`}
                         >
                             {toast.message}
                         </span>
                         <button
                             onClick={closeToast}
-                            className="text-white text-3xl ml-2 w-[10%]"
+                            className="text-white text-3xl ml-2 w-[10%] flex justify-end items-center mr-2 absolute right-0"
                             aria-label="Close"
                         >
                             ×
                         </button>
                     </div>
                 </div>
-            )}
+            )
+            }
             {props.children}
-        </UserContext.Provider>
+        </UserContext.Provider >
     )
 
 }

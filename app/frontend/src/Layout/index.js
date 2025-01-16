@@ -31,7 +31,7 @@ const Layout = () => {
                 >
                     <button
                         onClick={() => {
-                            triggerToast('Operation was Successfull!', 'success');
+                            triggerToast('Reward claim requested Comeback after 20 minutes!Reward claim requested Comeback after 20 minutes!', 'success');
                         }}
                         className='w-[50%] h-12 bg-white text-black rounded-2xl'
                     >
