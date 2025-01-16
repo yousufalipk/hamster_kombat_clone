@@ -14,6 +14,8 @@ module.exports = {
 			},
 			animation: {
 				rotatePulse: 'rotatePulse 3s linear infinite',
+				toastIn: 'toastIn 0.5s ease-out forwards',
+				toastOut: 'toastOut 0.5s ease-in forwards',
 			},
 			keyframes: {
 				rotatePulse: {
@@ -29,6 +31,14 @@ module.exports = {
 						transform: 'rotate(-360deg) scale(1)',
 						opacity: '1',
 					},
+				},
+				toastIn: {
+					'0%': { top: '-80px', width: '0%', opacity: '0' },
+					'100%': { top: '20px', width: '80%', opacity: '1' },
+				},
+				toastOut: {
+					'0%': { top: '20px', width: '80%', opacity: '1' },
+					'100%': { top: '-80px', width: '0%', opacity: '0' },
 				},
 			},
 			colors: {

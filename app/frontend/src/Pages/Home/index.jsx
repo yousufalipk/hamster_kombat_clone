@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../../context/index';
-import { toast } from 'react-toastify';
 
 import DailyGamePlayImg from '../../assets/optimizedImages/Home/dailyGamePlay.svg';
 import DailyRewardImg from '../../assets/optimizedImages/Home/dailyReward.svg';
@@ -105,7 +104,8 @@ const Home = () => {
 		energyUpgradeCost,
 		energyLimits,
 		multitapUpgradeCost,
-		multitapValues
+		multitapValues,
+		triggerToast
 	} = useUser();
 
 	const [isRefilling, setIsRefilling] = useState(false);
@@ -506,14 +506,14 @@ const Home = () => {
 
 			if (res.success) {
 				setUnlimitedTapsPopup(false);
-				toast.success(res.mess);
+				triggerToast(res.mess, 'success');
 			} else {
 				setUnlimitedTapsPopup(false);
-				toast.error(res.mess);
+				triggerToast(res.mess, 'error');
 			}
 		} catch (error) {
 			console.log("Error upgrading unlimited taps!", error);
-			toast.error("Internal Server Error!");
+			triggerToast('Internal Server Error', 'error');
 		} finally {
 			setButtonLoading(false);
 		}
@@ -525,17 +525,16 @@ const Home = () => {
 			const res = await energyRefillUpgrade();
 
 			if (res.success) {
-				console.log("Energy Refilled succesfuly!", res.mess);
 				setEnergyRefillPopup(false);
-				toast.success(res.mess);
+				triggerToast(res.mess, 'success');
 			} else {
 				setEnergyRefillPopup(false);
-				toast.error(res.mess);
+				triggerToast(res.mess, 'error');
 			}
 
 		} catch (error) {
 			console.log("Error Refilling Energy!", error);
-			toast.error("Internal Server Error!");
+			triggerToast('Internal Server Error', 'error');
 		} finally {
 			setButtonLoading(false);
 		}
@@ -545,10 +544,10 @@ const Home = () => {
 		setButtonLoading(true);
 		const res = await energyUpgrade();
 		if (res.success) {
-			toast.success("Energy Limit Upgraded!");
+			triggerToast('Energy Limit Upgraded!', 'success');
 			setEnergyPopup(false);
 		} else {
-			toast.error(res.mess);
+			triggerToast(res.mess, 'error');
 			setEnergyPopup(false);
 		}
 		setButtonLoading(false);
@@ -558,10 +557,10 @@ const Home = () => {
 		setButtonLoading(true);
 		const res = await multitapUpgrade();
 		if (res.success) {
-			toast.success("Multitap Level Upgraded!");
+			triggerToast('Multitap Level Upgraded!', 'success');
 			setMultitapsPopup(false);
 		} else {
-			toast.error(res.mess);
+			triggerToast(res.mess, 'error');
 			setMultitapsPopup(false);
 		}
 		setButtonLoading(false);
@@ -572,10 +571,10 @@ const Home = () => {
 		setButtonLoading(true);
 		const res = await claimDailyReward();
 		if (res.success) {
-			toast.success('Daily Reward Claimed Succesfuly!');
+			triggerToast('Daily Reward Claimed Succesfuly!', 'success');
 			setDailyRewardPopup(false);
 		} else {
-			toast.error(res.mess);
+			triggerToast(res.mess, 'error');
 		}
 		setButtonLoading(false);
 	}
@@ -585,12 +584,12 @@ const Home = () => {
 		try {
 			const res = await claimCpmCoins();
 			if (res.success) {
-				toast.success(res.mess);
+				triggerToast(res.mess, 'success');
 			} else {
-				toast.error(res.mess);
+				triggerToast(res.mess, 'error');
 			}
 		} catch (error) {
-			toast.error('Internal Server Error!');
+			triggerToast('Internal Server Error!', 'error');
 		} finally {
 			setButtonLoading(false);
 		}

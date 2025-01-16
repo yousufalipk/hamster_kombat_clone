@@ -21,15 +21,13 @@ import { FaCopy } from "react-icons/fa";
 
 import CommingSoon from '../../assets/root/comingSoon.svg';
 
-import { toast } from 'react-toastify';
-
 
 import { useTonConnectUI } from "@tonconnect/ui-react";
 
 const Wallet = () => {
 	const [tonConnectUI] = useTonConnectUI();
 	const [walletAddress, setWalletAddress] = useState(null);
-	const { balance, updateWalletAddressToDb, formatBalance } = useUser();
+	const { balance, updateWalletAddressToDb, formatBalance, triggerToast } = useUser();
 
 	const [dots, setDots] = useState('');
 	const [buttonLoading, setButtonLoading] = useState(false);
@@ -131,13 +129,13 @@ const Wallet = () => {
 		try {
 			if (walletAddress) {
 				await navigator.clipboard.writeText(walletAddress);
-				toast.success("Wallet address copied to clipboard!");
+				triggerToast('Wallet address copied to clipboard!', 'success');
 			} else {
-				toast.error("No wallet address to copy.");
+				triggerToast('No wallet address to copy.', 'error');
 			}
 		} catch (error) {
 			console.error("Failed to copy wallet address:", error);
-			toast.error("Failed to copy wallet address.");
+			triggerToast('Failed to copy wallet address', 'error');
 		}
 	};
 

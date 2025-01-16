@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import { toast } from 'react-toastify';
 import { useUser } from '../../context/index';
 import { useNavigate } from 'react-router-dom';
 import CustomLoader from '../Loader/Loader';
@@ -27,7 +26,7 @@ import PopupDivider from '../PopupDividerSvg/PopupDividerSvg';
 import VerticalDividerSvg from "../VerticalDividerSvg/VerticalDividerSvg";
 
 const Token = () => {
-	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance, formatCpm, playComboAnimation } = useUser();
+	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance, formatCpm, playComboAnimation, triggerToast } = useUser();
 
 	const [isModalOpen, setModalOpen] = useState(false);
 	const [processing, setProcessing] = useState(true);
@@ -126,9 +125,9 @@ const Token = () => {
 			setButtonLoading(true);
 			const res = await upgradeProjectLevel(token.project._id);
 			if (res.success) {
-				toast.success(res.mess);
+				triggerToast(res.mess, 'success');
 			} else {
-				toast.error(res.mess);
+				triggerToast(res.mess, 'success');
 			}
 		} catch (error) {
 			console.log('Internal Server Error!');
@@ -170,13 +169,13 @@ const Token = () => {
 						setSelectedTask(updatedTask);
 					}
 				}
-				toast.success(res.mess);
+				triggerToast(res.mess, 'success');
 			} else {
-				toast.error(res.mess);
+				triggerToast(res.mess, 'error');
 			}
 		} catch (error) {
 			console.log("Internal Server Error", error);
-			toast.error('Internal Server Error! 2222');
+			triggerToast('Internal Server Error', 'error');
 		} finally {
 			setButtonLoading(false);
 		}

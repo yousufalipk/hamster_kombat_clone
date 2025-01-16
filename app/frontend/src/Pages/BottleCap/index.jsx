@@ -3,14 +3,12 @@ import BigCoin from "../../assets/BigCoinIcon.svg";
 import Twitter from "../../assets/pages/twitter.svg";
 import Telegram from "../../assets/pages/telegram.svg";
 import Youtube from "../../assets/pages/Yutube.svg";
-import padaIcon from "../../assets/pages/pandaicon.svg"
 import arrow from "../../assets/pages/arrow.svg";
 import linbottle from '../../assets/token/LineBottle.svg'
 import closebutton from "../../assets/token/closebutton.svg"
-import { useUser } from "../../context/index";
-import { toast } from 'react-toastify';
 import Instagram from '../../assets/token/instagram.svg';
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
+import TonIcon from '../../assets/tonIcon.svg';
 
 import invite1 from '../../assets/invite/1.svg';
 import invite2 from '../../assets/invite/2.svg';
@@ -19,15 +17,13 @@ import invite3 from '../../assets/invite/3.svg';
 import LeftPopupEllipse from '../../assets/optimizedImages/popup/leftEllipse.webp';
 import RightPopupEllipse from '../../assets/optimizedImages/popup/rightEllipse.webp';
 
-import { Link } from 'react-router-dom';
-
 import CustomLoader from '../../Components/Loader/Loader';
 
-import TonIcon from '../../assets/tonIcon.svg';
-
+import { Link } from 'react-router-dom';
+import { useUser } from "../../context/index";;
 
 export const BottleCap = () => {
-	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, userDailyTasks, userPatnerTask, balance, inviteFriends, claimInviteFriendTask, username, setBalance, formatBalance, fetchInviteFriends } = useUser();
+	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, userDailyTasks, userPatnerTask, balance, inviteFriends, claimInviteFriendTask, username, setBalance, formatBalance, fetchInviteFriends, triggerToast } = useUser();
 
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [taskPopUp, setTaskPopup] = useState(false);
@@ -170,13 +166,13 @@ export const BottleCap = () => {
 				if (res.data.claimedStatus !== 'pending') {
 					setBalance((prevBalance) => prevBalance + selectedTask.reward);
 				}
-				toast.success(res.mess);
+				triggerToast(res.mess, 'success');
 			} else {
-				toast.error(res.mess);
+				triggerToast(res.mess, 'error');
 			}
 		} catch (error) {
 			console.log("Internal Server Error", error);
-			toast.error('Internal Server Error!');
+			triggerToast('Internal Server Error', 'error');
 		} finally {
 			setButtonLoading(false);
 		}
@@ -187,7 +183,7 @@ export const BottleCap = () => {
 			setButtonLoading(true);
 			const res = await claimInviteFriendTask(rewardId);
 			if (res.success) {
-				toast.success(res.mess);
+				triggerToast(res.mess, 'success');
 				await fetchInviteFriends();
 				setBalance((prevBalance) => prevBalance + selectedInviteFriendTask.reward);
 				setSelectedInviteFriendTask((prevTask) => ({
@@ -195,11 +191,11 @@ export const BottleCap = () => {
 					claimed: true,
 				}));
 			} else {
-				toast.error(res.mess);
+				triggerToast(res.mess, 'error');
 			}
 		} catch (error) {
+			triggerToast('Internal Server Error', 'error');
 			console.log('Internal Server Error', error);
-			toast.error('Internal Server Error');
 		} finally {
 			setButtonLoading(false);
 		}

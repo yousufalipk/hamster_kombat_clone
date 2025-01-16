@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { toast } from 'react-toastify';
 import Coin from "../../assets/BigCoinIcon.svg";
 import FriendsPic from "../../assets/FriendsPic.png";
 import GiftBox from "../../assets/GiftBox.png";
@@ -11,7 +10,7 @@ import { useUser } from '../../context/index';
 import { Link } from 'react-router-dom';
 
 const InviteFriends = () => {
-	const { telegramId, username, referrals, fetchRefferals, refLoader } = useUser();
+	const { telegramId, username, referrals, fetchRefferals, refLoader, triggerToast } = useUser();
 
 	const [dots, setDots] = useState('');
 
@@ -46,9 +45,9 @@ const InviteFriends = () => {
 		textArea.select();
 		try {
 			document.execCommand("copy");
-			toast.success('Copied!');
+			triggerToast('Copied!!', 'success');
 		} catch (err) {
-			toast.error('Failed to copy!');
+			triggerToast('Failed to copy!', 'success');
 			console.error("Failed to copy", err);
 		}
 		document.body.removeChild(textArea);

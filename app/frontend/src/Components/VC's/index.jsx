@@ -9,11 +9,10 @@ import LeftPopupEllipse from '../../assets/optimizedImages/popup/leftEllipse.web
 import RightPopupEllipse from '../../assets/optimizedImages/popup/rightEllipse.webp';
 import popupLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 
-import { toast } from 'react-toastify';
 import { useUser } from "../../context";
 
 const VCS = () => {
-	const { vcs, fetchVcs, upgradeVcLevel, vcLoader, balance, formatNumberWithSuffix, formatCpm } = useUser();
+	const { vcs, fetchVcs, upgradeVcLevel, vcLoader, balance, triggerToast, formatCpm } = useUser();
 
 	const navigate = useNavigate();
 
@@ -53,9 +52,9 @@ const VCS = () => {
 		try {
 			const res = await upgradeVcLevel(selectedVc._id);
 			if (res.success) {
-				toast.success(res.mess);
+				triggerToast(res.mess, 'success');
 			} else {
-				toast.error(res.mess);
+				triggerToast(res.mess, 'error');
 			}
 		} catch (error) {
 

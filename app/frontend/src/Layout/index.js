@@ -13,10 +13,42 @@ import LevelsPage from '../Components/Levels/Levels';
 
 import EllipseImg from '../assets/root/ellipse.png';
 
+import { useUser } from '../context/index.js';
+
 const Layout = () => {
+    const { triggerToast } = useUser();
     return (
         <>
             <div className='relative h-full w-screen overflow-hidden z-20'>
+
+                {/* Cutom Toast Triggrer */}
+                {/*
+                <div
+                    style={{
+                        zIndex: 1000
+                    }}
+                    className='w-full h-full absolute px-10 flex justify-center items-center gap-2 bg-black'
+                >
+                    <button
+                        onClick={() => {
+                            triggerToast('Operation was Successfull!', 'success');
+                        }}
+                        className='w-[50%] h-12 bg-white text-black rounded-2xl'
+                    >
+                        Success
+                    </button>
+                    <button
+                        onClick={() => {
+                            triggerToast('Operation was Unsuccessful!', 'fail');
+                        }}
+                        className='w-[50%] h-12 bg-white text-black rounded-2xl'
+                    >
+                        Fail
+                    </button>
+                </div>
+                */}
+
+
                 <img src={EllipseImg} alt="grad" className='absolute' />
                 <img src={EllipseImg} alt="grad" className='absolute -bottom-72' />
                 <div className='h-[86vh]'>

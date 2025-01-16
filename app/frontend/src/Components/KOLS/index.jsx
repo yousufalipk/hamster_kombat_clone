@@ -3,7 +3,6 @@ import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import AngleIcon from "../../assets/BlackAngle.svg";
 import CustomLoader from '../Loader/Loader';
-import { toast } from 'react-toastify';
 import close from "../../assets/dailyreward/close.svg"
 
 import { useUser } from '../../context/index';
@@ -13,7 +12,7 @@ import RightPopupEllipse from '../../assets/optimizedImages/popup/rightEllipse.w
 import popupLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 
 const KOLS = () => {
-	const { fetchKols, upgradeKolsLevel, kols, kolsLoader, balance, formatNumberWithSuffix, formatCpm } = useUser();
+	const { fetchKols, upgradeKolsLevel, kols, kolsLoader, balance, triggerToast, formatCpm } = useUser();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedKol, setSelectedKol] = useState(null);
@@ -51,9 +50,9 @@ const KOLS = () => {
 		try {
 			const res = await upgradeKolsLevel(selectedKol._id);
 			if (res.success) {
-				toast.success(res.mess);
+				triggerToast(res.mess, 'success');
 			} else {
-				toast.error(res.mess);
+				triggerToast(res.mess, 'error');
 			}
 		} catch (error) {
 			console.log("Internal Server Error", error);

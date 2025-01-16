@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { io } from "socket.io-client";
 import { useNavigate } from 'react-router-dom';
@@ -978,6 +978,61 @@ export const UserProvider = (props) => {
         }
     }
 
+    const [toast, setToast] = useState(null);
+    const [isVisible, setIsVisible] = useState(false);
+    const [isExiting, setIsExiting] = useState(false);
+    const [isTextVisible, setIsTextVisible] = useState(false);
+    const isToastInProgress = useRef(false);
+    const toastQueue = useRef([]);
+
+    const triggerToast = (message, type) => {
+        toastQueue.current.push({ message, type });
+
+        if (!isToastInProgress.current) {
+            processNextToast();
+        }
+    };
+
+    const processNextToast = () => {
+        if (toastQueue.current.length === 0) {
+            return;
+        }
+
+        isToastInProgress.current = true;
+
+        const { message, type } = toastQueue.current.shift();
+
+        setToast({ message, type });
+        setIsTextVisible(false);
+        setIsVisible(true);
+        setIsExiting(false);
+
+        setTimeout(() => {
+            setIsTextVisible(true);
+        }, 500);
+
+        setTimeout(() => {
+            setIsExiting(true);
+            setIsTextVisible(false);
+            setTimeout(() => {
+                setIsVisible(false);
+                setToast(null);
+                isToastInProgress.current = false;
+                processNextToast();
+            }, 500);
+        }, 3000);
+    };
+
+    const closeToast = () => {
+        setIsExiting(true);
+        setIsTextVisible(false);
+        setTimeout(() => {
+            setIsVisible(false);
+            setToast(null);
+            isToastInProgress.current = false;
+            processNextToast();
+        }, 500);
+    };
 
     return (
         <UserContext.Provider value={{
@@ -1100,8 +1155,33 @@ export const UserProvider = (props) => {
             multitapValues,
 
             fetchRefferals,
-            refLoader
+            refLoader,
+
+            triggerToast
         }}>
+            {toast && isVisible && (
+                <div
+                    style={{ zIndex: 1000 }}
+                    className={`fixed left-1/2 transform -translate-x-1/2 top-[-80px] mx-auto px-2 rounded-md text-white 
+            ${toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'} 
+            ${isExiting ? 'animate-toastOut' : 'animate-toastIn'}`}
+                >
+                    <div className={`flex justify-center items-center gap-2 ${isExiting ? 'opacity-0' : ''}`}>
+                        <span
+                            className={`w-[80%] text-center overflow-hidden text-md transition-opacity duration-500 ${isTextVisible ? 'opacity-100' : 'opacity-0'}`}
+                        >
+                            {toast.message}
+                        </span>
+                        <button
+                            onClick={closeToast}
+                            className="text-white text-3xl ml-2 w-[20%]"
+                            aria-label="Close"
+                        >
+                            ×
+                        </button>
+                    </div>
+                </div>
+            )}
             {props.children}
         </UserContext.Provider>
     )

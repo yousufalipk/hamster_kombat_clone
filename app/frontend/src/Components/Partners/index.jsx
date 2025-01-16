@@ -3,7 +3,6 @@ import BigCoin from "../../assets/BigCoinIcon.svg";
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import AngleIcon from "../../assets/BlackAngle.svg";
 import CustomLoader from '../Loader/Loader';
-import { toast } from 'react-toastify';
 import close from "../../assets/dailyreward/close.svg"
 import LeftPopupEllipse from '../../assets/optimizedImages/popup/leftEllipse.webp';
 import RightPopupEllipse from '../../assets/optimizedImages/popup/rightEllipse.webp';
@@ -12,7 +11,7 @@ import popupLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 import { useUser } from "../../context";
 
 const Partners = () => {
-	const { patners, fetchPatners, upgradePatnerLevel, patnerLoader, balance, formatNumberWithSuffix, formatCpm } = useUser();
+	const { patners, fetchPatners, upgradePatnerLevel, patnerLoader, balance, triggerToast, formatCpm } = useUser();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedPatner, setSelectedPatner] = useState(null);
 
@@ -49,9 +48,9 @@ const Partners = () => {
 			setButtonLoading(true);
 			const res = await upgradePatnerLevel(selectedPatner._id);
 			if (res.success) {
-				toast.success(res.mess);
+				triggerToast(res.mess, 'success');
 			} else {
-				toast.error(res.mess);
+				triggerToast(res.mess, 'error');
 			}
 		} catch (error) {
 
