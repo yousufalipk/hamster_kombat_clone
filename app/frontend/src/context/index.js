@@ -1161,20 +1161,20 @@ export const UserProvider = (props) => {
         }}>
             {toast && isVisible && (
                 <div
-                    style={{ zIndex: 1000 }}
-                    className={`fixed left-1/2 transform -translate-x-1/2 top-[-80px] mx-auto px-2 rounded-md text-white 
+                    style={{ zIndex: 100000000 }}
+                    className={`w-[90%] fixed left-1/2 transform -translate-x-1/2 top-[-80px] mx-auto px-2 rounded-md text-white 
             ${toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'} 
             ${isExiting ? 'animate-toastOut' : 'animate-toastIn'}`}
                 >
-                    <div className={`flex justify-center items-center gap-2 ${isExiting ? 'opacity-0' : ''}`}>
+                    <div className={`flex justify-between items-center gap-2 ${isExiting ? 'opacity-0' : ''}`}>
                         <span
-                            className={`w-[80%] text-center overflow-hidden text-md transition-opacity duration-500 ${isTextVisible ? 'opacity-100' : 'opacity-0'}`}
+                            className={`w-[90%] text-center overflow-hidden text-md transition-opacity duration-500 ${isTextVisible ? 'opacity-100' : 'opacity-0'}`}
                         >
                             {toast.message}
                         </span>
                         <button
                             onClick={closeToast}
-                            className="text-white text-3xl ml-2 w-[20%]"
+                            className="text-white text-3xl ml-2 w-[10%]"
                             aria-label="Close"
                         >
                             ×

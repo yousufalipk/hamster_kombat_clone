@@ -48,7 +48,6 @@ const Layout = () => {
                 </div>
                 */}
 
-
                 <img src={EllipseImg} alt="grad" className='absolute' />
                 <img src={EllipseImg} alt="grad" className='absolute -bottom-72' />
                 <div className='h-[86vh]'>

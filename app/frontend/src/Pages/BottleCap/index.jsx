@@ -502,11 +502,11 @@ export const BottleCap = () => {
 						{formatBalance(balance)}
 					</div>
 
-					<div className="w-[90%] mx-auto h-full flex flex-col justify-start items-center text-white pb-10 bt-7 gap-5">
-						<h1 className="text-[32px]">
+					<div className="w-[90%] mx-auto flex flex-col justify-start items-center text-white pb-10 gap-5">
+						<h1 className="text-[32px] h-[7vh]">
 							Tasks
 						</h1>
-						<div className="w-full h-[6vh] rounded-full border border-gray-500 flex justify-between items-center p-1 gap-1">
+						<div className="w-full h-[4.5vh] rounded-full border border-gray-500 flex justify-between items-center gap-1 p-1">
 							{buttons.map((btn) => {
 								let count;
 								if (btn.id === 2) {

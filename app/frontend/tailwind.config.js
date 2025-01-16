@@ -33,12 +33,12 @@ module.exports = {
 					},
 				},
 				toastIn: {
-					'0%': { top: '-80px', width: '0%', opacity: '0' },
-					'100%': { top: '20px', width: '80%', opacity: '1' },
+					'0%': { top: '-80px', opacity: '0' },
+					'100%': { top: '20px', opacity: '1' },
 				},
 				toastOut: {
-					'0%': { top: '20px', width: '80%', opacity: '1' },
-					'100%': { top: '-80px', width: '0%', opacity: '0' },
+					'0%': { top: '20px', opacity: '1' },
+					'100%': { top: '-80px', opacity: '0' },
 				},
 			},
 			colors: {
