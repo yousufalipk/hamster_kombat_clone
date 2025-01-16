@@ -59,10 +59,10 @@ app.get('/random-card-status-update', async (req, res) => {
         await Promise.all(updatePreviousCards);
 
         const fetchCollaborators = [
-            ProjectModel.find({ card: false }, { _id: 1, createdAt: 1 }).sort({ createdAt: -1 }).limit(10).lean(),
-            KolsModel.find({ card: false }, { _id: 1, createdAt: 1 }).sort({ createdAt: -1 }).limit(10).lean(),
-            PatnersModel.find({ card: false }, { _id: 1, createdAt: 1 }).sort({ createdAt: -1 }).limit(10).lean(),
-            VcModel.find({ card: false }, { _id: 1, createdAt: 1 }).sort({ createdAt: -1 }).limit(10).lean()
+            ProjectModel.find({ card: false }, { _id: 1, createdAt: 1, name: 1 }).sort({ createdAt: -1 }).limit(10).lean(),
+            KolsModel.find({ card: false }, { _id: 1, createdAt: 1, name: 1 }).sort({ createdAt: -1 }).limit(10).lean(),
+            PatnersModel.find({ card: false }, { _id: 1, createdAt: 1, name: 1 }).sort({ createdAt: -1 }).limit(10).lean(),
+            VcModel.find({ card: false }, { _id: 1, createdAt: 1, name: 1 }).sort({ createdAt: -1 }).limit(10).lean()
         ];
 
         const [projects, kols, partners, vcs] = await Promise.all(fetchCollaborators);
