@@ -21,7 +21,7 @@ const ContentForm = () => {
 
             tg.BackButton.show();
             tg.BackButton.onClick(() => {
-                navigate('/');
+                navigate('/bottle-cap');
             });
 
             return () => {

@@ -1181,7 +1181,7 @@ export const UserProvider = (props) => {
             {toast && isVisible && (
                 <div
                     style={{ zIndex: 100000000 }}
-                    className={`w-[90%] fixed left-1/2 transform -translate-x-1/2 top-[-80px] mx-auto px-2 rounded-md text-white 
+                    className={`w-[90%] fixed left-1/2 transform -translate-x-1/2 top-[-80px] mx-auto px-2 p-2 rounded-md text-white 
             ${toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'} 
             ${isExiting ? 'animate-toastOut' : 'animate-toastIn'}`}
                 >
