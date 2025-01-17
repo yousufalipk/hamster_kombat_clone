@@ -52,7 +52,7 @@ const Hammer = () => {
 										className="w-[22vw] h-[13vh] rounded-xl border-gradient flex flex-col justify-center items-center"
 									>
 										<img
-											src={`data:image/jpeg;base64,${comboCards[0].icon}`}
+											src={comboCards[0].icon}
 											alt="icon"
 											width={50}
 											height={50}
@@ -85,7 +85,7 @@ const Hammer = () => {
 										className="w-[22vw] h-[13vh] rounded-xl border-gradient flex flex-col justify-center items-center"
 									>
 										<img
-											src={`data:image/jpeg;base64,${comboCards[1].icon}`}
+											src={comboCards[1].icon}
 											alt="icon"
 											width={50}
 											height={50}

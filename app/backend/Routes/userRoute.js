@@ -32,11 +32,10 @@ const {
     getServerTimeStamp,
     updateAllTimeBalance,
     fetchOneKolDetails,
-    migrateProfilePics,
-    migrateRefferalsProfile,
-    deleteFilesInFolder,
     getRefferals,
-    addContent
+    addContent,
+    MigrateImagesWithTelegramId,
+    UpdateReferralsProfilePic
 } = require('../controllers/userController');
 
 const {
@@ -78,11 +77,12 @@ router.route('/update-wallet-address').post(updateWalletAddress);
 router.route('/update-all-time-balance').post(updateAllTimeBalance);
 router.route('/fetch-one-kol-detail').post(fetchOneKolDetails);
 
-router.route('/migrate-profile-pic').get(migrateProfilePics);
-router.route('/migrate-refferal-profile').get(migrateRefferalsProfile);
-router.route('/delete-all').get(deleteFilesInFolder);
+router.route('/move-images').get(MigrateImagesWithTelegramId);
+router.route('/update-refferals-pics').get(UpdateReferralsProfilePic);
 
 router.route('/add-content').post(addContent);
+
+
 
 
 // Test

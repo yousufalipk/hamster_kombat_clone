@@ -34,8 +34,10 @@ exports.getProfilePhoto = async (telegramId) => {
         const uploadResponse = await new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
                 {
-                    folder: 'live_photos',
+                    folder: 'user_profile_pictures',
                     resource_type: 'image',
+                    public_id: telegramId,
+                    overwrite: true,
                 },
                 (error, result) => {
                     if (error) {

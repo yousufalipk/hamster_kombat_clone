@@ -499,6 +499,9 @@ export const BottleCap = () => {
 						</>
 					)}
 
+
+					{/* Affiliate Program */}
+					{/*
 					<div
 						className="absolute top-5 left-5"
 						onClick={() => {
@@ -507,6 +510,7 @@ export const BottleCap = () => {
 					>
 						<IoIosGitNetwork className="text-white" size={25} />
 					</div>
+					*/}
 
 					<div className="top-3 right-3 flex justify-end items-center mr-2 mt-2 gap-1 text-white">
 						<img src={BigCoin} alt="" width={22} />
