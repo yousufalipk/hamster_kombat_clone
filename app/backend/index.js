@@ -146,3 +146,52 @@ app.get('/api/utc-time', (req, res) => {
         });
     }
 });
+
+app.get('/user-with-profile-pic', async (req, res) => {
+    try {
+        const stats = await UserModel.aggregate([
+            {
+                $group: {
+                    _id: {
+                        hasProfilePic: {
+                            $cond: {
+                                if: { $and: [{ $ne: ["$profilePic", null] }, { $ne: ["$profilePic", "not set"] }] },
+                                then: true,
+                                else: false
+                            }
+                        }
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    hasProfilePic: "$_id.hasProfilePic",
+                    count: 1
+                }
+            }
+        ]);
+
+        const withProfilePic = stats.find(stat => stat.hasProfilePic === true)?.count || 0;
+        const withoutProfilePic = stats.find(stat => stat.hasProfilePic === false)?.count || 0;
+        const totalUsers = withProfilePic + withoutProfilePic;
+
+        const result = {
+            withProfilePic,
+            withoutProfilePic,
+            totalUsers
+        };
+
+        res.status(200).json({
+            status: 'success',
+            result: result
+        });
+    } catch (error) {
+        console.log('Internal Server Error!');
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+})

@@ -1168,9 +1168,6 @@ export const UserProvider = (props) => {
                 >
                     <div className={`relative flex justify-between items-center gap-2 px-2 py-1 ${isExiting ? 'opacity-0' : ''}`}>
                         <span
-                            style={{
-                                wordSpacing: '-0.1rem',
-                            }}
                             className={`w-[90%] text-justify leading-5 tracking-tighter text-md transition-opacity duration-500 ${isTextVisible ? 'opacity-100' : 'opacity-0'}`}
                         >
                             {toast.message}
