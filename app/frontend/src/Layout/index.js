@@ -24,7 +24,7 @@ const Layout = () => {
             <div className='relative h-full w-screen overflow-hidden z-20'>
 
                 {/* Cutom Toast Triggrer */}
-
+                {/*
                 <div
                     style={{
                         zIndex: 1000
@@ -48,6 +48,7 @@ const Layout = () => {
                         Fail
                     </button>
                 </div>
+                */}
 
 
                 <img src={EllipseImg} alt="grad" className='absolute' />
