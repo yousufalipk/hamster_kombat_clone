@@ -17,13 +17,13 @@ const AffiliateProgram = () => {
             id: 2,
             text: 'Publish it',
             description: 'On any social network. Be sure to provide a link to the application',
-            path: '/'
+            path: '/affiliate-program'
         },
         {
             id: 3,
             text: 'Get up to 200 TON',
             description: 'Depending ont the number of views, interactions, your audience and other important factors, we will detemine the amount of your reward.',
-            path: '/'
+            path: '/affiliate-program'
         },
     ]
     const recentRewardUsers = [
