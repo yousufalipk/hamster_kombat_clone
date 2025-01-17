@@ -7,6 +7,8 @@ import Hammer from '../Pages/Hammer/index';
 import InviteFriends from '../Pages/InviteFriends/index';
 import Wallet from '../Pages/Wallet/index';
 import Footer from '../Components/Footer';
+import AffiliateProgram from '../Pages/BottleCap/affiliateProgram.jsx';
+import ContentForm from '../Pages/BottleCap/contentForm.jsx';
 
 import Rankings from '../Components/Rankings/index';
 import LevelsPage from '../Components/Levels/Levels';
@@ -59,6 +61,8 @@ const Layout = () => {
                         <Route path="/invite-friends" element={<InviteFriends />} />
                         <Route path="/rankings" element={<Rankings />} />
                         <Route path="/levels" element={<LevelsPage />} />
+                        <Route path="/affiliate-program" element={<AffiliateProgram />} />
+                        <Route path="/content" element={<ContentForm />} />
                     </Routes>
                 </div>
                 <div>

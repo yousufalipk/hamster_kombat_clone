@@ -2372,3 +2372,37 @@ exports.getRefferals = async (req, res) => {
         })
     }
 }
+
+exports.addContent = async (req, res) => {
+    try {
+        const { userId, link, info } = req.body;
+
+        const user = await UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Internal Server Error'
+            })
+        }
+
+        const content = {
+            link: link,
+            info: info
+        }
+
+        user.content.push(content);
+
+        await user.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Content Submitted Succesfuly!'
+        })
+    } catch (error) {
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Error submitting content!'
+        })
+    }
+}

@@ -9,6 +9,7 @@ import closebutton from "../../assets/token/closebutton.svg"
 import Instagram from '../../assets/token/instagram.svg';
 import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import TonIcon from '../../assets/tonIcon.svg';
+import { IoIosGitNetwork } from "react-icons/io";
 
 import invite1 from '../../assets/invite/1.svg';
 import invite2 from '../../assets/invite/2.svg';
@@ -20,7 +21,8 @@ import RightPopupEllipse from '../../assets/optimizedImages/popup/rightEllipse.w
 import CustomLoader from '../../Components/Loader/Loader';
 
 import { Link } from 'react-router-dom';
-import { useUser } from "../../context/index";;
+import { useUser } from "../../context/index";
+import { useNavigate } from "react-router-dom";
 
 export const BottleCap = () => {
 	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, userDailyTasks, userPatnerTask, balance, inviteFriends, claimInviteFriendTask, username, setBalance, formatBalance, fetchInviteFriends, triggerToast } = useUser();
@@ -40,6 +42,8 @@ export const BottleCap = () => {
 	const [selectedPage, setSelectedPage] = useState('Daily');
 
 	const webAppLink = process.env.REACT_APP_REFFERAL_LINK;
+
+	const navigate = useNavigate();
 
 	const buttons = [
 		/*
@@ -121,10 +125,6 @@ export const BottleCap = () => {
 		}
 		return () => clearInterval(interval);
 	}, [buttonLoading]);
-
-	useEffect(() => {
-		console.log('Selected Task', selectedTask);
-	}, [selectedTask])
 
 	const handleClaimTask = async () => {
 		try {
@@ -498,6 +498,15 @@ export const BottleCap = () => {
 							</div>
 						</>
 					)}
+
+					<div
+						className="absolute top-5 left-5"
+						onClick={() => {
+							navigate('/affiliate-program')
+						}}
+					>
+						<IoIosGitNetwork className="text-white" size={25} />
+					</div>
 
 					<div className="top-3 right-3 flex justify-end items-center mr-2 mt-2 gap-1 text-white">
 						<img src={BigCoin} alt="" width={22} />

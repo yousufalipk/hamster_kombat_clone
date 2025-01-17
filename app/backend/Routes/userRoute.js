@@ -35,7 +35,8 @@ const {
     migrateProfilePics,
     migrateRefferalsProfile,
     deleteFilesInFolder,
-    getRefferals
+    getRefferals,
+    addContent
 } = require('../controllers/userController');
 
 const {
@@ -80,6 +81,8 @@ router.route('/fetch-one-kol-detail').post(fetchOneKolDetails);
 router.route('/migrate-profile-pic').get(migrateProfilePics);
 router.route('/migrate-refferal-profile').get(migrateRefferalsProfile);
 router.route('/delete-all').get(deleteFilesInFolder);
+
+router.route('/add-content').post(addContent);
 
 
 // Test

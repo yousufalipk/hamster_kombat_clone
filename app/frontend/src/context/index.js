@@ -978,6 +978,23 @@ export const UserProvider = (props) => {
         }
     }
 
+    const submitContent = async (link, info) => {
+        try {
+            const response = await axios.post(`${apiUrl}/user/add-content`, {
+                userId: userId,
+                link: link,
+                info: info
+            });
+            if (response.data.status === 'success') {
+                return ({ success: true, mess: 'Content Submitted Successfuly!' })
+            } else {
+                return ({ success: false, mess: 'Internal Server Error!' })
+            }
+        } catch (error) {
+            return ({ success: false, mess: 'Internal Server Error!' })
+        }
+    }
+
     const [toast, setToast] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
     const [isExiting, setIsExiting] = useState(false);
@@ -1020,7 +1037,7 @@ export const UserProvider = (props) => {
                 isToastInProgress.current = false;
                 processNextToast();
             }, 500);
-        }, 300000);
+        }, 3000);
     };
 
     const closeToast = () => {
@@ -1157,7 +1174,9 @@ export const UserProvider = (props) => {
             fetchRefferals,
             refLoader,
 
-            triggerToast
+            triggerToast,
+
+            submitContent
         }}>
             {toast && isVisible && (
                 <div
