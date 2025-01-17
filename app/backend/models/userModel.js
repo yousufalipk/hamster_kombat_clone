@@ -222,19 +222,7 @@ const userSchema = new mongoose.Schema({
     allTimeBalance: {
         type: Number,
         default: null
-    },
-    content: [{
-        link: {
-            type: String,
-        },
-        info: {
-            type: String,
-        },
-        createdAt: {
-            type: Date,
-            default: Date.now,
-        },
-    }]
+    }
 }, { timestamps: true });
 
 const UserModel = mongoose.model('User', userSchema);

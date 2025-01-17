@@ -1,4 +1,5 @@
 const UserModel = require('../models/userModel');
+const ContentModel = require('../models/contentModel');
 const ProjectModel = require('../models/projectSchema');
 const KolModel = require('../models/kolsSchema');
 const PatnerModel = require('../models/patnersSchema');
@@ -2386,14 +2387,13 @@ exports.addContent = async (req, res) => {
             })
         }
 
-        const content = {
+        const content = new ContentModel({
+            userId: userId,
             link: link,
             info: info
-        }
+        });
 
-        user.content.push(content);
-
-        await user.save();
+        await content.save();
 
         return res.status(200).json({
             status: 'success',
