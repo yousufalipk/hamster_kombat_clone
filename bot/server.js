@@ -1,6 +1,6 @@
 const express = require('express');
 const { Telegraf } = require('telegraf');
-const { PORT, BOT_TOKEN, ANNOUNCEMENT_CHANNEL_URL, TELEGRAM_CHAT_URL, GAME_BOT_URL } = require('./Config/env');
+const { PORT, BOT_TOKEN, ANNOUNCEMENT_CHANNEL_URL, TELEGRAM_CHAT_URL, GAME_BOT_URL, WEBHOOL_PATH } = require('./Config/env');
 
 const bot = new Telegraf(BOT_TOKEN);
 const app = express();
@@ -64,7 +64,7 @@ app.post(BOT_WEBHOOK_PATH, (req, res) => {
 app.listen(PORT, async () => {
 	console.log(`Server running on http://localhost:${PORT}`);
 
-	const WEBHOOK_URL = `https://telegram-bot-production-e664.up.railway.app${BOT_WEBHOOK_PATH}`;
+	const WEBHOOK_URL = `${WEBHOOL_PATH}${BOT_WEBHOOK_PATH}`;
 	try {
 		await bot.telegram.setWebhook(WEBHOOK_URL);
 		console.log(`Webhook set to ${WEBHOOK_URL}`);
@@ -76,4 +76,8 @@ app.listen(PORT, async () => {
 			console.error('Error setting webhook:', error.response?.description || error.message);
 		}
 	}
+});
+
+app.get('/', (req, res) => {
+	res.status(200).send('Server is healthy and running!');
 });
