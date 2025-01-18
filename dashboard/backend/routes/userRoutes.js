@@ -9,6 +9,10 @@ const {
     fetchTwoTrueCards,
     broadcastMessageToUsers
 } = require('../controller/userController');
+const multer = require('multer');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // User routes
 
@@ -22,6 +26,6 @@ router.route('/refresh').post(refresh);
 
 router.route('/fetch-dailyComboCard').get(fetchTwoTrueCards);
 
-router.route('/broadcast-message').post(broadcastMessageToUsers);
+router.post('/broadcast-message', upload.single('file'), broadcastMessageToUsers);
 
 module.exports = router;

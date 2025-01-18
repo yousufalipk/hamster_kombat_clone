@@ -1102,7 +1102,7 @@ export const FirebaseProvider = (props) => {
             toggleTaskStatus,
             socialTasks,
             dailyTasks,
-            patnerTasks
+            patnerTasks,
 
         }}>
             {props.children}
