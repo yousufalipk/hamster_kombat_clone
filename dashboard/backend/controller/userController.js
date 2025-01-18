@@ -326,6 +326,12 @@ exports.broadcastMessageToUsers = async (req, res) => {
             if (!btn.text || !btn.link) {
                 throw new Error('Each button must have "buttonText" and "link".');
             }
+
+            const urlRegex = /^(https?:\/\/|tg:\/\/)/;
+            if (!urlRegex.test(btn.link)) {
+                throw new Error(`Invalid URL protocol for button link: ${btn.link}. Must be https:// or tg://.`);
+            }
+
             return [{ text: btn.text, url: btn.link }];
         });
 
