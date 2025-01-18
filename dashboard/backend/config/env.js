@@ -10,6 +10,7 @@ const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN;
 const CLOUD_NAME = process.env.CLOUD_NAME;
 const API_KEY = process.env.API_KEY;
 const API_SECRET = process.env.API_SECRET;
+const BOT_TOKEN = process.env.BOT_TOKEN;
 
 module.exports = {
     PORT,
@@ -19,5 +20,6 @@ module.exports = {
     FRONTEND_ORIGIN,
     CLOUD_NAME,
     API_KEY,
-    API_SECRET
+    API_SECRET,
+    BOT_TOKEN
 }
