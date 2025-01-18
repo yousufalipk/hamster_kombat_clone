@@ -67,7 +67,7 @@ const App = () => {
 
 				const timeDifference = Math.abs(serverTime - clientTime);
 
-				if (timeDifference > 5000 || timeDifference < -5000) {
+				if (timeDifference > 15000 || timeDifference < -15000) {
 					setIsTimeValid(false);
 				} else {
 					setIsTimeValid(true);

@@ -31,6 +31,9 @@ import DailyComboCardPage from '../../Pages/DailyComboCard/DailyComboCard';
 //Manage Tasks
 import ManageTasksPage from '../../Pages/ManageTasks/ManageTasks';
 
+// Message Broadcast
+import MessageBroadcast from '../../Pages/MessageBroadcast/MessageBroadcast';
+
 import UserProtected from '../../Components/Protected/UserProtected';
 
 const AdminLayout = () => {
@@ -72,6 +75,10 @@ const AdminLayout = () => {
 
             {/* Manage Tasks */}
             <Route path='/manage-tasks' element={<UserProtected ><ManageTasksPage /></UserProtected>} />
+
+            {/* Message Broadcast */}
+            <Route path='/broadcast-message' element={<UserProtected ><MessageBroadcast /></UserProtected>} />
+
           </Routes>
         </div>
       </div>
