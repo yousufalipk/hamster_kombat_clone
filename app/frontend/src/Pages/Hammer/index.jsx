@@ -57,7 +57,7 @@ const Hammer = () => {
 											width={50}
 											height={50}
 										/>
-										<span className="text-white font-semibold">{comboCards[0].name}</span>
+										<span className="text-white font-semibold text-sm text-center">{comboCards[0].name}</span>
 									</div>
 								</>
 							) : (
@@ -90,7 +90,7 @@ const Hammer = () => {
 											width={50}
 											height={50}
 										/>
-										<span className="text-white font-semibold">{comboCards[1].name}</span>
+										<span className="text-white font-semibold text-sm text-center">{comboCards[1].name}</span>
 									</div>
 								</>
 							) : (

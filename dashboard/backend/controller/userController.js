@@ -1,6 +1,7 @@
 const UserModel = require('../models/userSchema');
 const TelegramUser = require('../models/telegramUsersSchema');
 const RefreshTokenModel = require("../models/tokenSchema");
+const BroadcastingModel = require('../models/broadcastingLogs');
 
 const ProjectModel = require('../models/projectSchema');
 const KolsModel = require('../models/kolsSchema');
@@ -307,22 +308,21 @@ exports.broadcastMessageToUsers = async (req, res) => {
         const file = req.file;
 
         if (!message || !btnData) {
-            return res.status(400).json({ error: 'Message and btnData are required.' });
+            return res.status(400).json({ error: 'Message and Buttons Data are required.' });
         }
 
         let buttons;
         try {
             buttons = JSON.parse(btnData);
         } catch (error) {
-            return res.status(400).json({ error: 'Invalid btnData format. Must be a valid JSON string.' });
+            return res.status(400).json({ error: 'Invalid buttons data format. Must be a valid JSON string.' });
         }
 
         if (!Array.isArray(buttons) || buttons.length === 0) {
-            return res.status(400).json({ error: 'btnData must be a non-empty array.' });
+            return res.status(400).json({ error: 'buttons must be a non-empty array.' });
         }
 
         const inlineKeyboard = buttons.map((btn) => {
-            console.log('btnssss', btn);
             if (!btn.text || !btn.link) {
                 throw new Error('Each button must have "buttonText" and "link".');
             }
@@ -358,19 +358,30 @@ exports.broadcastMessageToUsers = async (req, res) => {
                 }
             } catch (err) {
                 console.error(`Failed to send message to ${user.telegramId}:`, err.message);
-                failedUsers.push(user.telegramId);
+                failedUsers.push({ telegramId: user.telegramId });
             }
         });
 
         await Promise.all(sendPromises);
 
+        const successUsers = users.filter(user => !failedUsers.some(failedUser => failedUser.telegramId === user.telegramId));
+
+        const log = new BroadcastingModel({
+            failedUsers: failedUsers,
+            noOfFailedUsers: failedUsers.length,
+            successUsers: successUsers.map(user => ({ telegramId: user.telegramId })),
+            noOfSuccessUsers: successUsers.length,
+        });
+
+        await log.save();
+
         res.status(200).json({
             status: 'success',
-            message: `Broadcast completed. ${users.length - failedUsers.length} messages sent successfully.`,
+            message: `Broadcast completed. ${successUsers.length} messages sent successfully.`,
             failedUsers,
         });
     } catch (error) {
         console.error('Error broadcasting message:', error.message);
-        res.status(500).json({ error: 'Internal Server Error 222', details: error.message });
+        res.status(500).json({ error: 'Internal Server Error', details: error.message });
     }
 };

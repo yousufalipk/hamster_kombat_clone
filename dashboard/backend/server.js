@@ -14,6 +14,7 @@ const ProjectModel = require('./models/projectSchema');
 const KolsModel = require('./models/kolsSchema');
 const PatnersModel = require('./models/patnersSchema');
 const VcModel = require('./models/vcSchema');
+const comboLogs = require('./models/comboCardsLogs');
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use('/task', taskRoutes);
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
 });
+
 
 app.get('/random-card-status-update', async (req, res) => {
     try {
@@ -105,6 +107,19 @@ app.get('/random-card-status-update', async (req, res) => {
         });
 
         await Promise.all(updatePromises);
+
+        const log = new comboLogs({
+            comboCard1: {
+                name: selectedCollaborators[0].name,
+                type: selectedCollaborators[0].type
+            },
+            comboCard2: {
+                name: selectedCollaborators[1].name,
+                type: selectedCollaborators[1].type
+            }
+        });
+
+        await log.save();
 
         return res.status(200).json({
             status: 'success',
