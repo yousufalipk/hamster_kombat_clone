@@ -2,7 +2,7 @@ name: Cron job to trigger API
 
 on:
   schedule:
-    - cron: "0 19 * * *"  # 7:00 PM UTC = 12:00 AM PKT (Karachi time)
+    - cron: "0 0 * * *"
   workflow_dispatch:
 
 jobs:
@@ -11,7 +11,9 @@ jobs:
     steps:
       - name: Log the current time (for debugging)
         run: date
-
-      - name: Trigger (New Combo Card Daily)
+        
+      - name: Trigger dailyComboCards task
         run: |
+          echo "Triggering dailyComboCards API..."
           curl -X GET https://panda-tap-dashboard-backend.vercel.app/random-card-status-update
+          echo "API trigger completed successfully."

@@ -35,7 +35,8 @@ const {
     getRefferals,
     addContent,
     MigrateImagesWithTelegramId,
-    UpdateReferralsProfilePic
+    UpdateReferralsProfilePic,
+    dailyComboReset
 } = require('../controllers/userController');
 
 const {
@@ -81,6 +82,7 @@ router.route('/move-images').get(MigrateImagesWithTelegramId);
 router.route('/update-refferals-pics').get(UpdateReferralsProfilePic);
 
 router.route('/add-content').post(addContent);
+router.route('/reset-daily-combo').get(dailyComboReset);
 
 
 

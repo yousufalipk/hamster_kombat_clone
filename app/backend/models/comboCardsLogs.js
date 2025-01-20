@@ -4,22 +4,34 @@ const comboLogsSchema = new mongoose.Schema({
     comboCard1: {
         name: {
             type: String,
-            required: true
+            default: '',
         },
         type: {
             type: String,
-            required: true
-        }
+            default: '',
+        },
+        id: {
+            type: String,
+            default: '',
+        },
     },
     comboCard2: {
         name: {
             type: String,
-            required: true
+            default: '',
         },
         type: {
             type: String,
-            required: true
-        }
+            default: '',
+        },
+        id: {
+            type: String,
+            default: '',
+        },
+    },
+    formatedDateAndTime: {
+        type: String,
+        default: ''
     }
 }, {
     timestamps: true,
