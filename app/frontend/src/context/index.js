@@ -15,6 +15,8 @@ export const UserProvider = (props) => {
 
     const apiUrl = process.env.REACT_APP_URL;
 
+    const AdController = window.Adsgram.init({ blockId: "7329" });
+
     // User States
 
     const [userDataInitilized, setUserDataInitlized] = useState(false);
@@ -1051,6 +1053,34 @@ export const UserProvider = (props) => {
         }, 500);
     };
 
+    const watchAdsAndEarn = async () => {
+        try {
+            const adResult = await AdController.show();
+
+            if (adResult.done && !adResult.error) {
+                console.log('Ad watched successfully. Processing reward...');
+
+                const response = await axios.post(`${apiUrl}/user/watch-ads-reward`, {
+                    userId: userId,
+                });
+
+                if (response.data.status === 'success') {
+                    console.log('Reward granted successfully!');
+                    return { success: true, message: 'Reward granted successfully' };
+                } else {
+                    console.log('Failed to grant reward:', response.data.message);
+                    return { success: false, message: response.data.message };
+                }
+            } else if (adResult.error) {
+                return { success: false, message: `Ad error: ${adResult.description}` };
+            } else {
+                return { success: false, message: 'Ad was not completed.' };
+            }
+        } catch (error) {
+            return { success: false, message: 'Internal Server Error' };
+        }
+    };
+
     return (
         <UserContext.Provider value={{
             initializeUser,
@@ -1176,7 +1206,9 @@ export const UserProvider = (props) => {
 
             triggerToast,
 
-            submitContent
+            submitContent,
+
+            watchAdsAndEarn
         }}>
             {toast && isVisible && (
                 <div

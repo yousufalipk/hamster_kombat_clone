@@ -2297,6 +2297,44 @@ exports.dailyComboReset = async (req, res) => {
     }
 };
 
+exports.watchAdsReward = async (req, res) => {
+    try {
+        const { userid } = req.query;
+
+        if (!userid) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'User ID is required in the query parameter!',
+            });
+        }
+
+        const user = await UserModel.findOne({ telegramId: userid });
+
+        if (!user) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'User not found!',
+            });
+        }
+
+        const rewardAmount = 5000;
+        user.balance += rewardAmount;
+
+        await user.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Reward balance added successfully!',
+            newBalance: user.balance,
+        });
+    } catch (error) {
+        console.error('Internal Server Error:', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error',
+        });
+    }
+};
 
 /*
 const downloadImage = async (url, filePath) => {

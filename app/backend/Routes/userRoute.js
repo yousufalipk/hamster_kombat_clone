@@ -34,7 +34,8 @@ const {
     addContent,
     MigrateImagesWithTelegramId,
     UpdateReferralsProfilePic,
-    dailyComboReset
+    dailyComboReset,
+    watchAdsReward
 } = require('../controllers/userController');
 
 const {
@@ -75,6 +76,7 @@ router.route('/get-server-timestamp').get(getServerTimeStamp);
 router.route('/update-wallet-address').post(updateWalletAddress);
 router.route('/update-all-time-balance').post(updateAllTimeBalance);
 router.route('/fetch-one-kol-detail').post(fetchOneKolDetails);
+router.route('/watch-ads-reward').post(watchAdsReward);
 
 
 router.route('/add-content').post(addContent);

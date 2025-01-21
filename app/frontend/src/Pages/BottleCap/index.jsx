@@ -25,7 +25,7 @@ import { useUser } from "../../context/index";
 import { useNavigate } from "react-router-dom";
 
 export const BottleCap = () => {
-	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, userDailyTasks, userPatnerTask, balance, inviteFriends, claimInviteFriendTask, username, setBalance, formatBalance, fetchInviteFriends, triggerToast } = useUser();
+	const { telegramId, claimUserTask, fetchUserTask, userSocialTasks, userDailyTasks, userPatnerTask, balance, inviteFriends, claimInviteFriendTask, username, setBalance, formatBalance, fetchInviteFriends, triggerToast, watchAdsAndEarn } = useUser();
 
 	const [selectedTask, setSelectedTask] = useState(null);
 	const [taskPopUp, setTaskPopup] = useState(false);
@@ -511,6 +511,17 @@ export const BottleCap = () => {
 						<IoIosGitNetwork className="text-white" size={25} />
 					</div>
 					*/}
+
+					{/* watch ads & earn */}
+
+					<div
+						className="absolute top-2 left-2 px-5 py-2 text-white border rounded-full text-xs"
+						onClick={() => {
+							watchAdsAndEarn();
+						}}
+					>
+						Watch & Earn
+					</div>
 
 					<div className="top-3 right-3 flex justify-end items-center mr-2 mt-2 gap-1 text-white">
 						<img src={BigCoin} alt="" width={22} />
