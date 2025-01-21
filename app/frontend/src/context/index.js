@@ -1060,6 +1060,7 @@ export const UserProvider = (props) => {
             if (adResult.done && !adResult.error) {
                 console.log('Ad watched successfully. Processing reward...');
 
+                /*
                 const response = await axios.post(`${apiUrl}/user/watch-ads-reward`, {
                     userId: userId,
                 });
@@ -1071,6 +1072,7 @@ export const UserProvider = (props) => {
                     console.log('Failed to grant reward:', response.data.message);
                     return { success: false, message: response.data.message };
                 }
+                    */
             } else if (adResult.error) {
                 return { success: false, message: `Ad error: ${adResult.description}` };
             } else {
