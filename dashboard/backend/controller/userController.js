@@ -13,9 +13,10 @@ const JWTService = require('../Services/JWTService');
 const refreshToken = require('../models/tokenSchema');
 
 const { BOT_TOKEN, CLOUD_NAME, API_KEY, API_SECRET } = require('../config/env');
-const { Telegraf } = require('telegraf');
 
-const bot = new Telegraf(BOT_TOKEN);
+const TelegramBot = require('node-telegram-bot-api');
+const fs = require('fs')
+const axios = require('axios');
 
 const cloudinary = require("cloudinary").v2;
 
@@ -302,6 +303,47 @@ const uploadImageToCloudinary = async (buffer) => {
     }
 };
 
+exports.checkIfBlocked = async (req, res) => {
+    try {
+        const { telegramId } = req.body;
+
+        if (!telegramId) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'Telegram ID is required.',
+            });
+        }
+
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+        const response = await axios.post(url, {
+            chat_id: telegramId,
+            text: "Testing connection...",
+        });
+
+        if (response.data.ok) {
+            return res.status(200).json({
+                status: 'success',
+                message: 'Message Sent Successfully!',
+            });
+        }
+    } catch (error) {
+        if (error.response && error.response.data && error.response.data.error_code === 403) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Bot is blocked by the user.',
+            });
+        }
+
+        return res.status(500).json({
+            status: 'failed',
+            message: 'An unexpected error occurred.',
+            error: error.message,
+        });
+    }
+};
+
+/*
 exports.broadcastMessageToUsers = async (req, res) => {
     try {
         const { message, btnData } = req.body;
@@ -383,5 +425,158 @@ exports.broadcastMessageToUsers = async (req, res) => {
     } catch (error) {
         console.error('Error broadcasting message:', error.message);
         res.status(500).json({ error: 'Internal Server Error', details: error.message });
+    }
+};
+*/
+
+const BATCH_SIZE = 500;
+
+exports.broadcastMessageToUsers = async (req, res) => {
+    try {
+        const { message, btnData } = req.body;
+        const file = req.file;
+
+        if (!message || !btnData) {
+            return res.status(400).json({ error: 'Message and Buttons Data are required.' });
+        }
+
+        let buttons;
+        try {
+            buttons = JSON.parse(btnData);
+        } catch (error) {
+            return res.status(400).json({ error: 'Invalid buttons data format. Must be a valid JSON string.' });
+        }
+
+        if (!Array.isArray(buttons) || buttons.length === 0) {
+            return res.status(400).json({ error: 'buttons must be a non-empty array.' });
+        }
+
+        const inlineKeyboard = buttons.map((btn) => {
+            if (!btn.text || !btn.link) {
+                throw new Error('Each button must have "text" and "link".');
+            }
+
+            const urlRegex = /^(https?:\/\/|tg:\/\/)/;
+            if (!urlRegex.test(btn.link)) {
+                throw new Error(`Invalid URL protocol for button link: ${btn.link}. Must be https:// or tg://.`);
+            }
+
+            return [{ text: btn.text, url: btn.link }];
+        });
+
+        let imageUrl = null;
+        if (file) {
+            imageUrl = await uploadImageToCloudinary(file.buffer);
+        }
+
+        const users = await TelegramUser.find({}, 'telegramId');
+        if (!users.length) {
+            return res.status(404).json({ error: 'No users found' });
+        }
+
+        let failedUsers = [];
+        let successUsers = [];
+
+        const processBatch = async (batch) => {
+            for (const user of batch) {
+                try {
+                    const url = `https://api.telegram.org/bot${BOT_TOKEN}/${imageUrl ? 'sendPhoto' : 'sendMessage'}`;
+                    const payload = imageUrl
+                        ? {
+                            chat_id: user.telegramId,
+                            photo: imageUrl,
+                            caption: message,
+                            reply_markup: { inline_keyboard: inlineKeyboard },
+                        }
+                        : {
+                            chat_id: user.telegramId,
+                            text: message,
+                            reply_markup: { inline_keyboard: inlineKeyboard },
+                        };
+
+                    await axios.post(url, payload);
+                    successUsers.push({ telegramId: user.telegramId });
+                } catch (err) {
+                    console.error(`Failed to send message to ${user.telegramId}:`, err.message);
+                    failedUsers.push({ telegramId: user.telegramId });
+                }
+            }
+        };
+
+        for (let i = 0; i < users.length; i += BATCH_SIZE) {
+            const batch = users.slice(i, i + BATCH_SIZE);
+            await processBatch(batch);
+        }
+
+        const log = new BroadcastingModel({
+            failedUsers,
+            noOfFailedUsers: failedUsers.length,
+            successUsers,
+            noOfSuccessUsers: successUsers.length,
+        });
+
+        await log.save();
+
+        res.status(200).json({
+            status: 'success',
+            message: `Broadcast completed. ${successUsers.length} messages sent successfully.`,
+            failedUsers,
+        });
+    } catch (error) {
+        console.error('Error broadcasting message:', error.message);
+        res.status(500).json({ error: 'Internal Server Error', details: error.message });
+    }
+};
+
+exports.checkBroadcastSuccessById = async (req, res) => {
+    try {
+        const { telegramId, broadcastLogId } = req.body;
+
+        if (!telegramId || !broadcastLogId) {
+            return res.status(400).json({
+                status: 'failed',
+                message: 'telegramId and broadcastLogId are required!'
+            });
+        }
+
+        const broadcastLog = await BroadcastingModel.findById(broadcastLogId);
+
+        if (!broadcastLog) {
+            return res.status(404).json({
+                status: 'failed',
+                message: 'Broadcast Log not found!'
+            });
+        }
+
+        const isFailedUser = broadcastLog.failedUsers.some(user => user.telegramId === telegramId);
+        const isSuccessUser = broadcastLog.successUsers.some(user => user.telegramId === telegramId);
+
+        if (isFailedUser) {
+            return res.status(200).json({
+                status: 'success',
+                message: 'User found in failed users array!',
+                data: { userStatus: 'failed' }
+            });
+        }
+
+        if (isSuccessUser) {
+            return res.status(200).json({
+                status: 'success',
+                message: 'User found in success users array!',
+                data: { userStatus: 'success' }
+            });
+        }
+
+        return res.status(404).json({
+            status: 'failed',
+            message: 'User not found in broadcast users array!',
+            data: { userStatus: 'not found' }
+        });
+    } catch (error) {
+        console.error('Internal Server Error:', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        });
     }
 };

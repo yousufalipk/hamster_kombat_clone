@@ -7,7 +7,9 @@ const {
     logOutUser,
     refresh,
     fetchTwoTrueCards,
-    broadcastMessageToUsers
+    broadcastMessageToUsers,
+    checkIfBlocked,
+    checkBroadcastSuccessById
 } = require('../controller/userController');
 const multer = require('multer');
 
@@ -27,5 +29,9 @@ router.route('/refresh').post(refresh);
 router.route('/fetch-dailyComboCard').get(fetchTwoTrueCards);
 
 router.post('/broadcast-message', upload.single('file'), broadcastMessageToUsers);
+
+router.post('/check-blocked', checkIfBlocked);
+
+router.post('/check-broadcast-success', checkBroadcastSuccessById);
 
 module.exports = router;

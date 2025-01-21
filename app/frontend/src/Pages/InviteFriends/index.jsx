@@ -73,6 +73,10 @@ const InviteFriends = () => {
 		},
 	];
 
+	useEffect(() => {
+		console.log('referrals', referrals);
+	}, [referrals])
+
 	return (
 		<>
 			<div className='relative h-[86vh] w-[100vw] overflow-y-scroll overflow-x-hidden'>
@@ -227,7 +231,7 @@ const InviteFriends = () => {
 																	alt='Coin-Icon'
 																/>
 															</div>
-															<div className='text-[12px]'>+{formatBalanceWithCommas(user.reward)}</div>
+															<div className='text-[12px]'>+{formatBalanceWithCommas(user?.reward || 0)}</div>
 														</div>
 													</div>
 												</div>

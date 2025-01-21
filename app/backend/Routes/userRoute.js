@@ -21,14 +21,12 @@ const {
     fetchPatners,
     fetchUserPatners,
     upgradeUserPatnerLevel,
-    storeErrorLog,
     claimUserTask,
     fetchUserTasks,
     claimInviteFriendsReward,
     fetchUserInviteFriends,
     claimCPM,
     updateWalletAddress,
-    test,
     getServerTimeStamp,
     updateAllTimeBalance,
     fetchOneKolDetails,
@@ -78,18 +76,13 @@ router.route('/update-wallet-address').post(updateWalletAddress);
 router.route('/update-all-time-balance').post(updateAllTimeBalance);
 router.route('/fetch-one-kol-detail').post(fetchOneKolDetails);
 
-router.route('/move-images').get(MigrateImagesWithTelegramId);
-router.route('/update-refferals-pics').get(UpdateReferralsProfilePic);
 
 router.route('/add-content').post(addContent);
 router.route('/reset-daily-combo').get(dailyComboReset);
 
-
-
-
-// Test
-router.route('/test').post(test);
-router.route('/store-error-log').post(storeErrorLog);
-
+/*
+router.route('/move-images').get(MigrateImagesWithTelegramId);
+router.route('/update-refferals-pics').get(UpdateReferralsProfilePic);
+*/
 
 module.exports = router;

@@ -622,33 +622,6 @@ exports.claimDailyRewards = async (req, res) => {
     }
 }
 
-exports.storeErrorLog = async (req, res) => {
-    try {
-        const { error } = req.body;
-
-        console.log("Error", error);
-
-        /*
-        const newlog = new ErrorModel({
-            error: error
-        });
- 
-        await newlog.save();
- 
-        */
-        return res.status(200).json({
-            status: 'success',
-            message: 'Error log saved succesfuly!'
-        })
-    } catch (error) {
-        console.log("Error Storing log!", error);
-        return res.status(200).json({
-            status: 'failed',
-            message: 'Internal Server Error!'
-        })
-    }
-}
-
 exports.checkPremium = async (req, res) => {
     try {
         const { telegramId } = req.body;
@@ -981,7 +954,6 @@ exports.claimProjectTask = async (req, res) => {
     try {
         const { userId, projectId, taskId } = req.body;
 
-        // Validate input
         if (!userId || !projectId || !taskId) {
             return res.status(400).json({
                 status: 'failed',
@@ -989,7 +961,6 @@ exports.claimProjectTask = async (req, res) => {
             });
         }
 
-        // Fetch user and project data
         const user = await UserModel.findById(userId);
         const project = await ProjectModel.findById(projectId);
         const projectTask = project?.tasks.find((t) => t._id.toString() === taskId);
@@ -1061,10 +1032,9 @@ exports.claimProjectTask = async (req, res) => {
                     status: 'success',
                     message: `Comeback after ${30 - Math.floor(timeDifference)} minutes!`,
                     claimedStatus: 'pending',
-                    claimedDate: userTask.claimedDate,  // Send the claimed time
+                    claimedDate: userTask.claimedDate,
                 });
             } else {
-                // Update task status to claimed
                 userTask.claimedStatus = 'claimed';
                 userTask.claimedDate = currentTime;
 
@@ -2119,21 +2089,6 @@ exports.getServerTimeStamp = async (req, res) => {
     }
 };
 
-exports.test = async (req, res) => {
-    try {
-        const { error } = req.body;
-
-        console.log("Test Api Error", error);
-
-        return res.status(200).json({
-            status: 'success',
-            message: 'Testing Success!'
-        })
-    } catch (error) {
-        console.log("Error testing: ", error);
-    }
-}
-
 exports.updateAllTimeBalance = async (req, res) => {
     try {
         const { userId, balance } = req.body;
@@ -2237,6 +2192,113 @@ exports.addContent = async (req, res) => {
     }
 }
 
+
+exports.dailyComboReset = async (req, res) => {
+    try {
+        const resetPromises = [
+            ProjectModel.updateMany({}, { card: false }),
+            KolModel.updateMany({}, { card: false }),
+            PatnerModel.updateMany({}, { card: false }),
+            VcModel.updateMany({}, { card: false }),
+        ];
+        await Promise.all(resetPromises);
+
+        let log = await comboLogs.findOne();
+
+        if (!log) {
+            log = new comboLogs({
+                comboCard1: {
+                    id: '',
+                    name: '',
+                    type: '',
+                },
+                comboCard2: {
+                    id: '',
+                    name: '',
+                    type: '',
+                },
+                formatedDateAndTime: moment().utc().format('DD MMM YYYY, hh:mmA UTC')
+            });
+            await log.save();
+        }
+
+        const excludedIds = new Set([
+            log.comboCard1?.id?.toString(),
+            log.comboCard2?.id?.toString(),
+        ]);
+
+        const models = [
+            { model: ProjectModel, type: 'project' },
+            { model: KolModel, type: 'kol' },
+            { model: PatnerModel, type: 'partner' },
+            { model: VcModel, type: 'vc' },
+        ];
+
+        const collaboratorsPromises = models.map(({ model, type }) =>
+            model.aggregate([
+                { $match: { card: false, _id: { $nin: Array.from(excludedIds) } } },
+                { $project: { _id: 1, name: 1, createdAt: 1, type: { $literal: type } } },
+            ])
+        );
+
+        const results = await Promise.all(collaboratorsPromises);
+        const allCollaborators = results.flat();
+
+        if (allCollaborators.length < 2) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Not enough collaborators available for selection.',
+            });
+        }
+
+        let selectedCollaborators = [];
+        if (log.comboCard1 && log.comboCard2) {
+            const remainingCollaborators = allCollaborators.filter(
+                collaborator => collaborator._id.toString() !== log.comboCard1.id.toString() &&
+                    collaborator._id.toString() !== log.comboCard2.id.toString()
+            );
+
+            selectedCollaborators = remainingCollaborators.sort(() => 0.5 - Math.random()).slice(0, 2);
+        } else {
+            selectedCollaborators = allCollaborators.sort(() => 0.5 - Math.random()).slice(0, 2);
+        }
+
+        const updatePromises = selectedCollaborators.map(collaborator =>
+            models
+                .find(m => m.type === collaborator.type)
+                .model.findByIdAndUpdate(collaborator._id, { card: true })
+        );
+        await Promise.all(updatePromises);
+
+        log.comboCard1.id = selectedCollaborators[0]._id.toString();
+        log.comboCard1.name = selectedCollaborators[0].name;
+        log.comboCard1.type = selectedCollaborators[0].type;
+
+        log.comboCard2.id = selectedCollaborators[1]._id.toString();
+        log.comboCard2.name = selectedCollaborators[1].name;
+        log.comboCard2.type = selectedCollaborators[1].type;
+
+        log.formatedDateAndTime = moment().utc().format('DD MMM YYYY, hh:mmA UTC');
+
+
+        await log.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Card status updated successfully!',
+            selectedCollaborators,
+        });
+    } catch (error) {
+        console.error('Error in dailyComboReset:', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error',
+        });
+    }
+};
+
+
+/*
 const downloadImage = async (url, filePath) => {
     const writer = fs.createWriteStream(filePath);
 
@@ -2433,106 +2495,4 @@ exports.UpdateReferralsProfilePic = async (req, res) => {
     }
 };
 
-exports.dailyComboReset = async (req, res) => {
-    try {
-        const resetPromises = [
-            ProjectModel.updateMany({}, { card: false }),
-            KolModel.updateMany({}, { card: false }),
-            PatnerModel.updateMany({}, { card: false }),
-            VcModel.updateMany({}, { card: false }),
-        ];
-        await Promise.all(resetPromises);
-
-        let log = await comboLogs.findOne();
-
-        if (!log) {
-            log = new comboLogs({
-                comboCard1: {
-                    id: '',
-                    name: '',
-                    type: '',
-                },
-                comboCard2: {
-                    id: '',
-                    name: '',
-                    type: '',
-                },
-                formatedDateAndTime: moment().utc().format('DD MMM YYYY, hh:mmA UTC')
-            });
-            await log.save();
-        }
-
-        const excludedIds = new Set([
-            log.comboCard1?.id?.toString(),
-            log.comboCard2?.id?.toString(),
-        ]);
-
-        const models = [
-            { model: ProjectModel, type: 'project' },
-            { model: KolModel, type: 'kol' },
-            { model: PatnerModel, type: 'partner' },
-            { model: VcModel, type: 'vc' },
-        ];
-
-        const collaboratorsPromises = models.map(({ model, type }) =>
-            model.aggregate([
-                { $match: { card: false, _id: { $nin: Array.from(excludedIds) } } },
-                { $project: { _id: 1, name: 1, createdAt: 1, type: { $literal: type } } },
-            ])
-        );
-
-        const results = await Promise.all(collaboratorsPromises);
-        const allCollaborators = results.flat();
-
-        if (allCollaborators.length < 2) {
-            return res.status(200).json({
-                status: 'failed',
-                message: 'Not enough collaborators available for selection.',
-            });
-        }
-
-        let selectedCollaborators = [];
-        if (log.comboCard1 && log.comboCard2) {
-            const remainingCollaborators = allCollaborators.filter(
-                collaborator => collaborator._id.toString() !== log.comboCard1.id.toString() &&
-                    collaborator._id.toString() !== log.comboCard2.id.toString()
-            );
-
-            selectedCollaborators = remainingCollaborators.sort(() => 0.5 - Math.random()).slice(0, 2);
-        } else {
-            selectedCollaborators = allCollaborators.sort(() => 0.5 - Math.random()).slice(0, 2);
-        }
-
-        const updatePromises = selectedCollaborators.map(collaborator =>
-            models
-                .find(m => m.type === collaborator.type)
-                .model.findByIdAndUpdate(collaborator._id, { card: true })
-        );
-        await Promise.all(updatePromises);
-
-        log.comboCard1.id = selectedCollaborators[0]._id.toString();
-        log.comboCard1.name = selectedCollaborators[0].name;
-        log.comboCard1.type = selectedCollaborators[0].type;
-
-        log.comboCard2.id = selectedCollaborators[1]._id.toString();
-        log.comboCard2.name = selectedCollaborators[1].name;
-        log.comboCard2.type = selectedCollaborators[1].type;
-
-        log.formatedDateAndTime = moment().utc().format('DD MMM YYYY, hh:mmA UTC');
-
-
-        await log.save();
-
-        return res.status(200).json({
-            status: 'success',
-            message: 'Card status updated successfully!',
-            selectedCollaborators,
-        });
-    } catch (error) {
-        console.error('Error in dailyComboReset:', error);
-        return res.status(500).json({
-            status: 'failed',
-            message: 'Internal Server Error',
-        });
-    }
-};
+*/
