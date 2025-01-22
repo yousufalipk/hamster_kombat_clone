@@ -146,9 +146,9 @@ const Token = () => {
 				const res2 = await fetchUserProjectDetails(token.project._id);
 				// start animation
 				if (res2.success) {
+					setToken(res2.data);
 					setIsAnimating(true);
 					setTimeout(() => {
-						setToken(res2.data);
 						setIsAnimating(false);
 						setShowChild1(false);
 						setShowCoinDrop(false);
