@@ -33,7 +33,7 @@ import SparkelAnimation from '../../assets/animation/sparkle.gif';
 
 const Token = () => {
 
-	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance, formatCpm, triggerToast, comboCards } = useUser();
+	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance, formatCpm, triggerToast, comboCards, comboCardWinning } = useUser();
 
 	const [isModalOpen, setModalOpen] = useState(false);
 	const [processing, setProcessing] = useState(true);
@@ -56,10 +56,6 @@ const Token = () => {
 	const [flipCard, setFlipCard] = useState(false);
 	const [levelSlideOut, setLevelSlideOut] = useState(false);
 	const [levelChange, setLevelChange] = useState(false);
-
-
-
-	const [comboCardWinning, setComboCardWinning] = useState(false);
 
 	useEffect(() => {
 		if (selectedTask) {
@@ -243,7 +239,7 @@ const Token = () => {
 					</div>
 				)}
 
-				{comboCardWinning && comboCards.length === 2 && (
+				{comboCardWinning && (
 					<AnimatePresence>
 						{comboCardWinning && (
 							<motion.div

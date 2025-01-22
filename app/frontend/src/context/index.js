@@ -623,9 +623,16 @@ export const UserProvider = (props) => {
                 await fetchProjects();
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
+
+                console.log('res.data.combocards', res.data.comboCards);
                 setComboCards(res.data.comboCards);
+
                 if (res.data.playAnimation === 2) {
+
+                    console.log('Animation Running Combo Cardsss');
                     setTimeout(() => {
+                        console.log('ComboCard animation true');
+                        console.log('Combo card length ===', comboCards.length);
                         setComboCardWinning(true);
                         setTimeout(() => setComboCardWinning(false), 8000);
                     }, 5200)
