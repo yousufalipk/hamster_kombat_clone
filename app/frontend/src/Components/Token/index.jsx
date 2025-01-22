@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { motion } from "framer-motion";
-import { useAnimate } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import DropCoins from '../../assets/animation/dropCoins.gif';
 
@@ -30,9 +29,11 @@ import UpgradeSvg from '../UpgradeSvg/UpgradeSvg';
 import PopupDivider from '../PopupDividerSvg/PopupDividerSvg';
 import VerticalDividerSvg from "../VerticalDividerSvg/VerticalDividerSvg";
 
+import SparkelAnimation from '../../assets/animation/sparkle.gif';
+
 const Token = () => {
 
-	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance, formatCpm, playComboAnimation, triggerToast } = useUser();
+	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance, formatCpm, triggerToast, comboCards } = useUser();
 
 	const [isModalOpen, setModalOpen] = useState(false);
 	const [processing, setProcessing] = useState(true);
@@ -55,6 +56,10 @@ const Token = () => {
 	const [flipCard, setFlipCard] = useState(false);
 	const [levelSlideOut, setLevelSlideOut] = useState(false);
 	const [levelChange, setLevelChange] = useState(false);
+
+
+
+	const [comboCardWinning, setComboCardWinning] = useState(false);
 
 	useEffect(() => {
 		if (selectedTask) {
@@ -229,21 +234,6 @@ const Token = () => {
 		}
 	}, [flipCard]);
 
-	const StartAnimation = () => {
-		setIsAnimating(true);
-		setTimeout(() => {
-			setIsAnimating(false);
-			setShowChild1(false);
-			setShowCoinDrop(false);
-			setFlipCard(false);
-			setLevelSlideOut(false);
-			setLevelChange(false);
-			setTimeout(() => {
-				setLevelChange(false);
-			}, 1000);
-		}, 5200);
-	}
-
 	return (
 		<>
 			<>
@@ -251,6 +241,240 @@ const Token = () => {
 					<div className="h-[100vh] w-[100vw] z-50 bg-black opacity-50 flex justify-center items-center">
 						<CustomLoader size={200} />
 					</div>
+				)}
+
+				{comboCardWinning && comboCards.length === 2 && (
+					<AnimatePresence>
+						{comboCardWinning && (
+							<motion.div
+								style={{
+									zIndex: 50000000000
+								}}
+								className="fixed inset-0 flex justify-center items-center text-white"
+								initial={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
+								animate={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
+								exit={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
+								transition={{ duration: 0.5 }}
+							>
+								{/* Cards Container */}
+								<motion.div
+									className="relative flex justify-center items-center w-[90%] max-w-3xl  z-50"
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									exit={{ opacity: 0 }}
+									transition={{ duration: 1 }}
+								>
+
+									{/* Left Card */}
+									<motion.div
+										className="flex justify-center items-center"
+										initial={{ x: "-100vw" }}
+										animate={{ x: "0" }}
+										transition={{
+											duration: 1,
+											delay: 0.5,
+										}}
+									>
+										{/* Wiggle Animation */}
+										<motion.div
+											animate={{
+												rotate: [0, 10, -10, 0],
+											}}
+											transition={{
+												duration: 2,
+												delay: 4,
+												ease: "easeInOut",
+											}}
+										>
+											{/* Scale Down and Exit */}
+											<motion.div
+												animate={{
+													scale: [1, 0],
+													opacity: [1, 0],
+													y: [0, -20],
+												}}
+												transition={{
+													duration: 1,
+													delay: 6.5,
+													ease: "easeIn",
+												}}
+												style={{
+													background: `linear-gradient(to bottom, ${comboCards[0]?.fromColor}, ${comboCards[0]?.toColor})`
+												}}
+												className="w-24 h-32 rounded-md flex justify-center items-center"
+											>
+												<div className="w-full h-full absolute z-20 flex flex-col justify-center items-center gap-2">
+													<img
+														className="w-[50px] h-[50px] rounded-full"
+														src={comboCards[0].icon}
+														alt="BigCoin-Icon"
+													/>
+													<h1 className="text-center w-full">
+														{comboCards[0].name}
+													</h1>
+												</div>
+												<div className="relative w-full h-full overflow-hidden z-10 flex justify-center items-center">
+													<img
+														src={cardbg}
+														alt=""
+														className="opacity-10 w-[180px] h-[180px]"
+													/>
+													<div className=" flex items-center justify-center absolute">
+														<p className="font-italianno text-[3rem]   text-slate-100 opacity-10">
+															{comboCards[0].name.charAt(0)}
+														</p>
+													</div>
+												</div>
+											</motion.div>
+										</motion.div>
+									</motion.div>
+
+									{/* Right Card */}
+									<motion.div
+										className="flex justify-center items-center"
+										initial={{ x: "100vw" }}
+										animate={{ x: "0" }}
+										transition={{
+											duration: 1,
+											delay: 0.5,
+										}}
+									>
+										{/* Wiggle Animation */}
+										<motion.div
+											animate={{
+												rotate: [0, -10, 10, 0],
+											}}
+											transition={{
+												duration: 2,
+												delay: 4,
+												ease: "easeInOut",
+											}}
+										>
+											{/* Scale Down and Exit */}
+											<motion.div
+												animate={{
+													scale: [1, 0],
+													opacity: [1, 0],
+													y: [0, -20],
+												}}
+												transition={{
+													duration: 1,
+													delay: 6.5,
+													ease: "easeIn",
+												}}
+												style={{
+													background: `linear-gradient(to bottom, ${comboCards[1]?.fromColor}, ${comboCards[1]?.toColor})`
+												}}
+												className="w-24 h-32 rounded-md flex justify-center items-center"
+											>
+												<div className="w-full h-full absolute z-20 flex flex-col justify-center items-center gap-2">
+													<img
+														className="w-[50px] h-[50px] rounded-full"
+														src={comboCards[1].icon}
+														alt="BigCoin-Icon"
+													/>
+													<h1 className="text-center w-full">
+														{comboCards[1].name}
+													</h1>
+												</div>
+												<div className="relative w-full h-full overflow-hidden z-10 flex justify-center items-center">
+													<img
+														src={cardbg}
+														alt=""
+														className="opacity-10 w-[180px] h-[180px]"
+													/>
+													<div className=" flex items-center justify-center absolute">
+														<p className="font-italianno text-[3rem]   text-slate-100 opacity-10">
+															{comboCards[1].name.charAt(0)}
+														</p>
+													</div>
+												</div>
+											</motion.div>
+										</motion.div>
+									</motion.div>
+								</motion.div>
+
+								{/* Congratulations Text */}
+								<motion.div
+									className="absolute z-50 top-[25%] text-center"
+									initial={{ opacity: 0, y: -50 }}
+									animate={{ opacity: 1, y: 0 }}
+									exit={{ opacity: 0 }}
+									transition={{ delay: 2, duration: 1 }}
+								>
+									<motion.div
+										animate={{
+											scale: [1, 0],
+											opacity: [1, 0],
+											y: [0, -20],
+										}}
+										transition={{
+											duration: 1,
+											delay: 6.5,
+											ease: "easeIn",
+										}}
+									>
+										<h1
+											style={{
+												textShadow: '0px 0px 20px #016EE9',
+											}}
+											className="text-white text-center text-xl font-semibold px-3"
+										>
+											CONGRATULATIONS! You have completed Combo Card!
+										</h1>
+									</motion.div>
+								</motion.div>
+
+								{/* Coins Text */}
+								<motion.div
+									className="absolute z-50 bottom-[10%] text-center"
+									initial={{ opacity: 0, y: 50 }}
+									animate={{ opacity: 1, y: 0 }}
+									exit={{ opacity: 0 }}
+									transition={{ delay: 2, duration: 1 }}
+								>
+									<motion.div
+										animate={{
+											scale: [1, 0],
+											opacity: [1, 0],
+											y: [0, -20],
+										}}
+										transition={{
+											duration: 1,
+											delay: 6.5,
+											ease: "easeIn",
+										}}
+									>
+										<h2 className="text-2xl font-semibold">50,000 Coins</h2>
+									</motion.div>
+								</motion.div>
+
+								{/* Sparkles GIF */}
+								<motion.div
+									className="absolute bottom-[10%] z-0 flex justify-center items-center"
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									exit={{ opacity: 0 }}
+									transition={{ delay: 1.3, duration: 1 }}
+								>
+									<motion.div
+										animate={{
+											scale: [1, 0],
+											opacity: [1, 0],
+											y: [0, -20],
+										}}
+										transition={{
+											duration: 1,
+											delay: 6.5,
+											ease: "easeIn",
+										}}
+									>
+										<img src={SparkelAnimation} alt="Sparkles" width={300} />
+									</motion.div>
+								</motion.div>
+							</motion.div>
+						)}
+					</AnimatePresence>
 				)}
 
 				{isAnimating && (
@@ -306,7 +530,7 @@ const Token = () => {
 												alt="BigCoin-Icon"
 											/>
 											<h1 className="text-center w-full">
-												Game Fi
+												{token.project.name}
 											</h1>
 										</div>
 										<div className="relative w-full h-full overflow-hidden z-10 flex justify-center items-center">
@@ -354,7 +578,8 @@ const Token = () => {
 										style={{
 											textShadow: '0px 0px 20px #016EE9',
 										}}
-										className="text-white text-center text-3xl font-semibold -mt-8">
+										className="text-white text-center text-3xl font-semibold -mt-8"
+									>
 										Level {(token.userData.userLevel || 0) + 1}
 									</p>
 								</motion.div>
@@ -388,18 +613,6 @@ const Token = () => {
 
 						</motion.div>
 					</motion.div >
-				)}
-
-				{playComboAnimation === 1 && (
-					<div className="h-[100vh] w-[100vw] z-50 bg-black opacity-50 flex justify-center items-center">
-						Got 1 Combo Card!
-					</div>
-				)}
-
-				{playComboAnimation === 2 && (
-					<div className="h-[100vh] w-[100vw] z-50 bg-black opacity-50 flex justify-center items-center">
-						Got 1 Combo Card!
-					</div>
 				)}
 
 				{sendTokenData && token && (
@@ -685,7 +898,8 @@ const Token = () => {
 							>
 								Play Animation
 							</button>
-						</div>*/}
+						</div>
+						*/}
 
 						<div className='bg-[#060611] px-4 w-full h-[100vh] overflow-y-scroll overflow-x-hidden'>
 							<div className="text-white flex justify-end items-center gap-2 p-5">

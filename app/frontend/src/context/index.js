@@ -57,7 +57,7 @@ export const UserProvider = (props) => {
     const [claimed, setClaimed] = useState([]);
     const [currentDay, setCurrentDay] = useState(null);
 
-    const [playComboAnimation, setPlayComboAnimation] = useState(false);
+    const [comboCardWinning, setComboCardWinning] = useState(false);
 
     // Leaderboard 
 
@@ -134,17 +134,6 @@ export const UserProvider = (props) => {
 
     const multitapUpgradeCost = [0, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000, 256000, 512000, 1024000, 2048000, 4096000, 8192000, 16384000, 32768000];
     const multitapValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
-
-
-    // Play combo animation
-    useEffect(() => {
-        if (playComboAnimation === 1) {
-            console.log('Got 1st combo card animation!');
-        } else if (playComboAnimation === 2) {
-            console.log('Got 2nd combo card animation!');
-        }
-    }, [playComboAnimation])
-
 
     // Update All time balance
     useEffect(() => {
@@ -635,11 +624,11 @@ export const UserProvider = (props) => {
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
                 setComboCards(res.data.comboCards);
-                if (res.data.playAnimation) {
-                    setPlayComboAnimation(res.data.playAnimation);
+                if (res.data.playAnimation === 2) {
                     setTimeout(() => {
-                        setPlayComboAnimation(null);
-                    }, 10000) // 10 sec
+                        setComboCardWinning(true);
+                        setTimeout(() => setComboCardWinning(false), 8000);
+                    }, 5200)
                 }
                 return ({ success: true, mess: res.data.message });
             } else {
@@ -707,11 +696,9 @@ export const UserProvider = (props) => {
                     )
                 );
 
-                if (res.data.playAnimation) {
-                    setPlayComboAnimation(res.data.playAnimation);
-                    setTimeout(() => {
-                        setPlayComboAnimation(null);
-                    }, 10000) // 10 sec
+                if (res.data.playAnimation === 2) {
+                    setComboCardWinning(true);
+                    setTimeout(() => setComboCardWinning(false), 8000);
                 }
                 return ({ success: true, mess: res.data.message });
             } else {
@@ -760,11 +747,9 @@ export const UserProvider = (props) => {
                     )
                 );
 
-                if (res.data.playAnimation) {
-                    setPlayComboAnimation(res.data.playAnimation);
-                    setTimeout(() => {
-                        setPlayComboAnimation(null);
-                    }, 10000) // 10 sec
+                if (res.data.playAnimation === 2) {
+                    setComboCardWinning(true);
+                    setTimeout(() => setComboCardWinning(false), 8000);
                 }
                 return ({ success: true, mess: res.data.message });
             } else {
@@ -815,11 +800,9 @@ export const UserProvider = (props) => {
                     )
                 );
 
-                if (res.data.playAnimation) {
-                    setPlayComboAnimation(res.data.playAnimation);
-                    setTimeout(() => {
-                        setPlayComboAnimation(null);
-                    }, 10000) // 10 sec
+                if (res.data.playAnimation === 2) {
+                    setComboCardWinning(true);
+                    setTimeout(() => setComboCardWinning(false), 8000);
                 }
                 return ({ success: true, mess: res.data.message });
             } else {
@@ -1196,8 +1179,6 @@ export const UserProvider = (props) => {
             formatNumberWithSuffix,
             formatCpm,
 
-            playComboAnimation,
-
             energyUpgradeCost,
             energyLimits,
             multitapUpgradeCost,
@@ -1210,7 +1191,9 @@ export const UserProvider = (props) => {
 
             submitContent,
 
-            watchAdsAndEarn
+            watchAdsAndEarn,
+
+            comboCardWinning
         }}>
             {toast && isVisible && (
                 <div
