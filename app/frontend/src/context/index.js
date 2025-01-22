@@ -57,6 +57,7 @@ export const UserProvider = (props) => {
     const [claimed, setClaimed] = useState([]);
     const [currentDay, setCurrentDay] = useState(null);
 
+    const [comboCardAnimation, setComboCardAnimation] = useState(false);
     const [comboCardWinning, setComboCardWinning] = useState(false);
 
     // Leaderboard 
@@ -627,16 +628,20 @@ export const UserProvider = (props) => {
                 console.log('res.data.combocards', res.data.comboCards);
                 setComboCards(res.data.comboCards);
 
-                if (res.data.playAnimation === 2) {
-
-                    console.log('Animation Running Combo Cardsss');
+                if (res.data.playAnimation === 1) {
+                    setComboCardAnimation(1);
+                } else if (res.data.playAnimation === 2) {
+                    setComboCardAnimation(2);
                     setTimeout(() => {
-                        console.log('ComboCard animation true');
-                        console.log('Combo card length ===', comboCards.length);
                         setComboCardWinning(true);
                         setTimeout(() => setComboCardWinning(false), 8000);
                     }, 5200)
                 }
+
+                setTimeout(() => {
+                    setComboCardAnimation(false)
+                }, 5200);
+
                 return ({ success: true, mess: res.data.message });
             } else {
                 return ({ success: false, mess: res.data.message });
@@ -1200,6 +1205,7 @@ export const UserProvider = (props) => {
 
             watchAdsAndEarn,
 
+            comboCardAnimation,
             comboCardWinning
         }}>
             {toast && isVisible && (

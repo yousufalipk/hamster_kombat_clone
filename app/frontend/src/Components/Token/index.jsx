@@ -33,7 +33,7 @@ import SparkelAnimation from '../../assets/animation/sparkle.gif';
 
 const Token = () => {
 
-	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance, formatCpm, triggerToast, comboCards, comboCardWinning } = useUser();
+	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance, formatCpm, triggerToast, comboCards, comboCardWinning, comboCardAnimation } = useUser();
 
 	const [isModalOpen, setModalOpen] = useState(false);
 	const [processing, setProcessing] = useState(true);
@@ -473,7 +473,7 @@ const Token = () => {
 					</AnimatePresence>
 				)}
 
-				{isAnimating && (
+				{isAnimating && comboCardAnimation && (
 					<motion.div
 						initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
 						animate={{ backgroundColor: "rgba(0, 0, 0, 0.9)" }}
@@ -601,7 +601,11 @@ const Token = () => {
 												textShadow: '0px 0px 20px #016EE9',
 											}}
 										>
-											Cool! You have achieved second combo card
+											{comboCardAnimation === 1 ? (
+												'Cool! You have achieved one combo card. Find other one to claim Combo Card'
+											) : (
+												'Cool! You have achieved second combo card'
+											)}
 										</p>
 									</motion.div>
 								)}
