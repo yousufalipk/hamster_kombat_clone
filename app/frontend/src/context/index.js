@@ -624,8 +624,6 @@ export const UserProvider = (props) => {
                 await fetchProjects();
                 setBalance(res.data.balance);
                 setCoinsPerMinute(res.data.cpm);
-
-                console.log('res.data.combocards', res.data.comboCards);
                 setComboCards(res.data.comboCards);
 
                 if (res.data.playAnimation === 1) {
@@ -709,8 +707,10 @@ export const UserProvider = (props) => {
                 );
 
                 if (res.data.playAnimation === 2) {
-                    setComboCardWinning(true);
-                    setTimeout(() => setComboCardWinning(false), 8000);
+                    setTimeout(() => {
+                        setComboCardWinning(true);
+                        setTimeout(() => setComboCardWinning(false), 8000);
+                    }, 1500)
                 }
                 return ({ success: true, mess: res.data.message });
             } else {
@@ -760,8 +760,10 @@ export const UserProvider = (props) => {
                 );
 
                 if (res.data.playAnimation === 2) {
-                    setComboCardWinning(true);
-                    setTimeout(() => setComboCardWinning(false), 8000);
+                    setTimeout(() => {
+                        setComboCardWinning(true);
+                        setTimeout(() => setComboCardWinning(false), 8000);
+                    }, 1500)
                 }
                 return ({ success: true, mess: res.data.message });
             } else {
@@ -813,8 +815,10 @@ export const UserProvider = (props) => {
                 );
 
                 if (res.data.playAnimation === 2) {
-                    setComboCardWinning(true);
-                    setTimeout(() => setComboCardWinning(false), 8000);
+                    setTimeout(() => {
+                        setComboCardWinning(true);
+                        setTimeout(() => setComboCardWinning(false), 8000);
+                    }, 1500)
                 }
                 return ({ success: true, mess: res.data.message });
             } else {

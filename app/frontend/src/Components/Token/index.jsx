@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import { motion, AnimatePresence } from "framer-motion";
+import SparkelAnimation from '../../assets/animation/sparkle.gif';
+import cardbg from "../../assets/token/tokencardbg.svg";
 
 import DropCoins from '../../assets/animation/dropCoins.gif';
 
@@ -23,13 +25,10 @@ import Youtube from '../../assets/token/youtube.svg';
 import Instagram from '../../assets/token/instagram.svg';
 
 import arrow from '../../assets/token/arrow.svg';
-import cardbg from "../../assets/token/tokencardbg.svg";
 
 import UpgradeSvg from '../UpgradeSvg/UpgradeSvg';
 import PopupDivider from '../PopupDividerSvg/PopupDividerSvg';
 import VerticalDividerSvg from "../VerticalDividerSvg/VerticalDividerSvg";
-
-import SparkelAnimation from '../../assets/animation/sparkle.gif';
 
 const Token = () => {
 
