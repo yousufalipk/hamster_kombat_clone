@@ -30,6 +30,8 @@ import Coin from "../../assets/BigCoinIcon.svg";
 
 import ProfilePic from '../../assets/profile.png';
 
+import AngleIcon from "../../assets/AngleIcon.svg";
+
 const Rankings = () => {
 	const { rankLoader, setRankLoader, topUsers, fetchLeaderboardUsers, level, userId, levelsData, formatNumberWithSuffix, formatBalance } = useUser();
 
@@ -186,6 +188,7 @@ const Rankings = () => {
 										className="flex justify-center items-center text-white font-semibold gap-1">
 										<img src={BadgeIcon} alt="badge_icon" />
 										<p className="capitalize">{levelsData[page].name}</p>
+										<img src={AngleIcon} alt="angle_icon" width={8} />
 									</div>
 								</div>
 								{/* top 3 stage */}
