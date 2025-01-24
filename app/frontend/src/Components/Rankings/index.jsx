@@ -164,6 +164,7 @@ const Rankings = () => {
 					</div>
 				</>
 			)}
+
 			{topUsers && currentPageUsers && (
 				<>
 					<div className='h-[92vh] w-[100vw] z-10 overflow-scroll overflow-x-hidden'>

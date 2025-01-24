@@ -174,35 +174,41 @@ exports.updatePatner = async (req, res) => {
             });
         }
 
-        const base64DataIcon = icon.data.startsWith('data:image')
-            ? icon.data
-            : `data:image/${icon.contentType.split('/')[1]};base64,${icon.data}`;
+        let IconUploadResult = null, LogoUploadResult = null;
 
-        const IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
-            folder: 'partnersIcons'
-        });
+        if (!icon.data.startsWith('https://')) {
+            const base64DataIcon = icon.data.startsWith('data:image')
+                ? icon.data
+                : `data:image/${icon.contentType.split('/')[1]};base64,${icon.data}`;
 
-        if (!IconUploadResult || !IconUploadResult.secure_url) {
-            return res.status(500).json({
-                status: 'failed',
-                message: "Partners Icon upload to Cloudinary failed!",
+            IconUploadResult = await cloudinary.uploader.upload(base64DataIcon, {
+                folder: 'partnersIcons'
             });
+
+            if (!IconUploadResult || !IconUploadResult.secure_url) {
+                return res.status(500).json({
+                    status: 'failed',
+                    message: "Kols Icon upload to Cloudinary failed!",
+                });
+            }
         }
 
-        const base64DataLogo = logo.data.startsWith('data:image')
-            ? logo.data
-            : `data:image/${logo.contentType.split('/')[1]};base64,${logo.data}`;
+        if (!logo.data.startsWith('https://')) {
+            const base64DataLogo = logo.data.startsWith('data:image')
+                ? logo.data
+                : `data:image/${logo.contentType.split('/')[1]};base64,${logo.data}`;
 
 
-        const LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {
-            folder: 'partnersLogos'
-        });
-
-        if (!LogoUploadResult || !LogoUploadResult.secure_url) {
-            return res.status(500).json({
-                status: 'failed',
-                message: "Patners Logos upload to Cloudinary failed!",
+            LogoUploadResult = await cloudinary.uploader.upload(base64DataLogo, {
+                folder: 'partnersLogos'
             });
+
+            if (!LogoUploadResult || !LogoUploadResult.secure_url) {
+                return res.status(500).json({
+                    status: 'failed',
+                    message: "Kols Logos upload to Cloudinary failed!",
+                });
+            }
         }
 
         const patner = await PatnerModel.findById(patnerId);
@@ -237,12 +243,12 @@ exports.updatePatner = async (req, res) => {
         patner.name = name;
         patner.icon = {
             name: icon.name,
-            data: IconUploadResult.secure_url,
+            data: IconUploadResult?.secure_url || icon.data,
             contentType: icon.contentType,
         };
         patner.logo = {
             name: logo.name,
-            data: LogoUploadResult.secure_url,
+            data: LogoUploadResult?.secure_url || logo.data,
             contentType: logo.contentType,
         };
         patner.fromColor = fromColor;

@@ -1,8 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useUser } from '../../context';
 import AngleIcon from "../../assets/AngleIcon.svg";
 import DomeProfilePic from "../../assets/profile.png";
 import LevelsBackground from '../../assets/levels.png';
+import TitleBackground from '../../assets/titleBg.svg';
+
+import VerticalLine from '../../assets/verticalLine.svg';
+import DaiyCurrentDayBg from '../../assets/dailyreward/dailyCurrentDay.jpg';
 
 import SmallCoin from '../../assets/optimizedImages/SmallCoin.svg';
 
@@ -24,6 +28,21 @@ import Panda12 from '../../assets/optimizedImages/Home/Pandas/12.webp';
 import Panda13 from '../../assets/optimizedImages/Home/Pandas/13.webp';
 import Panda14 from '../../assets/optimizedImages/Home/Pandas/14.webp';
 
+import LevelBackground0 from '../../assets/levelsBackgroundImages/0.svg';
+import LevelBackground1 from '../../assets/levelsBackgroundImages/1.svg';
+import LevelBackground2 from '../../assets/levelsBackgroundImages/2.svg';
+import LevelBackground3 from '../../assets/levelsBackgroundImages/3.svg';
+import LevelBackground4 from '../../assets/levelsBackgroundImages/4.svg';
+import LevelBackground5 from '../../assets/levelsBackgroundImages/5.svg';
+import LevelBackground6 from '../../assets/levelsBackgroundImages/6.svg';
+import LevelBackground7 from '../../assets/levelsBackgroundImages/7.svg';
+import LevelBackground8 from '../../assets/levelsBackgroundImages/8.svg';
+import LevelBackground9 from '../../assets/levelsBackgroundImages/9.svg';
+import LevelBackground10 from '../../assets/levelsBackgroundImages/10.svg';
+import LevelBackground11 from '../../assets/levelsBackgroundImages/11.svg';
+import LevelBackground12 from '../../assets/levelsBackgroundImages/12.svg';
+import LevelBackground13 from '../../assets/levelsBackgroundImages/13.svg';
+
 import Sticker1 from '../../assets/levels/stickers/level1.svg';
 import Sticker2 from '../../assets/levels/stickers/level2.svg';
 import Sticker3 from '../../assets/levels/stickers/level3.svg';
@@ -31,8 +50,15 @@ import Sticker4 from '../../assets/levels/stickers/level4.svg';
 import Sticker5 from '../../assets/levels/stickers/level5.svg';
 import Sticker6 from '../../assets/levels/stickers/level6.svg';
 
+import PandaBgBrown from '../../assets/BrownBgPanda.svg';
+
+import LockIcon from '../../assets/lock.svg';
+
 const Levels = () => {
     const { level, profilePic, firstName, levelName, levelPercentage, levelsData } = useUser();
+
+    const [page, setPage] = useState('level');
+    const [skinPage, setSkinPage] = useState(level - 1);
 
     useEffect(() => {
         console.log('Level', level);
@@ -55,6 +81,23 @@ const Levels = () => {
         13: Panda14,
     };
 
+    const backgroundMapping = {
+        0: LevelBackground0,
+        1: LevelBackground1,
+        2: LevelBackground2,
+        3: LevelBackground3,
+        4: LevelBackground4,
+        5: LevelBackground5,
+        6: LevelBackground6,
+        7: LevelBackground7,
+        8: LevelBackground8,
+        9: LevelBackground9,
+        10: LevelBackground10,
+        11: LevelBackground11,
+        12: LevelBackground12,
+        13: LevelBackground13
+    }
+
     const stickerMapping = {
         0: Sticker1,
         1: Sticker2,
@@ -71,6 +114,79 @@ const Levels = () => {
         12: Sticker6,
         13: Sticker6,
     };
+
+    const colorMapping = [
+        {
+            id: 0,
+            from: '#8DFFB4',
+            to: '#0AC9A6'
+        },
+        {
+            id: 1,
+            from: '#576DE4',
+            to: '#5C00D0'
+        },
+        {
+            id: 2,
+            from: '#57CBE4',
+            to: '#008DB9'
+        },
+        {
+            id: 3,
+            from: '#B857E4',
+            to: '#8400B8'
+        },
+        {
+            id: 4,
+            from: '#D39200',
+            to: '#FFCE00',
+        },
+        {
+            id: 5,
+            from: '#5B0002',
+            to: '#DF700A'
+        },
+        {
+            id: 6,
+            from: '#38B1DE',
+            to: '#61C3E8'
+        },
+        {
+            id: 7,
+            from: '#78571B',
+            to: '#F3B54C'
+        },
+        {
+            id: 8,
+            from: '#1FD884',
+            to: '#07472A'
+        },
+        {
+            id: 9,
+            from: '#38B1DE',
+            to: '#61C3E8',
+        },
+        {
+            id: 10,
+            from: '#8E9EAB',
+            to: '#EEF2F3'
+        },
+        {
+            id: 11,
+            from: '#B857E4',
+            to: '#B857E4'
+        },
+        {
+            id: 12,
+            from: '#DB6704',
+            to: '#FFB93E'
+        },
+        {
+            id: 13,
+            from: '#7F96A8',
+            to: '#4B5561'
+        }
+    ]
 
 
     const formatNumber = (value) => {
@@ -93,8 +209,17 @@ const Levels = () => {
         return randomNames[Math.floor(Math.random() * randomNames.length)];
     };
 
+    const handleBuyAndUpgradeLevel = () => {
+        try {
+
+        } catch (error) {
+            console.log('Internal Server Error!');
+        }
+    }
+
     return (
         <div className='h-[92vh] w-full bg-[#090913] pt-5 px-2'>
+
             {/* Header */}
             <div className="px-2 flex justify-between">
                 <div className="flex mt-1.5">
@@ -164,128 +289,280 @@ const Levels = () => {
                 </div>
             </div>
 
-            <div className='relative w-full h-[82vh] z-0 flex justify-center items-center mt-5'>
-                <img src={LevelsBackground} alt="leaderboard_bg" className='absolute top-0 w-full h-full object-fit object-center z-20' />
-                <div className="w-[90%] h-[80vh] absolute z-10 py-20 overflow-y-scroll text-white">
-                    {levelsData.map((lev, index) => {
-                        return (
-                            <>
-                                {/* Completed Level */}
-                                {index + 1 < level && (
-                                    <div
-                                        key={index}
-                                        className="relative w-full h-[8vh] mt-3 p-2 rounded-xl bg-[##2b2c3f] flex justify-start items-center"
-                                        style={{
-                                            border: "2px solid transparent",
-                                            borderImage: "linear-gradient(to right, black 10%, #A9A9A9 50%, black 100%)",
-                                            borderImageSlice: 1,
-                                            boxSizing: "border-box",
-                                            padding: "6px",
-                                        }}
-                                    >
-                                        <img src={LevelUp} alt="levelup" className="absolute z-10 -top-1 -right-1" />
-                                        <div className="relative w-[20%] h-full">
-                                            <img src={stickerMapping[index]} alt="sticker" width={40} className="absolute -top-1 left-3" />
-                                        </div>
-                                        <div className="w-full h-full flex flex-col justify-center items-center gap-1">
-                                            <div className="w-full h-1/2 flex justify-center items-center gap-1">
-                                                <h1 className="text-white font-bold">{lev.name}</h1>
-                                                <img src={pandaMapping[index]} alt="panda" width={18} />
-                                            </div>
+            {/* slider ( levels page / skins page) */}
+
+            <div className='w-full h-[8vh] flex justify-center items-end text-white'>
+                <button
+                    onClick={() => {
+                        setPage('level');
+                    }}
+                    className={`w-1/2 h-[5vh] ${page === 'level' && 'custom-orange-border'}`}
+                >
+                    LEVELS
+                </button>
+                <button
+                    onClick={() => {
+                        setPage('skin');
+                    }}
+                    className={`w-1/2 h-[5vh] ${page === 'skin' && 'custom-orange-border'}`}
+                >
+                    SKINS
+                </button>
+            </div>
+
+            {/* Levels Page */}
+            {page === 'level' ? (
+                <>
+                    <div className='relative w-full h-[74vh] z-0 flex justify-center items-center mt-2'>
+                        <img src={LevelsBackground} alt="leaderboard_bg" className='absolute top-0 w-full h-full object-fit object-center z-20' />
+                        <div className="w-[90%] h-[74vh] absolute z-10 pb-12 pt-12 overflow-y-scroll text-white">
+                            {levelsData.map((lev, index) => {
+                                return (
+                                    <>
+                                        {/* Completed Level */}
+                                        {index + 1 < level && (
                                             <div
-                                                className="relative z-0 w-[85%] h-full"
+                                                key={index}
+                                                className="relative w-full h-[8vh] mt-3 p-2 rounded-xl bg-[##2b2c3f] flex justify-start items-center"
                                                 style={{
-                                                    background: "radial-gradient(circle, #0575B7, #023451)"
+                                                    border: "2px solid transparent",
+                                                    borderImage: "linear-gradient(to right, black 10%, #A9A9A9 50%, black 100%)",
+                                                    borderImageSlice: 1,
+                                                    boxSizing: "border-box",
+                                                    padding: "6px",
                                                 }}
                                             >
-                                                <div className="w-full h-full absolute top-0 z-10 flex justify-between items-center p-2 text-[12px]">
-                                                    <p>LEVEL {index + 1}</p>
-                                                    <p className="flex justify-end items-center gap-1">
-                                                        <img src={SmallCoin} alt="smallcoin" width={15} />
-                                                        {formatNumber(levelsData[index].rangeFrom)}-
-                                                        {levelsData[index].rangeTo !== "max" ? formatNumber(levelsData[index].rangeTo) : "MAX"}
-                                                    </p>
+                                                <img src={LevelUp} alt="levelup" className="absolute z-10 -top-1 -right-1" />
+                                                <div className="relative w-[20%] h-full">
+                                                    <img src={stickerMapping[index]} alt="sticker" width={40} className="absolute -top-1 left-3" />
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div >
-                                )}
+                                                <div className="w-full h-full flex flex-col justify-center items-center gap-1">
+                                                    <div className="w-full h-1/2 flex justify-center items-center gap-1">
+                                                        <h1 className="text-white font-bold">{lev.name}</h1>
+                                                        <img src={pandaMapping[index]} alt="panda" width={18} />
+                                                    </div>
+                                                    <div
+                                                        className="relative z-0 w-[85%] h-full"
+                                                        style={{
+                                                            background: "radial-gradient(circle, #0575B7, #023451)"
+                                                        }}
+                                                    >
+                                                        <div className="w-full h-full absolute top-0 z-10 flex justify-between items-center p-2 text-[12px]">
+                                                            <p>LEVEL {index + 1}</p>
+                                                            <p className="flex justify-end items-center gap-1">
+                                                                <img src={SmallCoin} alt="smallcoin" width={15} />
+                                                                {formatNumber(levelsData[index].rangeFrom)}-
+                                                                {levelsData[index].rangeTo !== "max" ? formatNumber(levelsData[index].rangeTo) : "MAX"}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div >
+                                        )}
 
-                                {/* Current Level */}
-                                {index + 1 === level && (
-                                    <div
-                                        key={index}
-                                        className="relative w-full h-[8vh] mt-3 p-2 rounded-xl flex justify-start items-center shadow-[#0199FF] shadow-md bg-[#999da6]"
-                                        style={{
-                                            border: "2px solid transparent",
-                                            borderImage: "linear-gradient(to right, black 10%, #A9A9A9 50%, black 100%)",
-                                            borderImageSlice: 1,
-                                            boxSizing: "border-box",
-                                            padding: "6px",
-                                        }}
-                                    >
-                                        <div className="relative w-[20%] h-full">
-                                            <img src={stickerMapping[index]} alt="sticker" width={40} className="absolute -top-1 left-3" />
-                                        </div>
-                                        <div className="w-full h-full flex flex-col justify-center items-center gap-1">
-                                            <div className="w-full h-1/2 flex justify-center items-center gap-1">
-                                                <h1 className="font-bold text-black">{lev.name}</h1>
-                                                <img src={pandaMapping[index]} alt="panda" width={18} />
-                                            </div>
-                                            <div className="relative z-0 w-[85%] h-full bg-black">
-                                                <div className="w-full h-full absolute top-0 z-10 flex justify-between items-center p-2 text-[12px]">
-                                                    <p>LEVEL {index + 1}</p>
-                                                    <p className="flex justify-end items-center gap-1">
-                                                        <img src={SmallCoin} alt="smallcoin" width={15} />
-                                                        {formatNumber(levelsData[index].rangeFrom)}-
-                                                        {levelsData[index].rangeTo !== "max" ? formatNumber(levelsData[index].rangeTo) : "MAX"}
-                                                    </p>
+                                        {/* Current Level */}
+                                        {index + 1 === level && (
+                                            <div
+                                                key={index}
+                                                className="relative w-full h-[8vh] mt-3 p-2 rounded-xl flex justify-start items-center shadow-[#0199FF] shadow-md bg-[#999da6]"
+                                                style={{
+                                                    border: "2px solid transparent",
+                                                    borderImage: "linear-gradient(to right, black 10%, #A9A9A9 50%, black 100%)",
+                                                    borderImageSlice: 1,
+                                                    boxSizing: "border-box",
+                                                    padding: "6px",
+                                                }}
+                                            >
+                                                <div className="relative w-[20%] h-full">
+                                                    <img src={stickerMapping[index]} alt="sticker" width={40} className="absolute -top-1 left-3" />
                                                 </div>
+                                                <div className="w-full h-full flex flex-col justify-center items-center gap-1">
+                                                    <div className="w-full h-1/2 flex justify-center items-center gap-1">
+                                                        <h1 className="font-bold text-black">{lev.name}</h1>
+                                                        <img src={pandaMapping[index]} alt="panda" width={18} />
+                                                    </div>
+                                                    <div className="relative z-0 w-[85%] h-full bg-black">
+                                                        <div className="w-full h-full absolute top-0 z-10 flex justify-between items-center p-2 text-[12px]">
+                                                            <p>LEVEL {index + 1}</p>
+                                                            <p className="flex justify-end items-center gap-1">
+                                                                <img src={SmallCoin} alt="smallcoin" width={15} />
+                                                                {formatNumber(levelsData[index].rangeFrom)}-
+                                                                {levelsData[index].rangeTo !== "max" ? formatNumber(levelsData[index].rangeTo) : "MAX"}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Next Level */}
+                                        {index + 1 > level && (
+                                            <div
+                                                key={index}
+                                                className="relative w-full h-[8vh] mt-3 p-2 rounded-xl bg-[#484a59] flex justify-start items-center"
+                                                style={{
+                                                    border: "2px solid transparent",
+                                                    borderImage: "linear-gradient(to right, black 10%, #A9A9A9 50%, black 100%)",
+                                                    borderImageSlice: 1,
+                                                    boxSizing: "border-box",
+                                                    padding: "6px",
+                                                }}
+                                            >
+                                                <img src={Lock} alt="lock" className="absolute right-4 top-2 z-10" />
+                                                <div className="relative w-[20%] h-full">
+                                                    <img src={stickerMapping[index]} alt="sticker" width={40} className="absolute -top-1 left-3" />
+                                                </div>
+                                                <div className="w-full h-full flex flex-col justify-center items-center gap-1">
+                                                    <div className="w-full h-1/2 flex justify-center items-center gap-1">
+                                                        <h1 className="font-bold text-white">{lev.name}</h1>
+                                                        <img src={pandaMapping[index]} alt="panda" width={18} />
+                                                    </div>
+                                                    <div className="relative z-0 w-[85%] h-full bg-black">
+                                                        <div className="w-full h-full absolute top-0 z-10 flex justify-between items-center p-2 text-[12px]">
+                                                            <p>LEVEL {index + 1}</p>
+                                                            <p className="flex justify-end items-center gap-1">
+                                                                <img src={SmallCoin} alt="smallcoin" width={15} />
+                                                                {formatNumber(levelsData[index].rangeFrom)}-
+                                                                {levelsData[index].rangeTo !== "max" ? formatNumber(levelsData[index].rangeTo) : "MAX"}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </>
+            ) : (
+                <>
+                    <div className='relative w-full h-[74vh] z-0 flex flex-col justify-center items-center -mt-2 text-white'>
+                        <div className='relative w-[100vw] h-[70%]'>
+                            <div className='w-full h-full absolute z-0'>
+                                <img src={backgroundMapping[skinPage]} alt="bg_img" className='w-full h-full object-cover' />
+                            </div>
+                            <div className='w-full h-full absolute z-10 flex flex-col justify-start items-center'>
+                                <div className='relative w-[80%] h-[20%]'>
+                                    <div className='w-full h-full absolute z-10'>
+                                        <img src={TitleBackground} alt="title_bg" className='w-full h-full' />
+                                    </div>
+                                    <div className='w-full h-full absolute z-20 flex justify-center items-center text-center elastic-stretch-text text-[25px]'>
+                                        {levelsData[skinPage].name}
+                                    </div>
+                                </div>
+                                <div className='w-full h-[65%] pb-2 flex justify-center items-center'>
+                                    <img src={pandaMapping[skinPage]} alt="panda_img" className='object-cover' width={200} />
+                                </div>
+                                <div className='w-full h-[12vh] bg-black bg-opacity-70 flex justify-center items-center'>
+                                    <div className='w-[45%] h-full flex flex-col justify-center items-center'>
+                                        <h1 className='w-full h-[30%] text-center'>LEVEL {levelsData[skinPage].id}</h1>
+                                        <div className='w-full h-[50%] flex justify-center items-center gap-1'>
+                                            <img src={pandaMapping[skinPage]} alt="small_panda" width={15} />
+                                            <div className='flex justify-center items-center gap-2 bg-[#14141E] w-20 h-4 border border-gray-500 rounded-[4px] text-[10px]'>
+                                                <img src={SmallCoin} alt="small_coin" width={10} />
+                                                +{levelsData[skinPage].rangeTo}
                                             </div>
                                         </div>
                                     </div>
-                                )}
-
-                                {/* Next Level */}
-                                {index + 1 > level && (
-                                    <div
-                                        key={index}
-                                        className="relative w-full h-[8vh] mt-3 p-2 rounded-xl bg-[#484a59] flex justify-start items-center"
-                                        style={{
-                                            border: "2px solid transparent",
-                                            borderImage: "linear-gradient(to right, black 10%, #A9A9A9 50%, black 100%)",
-                                            borderImageSlice: 1,
-                                            boxSizing: "border-box",
-                                            padding: "6px",
-                                        }}
-                                    >
-                                        <img src={Lock} alt="lock" className="absolute right-4 top-2 z-10" />
-                                        <div className="relative w-[20%] h-full">
-                                            <img src={stickerMapping[index]} alt="sticker" width={40} className="absolute -top-1 left-3" />
-                                        </div>
-                                        <div className="w-full h-full flex flex-col justify-center items-center gap-1">
-                                            <div className="w-full h-1/2 flex justify-center items-center gap-1">
-                                                <h1 className="font-bold text-white">{lev.name}</h1>
-                                                <img src={pandaMapping[index]} alt="panda" width={18} />
-                                            </div>
-                                            <div className="relative z-0 w-[85%] h-full bg-black">
-                                                <div className="w-full h-full absolute top-0 z-10 flex justify-between items-center p-2 text-[12px]">
-                                                    <p>LEVEL {index + 1}</p>
-                                                    <p className="flex justify-end items-center gap-1">
-                                                        <img src={SmallCoin} alt="smallcoin" width={15} />
-                                                        {formatNumber(levelsData[index].rangeFrom)}-
-                                                        {levelsData[index].rangeTo !== "max" ? formatNumber(levelsData[index].rangeTo) : "MAX"}
-                                                    </p>
+                                    <img src={VerticalLine} alt="vertical_line" />
+                                    <div className='w-[45%] h-full flex justify-center items-center'>
+                                        <button
+                                            disabled={skinPage <= (level - 1)}
+                                            className={`w-[65%] h-6 bg-gradient-to-t from-[#0B0D79] to-[#09729F] rounded-[8px] border border-gray-500 text-sm ${skinPage <= (level - 1) && 'text-gray-300'} `}
+                                        >
+                                            {skinPage <= (level - 1) ? (
+                                                <>
+                                                    Equipped
+                                                </>
+                                            ) : (
+                                                <div className='flex justify-center items-center gap-2'>
+                                                    {levelsData[skinPage].tonPrice}
+                                                </div>
+                                            )}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="w-full h-24 flex items-center px-3 py-2 text-white overflow-y-hidden overflow-x-auto gap-2">
+                            {levelsData.map((lev, index) => {
+                                return (
+                                    <>
+                                        {index === skinPage ? (
+                                            <div
+                                                onClick={() => {
+                                                    setSkinPage(index);
+                                                }}
+                                                key={index}
+                                                style={{
+                                                    backgroundImage: `url(${DaiyCurrentDayBg})`,
+                                                    backgroundSize: 'cover',
+                                                    backgroundPosition: 'center'
+                                                }}
+                                                className={`relative z-0 min-w-[70px] h-full flex items-center justify-center text-center rounded-xl shadow-[0_0_5px_0px_rgba(0,0,0,0.2)] shadow-[#2174FF] border-2 border-[#2174FF]`}
+                                            >
+                                                {index > (level - 1) && (
+                                                    <img src={LockIcon} alt="lock_icon" className='absolute top-2 right-1 z-30' />
+                                                )}
+                                                <div className='w-full h-4 border-white absolute -top-1.5'>
+                                                    <div
+                                                        style={{
+                                                            background: `linear-gradient(to right, ${colorMapping[index].from}, ${colorMapping[index].to || colorMapping[index].from})`
+                                                        }}
+                                                        className='w-[80%] h-full flex justify-center items-center text-[12px] mx-auto rounded-md'
+                                                    >
+                                                        {`level ${index + 1}`}
+                                                    </div>
+                                                </div>
+                                                <div className='w-full h-full absolute z-10 flex justify-center items-center'>
+                                                    <img src={PandaBgBrown} alt="bg-brown" width={50} />
+                                                </div>
+                                                <div className='w-full h-full absolute z-10 flex flex-col justify-center items-center'>
+                                                    <img src={pandaMapping[index]} alt="panda" width={35} />
+                                                    <h1 className='absolute bottom-0.5 text-[8px]'>{levelsData[index].name}</h1>
+                                                </div>
+                                            </div >
+                                        ) : (
+                                            <div
+                                                onClick={() => {
+                                                    setSkinPage(index);
+                                                }}
+                                                key={index}
+                                                className={`relative z-0 min-w-[70px] h-full flex items-center justify-center text-center rounded-xl custom-gray-border `}
+                                            >
+                                                {index > (level - 1) && (
+                                                    <img src={LockIcon} alt="lock_icon" className='absolute top-2 right-1 z-30' />
+                                                )}
+                                                <div className='w-full h-4 border-white absolute -top-1.5'>
+                                                    <div
+                                                        style={{
+                                                            background: `linear-gradient(to right, ${colorMapping[index].from}, ${colorMapping[index].to || colorMapping[index].from})`
+                                                        }}
+                                                        className='w-[80%] h-full flex justify-center items-center text-[12px] mx-auto rounded-md'
+                                                    >
+                                                        {`level ${index + 1}`}
+                                                    </div>
+                                                </div>
+                                                <div className='w-full h-full absolute z-10 flex justify-center items-center'>
+                                                    <img src={PandaBgBrown} alt="bg-brown" width={50} />
+                                                </div>
+                                                <div className='w-full h-full absolute z-10 flex flex-col justify-center items-center'>
+                                                    <img src={pandaMapping[index]} alt="panda" width={35} />
+                                                    <h1 className='absolute bottom-0.5 text-[8px]'>{levelsData[index].name}</h1>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                )}
-                            </>
-                        );
-                    })}
-                </div>
-            </div>
+                                        )}
+                                    </>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </>
+            )
+            }
+
         </div >
     )
 }

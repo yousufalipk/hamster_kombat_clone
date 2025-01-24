@@ -236,3 +236,58 @@ html {
   flex-direction: column;
   z-index: 3000;
 }
+
+.custom-orange-border {
+  position: relative;
+}
+
+.custom-orange-border::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #DB6704 45%, transparent);
+}
+
+.custom-gray-border {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-gray-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #2C2D3F, #A9A9A9, #2C2D3F);
+  z-index: -1;
+  border-radius: 12px;
+  padding: 1.5px;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+@font-face {
+  font-family: 'Elastic Stretch';
+  src: url('../public/fonts/ElasticStretch.ttf') format('truetype'),
+    url('../public//fonts/ElasticStretch.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.elastic-stretch-text {
+  font-family: 'Elastic Stretch', sans-serif;
+  color: white;
+  -webkit-text-stroke: 2px #071F3E;
+  -webkit-text-fill-color: white;
+}

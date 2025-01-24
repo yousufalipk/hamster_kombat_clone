@@ -61,6 +61,8 @@ import rightbox from '../../assets/dailyreward/gift2.svg';
 
 import CommingSoon from '../../assets/root/comingSoon.svg';
 
+
+
 const Home = () => {
 
 	const {

@@ -114,20 +114,20 @@ export const UserProvider = (props) => {
     const [mainLoader, setMainLoader] = useState(false);
 
     const levelsData = [
-        { id: 1, name: 'Adventurous', rangeFrom: 0, rangeTo: 5000 },
-        { id: 2, name: 'Energetic', rangeFrom: 5000, rangeTo: 50000 },
-        { id: 3, name: 'Rockstar', rangeFrom: 50000, rangeTo: 250000 },
-        { id: 4, name: 'Astronaut', rangeFrom: 250000, rangeTo: 500000 },
-        { id: 5, name: 'Super Hero', rangeFrom: 500000, rangeTo: 1000000 },
-        { id: 6, name: 'Detective', rangeFrom: 1000000, rangeTo: 2500000 },
-        { id: 7, name: 'Ninja', rangeFrom: 2500000, rangeTo: 5000000 },
-        { id: 8, name: 'Pirate', rangeFrom: 5000000, rangeTo: 20000000 },
-        { id: 9, name: 'Samurai Panda', rangeFrom: 20000000, rangeTo: 50000000 },
-        { id: 10, name: 'Tapster', rangeFrom: 50000000, rangeTo: 150000000 },
-        { id: 11, name: 'Tech Genius', rangeFrom: 150000000, rangeTo: 500000000 },
-        { id: 12, name: 'Cyber Warrior', rangeFrom: 500000000, rangeTo: 1000000000 },
-        { id: 13, name: 'Flare', rangeFrom: 1000000000, rangeTo: 3000000000 },
-        { id: 14, name: 'The Crypto', rangeFrom: 3000000000, rangeTo: 'max' },
+        { id: 1, name: 'Adventurous', rangeFrom: 0, rangeTo: 5000, reward: 5000, tonPrice: 50 },
+        { id: 2, name: 'Energetic', rangeFrom: 5000, rangeTo: 50000, reward: 10000, tonPrice: 100 },
+        { id: 3, name: 'Rockstar', rangeFrom: 50000, rangeTo: 250000, reward: 20000, tonPrice: 200 },
+        { id: 4, name: 'Astronaut', rangeFrom: 250000, rangeTo: 500000, reward: 40000, tonPrice: 400 },
+        { id: 5, name: 'Super Hero', rangeFrom: 500000, rangeTo: 1000000, reward: 80000, tonPrice: 800 },
+        { id: 6, name: 'Detective', rangeFrom: 1000000, rangeTo: 2500000, reward: 160000, tonPrice: 1600 },
+        { id: 7, name: 'Ninja', rangeFrom: 2500000, rangeTo: 5000000, reward: 320000, tonPrice: 3200 },
+        { id: 8, name: 'Pirate', rangeFrom: 5000000, rangeTo: 20000000, reward: 640000, tonPrice: 6400 },
+        { id: 9, name: 'Samurai Panda', rangeFrom: 20000000, rangeTo: 50000000, reward: 1280000, tonPrice: 12800 },
+        { id: 10, name: 'Tapster', rangeFrom: 50000000, rangeTo: 150000000, reward: 2560000, tonPrice: 25600 },
+        { id: 11, name: 'Tech Genius', rangeFrom: 150000000, rangeTo: 500000000, reward: 5120000, tonPrice: 51200 },
+        { id: 12, name: 'Cyber Warrior', rangeFrom: 500000000, rangeTo: 1000000000, reward: 10240000, tonPrice: 102400 },
+        { id: 13, name: 'Flare', rangeFrom: 1000000000, rangeTo: 3000000000, reward: 20480000, tonPrice: 204800 },
+        { id: 14, name: 'The Crypto', rangeFrom: 3000000000, rangeTo: 'max', reward: 40960000, tonPrice: 409600 },
     ];
 
     const energyUpgradeCost = [0, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000, 256000, 512000, 1024000, 2048000, 4096000, 8192000, 16384000, 32768000];

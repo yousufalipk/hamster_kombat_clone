@@ -190,19 +190,23 @@ exports.updateProject = async (req, res) => {
             });
         }
 
-        const base64Data = icon.data.startsWith('data:image')
-            ? icon.data
-            : `data:image/${icon.contentType.split('/')[1]};base64,${icon.data}`;
+        let uploadResult = null;
 
-        const uploadResult = await cloudinary.uploader.upload(base64Data, {
-            folder: 'projects'
-        });
+        if (!icon.data.startsWith('https://')) {
+            const base64DataIcon = icon.data.startsWith('data:image')
+                ? icon.data
+                : `data:image/${icon.contentType.split('/')[1]};base64,${icon.data}`;
 
-        if (!uploadResult || !uploadResult.secure_url) {
-            return res.status(500).json({
-                status: 'failed',
-                message: "Image upload to Cloudinary failed!",
+            uploadResult = await cloudinary.uploader.upload(base64DataIcon, {
+                folder: 'projects'
             });
+
+            if (!uploadResult || !uploadResult.secure_url) {
+                return res.status(500).json({
+                    status: 'failed',
+                    message: "Project Icon upload to Cloudinary failed!",
+                });
+            }
         }
 
         const project = await ProjectModel.findById(projectId);
@@ -239,7 +243,7 @@ exports.updateProject = async (req, res) => {
         project.name = name;
         project.icon = {
             name: icon.name,
-            data: uploadResult.secure_url,
+            data: uploadResult?.secure_url || icon.data,
             contentType: icon.contentType,
         };
         project.fromColor = fromColor;

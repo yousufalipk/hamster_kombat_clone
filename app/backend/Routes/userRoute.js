@@ -39,7 +39,8 @@ const {
 } = require('../controllers/userController');
 
 const {
-    fetchTopUsersForAllLevels
+    fetchTopUsersForAllLevels,
+    BuyAndUpgradeLevel
 } = require('../utils/updateLevel');
 
 const router = express.Router();
@@ -81,6 +82,8 @@ router.route('/watch-ads-reward').get(watchAdsReward);
 
 router.route('/add-content').post(addContent);
 router.route('/reset-daily-combo').get(dailyComboReset);
+
+router.route('/buy-level').post(BuyAndUpgradeLevel);
 
 /*
 router.route('/move-images').get(MigrateImagesWithTelegramId);

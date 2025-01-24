@@ -14,8 +14,6 @@ const refreshToken = require('../models/tokenSchema');
 
 const { BOT_TOKEN, CLOUD_NAME, API_KEY, API_SECRET } = require('../config/env');
 
-const TelegramBot = require('node-telegram-bot-api');
-const fs = require('fs')
 const axios = require('axios');
 
 const cloudinary = require("cloudinary").v2;
@@ -429,7 +427,8 @@ exports.broadcastMessageToUsers = async (req, res) => {
 };
 */
 
-const BATCH_SIZE = 500;
+const BATCH_SIZE = 100;
+const MAX_PARALLEL_REQUESTS = 50;
 
 exports.broadcastMessageToUsers = async (req, res) => {
     try {
@@ -448,7 +447,7 @@ exports.broadcastMessageToUsers = async (req, res) => {
         }
 
         if (!Array.isArray(buttons) || buttons.length === 0) {
-            return res.status(400).json({ error: 'buttons must be a non-empty array.' });
+            return res.status(400).json({ error: 'Buttons must be a non-empty array.' });
         }
 
         const inlineKeyboard = buttons.map((btn) => {
@@ -477,35 +476,42 @@ exports.broadcastMessageToUsers = async (req, res) => {
         let failedUsers = [];
         let successUsers = [];
 
-        const processBatch = async (batch) => {
-            for (const user of batch) {
-                try {
-                    const url = `https://api.telegram.org/bot${BOT_TOKEN}/${imageUrl ? 'sendPhoto' : 'sendMessage'}`;
-                    const payload = imageUrl
-                        ? {
-                            chat_id: user.telegramId,
-                            photo: imageUrl,
-                            caption: message,
-                            reply_markup: { inline_keyboard: inlineKeyboard },
-                        }
-                        : {
-                            chat_id: user.telegramId,
-                            text: message,
-                            reply_markup: { inline_keyboard: inlineKeyboard },
-                        };
+        const sendMessageToUser = async (user, imageUrl) => {
+            try {
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/${imageUrl ? 'sendPhoto' : 'sendMessage'}`;
+                const payload = imageUrl
+                    ? {
+                        chat_id: user.telegramId,
+                        photo: imageUrl,
+                        caption: message,
+                        reply_markup: { inline_keyboard: inlineKeyboard },
+                    }
+                    : {
+                        chat_id: user.telegramId,
+                        text: message,
+                        reply_markup: { inline_keyboard: inlineKeyboard },
+                    };
 
-                    await axios.post(url, payload);
-                    successUsers.push({ telegramId: user.telegramId });
-                } catch (err) {
-                    console.error(`Failed to send message to ${user.telegramId}:`, err.message);
-                    failedUsers.push({ telegramId: user.telegramId });
-                }
+                await axios.post(url, payload);
+                successUsers.push({ telegramId: user.telegramId });
+                console.log(`Successfully sent message to ${user.telegramId}`);
+            } catch (err) {
+                console.error(`Failed to send message to ${user.telegramId}:`, err.message);
+                failedUsers.push({ telegramId: user.telegramId });
+            }
+        };
+
+        const sendMessagesInParallel = async (users) => {
+            const userPromises = users.map(user => sendMessageToUser(user, imageUrl));
+            for (let i = 0; i < userPromises.length; i += MAX_PARALLEL_REQUESTS) {
+                const batch = userPromises.slice(i, i + MAX_PARALLEL_REQUESTS);
+                await Promise.all(batch);
             }
         };
 
         for (let i = 0; i < users.length; i += BATCH_SIZE) {
             const batch = users.slice(i, i + BATCH_SIZE);
-            await processBatch(batch);
+            await sendMessagesInParallel(batch);
         }
 
         const log = new BroadcastingModel({
@@ -516,6 +522,9 @@ exports.broadcastMessageToUsers = async (req, res) => {
         });
 
         await log.save();
+
+        console.log(`Broadcast completed. ${successUsers.length} messages sent successfully.`);
+        console.log(`${failedUsers.length} messages failed to send.`);
 
         res.status(200).json({
             status: 'success',
