@@ -1093,6 +1093,8 @@ export const UserProvider = (props) => {
                 setBalance(response.data.newBalance);
                 setLevel(response.data.newLevel + 1);
                 setLevelName(levelsData[response.data.newLevel].name);
+                const percentage = ((response.data.newLevel + 1) / levelsData.length) * 100;
+                setLevelPercentage(percentage);
                 return ({ success: true, mess: 'Level Upgraded Succesfuly!' });
             } else {
                 return ({ success: false, mess: 'Internal Server Error!' });

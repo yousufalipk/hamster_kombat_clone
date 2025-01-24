@@ -485,9 +485,9 @@ const Levels = () => {
                                         <h1 className='w-full h-[30%] text-center'>LEVEL {levelsData[skinPage].id}</h1>
                                         <div className='w-full h-[50%] flex justify-center items-center gap-1'>
                                             <img src={pandaMapping[skinPage]} alt="small_panda" width={15} />
-                                            <div className='flex justify-center items-center gap-2 bg-[#14141E] w-20 h-4 border border-gray-500 rounded-[4px] text-[10px]'>
+                                            <div className='flex justify-center items-center bg-[#14141E] w-24 h-4 border border-gray-500 rounded-[4px] text-[10px]'>
                                                 <img src={SmallCoin} alt="small_coin" width={10} />
-                                                +{levelsData[skinPage].rangeTo}
+                                                +{levelsData[skinPage].rangeFrom}
                                             </div>
                                         </div>
                                     </div>
