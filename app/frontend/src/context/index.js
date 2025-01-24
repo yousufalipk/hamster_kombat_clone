@@ -1082,6 +1082,25 @@ export const UserProvider = (props) => {
         }
     };
 
+    const buyLevelUpgrade = async (requestedLevel) => {
+        try {
+            const response = await axios.post(`${apiUrl}/user/buy-level`, {
+                userId: userId,
+                levelRequested: requestedLevel
+            });
+            if (response.data.status === 'success') {
+                setBalance(response.data.newBalance);
+                setLevel(response.data.newLevel);
+                return ({ success: true, mess: 'Level Upgraded Succesfuly!' });
+            } else {
+                return ({ success: false, mess: 'Internal Server Error!' });
+            }
+        } catch (error) {
+            console.log('Internal Server Error!');
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
     return (
         <UserContext.Provider value={{
             initializeUser,
@@ -1210,7 +1229,9 @@ export const UserProvider = (props) => {
             watchAdsAndEarn,
 
             comboCardAnimation,
-            comboCardWinning
+            comboCardWinning,
+
+            buyLevelUpgrade
         }}>
             {toast && isVisible && (
                 <div

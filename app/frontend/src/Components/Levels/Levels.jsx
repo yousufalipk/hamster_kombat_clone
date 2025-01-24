@@ -12,6 +12,7 @@ import SmallCoin from '../../assets/optimizedImages/SmallCoin.svg';
 
 import LevelUp from '../../assets/levelUp.svg';
 import Lock from '../../assets/lock.svg';
+import TonCoin from '../../assets/ton.svg';
 
 import Panda1 from '../../assets/optimizedImages/Home/Pandas/1.webp';
 import Panda2 from '../../assets/optimizedImages/Home/Pandas/2.webp';
@@ -55,10 +56,25 @@ import PandaBgBrown from '../../assets/BrownBgPanda.svg';
 import LockIcon from '../../assets/lock.svg';
 
 const Levels = () => {
-    const { level, profilePic, firstName, levelName, levelPercentage, levelsData } = useUser();
+    const { level, profilePic, firstName, levelName, levelPercentage, levelsData, triggerToast, buyLevelUpgrade } = useUser();
 
     const [page, setPage] = useState('level');
     const [skinPage, setSkinPage] = useState(level - 1);
+
+    const [dots, setDots] = useState('');
+    const [buttonLoading, setButtonLoading] = useState(false);
+
+    useEffect(() => {
+        let interval;
+        if (buttonLoading) {
+            interval = setInterval(() => {
+                setDots(prev => (prev.length < 4 ? prev + '.' : ''));
+            }, 300);
+        } else {
+            setDots('');
+        }
+        return () => clearInterval(interval);
+    }, [buttonLoading]);
 
     useEffect(() => {
         console.log('Level', level);
@@ -209,11 +225,20 @@ const Levels = () => {
         return randomNames[Math.floor(Math.random() * randomNames.length)];
     };
 
-    const handleBuyAndUpgradeLevel = () => {
+    const handleBuyAndUpgradeLevel = async (levelTopUpdate) => {
         try {
-
+            setButtonLoading(true);
+            const res = await buyLevelUpgrade(levelTopUpdate);
+            if (res.success) {
+                triggerToast('Level Upgraded Succesfully!', 'success');
+            } else {
+                triggerToast('Error upgrading Level!', 'error');
+            }
         } catch (error) {
+            triggerToast('Internal Server Error!', 'error');
             console.log('Internal Server Error!');
+        } finally {
+            setButtonLoading(false);
         }
     }
 
@@ -469,6 +494,9 @@ const Levels = () => {
                                     <img src={VerticalLine} alt="vertical_line" />
                                     <div className='w-[45%] h-full flex justify-center items-center'>
                                         <button
+                                            onClick={() => {
+                                                handleBuyAndUpgradeLevel()
+                                            }}
                                             disabled={skinPage <= (level - 1)}
                                             className={`w-[65%] h-6 bg-gradient-to-t from-[#0B0D79] to-[#09729F] rounded-[8px] border border-gray-500 text-sm ${skinPage <= (level - 1) && 'text-gray-300'} `}
                                         >
@@ -477,9 +505,22 @@ const Levels = () => {
                                                     Equipped
                                                 </>
                                             ) : (
-                                                <div className='flex justify-center items-center gap-2'>
-                                                    {levelsData[skinPage].tonPrice}
-                                                </div>
+                                                <>
+                                                    {buttonLoading ? (
+                                                        <span className="flex justify-center items-center font-semibold text-5xl w-full">
+                                                            <p className="absolute -mt-6">
+                                                                {dots}
+                                                            </p>
+                                                        </span>
+                                                    ) : (
+                                                        <>
+                                                            <div className='flex justify-center items-center'>
+                                                                <img src={TonCoin} alt="tonCoin" />
+                                                                {levelsData[skinPage].tonPrice}
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </>
                                             )}
                                         </button>
                                     </div>
