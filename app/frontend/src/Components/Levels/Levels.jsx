@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useUser } from '../../context';
 import AngleIcon from "../../assets/AngleIcon.svg";
 import DomeProfilePic from "../../assets/profile.png";
@@ -59,10 +59,22 @@ const Levels = () => {
     const { level, profilePic, firstName, levelName, levelPercentage, levelsData, triggerToast, buyLevelUpgrade } = useUser();
 
     const [page, setPage] = useState('level');
-    const [skinPage, setSkinPage] = useState(level - 1);
+    const [skinPage, setSkinPage] = useState();
 
     const [dots, setDots] = useState('');
     const [buttonLoading, setButtonLoading] = useState(false);
+
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        if (containerRef.current) {
+            const selectedCard = containerRef.current.children[skinPage];
+            containerRef.current.scrollTo({
+                left: selectedCard.offsetLeft - containerRef.current.offsetWidth / 2 + selectedCard.offsetWidth / 2,
+                behavior: 'smooth'
+            });
+        }
+    }, [skinPage]);
 
     useEffect(() => {
         let interval;
@@ -75,10 +87,6 @@ const Levels = () => {
         }
         return () => clearInterval(interval);
     }, [buttonLoading]);
-
-    useEffect(() => {
-        console.log('Level', level);
-    }, [level])
 
     const pandaMapping = {
         0: Panda1,
@@ -328,6 +336,7 @@ const Levels = () => {
                 <button
                     onClick={() => {
                         setPage('skin');
+                        setSkinPage(level - 1);
                     }}
                     className={`w-1/2 h-[5vh] ${page === 'skin' && 'custom-orange-border'}`}
                 >
@@ -527,6 +536,7 @@ const Levels = () => {
                                 </div>
                             </div>
                         </div>
+                        {/*
                         <div className="w-full h-24 flex items-center px-3 py-2 text-white overflow-y-hidden overflow-x-auto gap-2">
                             {levelsData.map((lev, index) => {
                                 return (
@@ -599,6 +609,82 @@ const Levels = () => {
                                 );
                             })}
                         </div>
+                        */}
+
+                        <div className="w-full h-24 flex items-center px-3 py-2 text-white overflow-x-auto gap-2" ref={containerRef}>
+                            {levelsData.map((lev, index) => {
+                                return (
+                                    <>
+                                        {index === skinPage ? (
+                                            <div
+                                                onClick={() => {
+                                                    setSkinPage(index);
+                                                }}
+                                                key={index}
+                                                style={{
+                                                    backgroundImage: `url(${DaiyCurrentDayBg})`,
+                                                    backgroundSize: 'cover',
+                                                    backgroundPosition: 'center'
+                                                }}
+                                                className={`relative z-0 min-w-[70px] h-full flex items-center justify-center text-center rounded-xl shadow-[0_0_5px_0px_rgba(0,0,0,0.2)] shadow-[#2174FF] border-2 border-[#2174FF]`}
+                                            >
+                                                {index > (level - 1) && (
+                                                    <img src={LockIcon} alt="lock_icon" className='absolute top-2 right-1 z-30' />
+                                                )}
+                                                <div className='w-full h-4 border-white absolute -top-1.5'>
+                                                    <div
+                                                        style={{
+                                                            background: `linear-gradient(to right, ${colorMapping[index].from}, ${colorMapping[index].to || colorMapping[index].from})`
+                                                        }}
+                                                        className='w-[80%] h-full flex justify-center items-center text-[12px] mx-auto rounded-md'
+                                                    >
+                                                        {`level ${index + 1}`}
+                                                    </div>
+                                                </div>
+                                                <div className='w-full h-full absolute z-10 flex justify-center items-center'>
+                                                    <img src={PandaBgBrown} alt="bg-brown" width={50} />
+                                                </div>
+                                                <div className='w-full h-full absolute z-10 flex flex-col justify-center items-center'>
+                                                    <img src={pandaMapping[index]} alt="panda" width={35} />
+                                                    <h1 className='absolute bottom-0.5 text-[8px]'>{levelsData[index].name}</h1>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div
+                                                onClick={() => {
+                                                    setSkinPage(index);
+                                                }}
+                                                key={index}
+                                                className={`relative z-0 min-w-[70px] h-full flex items-center justify-center text-center rounded-xl custom-gray-border `}
+                                            >
+                                                {index > (level - 1) && (
+                                                    <img src={LockIcon} alt="lock_icon" className='absolute top-2 right-1 z-30' />
+                                                )}
+                                                <div className='w-full h-4 border-white absolute -top-1.5'>
+                                                    <div
+                                                        style={{
+                                                            background: `linear-gradient(to right, ${colorMapping[index].from}, ${colorMapping[index].to || colorMapping[index].from})`
+                                                        }}
+                                                        className='w-[80%] h-full flex justify-center items-center text-[12px] mx-auto rounded-md'
+                                                    >
+                                                        {`level ${index + 1}`}
+                                                    </div>
+                                                </div>
+                                                <div className='w-full h-full absolute z-10 flex justify-center items-center'>
+                                                    <img src={PandaBgBrown} alt="bg-brown" width={50} />
+                                                </div>
+                                                <div className='w-full h-full absolute z-10 flex flex-col justify-center items-center'>
+                                                    <img src={pandaMapping[index]} alt="panda" width={35} />
+                                                    <h1 className='absolute bottom-0.5 text-[8px]'>{levelsData[index].name}</h1>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
+                                );
+                            })}
+                        </div>
+
+
                     </div>
                 </>
             )
