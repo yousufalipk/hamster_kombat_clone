@@ -1089,8 +1089,10 @@ export const UserProvider = (props) => {
                 levelRequested: requestedLevel
             });
             if (response.data.status === 'success') {
+                await fetchLeaderboardUsers();
                 setBalance(response.data.newBalance);
-                setLevel(response.data.newLevel);
+                setLevel(response.data.newLevel + 1);
+                setLevelName(levelsData[response.data.newLevel].name);
                 return ({ success: true, mess: 'Level Upgraded Succesfuly!' });
             } else {
                 return ({ success: false, mess: 'Internal Server Error!' });

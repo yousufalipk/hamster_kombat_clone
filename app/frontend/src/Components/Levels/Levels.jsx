@@ -495,7 +495,7 @@ const Levels = () => {
                                     <div className='w-[45%] h-full flex justify-center items-center'>
                                         <button
                                             onClick={() => {
-                                                handleBuyAndUpgradeLevel()
+                                                handleBuyAndUpgradeLevel(skinPage)
                                             }}
                                             disabled={skinPage <= (level - 1)}
                                             className={`w-[65%] h-6 bg-gradient-to-t from-[#0B0D79] to-[#09729F] rounded-[8px] border border-gray-500 text-sm ${skinPage <= (level - 1) && 'text-gray-300'} `}
