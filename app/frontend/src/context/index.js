@@ -37,6 +37,7 @@ export const UserProvider = (props) => {
     const [referrals, setReferrals] = useState([]);
     const [remaningTime, setRemaningTime] = useState(null);
     const [walletAddress, setWalletAddress] = useState(null);
+    const [projectBalance, setProjectsBalance] = useState(null);
 
     // 4 Boosters 
     const [disableEnergy, setDisableEnergy] = useState(false);
@@ -261,6 +262,10 @@ export const UserProvider = (props) => {
     const formatBalance = (balance) => {
         return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(balance);
     };
+
+    const formatNumberWithSpaces = (number) => {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    }
 
     const checkSameDate = async (inputDate) => {
         let timestamp;
@@ -1105,6 +1110,23 @@ export const UserProvider = (props) => {
         }
     }
 
+    const fetchProjectsBalance = async () => {
+        try {
+            const response = await axios.post(`${apiUrl}/user/get-wallet-balance`, {
+                userId: userId
+            });
+            if (response.data.status === 'success') {
+                setProjectsBalance(response.data.data);
+                return ({ success: false, mess: 'Internal Server Error!' });
+            } else {
+                return ({ success: false, mess: 'Internal Server Error!' });
+            }
+        } catch (error) {
+            console.log('Internal Server Error!', error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
     return (
         <UserContext.Provider value={{
             initializeUser,
@@ -1217,6 +1239,7 @@ export const UserProvider = (props) => {
             formatBalance,
             formatNumberWithSuffix,
             formatCpm,
+            formatNumberWithSpaces,
 
             energyUpgradeCost,
             energyLimits,
@@ -1235,7 +1258,10 @@ export const UserProvider = (props) => {
             comboCardAnimation,
             comboCardWinning,
 
-            buyLevelUpgrade
+            buyLevelUpgrade,
+
+            fetchProjectsBalance,
+            projectBalance
         }}>
             {toast && isVisible && (
                 <div

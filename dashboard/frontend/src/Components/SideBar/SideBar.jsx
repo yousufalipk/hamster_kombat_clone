@@ -33,7 +33,7 @@ const SideBar = () => {
 
   return (
     <>
-      <div className='fixed top-0 left-0 w-[20vw] h-[100vh] overflow-y-scroll overflow-x-hidden custom-scrollbar flex flex-col justify-between bg-transparent backdrop-blur-3xl'>
+      <div className='fixed top-0 left-0 w-[15vw] h-[100vh] overflow-y-scroll overflow-x-hidden custom-scrollbar flex flex-col justify-between bg-transparent backdrop-blur-3xl'>
         {/* Logo */}
         <div className='flex flex-col items-center mt-4'>
           <Link to='/'>

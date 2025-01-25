@@ -9,7 +9,7 @@ import CoinImage from '../../../Assets/coin.svg';
 import Card from './Card';
 
 const ProjectForm = () => {
-    const { createProject, updateProject, sendData } = useFirebase();
+    const { createProject, updateProject, sendData, buttonLoading, dots } = useFirebase();
     const navigate = useNavigate();
 
     const [selectedFileName, setSelectedFileName] = useState(sendData?.icon?.name || 'No file chosen');
@@ -145,11 +145,24 @@ const ProjectForm = () => {
                         Back
                     </button>
                     <button
+                        disabled={buttonLoading}
                         type="button"
-                        className="mx-2 py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600"
+                        className="w-36 h-10 mx-2 py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600"
                         onClick={formik.handleSubmit}
                     >
-                        {sendData.tick === 'update' ? 'Confirm Changes' : 'Add Project'}
+                        {
+                            buttonLoading ? (
+                                <span className="flex justify-center items-center text-5xl font-bold w-full">
+                                    <p className="absolute -mt-6">
+                                        {dots}
+                                    </p>
+                                </span>
+                            ) : (
+                                <>
+                                    {sendData.tick === 'update' ? 'Confirm Changes' : 'Add Project'}
+                                </>
+                            )
+                        }
                     </button>
                 </div>
             </div>
@@ -184,69 +197,72 @@ const ProjectForm = () => {
                     )}
                 </div>
 
-                {/* From Color Picker */}
-                <div className="mb-4">
-                    <label className="block text-sm font-medium mb-1">Gradient From Color</label>
-                    <input
-                        type="color"
-                        name="fromColor"
-                        className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.fromColor && formik.touched.fromColor ? 'border-red-500' : ''}`}
-                        value={formik.values.fromColor}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                    />
-                    {formik.errors.fromColor && formik.touched.fromColor && (
-                        <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.fromColor}</p>
-                    )}
+                <div className='w-full flex justify-between items-center gap-4'>
+                    {/* From Color Picker */}
+                    <div className="mb-4 w-[25%]">
+                        <label className="block text-sm font-medium mb-1">Gradient From Color</label>
+                        <input
+                            type="color"
+                            name="fromColor"
+                            className={`text-black border rounded-md p-1 w-full h-[6vh] ${formik.errors.fromColor && formik.touched.fromColor ? 'border-red-500' : ''}`}
+                            value={formik.values.fromColor}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.errors.fromColor && formik.touched.fromColor && (
+                            <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.fromColor}</p>
+                        )}
+                    </div>
+
+                    {/* To Color Picker */}
+                    <div className="mb-4 w-[25%]">
+                        <label className="block text-sm font-medium mb-1">Gradient To Color</label>
+                        <input
+                            type="color"
+                            name="toColor"
+                            className={`text-black border rounded-md p-1 w-full h-[6vh] ${formik.errors.toColor && formik.touched.toColor ? 'border-red-500' : ''}`}
+                            value={formik.values.toColor}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.errors.toColor && formik.touched.toColor && (
+                            <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.toColor}</p>
+                        )}
+                    </div>
+
+                    {/* Line From Color Picker */}
+                    <div className="mb-4 w-[25%]">
+                        <label className="block text-sm font-medium mb-1">Zig Zag From Color</label>
+                        <input
+                            type="color"
+                            name="lineFromColor"
+                            className={`text-black border rounded-md p-1 w-full h-[6vh] ${formik.errors.lineFromColor && formik.touched.lineFromColor ? 'border-red-500' : ''}`}
+                            value={formik.values.lineFromColor}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.errors.lineFromColor && formik.touched.lineFromColor && (
+                            <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.lineFromColor}</p>
+                        )}
+                    </div>
+
+                    {/* Line To Color Picker */}
+                    <div className="mb-4 w-[25%]">
+                        <label className="block text-sm font-medium mb-1">Zig Zag To Color</label>
+                        <input
+                            type="color"
+                            name="lineToColor"
+                            className={`text-black border rounded-md p-1 w-full h-[6vh] ${formik.errors.lineToColor && formik.touched.lineToColor ? 'border-red-500' : ''}`}
+                            value={formik.values.lineToColor}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.errors.lineToColor && formik.touched.lineToColor && (
+                            <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.lineToColor}</p>
+                        )}
+                    </div>
                 </div>
 
-                {/* To Color Picker */}
-                <div className="mb-4">
-                    <label className="block text-sm font-medium mb-1">Gradient To Color</label>
-                    <input
-                        type="color"
-                        name="toColor"
-                        className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.toColor && formik.touched.toColor ? 'border-red-500' : ''}`}
-                        value={formik.values.toColor}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                    />
-                    {formik.errors.toColor && formik.touched.toColor && (
-                        <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.toColor}</p>
-                    )}
-                </div>
-
-                {/* Line From Color Picker */}
-                <div className="mb-4">
-                    <label className="block text-sm font-medium mb-1">Zig Zag From Color</label>
-                    <input
-                        type="color"
-                        name="lineFromColor"
-                        className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.lineFromColor && formik.touched.lineFromColor ? 'border-red-500' : ''}`}
-                        value={formik.values.lineFromColor}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                    />
-                    {formik.errors.lineFromColor && formik.touched.lineFromColor && (
-                        <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.lineFromColor}</p>
-                    )}
-                </div>
-
-                {/* Line To Color Picker */}
-                <div className="mb-4">
-                    <label className="block text-sm font-medium mb-1">Zig Zag To Color</label>
-                    <input
-                        type="color"
-                        name="lineToColor"
-                        className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.lineToColor && formik.touched.lineToColor ? 'border-red-500' : ''}`}
-                        value={formik.values.lineToColor}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                    />
-                    {formik.errors.lineToColor && formik.touched.lineToColor && (
-                        <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.lineToColor}</p>
-                    )}
-                </div>
 
                 {/* Number of Levels */}
                 <div className="mb-4">

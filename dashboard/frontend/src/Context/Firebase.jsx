@@ -44,6 +44,10 @@ export const FirebaseProvider = (props) => {
 
     const [patnerTasks, setPatnerTasks] = useState([]);
 
+    const [dots, setDots] = useState('');
+
+    const [buttonLoading, setButtonLoading] = useState(false);
+
     const refreshAuth = async () => {
         try {
             const refreshToken = localStorage.getItem('refreshToken');
@@ -74,6 +78,18 @@ export const FirebaseProvider = (props) => {
             setLoading(false);
         }
     }
+
+    useEffect(() => {
+        let interval;
+        if (buttonLoading) {
+            interval = setInterval(() => {
+                setDots(prev => (prev.length < 4 ? prev + '.' : ''));
+            }, 300);
+        } else {
+            setDots('');
+        }
+        return () => clearInterval(interval);
+    }, [buttonLoading]);
 
     useEffect(() => {
         const refreshToken = localStorage.getItem('refreshToken');
@@ -192,6 +208,7 @@ export const FirebaseProvider = (props) => {
     }
 
     const createProject = async (data) => {
+        setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel);
         const baseCost = parseFloat(data.baseCost);
         const baseReward = parseFloat(data.baseReward);
@@ -232,10 +249,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     };
 
     const updateProject = async (data, id) => {
+        setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel, 10);
         const baseCost = parseFloat(data.baseCost, 10);
         const baseReward = parseFloat(data.baseReward, 10);
@@ -277,10 +297,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     };
 
     const deleteProject = async (id) => {
+        setButtonLoading(true);
         try {
             const response = await axios.delete(`${apiUrl}/project/remove`, {
                 data: {
@@ -297,10 +320,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     }
 
     const toggleProjectCombo = async (projectId) => {
+        setButtonLoading(true);
         try {
             const response = await axios.post(`${apiUrl}/project/toogle-combo-card`, {
                 projectId: projectId,
@@ -324,6 +350,8 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.error("Error toggling project combo card:", error);
             return { success: false, mess: 'Internal Server Error!' };
+        } finally {
+            setButtonLoading(false);
         }
     };
 
@@ -346,6 +374,7 @@ export const FirebaseProvider = (props) => {
     }
 
     const addProjectTask = async (projectId, taskType, iconType, title, link, reward) => {
+        setButtonLoading(true);
         try {
             const res = await axios.post(`${apiUrl}/project/add-project-task`, {
                 projectId: projectId,
@@ -364,10 +393,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error!", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     }
 
     const removeProjectTask = async (projectId, taskId) => {
+        setButtonLoading(true);
         try {
             const res = await axios.post(`${apiUrl}/project/remove-project-task`, {
                 projectId: projectId,
@@ -382,10 +414,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error!", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     }
 
     const updateProjectTask = async (projectId, taskId, newTaskType, newIconType, newTitle, newLink, newReward) => {
+        setButtonLoading(true);
         try {
             const res = await axios.post(`${apiUrl}/project/update-project-task`, {
                 projectId: projectId,
@@ -411,10 +446,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error!", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     }
 
     const addTgeDate = async (projectId, tgeDate) => {
+        setButtonLoading(true);
         try {
             const res = await axios.post(`${apiUrl}/project/add-tge-date`, {
                 projectId: projectId,
@@ -429,6 +467,8 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error' })
+        } finally {
+            setButtonLoading(false);
         }
     }
 
@@ -449,6 +489,7 @@ export const FirebaseProvider = (props) => {
     }
 
     const createKol = async (data) => {
+        setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel, 10);
         const baseCost = parseFloat(data.baseCost, 10);
         const baseCpm = parseFloat(data.baseCpm, 10);
@@ -488,10 +529,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     };
 
     const updateKol = async (data, id) => {
+        setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel, 10);
         const baseCost = parseFloat(data.baseCost, 10);
         const baseCpm = parseFloat(data.baseCpm, 10);
@@ -532,10 +576,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     };
 
     const deleteKol = async (id) => {
+        setButtonLoading(true);
         try {
             const response = await axios.delete(`${apiUrl}/kols/remove-kol`, {
                 data: {
@@ -552,6 +599,8 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     }
 
@@ -572,6 +621,7 @@ export const FirebaseProvider = (props) => {
     }
 
     const createPatner = async (data) => {
+        setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel, 10);
         const baseCost = parseFloat(data.baseCost, 10);
         const baseCpm = parseFloat(data.baseCpm, 10);
@@ -611,10 +661,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     };
 
     const updatePatner = async (data, id) => {
+        setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel, 10);
         const baseCost = parseFloat(data.baseCost, 10);
         const baseCpm = parseFloat(data.baseCpm, 10);
@@ -655,11 +708,14 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     };
 
     const deletePatner = async (id) => {
         try {
+            setButtonLoading(true);
             const response = await axios.delete(`${apiUrl}/patners/remove-patner`, {
                 data: {
                     patnerId: id
@@ -675,6 +731,8 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     }
 
@@ -696,6 +754,7 @@ export const FirebaseProvider = (props) => {
     }
 
     const createVc = async (data) => {
+        setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel, 10);
         const baseCost = parseFloat(data.baseCost, 10);
         const baseCpm = parseFloat(data.baseCpm, 10);
@@ -735,10 +794,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     };
 
     const updateVc = async (data, id) => {
+        setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel, 10);
         const baseCost = parseFloat(data.baseCost, 10);
         const baseCpm = parseFloat(data.baseCpm, 10);
@@ -779,10 +841,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     };
 
     const deleteVc = async (id) => {
+        setButtonLoading(true);
         try {
             const response = await axios.delete(`${apiUrl}/vcs/remove-vc`, {
                 data: {
@@ -799,6 +864,8 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     }
 
@@ -858,7 +925,7 @@ export const FirebaseProvider = (props) => {
     }
 
     const addTask = async (taskType, iconType, title, link, reward, priority) => {
-        console.log('Priority', priority);
+        setButtonLoading(true);
         try {
             let res;
             if (taskType === 'social') {
@@ -910,10 +977,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error' })
+        } finally {
+            setButtonLoading(false);
         }
     }
 
     const updateTask = async (task, taskType, title, link, reward, priority) => {
+        setButtonLoading(true);
         try {
             if (taskType === 'social') {
                 const res = await axios.post(`${apiUrl}/task/update-social`, {
@@ -973,10 +1043,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error", error);
             return ({ success: false, mess: 'Internal Server Error' })
+        } finally {
+            setButtonLoading(false);
         }
     }
 
     const removeTask = async (taskId, taskType) => {
+        setButtonLoading(true);
         try {
             const res = await axios.delete(`${apiUrl}/task/remove`, {
                 data: {
@@ -998,10 +1071,13 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log("Internal Server Error!", error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     }
 
     const toggleTaskStatus = async (taskId, taskType) => {
+        setButtonLoading(true);
         try {
             const res = await axios.post(`${apiUrl}/task/toggle-task-status`, {
                 taskId: taskId,
@@ -1035,6 +1111,8 @@ export const FirebaseProvider = (props) => {
         } catch (error) {
             console.log('Internal Server Errro!', error);
             return ({ success: false, mess: 'Internal Server Error!' });
+        } finally {
+            setButtonLoading(false);
         }
     }
 
@@ -1104,6 +1182,8 @@ export const FirebaseProvider = (props) => {
             dailyTasks,
             patnerTasks,
 
+            dots,
+            buttonLoading
         }}>
             {props.children}
         </FirebaseContext.Provider>

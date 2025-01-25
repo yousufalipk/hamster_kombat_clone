@@ -2336,6 +2336,62 @@ exports.watchAdsReward = async (req, res) => {
     }
 };
 
+exports.getWalletBalance = async (req, res) => {
+    try {
+        const { userId } = req.body;
+
+        const user = await UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            })
+        }
+
+        const projects = await ProjectModel.find();
+
+        if (!projects) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Projects not found!'
+            })
+        }
+
+        const response = projects.map((project) => {
+            const walletEntry = user.wallet.find(
+                (walletItem) => walletItem._id.toString() === project._id.toString()
+            );
+
+            return {
+                name: project.name,
+                balance: walletEntry ? walletEntry.balance : 0,
+                icon: {
+                    name: project.icon.name,
+                    data: project.icon.data,
+                    contentType: project.icon.contentType,
+                },
+                colors: {
+                    fromColor: project.fromColor,
+                    toColor: project.toColor,
+                },
+            };
+        });
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Wallet Balance fetched successfuly!',
+            data: response
+        })
+    } catch (error) {
+        console.log('Internal Server Error!', error);
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
+
 /*
 const downloadImage = async (url, filePath) => {
     const writer = fs.createWriteStream(filePath);

@@ -86,7 +86,11 @@ const Card = ({
                                             <>
                                                 <img
                                                     className="w-[40px] h-[40px]"
-                                                    src={icon.data}
+                                                    src={
+                                                        icon.data.startsWith("data:") || icon.data.startsWith("http")
+                                                            ? icon.data
+                                                            : `data:image/png;base64,${icon.data}`
+                                                    }
                                                     alt="BigCoin-Icon"
                                                 />
                                             </>

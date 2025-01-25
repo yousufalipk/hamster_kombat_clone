@@ -6,6 +6,12 @@ body {
   color: white;
 }
 
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* For Webkit Browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
   display: none;

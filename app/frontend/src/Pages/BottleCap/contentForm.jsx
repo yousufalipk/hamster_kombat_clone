@@ -11,6 +11,7 @@ const ContentForm = () => {
 
     const [buttonLoading, setButtonLoading] = useState(false);
     const [dots, setDots] = useState('');
+
     const [contentLink, setContentLink] = useState('');
     const [additionalInfo, setAdditionalInfo] = useState('');
     const [errors, setErrors] = useState({ contentLink: '', additionalInfo: '' });

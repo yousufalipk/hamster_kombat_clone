@@ -19,7 +19,9 @@ const ManageTasks = () => {
         socialTasks,
         dailyTasks,
         patnerTasks,
-        toggleTaskStatus
+        toggleTaskStatus,
+        buttonLoading,
+        dots
     } = useFirebase();
 
     useEffect(() => {
@@ -138,45 +140,66 @@ const ManageTasks = () => {
                     </div>
                 </div>
                 <hr className="my-5 border-gray-300 w-full" />
-                <div className="mx-2 my-10 overflow-scroll">
+                <div className="mx-2 my-10 overflow-y-auto overflow-x-hidden w-[80vw] h-[70vh]">
                     {socialTasks && (
                         <div>
-                            <h1 className='font-semibold'>Social Tasks</h1>
-                            <table className="min-w-full bg-transparent border-collapse border border-gray-200 my-5">
+                            <div className='w-full h-[10vh] flex justify-between items-center'>
+                                <hr className='w-[40%] flex justify-center items-center' />
+                                <div className='w-[20%] flex justify-center items-center'>
+                                    <h1 className="font-bold text-3xl">Social Tasks</h1>
+                                </div>
+                                <hr className='w-[40%] flex justify-center items-center' />
+                            </div>
+                            <table className="table-fixed w-full bg-transparent border-collapse border border-gray-200 my-5">
                                 <thead>
                                     <tr>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">SR.No</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Task Type</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Icon Type</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Priority</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Status</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Title</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Link</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Reward</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Edit</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Delete</th>
+                                        {[
+                                            "Priority",
+                                            "Task Type",
+                                            "Icon Type",
+                                            "Status",
+                                            "Title",
+                                            "Link",
+                                            "Reward",
+                                            "Edit",
+                                            "Delete",
+                                        ].map((header) => (
+                                            <th
+                                                key={header}
+                                                className="px-4 py-2 border-b-2 border-gray-300 text-sm text-center"
+                                            >
+                                                {header}
+                                            </th>
+                                        ))}
                                     </tr>
                                 </thead>
-                                {socialTasks && (
-                                    <tbody>
-                                        {socialTasks.map((cls, i) => (
+                                <tbody>
+                                    {socialTasks
+                                        .sort((a, b) => a.priority - b.priority)
+                                        .map((cls, i) => (
                                             <tr key={cls._id}>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{i + 1}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.taskType}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.iconType}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.priority}</td>
-                                                <td
-                                                    onClick={() => {
-                                                        handleToggleTaskStatus(cls._id, cls.taskType);
-                                                    }}
-                                                    className={`px-6 py-4 border-b border-gray-200 text-sm text-center hover:cursor-pointer ${cls.status ? `text-green-500` : `text-red-700`}`}>
-                                                    {cls.status ? 'Active' : 'Disabled'}
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center truncate" title={cls.taskType}>
+                                                    {cls.taskType}
                                                 </td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.title}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.link}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.reward}</td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center truncate" title={cls.iconType}>
+                                                    {cls.iconType}
+                                                </td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center">{cls.priority}</td>
                                                 <td
-                                                    className="px-6 py-4 border-b border-gray-200 text-sm text-center"
+                                                    onClick={() => handleToggleTaskStatus(cls._id, cls.taskType)}
+                                                    className={`px-4 py-2 border-b border-gray-200 text-sm text-center cursor-pointer ${cls.status ? `text-green-500` : `text-red-700`}`}
+                                                >
+                                                    {cls.status ? "Active" : "Disabled"}
+                                                </td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center truncate" title={cls.title}>
+                                                    {cls.title}
+                                                </td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center truncate" title={cls.link}>
+                                                    {cls.link}
+                                                </td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center">{cls.reward}</td>
+                                                <td
+                                                    className="px-4 py-2 border-b border-gray-200 text-sm text-center cursor-pointer"
                                                     onClick={() => {
                                                         setUpdateTaskId(cls);
                                                         setUpdateTaskPopup(true);
@@ -185,57 +208,77 @@ const ManageTasks = () => {
                                                     <FaRegEdit className="text-bluebtn w-5 h-5 hover:text-gray-500 mx-auto" />
                                                 </td>
                                                 <td
-                                                    className="px-6 py-4 border-b border-gray-200 text-sm text-center"
+                                                    className="px-4 py-2 border-b border-gray-200 text-sm text-center cursor-pointer"
                                                     onClick={() => handleDeleteTask(cls._id, cls.taskType)}
                                                 >
                                                     <RiDeleteBin5Line className="text-bluebtn w-5 h-5 hover:text-gray-700 mx-auto" />
                                                 </td>
                                             </tr>
                                         ))}
-                                    </tbody>
-                                )}
+                                </tbody>
                             </table>
                         </div>
                     )}
 
                     {dailyTasks && (
                         <div>
-                            <h1 className='font-semibold'>Daily Tasks</h1>
-                            <table className="min-w-full bg-transparent border-collapse border border-gray-200 my-5">
+                            <div className='w-full h-[10vh] flex justify-between items-center'>
+                                <hr className='w-[40%] flex justify-center items-center' />
+                                <div className='w-[20%] flex justify-center items-center'>
+                                    <h1 className="font-bold text-3xl">Daily Tasks</h1>
+                                </div>
+                                <hr className='w-[40%] flex justify-center items-center' />
+                            </div>
+                            <table className="table-fixed w-full bg-transparent border-collapse border border-gray-200 my-5">
                                 <thead>
                                     <tr>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">SR.No</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Task Type</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Icon Type</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Priority</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Status</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Title</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Link</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Reward</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Edit</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Delete</th>
+                                        {[
+                                            "Priority",
+                                            "Task Type",
+                                            "Icon Type",
+                                            "Status",
+                                            "Title",
+                                            "Link",
+                                            "Reward",
+                                            "Edit",
+                                            "Delete",
+                                        ].map((header) => (
+                                            <th
+                                                key={header}
+                                                className="px-4 py-2 border-b-2 border-gray-300 text-sm text-center"
+                                            >
+                                                {header}
+                                            </th>
+                                        ))}
                                     </tr>
                                 </thead>
-                                {dailyTasks && (
-                                    <tbody>
-                                        {dailyTasks.map((cls, i) => (
+                                <tbody>
+                                    {dailyTasks
+                                        .sort((a, b) => a.priority - b.priority)
+                                        .map((cls, i) => (
                                             <tr key={cls._id}>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{i + 1}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.taskType}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.iconType}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.priority}</td>
-                                                <td
-                                                    onClick={() => {
-                                                        handleToggleTaskStatus(cls._id, cls.taskType);
-                                                    }}
-                                                    className={`px-6 py-4 border-b border-gray-200 text-sm text-center hover:cursor-pointer ${cls.status ? `text-green-500` : `text-red-700`}`}>
-                                                    {cls.status ? 'Active' : 'Disabled'}
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center">{cls.priority}</td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center truncate" title={cls.taskType}>
+                                                    {cls.taskType}
                                                 </td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.title}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.link}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.reward}</td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center truncate" title={cls.iconType}>
+                                                    {cls.iconType}
+                                                </td>
                                                 <td
-                                                    className="px-6 py-4 border-b border-gray-200 text-sm text-center"
+                                                    onClick={() => handleToggleTaskStatus(cls._id, cls.taskType)}
+                                                    className={`px-4 py-2 border-b border-gray-200 text-sm text-center cursor-pointer ${cls.status ? `text-green-500` : `text-red-700`}`}
+                                                >
+                                                    {cls.status ? "Active" : "Disabled"}
+                                                </td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center truncate" title={cls.title}>
+                                                    {cls.title}
+                                                </td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center truncate" title={cls.link}>
+                                                    {cls.link}
+                                                </td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center">{cls.reward}</td>
+                                                <td
+                                                    className="px-4 py-2 border-b border-gray-200 text-sm text-center cursor-pointer"
                                                     onClick={() => {
                                                         setUpdateTaskId(cls);
                                                         setUpdateTaskPopup(true);
@@ -244,57 +287,77 @@ const ManageTasks = () => {
                                                     <FaRegEdit className="text-bluebtn w-5 h-5 hover:text-gray-500 mx-auto" />
                                                 </td>
                                                 <td
-                                                    className="px-6 py-4 border-b border-gray-200 text-sm text-center"
+                                                    className="px-4 py-2 border-b border-gray-200 text-sm text-center cursor-pointer"
                                                     onClick={() => handleDeleteTask(cls._id, cls.taskType)}
                                                 >
                                                     <RiDeleteBin5Line className="text-bluebtn w-5 h-5 hover:text-gray-700 mx-auto" />
                                                 </td>
                                             </tr>
                                         ))}
-                                    </tbody>
-                                )}
+                                </tbody>
                             </table>
                         </div>
                     )}
 
                     {patnerTasks && (
                         <div>
-                            <h1 className='font-semibold'>Partner Tasks</h1>
-                            <table className="min-w-full bg-transparent border-collapse border border-gray-200 my-5">
+                            <div className='w-full h-[10vh] flex justify-between items-center'>
+                                <hr className='w-[40%] flex justify-center items-center' />
+                                <div className='w-[20%] flex justify-center items-center'>
+                                    <h1 className="font-bold text-3xl">Partner Tasks</h1>
+                                </div>
+                                <hr className='w-[40%] flex justify-center items-center' />
+                            </div>
+                            <table className="table-fixed w-full bg-transparent border-collapse border border-gray-200 my-5">
                                 <thead>
                                     <tr>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">SR.No</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Task Type</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Icon Type</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Priority</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Status</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Title</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Link</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Reward</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Edit</th>
-                                        <th className="px-6 py-3 border-b-2 border-gray-300 text-sm text-center">Delete</th>
+                                        {[
+                                            "Priority",
+                                            "Task Type",
+                                            "Icon Type",
+                                            "Status",
+                                            "Title",
+                                            "Link",
+                                            "Reward",
+                                            "Edit",
+                                            "Delete",
+                                        ].map((header) => (
+                                            <th
+                                                key={header}
+                                                className="px-4 py-2 border-b-2 border-gray-300 text-sm text-center"
+                                            >
+                                                {header}
+                                            </th>
+                                        ))}
                                     </tr>
                                 </thead>
-                                {patnerTasks && (
-                                    <tbody>
-                                        {patnerTasks.map((cls, i) => (
+                                <tbody>
+                                    {patnerTasks
+                                        .sort((a, b) => a.priority - b.priority)
+                                        .map((cls, i) => (
                                             <tr key={cls._id}>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{i + 1}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.taskType}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.iconType}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.priority}</td>
-                                                <td
-                                                    onClick={() => {
-                                                        handleToggleTaskStatus(cls._id, cls.taskType);
-                                                    }}
-                                                    className={`px-6 py-4 border-b border-gray-200 text-sm text-center hover:cursor-pointer ${cls.status ? `text-green-500` : `text-red-700`}`}>
-                                                    {cls.status ? 'Active' : 'Disabled'}
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center">{cls.priority}</td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center truncate" title={cls.taskType}>
+                                                    {cls.taskType}
                                                 </td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.title}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.link}</td>
-                                                <td className="px-6 py-4 border-b border-gray-200 text-sm text-center">{cls.reward}</td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center truncate" title={cls.iconType}>
+                                                    {cls.iconType}
+                                                </td>
                                                 <td
-                                                    className="px-6 py-4 border-b border-gray-200 text-sm text-center"
+                                                    onClick={() => handleToggleTaskStatus(cls._id, cls.taskType)}
+                                                    className={`px-4 py-2 border-b border-gray-200 text-sm text-center cursor-pointer ${cls.status ? `text-green-500` : `text-red-700`}`}
+                                                >
+                                                    {cls.status ? "Active" : "Disabled"}
+                                                </td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center truncate" title={cls.title}>
+                                                    {cls.title}
+                                                </td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center truncate" title={cls.link}>
+                                                    {cls.link}
+                                                </td>
+                                                <td className="px-4 py-2 border-b border-gray-200 text-sm text-center">{cls.reward}</td>
+                                                <td
+                                                    className="px-4 py-2 border-b border-gray-200 text-sm text-center cursor-pointer"
                                                     onClick={() => {
                                                         setUpdateTaskId(cls);
                                                         setUpdateTaskPopup(true);
@@ -303,147 +366,161 @@ const ManageTasks = () => {
                                                     <FaRegEdit className="text-bluebtn w-5 h-5 hover:text-gray-500 mx-auto" />
                                                 </td>
                                                 <td
-                                                    className="px-6 py-4 border-b border-gray-200 text-sm text-center"
+                                                    className="px-4 py-2 border-b border-gray-200 text-sm text-center cursor-pointer"
                                                     onClick={() => handleDeleteTask(cls._id, cls.taskType)}
                                                 >
                                                     <RiDeleteBin5Line className="text-bluebtn w-5 h-5 hover:text-gray-700 mx-auto" />
                                                 </td>
                                             </tr>
                                         ))}
-                                    </tbody>
-                                )}
+                                </tbody>
                             </table>
                         </div>
                     )}
                 </div>
-            </div>
+            </div >
 
             {/* Add/Update Task Popup */}
-            {(addTaskPopup || updateTaskPopup) && (
-                <div className="w-[100vw] h-[100vh] fixed top-0 left-0 flex justify-center items-center">
-                    <div className="w-full h-full absolute bg-black opacity-50 z-0"></div>
-                    <div className="bg-gray-800 w-1/2 rounded-3xl p-10 text-white z-50">
-                        <div className="flex justify-between items-center">
-                            <h1 className="text-lg font-semibold">
-                                {addTaskPopup ? 'Add Task' : 'Update Task'}
-                            </h1>
-                            <img
-                                src={CloseIcon}
-                                alt="close"
-                                onClick={() => {
-                                    formik.resetForm();
-                                    setAddTaskPopup(false);
-                                    setUpdateTaskPopup(false);
-                                }}
-                                className="cursor-pointer"
-                            />
-                        </div>
-                        <hr className="my-5 border-gray-300" />
-                        <form
-                            onSubmit={formik.handleSubmit}
-                            className="w-full flex flex-col justify-center items-start gap-2 px-20"
-                        >
-                            {!updateTaskPopup && (
-                                <>
-                                    <label className="block text-sm font-medium mb-1">Task Type</label>
-                                    <select
-                                        className={`text-black border rounded-md p-2 w-full bg-gray-300 ${formik.errors.iconType && formik.touched.iconType ? 'border-red-500' : ''}`}
-                                        id='taskType'
-                                        name='taskType'
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.taskType}
-                                    >
-                                        <option value='' disabled>Select Type</option>
-                                        <option value='social'>Social</option>
-                                        <option value='daily'>Daily</option>
-                                        <option value='partner'>Partner</option>
-                                    </select>
-                                    {formik.errors.taskType && formik.touched.taskType && (
-                                        <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.taskType}</p>
-                                    )}
-                                    <label className="block text-sm font-medium mb-1">Icon Type</label>
-                                    <select
-                                        className={`text-black border rounded-md p-2 w-full bg-gray-300 ${formik.errors.iconType && formik.touched.iconType ? 'border-red-500' : ''}`}
-                                        id='iconType'
-                                        name='iconType'
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.iconType}
-                                    >
-                                        <option value='' disabled>Select Type</option>
-                                        <option value='twitter'>Twitter</option>
-                                        <option value='telegram'>Telegram</option>
-                                        <option value='youtube'>Youtube</option>
-                                        <option value='instagram'>Instagram</option>
-                                    </select>
-                                    {formik.errors.iconType && formik.touched.iconType && (
-                                        <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.iconType}</p>
-                                    )}
-                                </>
-                            )}
-                            <label className="block text-sm font-medium mb-1">Priority</label>
-                            <input
-                                type="number"
-                                name="priority"
-                                id="priority"
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                value={formik.values.priority}
-                                className={`w-full p-2 text-black rounded-md bg-gray-300 ${formik.errors.priority && formik.touched.priority ? 'border-red-500' : ''}`}
-                            />
-                            {formik.errors.priority && formik.touched.priority && (
-                                <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.priority}</p>
-                            )}
-                            <label className="block text-sm font-medium mb-1">Title</label>
-                            <input
-                                type="text"
-                                name="title"
-                                id="title"
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                value={formik.values.title}
-                                className={`w-full p-2 text-black rounded-md bg-gray-300 ${formik.errors.title && formik.touched.title ? 'border-red-500' : ''}`}
-                            />
-                            {formik.errors.title && formik.touched.title && (
-                                <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.title}</p>
-                            )}
-                            <label className="block text-sm font-medium mb-1">{`Link: https://www.xyx.com`}</label>
-                            <input
-                                type="text"
-                                name="link"
-                                id="link"
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                value={formik.values.link}
-                                className={`w-full p-2 text-black rounded-md bg-gray-300 ${formik.errors.link && formik.touched.link ? 'border-red-500' : ''}`}
-                            />
-                            {formik.errors.link && formik.touched.link && (
-                                <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.link}</p>
-                            )}
-                            <label className="block text-sm font-medium mb-1">Reward</label>
-                            <input
-                                type="number"
-                                name="reward"
-                                id="reward"
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                value={formik.values.reward}
-                                className={`w-full p-2 text-black rounded-md bg-gray-300 ${formik.errors.reward && formik.touched.reward ? 'border-red-500' : ''}`}
-                            />
-                            {formik.errors.reward && formik.touched.reward && (
-                                <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.reward}</p>
-                            )}
-                            <button
-                                type="submit"
-                                className="py-1 px-4 rounded-md bg-bluebtn text-gray-700 hover:bg-transparent hover:border-2 hover:border-bluebtn hover:text-bluebtn mx-auto mt-5"
+            {
+                (addTaskPopup || updateTaskPopup) && (
+                    <div className="w-[100vw] h-[100vh] fixed top-0 left-0 flex justify-center items-center">
+                        <div className="w-full h-full absolute bg-black opacity-50 z-0"></div>
+                        <div className="bg-gray-800 w-1/2 rounded-3xl p-10 text-white z-50">
+                            <div className="flex justify-between items-center">
+                                <h1 className="text-lg font-semibold">
+                                    {addTaskPopup ? 'Add Task' : 'Update Task'}
+                                </h1>
+                                <img
+                                    src={CloseIcon}
+                                    alt="close"
+                                    onClick={() => {
+                                        formik.resetForm();
+                                        setAddTaskPopup(false);
+                                        setUpdateTaskPopup(false);
+                                    }}
+                                    className="cursor-pointer"
+                                />
+                            </div>
+                            <hr className="my-5 border-gray-300" />
+                            <form
+                                onSubmit={formik.handleSubmit}
+                                className="w-full flex flex-col justify-center items-start gap-2 px-20"
                             >
-                                {addTaskPopup ? 'Add Task' : 'Update Task'}
-                            </button>
-                        </form>
+                                {!updateTaskPopup && (
+                                    <>
+                                        <label className="block text-sm font-medium mb-1">Task Type</label>
+                                        <select
+                                            className={`text-black border rounded-md p-2 w-full bg-gray-300 ${formik.errors.iconType && formik.touched.iconType ? 'border-red-500' : ''}`}
+                                            id='taskType'
+                                            name='taskType'
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            value={formik.values.taskType}
+                                        >
+                                            <option value='' disabled>Select Type</option>
+                                            <option value='social'>Social</option>
+                                            <option value='daily'>Daily</option>
+                                            <option value='partner'>Partner</option>
+                                        </select>
+                                        {formik.errors.taskType && formik.touched.taskType && (
+                                            <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.taskType}</p>
+                                        )}
+                                        <label className="block text-sm font-medium mb-1">Icon Type</label>
+                                        <select
+                                            className={`text-black border rounded-md p-2 w-full bg-gray-300 ${formik.errors.iconType && formik.touched.iconType ? 'border-red-500' : ''}`}
+                                            id='iconType'
+                                            name='iconType'
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            value={formik.values.iconType}
+                                        >
+                                            <option value='' disabled>Select Type</option>
+                                            <option value='twitter'>Twitter</option>
+                                            <option value='telegram'>Telegram</option>
+                                            <option value='youtube'>Youtube</option>
+                                            <option value='instagram'>Instagram</option>
+                                        </select>
+                                        {formik.errors.iconType && formik.touched.iconType && (
+                                            <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.iconType}</p>
+                                        )}
+                                    </>
+                                )}
+                                <label className="block text-sm font-medium mb-1">Priority</label>
+                                <input
+                                    type="number"
+                                    name="priority"
+                                    id="priority"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.priority}
+                                    className={`w-full p-2 text-black rounded-md bg-gray-300 ${formik.errors.priority && formik.touched.priority ? 'border-red-500' : ''}`}
+                                />
+                                {formik.errors.priority && formik.touched.priority && (
+                                    <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.priority}</p>
+                                )}
+                                <label className="block text-sm font-medium mb-1">Title</label>
+                                <input
+                                    type="text"
+                                    name="title"
+                                    id="title"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.title}
+                                    className={`w-full p-2 text-black rounded-md bg-gray-300 ${formik.errors.title && formik.touched.title ? 'border-red-500' : ''}`}
+                                />
+                                {formik.errors.title && formik.touched.title && (
+                                    <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.title}</p>
+                                )}
+                                <label className="block text-sm font-medium mb-1">{`Link: https://www.xyx.com`}</label>
+                                <input
+                                    type="text"
+                                    name="link"
+                                    id="link"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.link}
+                                    className={`w-full p-2 text-black rounded-md bg-gray-300 ${formik.errors.link && formik.touched.link ? 'border-red-500' : ''}`}
+                                />
+                                {formik.errors.link && formik.touched.link && (
+                                    <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.link}</p>
+                                )}
+                                <label className="block text-sm font-medium mb-1">Reward</label>
+                                <input
+                                    type="number"
+                                    name="reward"
+                                    id="reward"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.reward}
+                                    className={`w-full p-2 text-black rounded-md bg-gray-300 ${formik.errors.reward && formik.touched.reward ? 'border-red-500' : ''}`}
+                                />
+                                {formik.errors.reward && formik.touched.reward && (
+                                    <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.reward}</p>
+                                )}
+                                <button
+                                    disabled={buttonLoading}
+                                    type="submit"
+                                    className="py-1 px-4 rounded-md bg-bluebtn text-gray-700 hover:bg-transparent hover:border-2 hover:border-bluebtn hover:text-bluebtn mx-auto mt-5"
+                                >
+                                    {
+                                        buttonLoading ? (
+                                            <span className="flex justify-center items-center text-5xl font-bold w-full">
+                                                <p className="absolute -mt-6">
+                                                    {dots}
+                                                </p>
+                                            </span>
+                                        ) : (
+                                            <>
+                                                {addTaskPopup ? 'Add Task' : 'Update Task'}
+                                            </>
+                                        )
+                                    }
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            )}
+                )
+            }
         </>
     );
 };

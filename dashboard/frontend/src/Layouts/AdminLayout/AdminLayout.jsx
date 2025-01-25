@@ -41,12 +41,15 @@ const AdminLayout = () => {
     <>
       {/* Side Bar */}
       <div className='w-[100vw] h-[100vh] relative flex flex-row bg-custom-image bg-cover bg-center'>
+
         <div className='absolute w-full h-full bg-black opacity-50'></div>
-        <div className='w-[20vw] h-[100vh]'>
+
+        <div className='w-[15vw] h-[100vh] border-2'>
           <SideBar />
         </div>
+
         {/* Content */}
-        <div className='w-[80vw] h-[100vh] overflow-y-scroll p-10 z-10'>
+        <div className='w-[85vw] h-[100vh] overflow-y-scroll py-10 px-5 z-10'>
           <Routes>
             <Route path='*' element={<HomePage />} />
 

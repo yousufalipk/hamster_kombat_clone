@@ -15,7 +15,7 @@ import CloseIcon from '../../Assets/close.svg';
 
 const ManageProjects = () => {
     const navigate = useNavigate();
-    const { setSendData, projects, fetchProjects, deleteProject, toggleProjectCombo, addTgeDate } = useFirebase();
+    const { setSendData, projects, fetchProjects, deleteProject, addTgeDate, buttonLoading, dots } = useFirebase();
 
     const [tgeDatePopup, setTgeDatePopup] = useState(null);
     const [projectId, setProjectId] = useState(null);
@@ -220,10 +220,23 @@ const ManageProjects = () => {
                                 )}
                                 <div className="w-full flex justify-center mt-5">
                                     <button
+                                        disabled={buttonLoading}
                                         type="submit"
-                                        className="py-1 px-4 rounded-md bg-bluebtn text-gray-700 hover:bg-transparent hover:border-2 hover:border-bluebtn hover:text-bluebtn"
+                                        className="w-28 h-12 py-1 px-4 rounded-md bg-bluebtn text-gray-700 hover:bg-transparent hover:border-2 hover:border-bluebtn hover:text-bluebtn"
                                     >
-                                        Confirm
+                                        {
+                                            buttonLoading ? (
+                                                <span className="flex justify-center items-center text-5xl font-bold w-full">
+                                                    <p className="absolute -mt-6">
+                                                        {dots}
+                                                    </p>
+                                                </span>
+                                            ) : (
+                                                <>
+                                                    Confirm
+                                                </>
+                                            )
+                                        }
                                     </button>
                                 </div>
                             </form>
@@ -258,7 +271,6 @@ const ManageProjects = () => {
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Line To Color</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Max Level</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">No. Tasks</th>
-                            <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Combo Card</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">TGE</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Launch Date</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Delete</th>
@@ -315,12 +327,6 @@ const ManageProjects = () => {
                                             </td>
                                             <td className='px-6 py-4 border-b border-gray-200 text-center'>
                                                 {cls.tasks.length}
-                                            </td>
-                                            <td
-                                                className={`px-6 py-4 border-b border-gray-200 text-center ${cls.card ? 'text-green-500' : 'text-red-500'
-                                                    }`}
-                                            >
-                                                {cls.card ? 'Enabled' : 'Disabled'}
                                             </td>
                                             <td
                                                 className={`px-6 py-4 border-b border-gray-200 text-center`}

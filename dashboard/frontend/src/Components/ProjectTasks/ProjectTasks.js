@@ -15,7 +15,9 @@ const ProjectTasks = () => {
         setProjectTasks,
         addProjectTask,
         removeProjectTask,
-        updateProjectTask
+        updateProjectTask,
+        buttonLoading,
+        dots
     } = useFirebase();
     const navigate = useNavigate();
 
@@ -113,8 +115,21 @@ const ProjectTasks = () => {
                             <button
                                 className="mx-2 py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600"
                                 onClick={() => setAddLevelPopup(true)}
+                                disabled={buttonLoading}
                             >
-                                Add Task
+                                {
+                                    buttonLoading ? (
+                                        <span className="flex justify-center items-center text-5xl font-bold w-full">
+                                            <p className="absolute -mt-6">
+                                                {dots}
+                                            </p>
+                                        </span>
+                                    ) : (
+                                        <>
+                                            Add Task
+                                        </>
+                                    )
+                                }
                             </button>
                         </div>
                     </div>
@@ -267,10 +282,23 @@ const ProjectTasks = () => {
                                 <p className="text-red-500 text-md font-semibold text-center mt-2 w-full">{formik.errors.reward}</p>
                             )}
                             <button
+                                disabled={buttonLoading}
                                 type="submit"
                                 className="py-1 px-4 rounded-md bg-bluebtn text-gray-700 hover:bg-transparent hover:border-2 hover:border-bluebtn hover:text-bluebtn mx-auto mt-5"
                             >
-                                {addLevelPopup ? 'Add Task' : 'Update Task'}
+                                {
+                                    buttonLoading ? (
+                                        <span className="flex justify-center items-center text-5xl font-bold w-full">
+                                            <p className="absolute -mt-6">
+                                                {dots}
+                                            </p>
+                                        </span>
+                                    ) : (
+                                        <>
+                                            {addLevelPopup ? 'Add Task' : 'Update Task'}
+                                        </>
+                                    )
+                                }
                             </button>
                         </form>
                     </div>

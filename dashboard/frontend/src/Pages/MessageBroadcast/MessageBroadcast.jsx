@@ -82,8 +82,9 @@ const BroadcastMessageForm = () => {
                         id="message"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        className="mt-1 p-3 w-full border border-gray-300 rounded-md text-black bg-transparent text-white"
+                        className="mt-1 p-3 w-full border border-gray-300 rounded-md bg-transparent text-white"
                         required
+                        rows="8"
                     />
                 </div>
 

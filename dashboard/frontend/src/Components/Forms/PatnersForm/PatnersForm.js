@@ -8,7 +8,7 @@ import CoinImage from '../../../Assets/coin.svg';
 import { FaAngleRight } from "react-icons/fa6";
 
 const PatnersForm = () => {
-    const { createPatner, updatePatner, sendData } = useFirebase();
+    const { createPatner, updatePatner, sendData, buttonLoading, dots } = useFirebase();
     const navigate = useNavigate();
 
     const [selectedIconName, setSelectedIconName] = useState(sendData?.icon?.name || 'No file chosen');
@@ -203,7 +203,11 @@ const PatnersForm = () => {
                                     {logo ? (
                                         <>
                                             <img
-                                                src={logo.data}
+                                                src={
+                                                    logo.data.startsWith("data:") || logo.data.startsWith("http")
+                                                        ? logo.data
+                                                        : `data:image/png;base64,${logo.data}`
+                                                }
                                                 alt={name ? `${name}-logo` : "Image"}
                                                 width={85}
                                                 className='absolute bottom-0 right-[7vw]'
@@ -221,7 +225,11 @@ const PatnersForm = () => {
                                     {icon ? (
                                         <>
                                             <img
-                                                src={icon.data}
+                                                src={
+                                                    icon.data.startsWith("data:") || icon.data.startsWith("http")
+                                                        ? icon.data
+                                                        : `data:image/png;base64,${icon.data}`
+                                                }
                                                 alt={name ? `${name}-icon` : "Image"}
                                                 width={85}
                                                 className='absolute bottom-0'
@@ -258,8 +266,21 @@ const PatnersForm = () => {
                         type="button"
                         className="mx-2 py-2 px-4 rounded-md bg-blue-500 text-white hover:bg-blue-600"
                         onClick={formik.handleSubmit}
+                        disabled={buttonLoading}
                     >
-                        {sendData.tick === 'update' ? 'Confirm Changes' : 'Add Patner'}
+                        {
+                            buttonLoading ? (
+                                <span className="flex justify-center items-center text-5xl font-bold w-full">
+                                    <p className="absolute -mt-6">
+                                        {dots}
+                                    </p>
+                                </span>
+                            ) : (
+                                <>
+                                    {sendData.tick === 'update' ? 'Confirm Changes' : 'Add Patner'}
+                                </>
+                            )
+                        }
                     </button>
                 </div>
             </div>
@@ -293,37 +314,40 @@ const PatnersForm = () => {
                     )}
                 </div>
 
-                {/* From Color Picker */}
-                <div className="mb-4">
-                    <label className="block text-sm font-medium mb-1">Gradient From Color</label>
-                    <input
-                        type="color"
-                        name="fromColor"
-                        className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.fromColor && formik.touched.fromColor ? 'border-red-500' : ''}`}
-                        value={formik.values.fromColor}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                    />
-                    {formik.errors.fromColor && formik.touched.fromColor && (
-                        <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.fromColor}</p>
-                    )}
+                <div className='w-full flex justify-between items-center gap-3'>
+                    {/* From Color Picker */}
+                    <div className="mb-4 w-[50%]">
+                        <label className="block text-sm font-medium mb-1">Gradient From Color</label>
+                        <input
+                            type="color"
+                            name="fromColor"
+                            className={`text-black border rounded-md p-1 w-full h-[6vh] ${formik.errors.fromColor && formik.touched.fromColor ? 'border-red-500' : ''}`}
+                            value={formik.values.fromColor}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.errors.fromColor && formik.touched.fromColor && (
+                            <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.fromColor}</p>
+                        )}
+                    </div>
+
+                    {/* To Color Picker */}
+                    <div className="mb-4 w-[50%]">
+                        <label className="block text-sm font-medium mb-1">Gradient To Color</label>
+                        <input
+                            type="color"
+                            name="toColor"
+                            className={`text-black border rounded-md p-1 w-full h-[6vh] ${formik.errors.toColor && formik.touched.toColor ? 'border-red-500' : ''}`}
+                            value={formik.values.toColor}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.errors.toColor && formik.touched.toColor && (
+                            <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.toColor}</p>
+                        )}
+                    </div>
                 </div>
 
-                {/* To Color Picker */}
-                <div className="mb-4">
-                    <label className="block text-sm font-medium mb-1">Gradient To Color</label>
-                    <input
-                        type="color"
-                        name="toColor"
-                        className={`text-black border rounded-md p-2 w-full h-[6vh] ${formik.errors.toColor && formik.touched.toColor ? 'border-red-500' : ''}`}
-                        value={formik.values.toColor}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                    />
-                    {formik.errors.toColor && formik.touched.toColor && (
-                        <p className="text-red-500 text-md font-semibold text-center mt-2">{formik.errors.toColor}</p>
-                    )}
-                </div>
 
                 {/* Number of Levels */}
                 <div className="mb-4">
@@ -346,7 +370,7 @@ const PatnersForm = () => {
                 <h1>Base Values</h1>
                 <div className='w-full flex justify-center items-center gap-2'>
                     {/* Base cost input */}
-                    <div className="mb-4 w-[33%]">
+                    <div className="mb-4 w-[50%]">
                         <input
                             type="text"
                             name="baseCost"
@@ -362,7 +386,7 @@ const PatnersForm = () => {
                     </div>
 
                     {/* Base cpm input */}
-                    <div className="mb-4 w-[33%]">
+                    <div className="mb-4 w-[50%]">
                         <input
                             type="text"
                             name="baseCpm"
@@ -382,7 +406,7 @@ const PatnersForm = () => {
                 <h1>Multipliers</h1>
                 <div className='w-full flex justify-center items-center gap-2'>
                     {/* Cost multiplier input */}
-                    <div className="mb-4 w-[33%]">
+                    <div className="mb-4 w-[50%]">
                         <input
                             type="text"
                             name="costMultiplier"
@@ -398,7 +422,7 @@ const PatnersForm = () => {
                     </div>
 
                     {/* Cpm multiplier input */}
-                    <div className="mb-4 w-[33%]">
+                    <div className="mb-4 w-[50%]">
                         <input
                             type="text"
                             name="cpmMultiplier"
