@@ -47,7 +47,6 @@ const Token = () => {
 	const [timeDifference, setTimeDifference] = useState(0);
 	const [shadowColor, setShadowColor] = useState('#fff');
 
-
 	// Animations
 	const [isAnimating, setIsAnimating] = useState(false);
 	const [showChild1, setShowChild1] = useState(false);
@@ -157,7 +156,7 @@ const Token = () => {
 						setTimeout(() => {
 							setLevelChange(false);
 						}, 1000);
-					}, 5200);
+					}, 5500);
 				} else {
 					triggerToast('Error Upgrading project!', 'error');
 				}
