@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
 	<TonConnectUIProvider
-		manifestUrl="https://res.cloudinary.com/du6yj0y8r/raw/upload/v1737808035/ton-manifest/manifest_a75eq9.json"
+		manifestUrl="https://panda-tap-app-frontend.vercel.app/manifest.json"
 	>
 		<BrowserRouter>
 			<UserProvider>

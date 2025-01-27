@@ -31,21 +31,25 @@ import StarCoin from '../../assets/star.svg';
 
 import PoupHorizontalLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 
-import { useTonConnectUI } from "@tonconnect/ui-react";
+import { TonConnectButton, useTonConnectUI } from "@tonconnect/ui-react";
 
 const Wallet = () => {
 	const [tonConnectUI, options] = useTonConnectUI();
 
+
+	const Ptap_Per_Ton = 1000;
+
 	const [walletAddress, setWalletAddress] = useState(null);
-	const { balance, formatNumberWithSpaces, triggerToast, fetchProjectsBalance, projectBalance, handleConnectWallet, handleDisconnectWallet } = useUser();
+	const { balance, formatNumberWithSpaces, triggerToast, fetchProjectsBalance, projectBalance, handleConnectWallet, handleDisconnectWallet, checkTonTransactionAndGiveReward } = useUser();
 
 	const [dots, setDots] = useState('');
 	const [buttonLoading, setButtonLoading] = useState(false);
 
+	useEffect(() => {
+		console.log('Wallet Address', walletAddress);
+	}, [walletAddress])
 
 	const [card, setCard] = useState('star');
-
-	const priceInDollar = 0.00;
 
 	const [iswithdraw, setIsPopupWithdraw] = useState(false);
 	const [isconnect, setIsPopupConnect] = useState(false);
@@ -57,7 +61,6 @@ const Wallet = () => {
 	const [starError, setStarError] = useState('');
 	const [tonError, setTonError] = useState('');
 
-	// Connect Wallet function: Update wallet address in the database
 	const connectWallet = async (walletAddress) => {
 		try {
 			setWalletAddress(walletAddress);
@@ -73,11 +76,10 @@ const Wallet = () => {
 		}
 	};
 
-	// Disconnect Wallet function: Update null wallet address in the database
 	const disconnectWallet = async () => {
 		try {
 			setWalletAddress(null);
-			const res = await handleConnectWallet(null);
+			const res = await handleDisconnectWallet(null);
 			if (res.success) {
 				triggerToast('Wallet disconnected successfully!', 'success');
 			} else {
@@ -89,7 +91,6 @@ const Wallet = () => {
 		}
 	};
 
-	// Ton Connection Status Check
 	useEffect(() => {
 		const checkWalletConnection = async () => {
 			if (tonConnectUI?.account?.address) {
@@ -116,7 +117,7 @@ const Wallet = () => {
 		};
 	}, [tonConnectUI]);
 
-	// Handle user action to connect or disconnect wallet
+
 	const handleWalletAction = async () => {
 		try {
 			if (tonConnectUI?.connected) {
@@ -152,14 +153,45 @@ const Wallet = () => {
 	};
 
 	// Buy PTAP with ton
-	const handleTonSubmit = (e) => {
-		e.preventDefault();
+	const handleTonSubmit = async (e) => {
+		try {
+			e.preventDefault();
 
-		if (!tonValue || isNaN(tonValue)) {
-			setTonError('Please enter a valid numeric value.');
-		} else {
-			setTonError('');
-			console.log(`Ton Form Value: ${tonValue}`);
+			if (!tonValue || isNaN(tonValue)) {
+				setTonError('Please enter a valid numeric value.');
+			} else {
+				setTonError('');
+
+				const tonAmountInNanoCoins = tonValue * 1e9;
+
+				const transaction = {
+					messages: [
+						{
+							address: '0QCyOzE91WU2rEsNDgU-I2cI5aOzBHKond_PuWnJfZEdOgY_',
+							amount: "10",
+						},
+					],
+				};
+
+				const response = await tonConnectUI.sendTransaction(transaction);
+
+				console.log('response', response);
+
+				if (response && response.transactionHash) {
+					const res = await checkTonTransactionAndGiveReward(tonValue, response.transactionHash);
+
+					if (res.success) {
+						triggerToast(res.mess, 'success');
+					} else {
+						triggerToast(res.mess, 'error');
+					}
+				} else {
+					triggerToast('Transaction failed!', 'error');
+				}
+			}
+		} catch (error) {
+			console.log('Internal Server Error', error);
+		} finally {
 			setTonValue('');
 		}
 	};
@@ -244,6 +276,9 @@ const Wallet = () => {
 	return (
 		<>
 			<div className="w-full h-[86vh] flex flex-col justify-start items-center gap-2 relative p-2 py-5 overflow-hidden">
+				<div className="absolute top-2 right-2 bg-red-600">
+					<TonConnectButton />
+				</div>
 				<img src={RightPopupEllipse} alt="ellispse" className="absolute -top-5 -right-5" />
 				<div
 					style={{ backgroundImage: `url(${RectangleBg})` }}

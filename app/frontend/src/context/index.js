@@ -1136,6 +1136,25 @@ export const UserProvider = (props) => {
         }
     }
 
+    const checkTonTransactionAndGiveReward = async (tonValue, transactionHash) => {
+        try {
+            const response = await axios.post(`${apiUrl}/exchange/check-ton-transaction`, {
+                userId: userId,
+                tonValue: tonValue,
+                transactionHash: transactionHash
+            });
+            if (response.data.status === 'success') {
+                setBalance(response.data.newBalance);
+                return ({ success: true, mess: 'Transaction success! Ptap added!' });
+            } else {
+                return ({ success: false, mess: 'Transaction failed!' });
+            }
+        } catch (error) {
+            console.log('Internal Server Error!', error);
+            return ({ success: false, mess: 'Internal Server Error!' });
+        }
+    }
+
     return (
         <UserContext.Provider value={{
             initializeUser,
@@ -1273,7 +1292,11 @@ export const UserProvider = (props) => {
             buyLevelUpgrade,
 
             fetchProjectsBalance,
-            projectBalance
+            projectBalance,
+
+
+            checkTonTransactionAndGiveReward,
+
         }}>
             {toast && isVisible && (
                 <div
