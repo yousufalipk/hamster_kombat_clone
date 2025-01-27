@@ -1,8 +1,8 @@
 const UserModel = require('../models/userModel');
 const TransactionModel = require('../models/transactions');
+const TonWeb = require('tonweb');
 
 // Temp here move to env
-const staticWalletAddress = 'TON_WALLET_ADDRESS';
 const REWARD_TON_RATE = 1000;
 
 
@@ -68,8 +68,32 @@ exports.disconnectWallet = async (req, res) => {
     }
 }
 
+const checkTransactionStatusFromBoc = async (boc) => {
+    try {
+        const bocBuffer = Buffer.from(boc, "base64");
+
+        const tonweb = new TonWeb(new TonWeb.HttpProvider("https://testnet.toncenter.com/api/v2/jsonRPC"));
+
+        const Cell = TonWeb.boc.Cell;
+        const rootCell = Cell.fromBoc(bocBuffer)[0];
+
+        console.log("Decoded cell:", rootCell);
+
+        const status = await tonweb.provider.getTransaction(rootCell.hash());
+
+        return status && status.success ? "successful" : "failed";
+    } catch (error) {
+        console.error("Error decoding BOC:", error.message);
+        return "failed";
+    }
+};
+
 exports.checkTonTransaction = async (req, res) => {
-    const { userId, tonValue, transactionHash } = req.body;
+    const { userId, tonValue, boc } = req.body;
+
+    console.log('userId', userId);
+    console.log('tonValue', tonValue);
+    console.log('Boc', boc);
 
     if (!tonValue || isNaN(tonValue)) {
         return res.status(200).json({
@@ -84,13 +108,13 @@ exports.checkTonTransaction = async (req, res) => {
         userId,
         tonAmount: tonAmountInNanoCoins,
         validUntil: Date.now() + 5 * 60 * 1000,
-        transactionHash,
+        boc,
     });
 
     try {
         await transaction.save();
 
-        const transactionStatus = await checkTransactionStatus(transactionHash);
+        const transactionStatus = await checkTransactionStatusFromBoc(boc);
 
         if (transactionStatus === 'successful') {
             transaction.status = 'successful';
@@ -102,10 +126,10 @@ exports.checkTonTransaction = async (req, res) => {
                 return res.status(200).json({
                     status: 'failed',
                     message: 'User not found!'
-                })
+                });
             }
 
-            user.balance = tonValue * REWARD_TON_RATE;
+            user.balance += tonValue * REWARD_TON_RATE;
             await user.save();
 
             res.status(200).json({
@@ -128,6 +152,6 @@ exports.checkTonTransaction = async (req, res) => {
             message: 'Internal server error'
         });
     }
-}
+};
 
 

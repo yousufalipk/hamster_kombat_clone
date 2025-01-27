@@ -11,10 +11,9 @@ const transactionSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
-        transactionHash: {
+        boc: {
             type: String,
             required: true,
-            unique: true,
         },
         validUntil: {
             type: Date,

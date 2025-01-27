@@ -1136,12 +1136,13 @@ export const UserProvider = (props) => {
         }
     }
 
-    const checkTonTransactionAndGiveReward = async (tonValue, transactionHash) => {
+    /*
+    const checkTonTransactionAndGiveReward = async (tonValue, boc) => {
         try {
             const response = await axios.post(`${apiUrl}/exchange/check-ton-transaction`, {
                 userId: userId,
                 tonValue: tonValue,
-                transactionHash: transactionHash
+                boc: boc
             });
             if (response.data.status === 'success') {
                 setBalance(response.data.newBalance);
@@ -1154,6 +1155,7 @@ export const UserProvider = (props) => {
             return ({ success: false, mess: 'Internal Server Error!' });
         }
     }
+        */
 
     return (
         <UserContext.Provider value={{
@@ -1294,8 +1296,6 @@ export const UserProvider = (props) => {
             fetchProjectsBalance,
             projectBalance,
 
-
-            checkTonTransactionAndGiveReward,
 
         }}>
             {toast && isVisible && (
