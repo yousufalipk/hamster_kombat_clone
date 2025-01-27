@@ -1,8 +1,6 @@
   {
-    "name": "Panda Tap App",
-    "description": "A sample app to interact with TON.",
-    "url": "https://panda-tap-app-frontend.vercel.app",
-    "icons": ["https://panda-tap-app-frontend.vercel.app/panda.jpg"],
-    "bridge": "https://testnet.tonhubapi.com/bridge"
+    "url": "https://panda-tap-app-frontend.vercel.app",                      
+    "name": "A sample app to interact with TON.",                    
+    "iconUrl": "https://panda-tap-app-frontend.vercel.app/panda.jpg"   
   }
   
