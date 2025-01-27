@@ -1,4 +1,5 @@
 const express = require('express');
+const router = express.Router();
 
 const {
     initializeUser,
@@ -44,8 +45,6 @@ const {
     BuyAndUpgradeLevel
 } = require('../utils/updateLevel');
 
-const router = express.Router();
-
 
 router.route('/fetch-user').post(initializeUser);
 router.route('/get-refferals').post(getRefferals);
@@ -75,11 +74,14 @@ router.route('/fetch-invite-friends').post(fetchUserInviteFriends);
 router.route('/claim-refferal-reward').post(claimInviteFriendsReward);
 router.route('/claim-cpm').post(claimCPM);
 router.route('/get-server-timestamp').get(getServerTimeStamp);
-router.route('/update-wallet-address').post(updateWalletAddress);
 router.route('/update-all-time-balance').post(updateAllTimeBalance);
 router.route('/fetch-one-kol-detail').post(fetchOneKolDetails);
 router.route('/watch-ads-reward').get(watchAdsReward);
 router.route('/get-wallet-balance').post(getWalletBalance);
+
+/*
+router.route('/update-wallet-address').post(updateWalletAddress);
+*/
 
 
 router.route('/add-content').post(addContent);

@@ -27,6 +27,8 @@ cloudinary.config({
     api_secret: API_SECRET,
 });
 
+const exchangeRates = { TON: 10, stars: 100 }; // 1 Ptap === 10 Ton & 100 Stars
+
 
 const {
     check30sec,
@@ -2023,6 +2025,7 @@ exports.claimInviteFriendsReward = async (req, res) => {
     }
 }
 
+/*
 exports.updateWalletAddress = async (req, res) => {
     try {
         const { userId, walletAddress } = req.body;
@@ -2067,6 +2070,7 @@ exports.updateWalletAddress = async (req, res) => {
         });
     }
 };
+*/
 
 exports.getServerTimeStamp = async (req, res) => {
     try {
@@ -2191,7 +2195,6 @@ exports.addContent = async (req, res) => {
         })
     }
 }
-
 
 exports.dailyComboReset = async (req, res) => {
     try {
@@ -2391,6 +2394,7 @@ exports.getWalletBalance = async (req, res) => {
         })
     }
 }
+
 
 /*
 const downloadImage = async (url, filePath) => {

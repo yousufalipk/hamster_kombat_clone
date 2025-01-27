@@ -6,6 +6,7 @@ const { PORT } = require('./config/env');
 const UserModel = require('./models/userModel');
 const { initializeIo, userSocketMap } = require('./utils/socketHelper');
 const user = require('./Routes/userRoute');
+const exchange = require('./Routes/exhangeRoutes');
 const path = require('path');
 
 
@@ -81,6 +82,7 @@ server.listen(PORT || 8080, () => {
 
 // Routers
 app.use('/user', user);
+app.use('/exchange', exchange);
 
 // Test Routes
 app.get('/', (req, res) => {

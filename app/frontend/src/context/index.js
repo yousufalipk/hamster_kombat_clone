@@ -942,31 +942,6 @@ export const UserProvider = (props) => {
         }
     }
 
-    const updateWalletAddressToDb = async (walletAddress) => {
-        console.log('Wallet Address', walletAddress);
-        let res;
-        try {
-            if (walletAddress) {
-                res = await axios.post(`${apiUrl}/user/update-wallet-address`, {
-                    userId: userId,
-                    walletAddress: walletAddress
-                });
-            } else {
-                res = await axios.post(`${apiUrl}/user/update-wallet-address`, {
-                    userId: userId
-                });
-            }
-            if (res.data.status === 'success') {
-                return ({ success: false, mess: 'Wallet Connected Succesfuly!' })
-            } else {
-                return ({ success: false, mess: 'Error Connecting Wallet!' })
-            }
-        } catch (error) {
-            console.log('Internal Server Error!');
-            return ({ success: false, mess: 'Internal Server Error!' })
-        }
-    }
-
     const fetchRefferals = async () => {
         try {
             setRefLoader(true);
@@ -1127,6 +1102,40 @@ export const UserProvider = (props) => {
         }
     }
 
+    const handleConnectWallet = async (walletAddress) => {
+        try {
+            const response = await axios.post(`${apiUrl}/exchange/connect`, {
+                userId: userId,
+                walletAddress: walletAddress
+            });
+            if (response.data.status === 'success') {
+                setWalletAddress(response.data.walletAddress);
+                return ({ success: true, mess: 'Wallet Connected Succesfully!' });
+            } else {
+                return ({ success: false, mess: 'Error connecting wallet!' });
+            }
+        } catch (error) {
+            console.log('Error', error);
+            return ({ success: false, mess: 'Internal Server Error' });
+        }
+    }
+
+    const handleDisconnectWallet = async () => {
+        try {
+            const response = await axios.post(`${apiUrl}/exchange/disconnect`, {
+                userId: userId
+            });
+            if (response.data.status === 'success') {
+                setWalletAddress(null);
+                return ({ success: true, mess: 'Wallet disconnected Succesfully!' });
+            } else {
+                return ({ success: false, mess: 'Error disconnecting wallet!' });
+            }
+        } catch (error) {
+            return ({ success: false, mess: 'Internal Server Error' });
+        }
+    }
+
     return (
         <UserContext.Provider value={{
             initializeUser,
@@ -1226,9 +1235,12 @@ export const UserProvider = (props) => {
             setAvaliableCpm,
             levelsData,
 
+
+            // exchange
             walletAddress,
             setWalletAddress,
-            updateWalletAddressToDb,
+            handleConnectWallet,
+            handleDisconnectWallet,
 
             rankLoader,
             setRankLoader,

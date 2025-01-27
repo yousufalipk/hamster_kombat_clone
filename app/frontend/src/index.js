@@ -9,7 +9,9 @@ import { TonConnectUIProvider } from "@tonconnect/ui-react";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-	<TonConnectUIProvider manifestUrl="https://panda-tap-backend-production.up.railway.app/manifest.json">
+	<TonConnectUIProvider
+		manifestUrl="https://res.cloudinary.com/du6yj0y8r/raw/upload/v1737808035/ton-manifest/manifest_a75eq9.json"
+	>
 		<BrowserRouter>
 			<UserProvider>
 				<App />

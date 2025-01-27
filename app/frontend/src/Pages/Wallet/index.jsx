@@ -26,17 +26,18 @@ import RectangleBg2 from '../../assets/walletRectangeBg2.svg';
 
 import RightPopupEllipse from '../../assets/walletEllipse.svg';
 
-import { useTonConnectUI } from "@tonconnect/ui-react";
-
 import TonCoin from '../../assets/ton.svg';
 import StarCoin from '../../assets/star.svg';
 
 import PoupHorizontalLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 
+import { useTonConnectUI } from "@tonconnect/ui-react";
+
 const Wallet = () => {
-	const [tonConnectUI] = useTonConnectUI();
+	const [tonConnectUI, options] = useTonConnectUI();
+
 	const [walletAddress, setWalletAddress] = useState(null);
-	const { balance, updateWalletAddressToDb, formatNumberWithSpaces, triggerToast, fetchProjectsBalance, projectBalance } = useUser();
+	const { balance, formatNumberWithSpaces, triggerToast, fetchProjectsBalance, projectBalance, handleConnectWallet, handleDisconnectWallet } = useUser();
 
 	const [dots, setDots] = useState('');
 	const [buttonLoading, setButtonLoading] = useState(false);
@@ -56,6 +57,88 @@ const Wallet = () => {
 	const [starError, setStarError] = useState('');
 	const [tonError, setTonError] = useState('');
 
+	// Connect Wallet function: Update wallet address in the database
+	const connectWallet = async (walletAddress) => {
+		try {
+			setWalletAddress(walletAddress);
+			const res = await handleConnectWallet(walletAddress);
+			if (res.success) {
+				triggerToast('Wallet connected successfully!', 'success');
+			} else {
+				triggerToast('Error connecting wallet', 'error');
+			}
+		} catch (error) {
+			console.error('Error connecting wallet:', error);
+			triggerToast('Error connecting wallet', 'error');
+		}
+	};
+
+	// Disconnect Wallet function: Update null wallet address in the database
+	const disconnectWallet = async () => {
+		try {
+			setWalletAddress(null);
+			const res = await handleConnectWallet(null);
+			if (res.success) {
+				triggerToast('Wallet disconnected successfully!', 'success');
+			} else {
+				triggerToast('Error disconnecting wallet', 'error');
+			}
+		} catch (error) {
+			console.error('Error disconnecting wallet:', error);
+			triggerToast('Error disconnecting wallet', 'error');
+		}
+	};
+
+	// Ton Connection Status Check
+	useEffect(() => {
+		const checkWalletConnection = async () => {
+			if (tonConnectUI?.account?.address) {
+				setWalletAddress(tonConnectUI.account.address);
+			} else {
+				setWalletAddress(null);
+			}
+		};
+
+		checkWalletConnection();
+
+		const unsubscribe = tonConnectUI?.onStatusChange((wallet) => {
+			if (wallet?.account?.address) {
+				setWalletAddress(wallet.account.address);
+			} else {
+				setWalletAddress(null);
+			}
+		});
+
+		return () => {
+			if (unsubscribe) {
+				unsubscribe();
+			}
+		};
+	}, [tonConnectUI]);
+
+	// Handle user action to connect or disconnect wallet
+	const handleWalletAction = async () => {
+		try {
+			if (tonConnectUI?.connected) {
+				await tonConnectUI.disconnect();
+				await disconnectWallet();
+			} else {
+				await tonConnectUI.openModal();
+
+				const unsubscribe = tonConnectUI?.onStatusChange((wallet) => {
+					if (wallet?.account?.address) {
+						connectWallet(wallet.account.address);
+					}
+					if (unsubscribe) unsubscribe();
+				});
+			}
+		} catch (error) {
+			console.error('Error handling wallet action:', error);
+			triggerToast('Error handling wallet action', 'error');
+		}
+	};
+
+	// Buy PTAP with stars
 	const handleStarSubmit = (e) => {
 		e.preventDefault();
 
@@ -68,6 +151,7 @@ const Wallet = () => {
 		}
 	};
 
+	// Buy PTAP with ton
 	const handleTonSubmit = (e) => {
 		e.preventDefault();
 
@@ -92,64 +176,6 @@ const Wallet = () => {
 		const end = address.slice(-5);
 		return `${start}...${end}`;
 	};
-
-	const connectWallet = async (address) => {
-		try {
-			setWalletAddress(address);
-		} catch (error) {
-			console.error("Error connecting wallet:", error);
-		}
-	};
-
-	const disconnectWallet = async () => {
-		try {
-			setWalletAddress(null);
-		} catch (error) {
-			console.error("Error disconnecting wallet:", error);
-		}
-	};
-
-	const handleWalletAction = async () => {
-		setButtonLoading(true);
-		if (tonConnectUI.connected) {
-			await tonConnectUI.disconnect();
-		} else {
-			await tonConnectUI.openModal();
-		}
-		setButtonLoading(false);
-	}
-
-	useEffect(() => {
-		const checkWalletConnection = async () => {
-			if (tonConnectUI.account?.address) {
-				connectWallet(tonConnectUI.account?.address);
-			} else {
-				disconnectWallet();
-			}
-		}
-
-		checkWalletConnection();
-
-		const unsubscribe = tonConnectUI.onStatusChange((Wallet) => {
-			if (Wallet) {
-				connectWallet(Wallet.account?.address);
-			} else {
-				disconnectWallet();
-			}
-		})
-
-		return () => {
-			unsubscribe();
-		}
-
-	}, [tonConnectUI, handleWalletAction]);
-
-	useEffect(() => {
-		const updateWalletAddress = async () => {
-			await updateWalletAddressToDb(walletAddress);
-		}
-		updateWalletAddress();
-	}, [walletAddress])
 
 	useEffect(() => {
 		let interval;
@@ -231,17 +257,31 @@ const Wallet = () => {
 					</p>
 					<div className="w-full h-[50%] relative text-white flex justify-between items-center gap-3">
 						<button
-							className="w-1/2 h-7 bg-gradient-to-t from-darkBlue to-lightBlue rounded-md text-[14px] flex justify-center items-center gap-1 p-2"
+							id="ton-connect-btn"
+							className={`w-1/2 h-7 bg-gradient-to-t from-darkBlue to-lightBlue rounded-md text-[14px] flex justify-center items-center gap-1 p-2 ${walletAddress && 'grayscale'}`}
 							onClick={() => {
-								// Navigate to connect wallet page
+								handleWalletAction();
 							}}
 						>
-							<img
-								src={ConnectIcon}
-								alt="connect"
-								width={15}
-							/>
-							Connect Wallet
+							{!walletAddress ? (
+								<>
+									<img
+										src={ConnectIcon}
+										alt="connect"
+										width={15}
+									/>
+									Connect Wallet
+								</>
+							) : (
+								<>
+									<img
+										src={ConnectIcon}
+										alt="connect"
+										width={15}
+									/>
+									Disconnect Wallet
+								</>
+							)}
 						</button>
 						<button
 							className="w-1/2 h-7 bg-gradient-to-t from-darkBlue to-lightBlue rounded-md text-[14px] flex justify-center items-center gap-1 p-2 grayscale"
@@ -257,7 +297,7 @@ const Wallet = () => {
 							/>
 							Withdraw
 						</button>
-						<img src={CommingSoon} alt="comming_soon" width={50} className="absolute -top-1 -right-1" />
+						<img src={CommingSoon} alt="comming_soon" width={50} className="absolute top-2 right-0" />
 					</div>
 				</div>
 
@@ -364,7 +404,7 @@ const Wallet = () => {
 											)}
 										</button>
 									</form>
-									<div className="w-full h-[2.5vh] flex justify-center items-center gap-1 text-center text-[#727272] text-[12px]">
+									<div className="w-full h-[2.5vh] flex justify-center items-center gap-1 text-center text-[#727272] text-[12px] mt-1">
 										200
 										<img src={StarCoin} alt="starcoin" />
 										= 2$
@@ -381,7 +421,7 @@ const Wallet = () => {
 											return (
 												<div
 													key={index}
-													className="w-full h-[3vh] bg-[#32324D] rounded-sm flex justify-between items-center px-2 text-[12px] font-thin"
+													className="w-full h-[3vh] bg-[#32324D] rounded-sm flex justify-between items-center px-2 text-[12px] font-thin custom-button"
 												>
 													<div className="w-[25%] h-full flex justify-start items-center gap-1">
 														{pack.reward}
@@ -431,12 +471,43 @@ const Wallet = () => {
 											)}
 										</button>
 									</form>
+									<div className="w-full h-[2.5vh] flex justify-center items-center gap-1 text-center text-[#727272] text-[12px] mt-1">
+										200
+										<img src={TonCoin} alt="tonCoin" />
+										= 2$
+									</div>
+									<div className="w-full h-[2.5vh] flex justify-center items-center text-center text-white text-[12px]">
+										<img src={PoupHorizontalLine} alt="horizontal_ling" className="w-[40vw]" />
+										<h1>
+											or
+										</h1>
+										<img src={PoupHorizontalLine} alt="horizontal_ling" className="w-[40vw]" />
+									</div>
+									<div className="w-full h-full flex flex-col justify-center items-center gap-2">
+										{tonPackages.map((pack, index) => {
+											return (
+												<div
+													key={index}
+													className="relative w-full h-[3vh] bg-[#32324D] rounded-sm flex justify-between items-center px-2 text-[12px] font-thin custom-button"
+												>
+													<div className="w-[25%] h-full flex justify-start items-center gap-1">
+														{pack.reward}
+														<img src={LittleCoin} alt="little_coin" />
+													</div>
+													<div className="w-[25%] h-full flex justify-end items-center gap-1">
+														{pack.price}
+														<img src={TonCoin} alt="ton_coin" />
+													</div>
+												</div>
+											)
+										})}
+									</div>
 								</div>
 							)}
 						</div>
 					</div>
-				</div >
-			</div >
+				</div>
+			</div>
 		</>
 	);
 };

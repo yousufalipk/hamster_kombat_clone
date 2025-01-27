@@ -12,6 +12,10 @@
             "dest": "/index.js"
         },
         {
+            "src": "/exchange/(.*)",
+            "dest": "/index.js"
+        },
+        {
             "src": "/(.*)",
             "dest": "/index.js"
         }
