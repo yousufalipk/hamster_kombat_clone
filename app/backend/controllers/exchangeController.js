@@ -1,10 +1,11 @@
 const UserModel = require('../models/userModel');
 const TransactionModel = require('../models/transactions');
-const TonWeb = require('tonweb');
+const InvoiceModel = require('../models/invoiceSchema.js');
 
-// Temp here move to env
-const REWARD_TON_RATE = 1000;
+const { TELEGRAM_BOT_TOKEN } = require('../config/env');
+const { Bot } = require("grammy");
 
+const bot = new Bot(TELEGRAM_BOT_TOKEN);
 
 /* 
 exports.connectWallet = async (req, res) => {
@@ -209,5 +210,114 @@ exports.updateTransactionStatus = async (req, res) => {
         });
     }
 };
+
+// Generate Stars Invoice Link 
+exports.generateInvoiceLink = async (req, res) => {
+    try {
+        const { userId, amount } = req.body;
+
+        const user = await UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            });
+        }
+
+        const title = "Panda Tap";
+        const description = "Buy ptap using telegram stars!";
+        const payload = "{}";
+        const currency = "XTR";
+        const prices = [{ amount: amount, label: "Ptap Coins" }];
+
+        const invoiceLink = await bot.api.createInvoiceLink(
+            title,
+            description,
+            payload,
+            "",
+            currency,
+            prices
+        );
+
+        const newInvoice = new InvoiceModel({
+            userId,
+            amount,
+            status: 'pending',
+            invoiceLink,
+            pTapGiven: 0
+        });
+
+        const savedInvoice = await newInvoice.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Invoice Link generated successfully!',
+            invoiceId: savedInvoice._id,
+            invoiceLink: invoiceLink
+        });
+
+    } catch (error) {
+        console.error('Internal Server Error!', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        });
+    }
+};
+
+exports.updateInvoiceStatus = async (req, res) => {
+    try {
+        const { userId, invoiceId, pTapGiven, status } = req.body;
+
+        const invoice = await InvoiceModel.findById(invoiceId);
+
+        if (!invoice) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Invoice not found!'
+            });
+        }
+
+
+        if (status === 'success') {
+            const user = await UserModel.findById(userId);
+
+            if (!user) {
+                return res.status(200).json({
+                    status: 'failed',
+                    message: 'User not found!'
+                });
+            }
+            user.balance += pTapGiven;
+            invoice.status = 'success';
+            invoice.pTapGiven = pTapGiven;
+        } else {
+            invoice.status = 'failed';
+        }
+
+        await invoice.save();
+        await user.save();
+
+        if (invoice.status === 'success') {
+            return res.status(200).json({
+                status: 'success',
+                message: 'Transaction successfull',
+                newBalance: user.balance
+            })
+        } else {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Transaction failed!',
+            })
+        }
+    } catch (error) {
+        console.log('Internal Server Error', error);
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        })
+    }
+}
 
 

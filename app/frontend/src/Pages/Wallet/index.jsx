@@ -17,6 +17,7 @@ import axios from "axios";
 const Wallet = () => {
 
 	const Ptap_Per_Ton = 1000;
+	const Ptap_Per_Star = 1000;
 
 	const tonPackages = [
 		{
@@ -83,14 +84,56 @@ const Wallet = () => {
 	const [tonPrice, setTonPrice] = useState(null);
 
 	// Buy PTAP with stars
-	const handleStarSubmit = (e) => {
-		e.preventDefault();
+	const handleStarSubmit = async (e) => {
+		try {
+			e.preventDefault();
 
-		if (!starValue || isNaN(starValue)) {
-			setStarError('Please enter a valid numeric value.');
-		} else {
-			setStarError('');
-			console.log(`Star Form Value: ${starValue}`);
+			const parsedStarValue = parseFloat(starValue);
+			if (isNaN(parsedStarValue) || parsedStarValue <= 0) {
+				triggerToast('TON value must be a number greater than 0.', 'error');
+				return;
+			}
+
+			const response = await axios.post(`${apiUrl}/exchange/generate-invoice-link`, {
+				userId,
+				amount: starValue
+			});
+
+			const { status, invoiceId, invoiceLink, message } = response.data;
+
+			if (status !== 'success' || !invoiceId || !invoiceLink) {
+				console.error('Error generating invoice:', message);
+				triggerToast('Error generating invoice. Please try again later.', 'error');
+				return;
+			}
+
+			window.Telegram.WebApp.openInvoice(invoiceLink, async (paymentStatus) => {
+				try {
+					const pTapGiven = parsedStarValue * Ptap_Per_Star;
+
+					const updateResponse = await axios.post(`${apiUrl}/exchange/update-invoice`, {
+						userId,
+						invoidId: invoiceId,
+						pTapGiven,
+						status: paymentStatus === "paid" ? 'success' : 'failed'
+					});
+
+					if (updateResponse.data.status === 'success') {
+						setBalance(updateResponse.data.newBalance);
+						triggerToast('Transaction Successful!', 'success');
+					} else {
+						console.error('Error updating invoice:', updateResponse.data.message);
+						triggerToast('Failed to update transaction status!', 'error');
+					}
+				} catch (updateError) {
+					console.error('Error during invoice update:', updateError);
+					triggerToast('An error occurred while updating the transaction.', 'error');
+				}
+			});
+		} catch (error) {
+			console.error('Internal Server Error:', error);
+			triggerToast('An error occurred while processing your transaction.', 'error');
+		} finally {
 			setStarValue('');
 		}
 	};
@@ -99,8 +142,6 @@ const Wallet = () => {
 	const handleTonSubmit = async (e) => {
 		try {
 			e.preventDefault();
-
-			console.log('tonValue', tonValue);
 
 			const parsedTonValue = parseFloat(tonValue);
 			if (isNaN(parsedTonValue) || parsedTonValue <= 0) {
@@ -152,7 +193,7 @@ const Wallet = () => {
 			console.error('Internal Server Error:', error);
 			triggerToast('Error Buying Ptap!', 'error');
 		} finally {
-			//setTonValue('');
+			setTonValue('');
 		}
 	};
 
@@ -400,6 +441,10 @@ const Wallet = () => {
 										{starsPackages.map((pack, index) => {
 											return (
 												<div
+													onClick={(e) => {
+														setTonValue(pack.price);
+														handleStarSubmit(e);
+													}}
 													key={index}
 													className="w-full h-[3vh] bg-[#32324D] rounded-sm flex justify-between items-center px-2 text-[12px] font-thin custom-button"
 												>

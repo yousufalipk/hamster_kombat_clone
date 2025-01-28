@@ -514,6 +514,8 @@ export const BottleCap = () => {
 
 					{/* watch ads & earn */}
 
+
+					{/*
 					<div
 						className="absolute top-2 left-2 px-5 py-2 text-white border rounded-full text-xs"
 						onClick={() => {
@@ -522,6 +524,7 @@ export const BottleCap = () => {
 					>
 						Watch & Earn
 					</div>
+					*/}
 
 					<div className="top-3 right-3 flex justify-end items-center mr-2 mt-2 gap-1 text-white">
 						<img src={BigCoin} alt="" width={22} />

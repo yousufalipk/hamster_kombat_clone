@@ -10,14 +10,14 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "fs": "^0.0.1-security",
+    "grammy": "^1.34.1",
     "moment": "^2.30.1",
     "mongoose": "^8.7.3",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.7",
     "path": "^0.12.7",
     "socket.io": "^4.8.1",
-    "telegraf": "^4.16.3",
-    "tonweb": "^0.0.66"
+    "telegraf": "^4.16.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
