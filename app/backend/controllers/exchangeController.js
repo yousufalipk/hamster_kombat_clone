@@ -6,7 +6,7 @@ const TonWeb = require('tonweb');
 const REWARD_TON_RATE = 1000;
 
 
-// Connect User Wallet 
+/* 
 exports.connectWallet = async (req, res) => {
     try {
         const { userId, walletAddress } = req.body;
@@ -67,89 +67,145 @@ exports.disconnectWallet = async (req, res) => {
         })
     }
 }
+*/
 
-const checkTransactionStatusFromBoc = async (boc) => {
+
+// Update wallet address
+exports.updateWalletAddress = async (req, res) => {
     try {
-        const bocBuffer = Buffer.from(boc, "base64");
+        const { userId, walletAddress } = req.body;
 
-        const tonweb = new TonWeb(new TonWeb.HttpProvider("https://testnet.toncenter.com/api/v2/jsonRPC"));
+        const user = await UserModel.findById(userId);
 
-        const Cell = TonWeb.boc.Cell;
-        const rootCell = Cell.fromBoc(bocBuffer)[0];
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            })
+        }
 
-        console.log("Decoded cell:", rootCell);
+        if (walletAddress) {
+            user.walletAddress = walletAddress;
+        } else {
+            user.walletAddress = null;
+        }
 
-        const status = await tonweb.provider.getTransaction(rootCell.hash());
+        await user.save();
 
-        return status && status.success ? "successful" : "failed";
+        return res.status(200).json({
+            status: 'success',
+            message: 'Wallet address updated succesfully!'
+        })
     } catch (error) {
-        console.error("Error decoding BOC:", error.message);
-        return "failed";
+        console.log('Internal Server Error!', error);
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
+        })
+    }
+}
+
+// initiate Transaction
+exports.initiateTransaction = async (req, res) => {
+    try {
+        const { userId, amount, nanoValue } = req.body;
+
+        if (!userId || !amount || !nanoValue) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Missing required fields'
+            });
+        }
+
+        const user = await UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Internal Server Error!'
+            })
+        }
+
+        const transaction = new TransactionModel({
+            userId,
+            amount,
+            nanoValue,
+            status: 'pending',
+        });
+
+        await transaction.save();
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Transaction initiated successfully',
+            transactionId: transaction._id,
+        });
+    } catch (error) {
+        console.error('Error initiating transaction:', error);
+        res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        });
     }
 };
 
-exports.checkTonTransaction = async (req, res) => {
-    const { userId, tonValue, boc } = req.body;
-
-    console.log('userId', userId);
-    console.log('tonValue', tonValue);
-    console.log('Boc', boc);
-
-    if (!tonValue || isNaN(tonValue)) {
-        return res.status(200).json({
-            status: 'failed',
-            message: 'Please enter a valid numeric value for TON.'
-        });
-    }
-
-    const tonAmountInNanoCoins = tonValue * 1e9;
-
-    const transaction = new TransactionModel({
-        userId,
-        tonAmount: tonAmountInNanoCoins,
-        validUntil: Date.now() + 5 * 60 * 1000,
-        boc,
-    });
-
+// Update transaction status
+exports.updateTransactionStatus = async (req, res) => {
     try {
-        await transaction.save();
+        const { transactionId, status, pTapGiven } = req.body;
 
-        const transactionStatus = await checkTransactionStatusFromBoc(boc);
-
-        if (transactionStatus === 'successful') {
-            transaction.status = 'successful';
-            await transaction.save();
-
-            let user = await UserModel.findById(userId);
-
-            if (!user) {
-                return res.status(200).json({
-                    status: 'failed',
-                    message: 'User not found!'
-                });
-            }
-
-            user.balance += tonValue * REWARD_TON_RATE;
-            await user.save();
-
-            res.status(200).json({
-                status: 'success',
-                message: 'Transaction successful and PTAP coins awarded.',
-                newBalance: user.balance
-            });
-        } else {
-            transaction.status = 'failed';
-            await transaction.save();
-            res.status(500).json({
+        if (!transactionId || !status) {
+            return res.status(200).json({
                 status: 'failed',
-                message: 'Transaction failed.'
+                message: 'Missing required fields'
             });
         }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
+
+        if (!['success', 'failed'].includes(status)) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Invalid Status value'
+            });
+        }
+
+        const transaction = await TransactionModel.findById(transactionId);
+        if (!transaction) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Transaction not found!'
+            });
+        }
+
+        transaction.status = status;
+        transaction.updatedAt = new Date();
+
+        if (status === 'success') {
+            transaction.pTapGiven = pTapGiven || 0;
+
+            const user = await UserModel.findById(transaction.userId);
+
+            if (user) {
+                user.balance += pTapGiven;
+                await user.save();
+                await transaction.save();
+                return res.status(200).json({
+                    status: 'success',
+                    message: 'Transaction status updated successfully',
+                    transaction,
+                    newBalance: user.balance
+                });
+            }
+        }
+        return res.status(200).json({
             status: 'failed',
-            message: 'Internal server error'
+            message: 'Transaction status updated successfully',
+            transaction
+        });
+    } catch (error) {
+        console.error('Error updating transaction status:', error);
+        return res.status(500).json({
+            status: 'failed',
+            message: 'Internal Server Error!'
         });
     }
 };

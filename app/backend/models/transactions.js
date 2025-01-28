@@ -1,46 +1,37 @@
 const mongoose = require('mongoose');
 
-const transactionSchema = new mongoose.Schema(
-    {
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: true,
-        },
-        tonAmount: {
-            type: Number,
-            required: true,
-        },
-        boc: {
-            type: String,
-            required: true,
-        },
-        validUntil: {
-            type: Date,
-            required: true,
-        },
-        status: {
-            type: String,
-            enum: ['pending', 'successful', 'failed'],
-            default: 'pending',
-        },
-        createdAt: {
-            type: Date,
-            default: Date.now,
-        },
-        updatedAt: {
-            type: Date,
-            default: Date.now,
-        },
+const transactionSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
-    { timestamps: true }
-);
-
-transactionSchema.pre('save', function (next) {
-    this.updatedAt = Date.now();
-    next();
+    amount: {
+        type: Number,
+        required: true
+    },
+    nanoValue: {
+        type: String,
+        required: true
+    },
+    pTapGiven: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'success', 'failed'],
+        default: 'pending'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    },
 });
 
-const Transaction = mongoose.model('Transaction', transactionSchema);
-
-module.exports = Transaction;
+module.exports = mongoose.model('Transaction', transactionSchema);

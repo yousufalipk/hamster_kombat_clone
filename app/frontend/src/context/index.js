@@ -1102,6 +1102,7 @@ export const UserProvider = (props) => {
         }
     }
 
+    /*
     const handleConnectWallet = async (walletAddress) => {
         try {
             const response = await axios.post(`${apiUrl}/exchange/connect`, {
@@ -1135,27 +1136,25 @@ export const UserProvider = (props) => {
             return ({ success: false, mess: 'Internal Server Error' });
         }
     }
+    */
 
-    /*
-    const checkTonTransactionAndGiveReward = async (tonValue, boc) => {
+    const updateWalletAddress = async (walletAddress) => {
         try {
-            const response = await axios.post(`${apiUrl}/exchange/check-ton-transaction`, {
+            const response = await axios.post(`${apiUrl}/exchange/update-wallet-address`, {
                 userId: userId,
-                tonValue: tonValue,
-                boc: boc
+                walletAddress: walletAddress || null
             });
+
             if (response.data.status === 'success') {
-                setBalance(response.data.newBalance);
-                return ({ success: true, mess: 'Transaction success! Ptap added!' });
+                return ({ success: true, message: 'Wallet address updated succesfuly!' });
             } else {
-                return ({ success: false, mess: 'Transaction failed!' });
+                return ({ success: false, message: 'Error Updating wallet address' });
             }
         } catch (error) {
             console.log('Internal Server Error!', error);
-            return ({ success: false, mess: 'Internal Server Error!' });
+            return ({ success: false, message: 'Internal Server Error!' });
         }
     }
-        */
 
     return (
         <UserContext.Provider value={{
@@ -1260,8 +1259,7 @@ export const UserProvider = (props) => {
             // exchange
             walletAddress,
             setWalletAddress,
-            handleConnectWallet,
-            handleDisconnectWallet,
+            updateWalletAddress,
 
             rankLoader,
             setRankLoader,
