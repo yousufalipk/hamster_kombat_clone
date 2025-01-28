@@ -36,19 +36,15 @@ const Wallet = () => {
 
 	const starsPackages = [
 		{
-			reward: 200000,
 			price: 200
 		},
 		{
-			reward: 400000,
 			price: 400
 		},
 		{
-			reward: 600000,
 			price: 600
 		},
 		{
-			reward: 800000,
 			price: 800
 		},
 	]
@@ -90,7 +86,7 @@ const Wallet = () => {
 
 			const parsedStarValue = parseFloat(starValue);
 			if (isNaN(parsedStarValue) || parsedStarValue <= 0) {
-				triggerToast('TON value must be a number greater than 0.', 'error');
+				triggerToast('Star value must be a number greater than 0.', 'error');
 				return;
 			}
 
@@ -134,7 +130,7 @@ const Wallet = () => {
 			console.error('Internal Server Error:', error);
 			triggerToast('An error occurred while processing your transaction.', 'error');
 		} finally {
-			setStarValue('');
+			// setStarValue('');
 		}
 	};
 
@@ -322,6 +318,7 @@ const Wallet = () => {
 					</div>
 				</div>
 
+				{/*
 				<div className="relative w-full h-[26vh] border border-gray-700 rounded-md text-white">
 					<div className="w-full h-full absolute z-20 p-2">
 						<h1 className="w-full h-[15%] text-[#6D6D6D] text-[12px]">Balance</h1>
@@ -361,6 +358,8 @@ const Wallet = () => {
 						</div>
 					</div>
 				</div>
+				*/}
+
 				<div
 					style={{
 						backgroundImage: `url(${RectangleBg2})`,
@@ -442,14 +441,14 @@ const Wallet = () => {
 											return (
 												<div
 													onClick={(e) => {
-														setTonValue(pack.price);
+														setStarValue(pack.price);
 														handleStarSubmit(e);
 													}}
 													key={index}
 													className="w-full h-[3vh] bg-[#32324D] rounded-sm flex justify-between items-center px-2 text-[12px] font-thin custom-button"
 												>
 													<div className="w-[25%] h-full flex justify-start items-center gap-1">
-														{pack.reward}
+														{pack.price * Ptap_Per_Star}
 														<img src={LittleCoin} alt="little_coin" />
 													</div>
 													<div className="w-[25%] h-full flex justify-end items-center gap-1">
