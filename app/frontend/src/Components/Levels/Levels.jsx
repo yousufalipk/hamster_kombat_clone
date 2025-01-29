@@ -55,6 +55,8 @@ import PandaBgBrown from '../../assets/BrownBgPanda.svg';
 
 import LockIcon from '../../assets/lock.svg';
 
+import LevelRectangle from '../LevelsRectangle/LevelsRectangle';
+
 const Levels = () => {
     const { level, profilePic, firstName, levelName, levelPercentage, levelsData, triggerToast, buyLevelUpgrade } = useUser();
 

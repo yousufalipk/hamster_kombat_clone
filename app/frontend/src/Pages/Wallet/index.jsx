@@ -17,21 +17,21 @@ import { use } from "react";
 
 const Wallet = () => {
 
-	const Ptap_Per_Ton = 1000;
+	const Ptap_Per_Ton = 1000000;
 	const Ptap_Per_Star = 1000;
 
 	const tonPackages = [
 		{
-			price: 200
+			price: 0.1
 		},
 		{
-			price: 400
+			price: 0.2
 		},
 		{
-			price: 600
+			price: 0.3
 		},
 		{
-			price: 800
+			price: 0.4
 		},
 	]
 
@@ -374,7 +374,7 @@ const Wallet = () => {
 					<div className="absolute z-10 w-full h-full">
 						<WalletCard />
 					</div>
-					<div className="absolute z-20 w-full h-full px-5 flex flex-col items-center justify-start gap-2">
+					<div className="absolute z-20 w-full h-full px-3 flex flex-col items-center justify-start gap-2">
 						<div className="w-full h-[5.5vh] flex justify-center items-end text-white" >
 							<button
 								onClick={() => {
