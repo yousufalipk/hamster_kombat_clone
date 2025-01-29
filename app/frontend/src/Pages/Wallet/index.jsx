@@ -174,7 +174,7 @@ const Wallet = () => {
 				messages: [
 					{
 						address:
-							"0QD_aNBx_gcFUh4FH0oYtNeDm2pJ2OiO0-6znWPjgessI3vk",
+							"UQAkrvQdD6S4rhwbvdUXQiQdBp5XA3nAwyEzQnF2lucRxpsn",
 						amount: nanoValue,
 					},
 				],
