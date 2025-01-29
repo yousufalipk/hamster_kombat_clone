@@ -488,13 +488,14 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    const createKol = async (data) => {
+    const createKol = async (data, tasks) => {
         setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel, 10);
         const baseCost = parseFloat(data.baseCost, 10);
         const baseCpm = parseFloat(data.baseCpm, 10);
         const costMultiplier = parseFloat(data.costMultiplier, 10);
         const cpmMultiplier = parseFloat(data.cpmMultiplier, 10);
+
         try {
             const response = await axios.post(`${apiUrl}/kols/add-kol`, {
                 name: data.name,
@@ -518,8 +519,11 @@ export const FirebaseProvider = (props) => {
                 multipliers: {
                     costMultiplier: costMultiplier,
                     cpmMultiplier: cpmMultiplier
-                }
+                },
+                tasks: tasks
             });
+
+            console.log('Create Kol Response', response.data);
             if (response.data.status === 'success') {
                 await fetchKols();
                 return ({ success: true, mess: response.data.message });
@@ -534,7 +538,7 @@ export const FirebaseProvider = (props) => {
         }
     };
 
-    const updateKol = async (data, id) => {
+    const updateKol = async (data, tasks, id) => {
         setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel, 10);
         const baseCost = parseFloat(data.baseCost, 10);
@@ -565,7 +569,8 @@ export const FirebaseProvider = (props) => {
                 multipliers: {
                     costMultiplier: costMultiplier,
                     cpmMultiplier: cpmMultiplier
-                }
+                },
+                tasks: tasks
             });
             if (response.data.status === 'success') {
                 await fetchKols();
@@ -620,7 +625,7 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    const createPatner = async (data) => {
+    const createPatner = async (data, tasks) => {
         setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel, 10);
         const baseCost = parseFloat(data.baseCost, 10);
@@ -650,7 +655,8 @@ export const FirebaseProvider = (props) => {
                 multipliers: {
                     costMultiplier: costMultiplier,
                     cpmMultiplier: cpmMultiplier
-                }
+                },
+                tasks
             });
             if (response.data.status === 'success') {
                 await fetchPathners();
@@ -666,7 +672,7 @@ export const FirebaseProvider = (props) => {
         }
     };
 
-    const updatePatner = async (data, id) => {
+    const updatePatner = async (data, tasks, id) => {
         setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel, 10);
         const baseCost = parseFloat(data.baseCost, 10);
@@ -697,7 +703,8 @@ export const FirebaseProvider = (props) => {
                 multipliers: {
                     costMultiplier: costMultiplier,
                     cpmMultiplier: cpmMultiplier
-                }
+                },
+                tasks
             });
             if (response.data.status === 'success') {
                 await fetchPathners();
@@ -753,7 +760,7 @@ export const FirebaseProvider = (props) => {
         }
     }
 
-    const createVc = async (data) => {
+    const createVc = async (data, tasks) => {
         setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel, 10);
         const baseCost = parseFloat(data.baseCost, 10);
@@ -783,7 +790,8 @@ export const FirebaseProvider = (props) => {
                 multipliers: {
                     costMultiplier: costMultiplier,
                     cpmMultiplier: cpmMultiplier
-                }
+                },
+                tasks
             });
             if (response.data.status === 'success') {
                 await fetchVcs();
@@ -799,7 +807,7 @@ export const FirebaseProvider = (props) => {
         }
     };
 
-    const updateVc = async (data, id) => {
+    const updateVc = async (data, tasks, id) => {
         setButtonLoading(true);
         const numberOfLevel = parseFloat(data.numberOfLevel, 10);
         const baseCost = parseFloat(data.baseCost, 10);
@@ -830,7 +838,8 @@ export const FirebaseProvider = (props) => {
                 multipliers: {
                     costMultiplier: costMultiplier,
                     cpmMultiplier: cpmMultiplier
-                }
+                },
+                tasks
             });
             if (response.data.status === 'success') {
                 await fetchVcs();

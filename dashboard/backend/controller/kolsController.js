@@ -34,7 +34,7 @@ exports.fetchKols = async (req, res) => {
 
 exports.addKols = async (req, res) => {
     try {
-        const { name, icon, logo, fromColor, toColor, numberOfLevel, baseValues, multipliers } = req.body;
+        const { name, icon, logo, fromColor, toColor, numberOfLevel, baseValues, multipliers, tasks } = req.body;
 
         if (
             !name || !icon || !icon.name || !icon.data || !icon.contentType || !logo || !logo.name || !logo.data || !logo.contentType ||
@@ -123,7 +123,8 @@ exports.addKols = async (req, res) => {
             multipliers: {
                 costMultiplier: costMultiplier,
                 cpmMultiplier: cpmMultiplier
-            }
+            },
+            tasks: tasks
         });
 
         await newKol.save();
@@ -147,6 +148,7 @@ exports.addKols = async (req, res) => {
                     contentType: newKol.logo.contentType,
                 },
                 levels,
+                tasks
             },
         });
     } catch (error) {
@@ -160,7 +162,7 @@ exports.addKols = async (req, res) => {
 
 exports.updateKols = async (req, res) => {
     try {
-        const { kolId, name, icon, logo, fromColor, toColor, numberOfLevel, baseValues, multipliers } = req.body;
+        const { kolId, name, icon, logo, fromColor, toColor, numberOfLevel, baseValues, multipliers, tasks } = req.body;
 
         if (
             !name || !icon || !icon.name || !icon.data || !icon.contentType || !logo || !logo.name || !logo.data || !logo.contentType ||
@@ -266,6 +268,7 @@ exports.updateKols = async (req, res) => {
             rewardMultiplier: rewardMultiplier,
             cpmMultiplier: cpmMultiplier,
         };
+        kol.tasks = tasks;
 
         await kol.save();
 
@@ -288,6 +291,7 @@ exports.updateKols = async (req, res) => {
                     contentType: kol.logo.contentType,
                 },
                 levels: kol.levels,
+                tasks: tasks
             },
         });
     } catch (error) {

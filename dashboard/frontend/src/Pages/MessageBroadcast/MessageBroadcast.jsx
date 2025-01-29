@@ -42,7 +42,6 @@ const BroadcastMessageForm = () => {
             }, 3000);
             return;
         }
-
         setLoading(true);
         try {
             const formData = new FormData();

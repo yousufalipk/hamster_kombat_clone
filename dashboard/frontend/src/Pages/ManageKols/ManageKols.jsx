@@ -39,7 +39,8 @@ const ManageKols = () => {
             baseCost: kol.baseValues.baseCost,
             baseCpm: kol.baseValues.baseCpm,
             costMultiplier: kol.multipliers.costMultiplier,
-            cpmMultiplier: kol.multipliers.cpmMultiplier
+            cpmMultiplier: kol.multipliers.cpmMultiplier,
+            tasks: kol.tasks
         });
         setTimeout(() => {
             navigate(`/kols-form`)
@@ -104,7 +105,6 @@ const ManageKols = () => {
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Icon</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Logo</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Max Level</th>
-                            <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Combo Card</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Delete</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Update</th>
                             <th className='px-3 py-3 border-b-2 border-gray-300 text-sm text-center' scope="col">Manage Levels</th>
@@ -146,12 +146,6 @@ const ManageKols = () => {
                                             </td>
                                             <td className='px-6 py-4 border-b border-gray-200 text-center'>
                                                 {cls.levels.length}
-                                            </td>
-                                            <td
-                                                className={`px-6 py-4 border-b border-gray-200 text-center ${cls.card ? 'text-green-500' : 'text-red-500'
-                                                    }`}
-                                            >
-                                                {cls.card ? 'Enabled' : 'Disabled'}
                                             </td>
                                             <td className='px-6 py-4 border-b border-gray-200 text-sm text-center'>
                                                 <button

@@ -34,7 +34,7 @@ exports.fetchPatners = async (req, res) => {
 
 exports.addPatner = async (req, res) => {
     try {
-        const { name, icon, logo, fromColor, toColor, numberOfLevel, baseValues, multipliers } = req.body;
+        const { name, icon, logo, fromColor, toColor, numberOfLevel, baseValues, multipliers, tasks } = req.body;
 
         if (
             !name || !icon || !icon.name || !icon.data || !icon.contentType || !logo || !logo.name || !logo.data || !logo.contentType ||
@@ -123,7 +123,8 @@ exports.addPatner = async (req, res) => {
             multipliers: {
                 costMultiplier: costMultiplier,
                 cpmMultiplier: cpmMultiplier
-            }
+            },
+            tasks: tasks
         });
 
         await newPatner.save();
@@ -147,6 +148,7 @@ exports.addPatner = async (req, res) => {
                     contentType: newPatner.logo.contentType,
                 },
                 levels,
+                tasks
             },
         });
     } catch (error) {
@@ -160,7 +162,7 @@ exports.addPatner = async (req, res) => {
 
 exports.updatePatner = async (req, res) => {
     try {
-        const { patnerId, name, icon, logo, fromColor, toColor, numberOfLevel, baseValues, multipliers } = req.body;
+        const { patnerId, name, icon, logo, fromColor, toColor, numberOfLevel, baseValues, multipliers, tasks } = req.body;
 
         if (
             !name || !icon || !icon.name || !icon.data || !icon.contentType || !logo || !logo.name || !logo.data || !logo.contentType ||
@@ -265,6 +267,7 @@ exports.updatePatner = async (req, res) => {
             rewardMultiplier: rewardMultiplier,
             cpmMultiplier: cpmMultiplier,
         };
+        patner.tasks = tasks;
 
         await patner.save();
 
@@ -287,6 +290,7 @@ exports.updatePatner = async (req, res) => {
                     contentType: patner.logo.contentType,
                 },
                 levels: patner.levels,
+                tasks: patner.tasks
             },
         });
     } catch (error) {

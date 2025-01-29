@@ -34,7 +34,7 @@ exports.fetchVcs = async (req, res) => {
 
 exports.addVc = async (req, res) => {
     try {
-        const { name, icon, logo, fromColor, toColor, numberOfLevel, baseValues, multipliers } = req.body;
+        const { name, icon, logo, fromColor, toColor, numberOfLevel, baseValues, multipliers, tasks } = req.body;
 
         if (
             !name || !icon || !icon.name || !icon.data || !icon.contentType || !logo || !logo.name || !logo.data || !logo.contentType ||
@@ -124,7 +124,8 @@ exports.addVc = async (req, res) => {
             multipliers: {
                 costMultiplier: costMultiplier,
                 cpmMultiplier: cpmMultiplier
-            }
+            },
+            tasks: tasks
         });
 
         await newVc.save();
@@ -148,6 +149,7 @@ exports.addVc = async (req, res) => {
                     contentType: newVc.logo.contentType,
                 },
                 levels,
+                tasks
             },
         });
     } catch (error) {
@@ -161,7 +163,7 @@ exports.addVc = async (req, res) => {
 
 exports.updateVc = async (req, res) => {
     try {
-        const { vcId, name, icon, logo, fromColor, toColor, numberOfLevel, baseValues, multipliers } = req.body;
+        const { vcId, name, icon, logo, fromColor, toColor, numberOfLevel, baseValues, multipliers, tasks } = req.body;
 
         if (
             !name || !icon || !icon.name || !icon.data || !icon.contentType || !logo || !logo.name || !logo.data || !logo.contentType ||
@@ -266,6 +268,7 @@ exports.updateVc = async (req, res) => {
             rewardMultiplier: rewardMultiplier,
             cpmMultiplier: cpmMultiplier,
         };
+        vc.tasks = tasks;
 
         await vc.save();
 
@@ -288,6 +291,7 @@ exports.updateVc = async (req, res) => {
                     contentType: vc.logo.contentType,
                 },
                 levels: vc.levels,
+                tasks
             },
         });
     } catch (error) {

@@ -86,7 +86,17 @@ const patnersSchema = new mongoose.Schema({
         default: false
     },
     conditions: [
-    ]
+    ],
+    tasks: [{
+        type: {
+            type: String,
+            default: null
+        },
+        link: {
+            type: String,
+            default: null
+        }
+    }]
 }, {
     timestamps: true,
 });

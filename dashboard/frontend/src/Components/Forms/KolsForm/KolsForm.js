@@ -14,6 +14,24 @@ const KolsForm = () => {
     const [selectedIconName, setSelectedIconName] = useState(sendData?.icon?.name || 'No file chosen');
     const [selectedLogoName, setSelectedLogoName] = useState(sendData?.logo?.name || 'No file chosen');
 
+    const [tasks, setTasks] = useState(sendData.tasks || []);
+
+    const handleAddTask = () => {
+        setTasks([...tasks, { type: 'twitter', link: '' }]);
+    };
+
+    const handleRemoveTask = (index) => {
+        const newTasks = tasks.filter((_, i) => i !== index);
+        setTasks(newTasks);
+    };
+
+    const handleTaskChange = (e, index) => {
+        const newTasks = tasks.slice();
+        newTasks[index][e.target.name] = e.target.value;
+        setTasks(newTasks);
+    };
+
+
     // Formik Setup
     const formik = useFormik({
         initialValues: {
@@ -60,7 +78,7 @@ const KolsForm = () => {
         onSubmit: async (values) => {
             try {
                 if (sendData.tick === 'update') {
-                    const res = await updateKol(values, sendData.id);
+                    const res = await updateKol(values, tasks, sendData.id);
                     if (res.success) {
                         toast.success(res.mess);
                         navigate('/manage-kols');
@@ -69,7 +87,7 @@ const KolsForm = () => {
                         navigate('/manage-kols');
                     }
                 } else {
-                    const res = await createKol(values);
+                    const res = await createKol(values, tasks);
                     if (res.success) {
                         toast.success(res.mess);
                         navigate('/manage-kols');
@@ -82,7 +100,8 @@ const KolsForm = () => {
                 if (sendData.tick === 'update') {
                     toast.error('Failed to update project.');
                 } else {
-                    toast.error('Failed to create project.');
+                    console.log('Error', error);
+                    toast.error('Failed to create project s.');
                 }
             }
         },
@@ -497,6 +516,60 @@ const KolsForm = () => {
                         </div>
                     </div>
                 </div>
+
+                <div className="mb-4">
+                    <label className="block text-lg font-medium">Social Tasks</label>
+                    {tasks ? (
+                        <div>
+                            {tasks.map((task, index) => (
+                                <div key={index} className="flex mb-4 items-center">
+                                    <div className="mr-4">
+                                        <select
+                                            name="type"
+                                            value={task.type}
+                                            onChange={(e) => handleTaskChange(e, index)}
+                                            className="p-3 border border-gray-300 rounded-md text-white bg-transparent"
+                                            required
+                                        >
+                                            <option value="twitter" className="bg-transparent text-gray-600">Twitter</option>
+                                            <option value="telegram" className="bg-transparent text-gray-600">Telegram</option>
+                                        </select>
+                                    </div>
+                                    <div className="mr-4">
+                                        <input
+                                            type="url"
+                                            name="link"
+                                            value={task.link}
+                                            onChange={(e) => handleTaskChange(e, index)}
+                                            placeholder="Link"
+                                            className="p-3 border border-gray-300 rounded-md text-white bg-transparent"
+                                            required
+                                        />
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveTask(index)}
+                                        className="text-red-500"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div>
+
+                        </div>
+                    )}
+                    <button
+                        type="button"
+                        onClick={handleAddTask}
+                        className="px-4 py-2 bg-green-500 text-white rounded-md"
+                    >
+                        Add Task
+                    </button>
+                </div>
+
             </form>
         </div>
     );
