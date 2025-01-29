@@ -96,7 +96,7 @@ const Wallet = () => {
 
 			const response = await axios.post(`${apiUrl}/exchange/generate-invoice-link`, {
 				userId,
-				amount: starValue
+				amount: parsedStarValue
 			});
 
 			const { status, invoiceId, invoiceLink, message } = response.data;
@@ -147,7 +147,6 @@ const Wallet = () => {
 			const tonAmount = tonPrice ?? tonValue;
 
 			const parsedTonValue = parseFloat(tonAmount);
-			console.log('tonVlaue 11', parsedTonValue);
 
 			if (isNaN(parsedTonValue) || parsedTonValue <= 0) {
 				triggerToast('Please enter a valid TON value greater than 0.', 'error');
