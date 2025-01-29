@@ -1258,7 +1258,6 @@ exports.fetchUserTasks = async (req, res) => {
     }
 };
 
-
 exports.fetchUserKols = async (req, res) => {
     try {
         const { userId } = req.body;
@@ -1271,7 +1270,7 @@ exports.fetchUserKols = async (req, res) => {
             });
         }
 
-        const kols = await KolModel.find({}, '_id name fromColor toColor tgeDate icon logo levels').lean();
+        const kols = await KolModel.find({}, '_id name fromColor toColor tgeDate icon logo levels tasks').lean();
 
         const response = kols.map(kol => {
             const userKol = user.kols.find(up => up._id && up._id.equals(kol._id));
@@ -1285,7 +1284,6 @@ exports.fetchUserKols = async (req, res) => {
             const levelCost = kol.levels[customIndex]?.cost || 'max';
             const levelCpm = kol.levels[customIndex]?.cpm || 'max';
 
-
             const enrichedProject = {
                 ...kol,
                 userData: userKol ? {
@@ -1293,6 +1291,7 @@ exports.fetchUserKols = async (req, res) => {
                     nextLevelCost: levelCost,
                     nextLevelCpm: levelCpm
                 } : null,
+                socialTasksCompleted: !!userKol?.socialTasksCompleted
             };
             return enrichedProject;
         });
@@ -1421,10 +1420,12 @@ exports.upgradeUserKolLevel = async (req, res) => {
 
         if (userKol) {
             userKol.level = userKol.level + 1;
+            userKol.socialTasksCompleted = true
         } else {
             const kolData = {
                 _id: kolId,
-                level: 0
+                level: 0,
+                socialTasksCompleted: true
             }
             user.kols.push(kolData);
         }
@@ -1533,7 +1534,7 @@ exports.fetchUserVcs = async (req, res) => {
             });
         }
 
-        const vcs = await VcModel.find({}, '_id name fromColor toColor tgeDate icon logo levels').lean();
+        const vcs = await VcModel.find({}, '_id name fromColor toColor tgeDate icon logo levels tasks').lean();
 
         const response = vcs.map(vc => {
             const userVc = user.vcs.find(up => up._id && up._id.equals(vc._id));
@@ -1630,10 +1631,12 @@ exports.upgradeUserVcLevel = async (req, res) => {
 
         if (userVc) {
             userVc.level = userVc.level + 1;
+            userVc.socialTasksCompleted = true;
         } else {
             const vcData = {
                 _id: vcId,
-                level: 0
+                level: 0,
+                socialTasksCompleted: true
             }
             user.vcs.push(vcData);
         }
@@ -1743,7 +1746,7 @@ exports.fetchUserPatners = async (req, res) => {
             });
         }
 
-        const patners = await PatnerModel.find({}, '_id name fromColor toColor tgeDate icon logo levels').lean();
+        const patners = await PatnerModel.find({}, '_id name fromColor toColor tgeDate icon logo levels tasks').lean();
 
         const response = patners.map(patner => {
             const userPatner = user.patners.find(up => up._id && up._id.equals(patner._id));
@@ -1840,10 +1843,12 @@ exports.upgradeUserPatnerLevel = async (req, res) => {
 
         if (userPatner) {
             userPatner.level = userPatner.level + 1;
+            userPatner.socialTasksCompleted = true;
         } else {
             const patnerData = {
                 _id: patnerId,
-                level: 0
+                level: 0,
+                socialTasksCompleted: true
             }
             user.patners.push(patnerData);
         }

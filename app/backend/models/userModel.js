@@ -176,6 +176,10 @@ const userSchema = new mongoose.Schema({
         level: {
             type: Number,
             default: null
+        },
+        socialTasksCompleted: {
+            type: Boolean,
+            default: false
         }
     }],
     vcs: [{
@@ -186,6 +190,10 @@ const userSchema = new mongoose.Schema({
         level: {
             type: Number,
             default: null
+        },
+        socialTasksCompleted: {
+            type: Boolean,
+            default: false
         }
     }],
     patners: [{
@@ -196,6 +204,10 @@ const userSchema = new mongoose.Schema({
         level: {
             type: Number,
             default: null
+        },
+        socialTasksCompleted: {
+            type: Boolean,
+            default: false
         }
     }],
     comboCards: [{
