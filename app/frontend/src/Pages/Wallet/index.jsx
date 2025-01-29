@@ -37,16 +37,16 @@ const Wallet = () => {
 
 	const starsPackages = [
 		{
-			price: 200
+			price: 1
 		},
 		{
-			price: 400
+			price: 2
 		},
 		{
-			price: 600
+			price: 3
 		},
 		{
-			price: 800
+			price: 4
 		},
 	]
 
