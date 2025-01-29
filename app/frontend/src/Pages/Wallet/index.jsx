@@ -7,12 +7,13 @@ import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import WithdrawIcon from '../../assets/wallet/withdraw.svg';
 import CommingSoon from '../../assets/root/comingSoon.svg';
 import RectangleBg from '../../assets/wallet_Rectangle.svg';
-import RectangleBg2 from '../../assets/walletRectangeBg2.svg';
+import WalletCard from '../../Components/WalletCard/WalletCard';
 import RightPopupEllipse from '../../assets/walletEllipse.svg';
 import PoupHorizontalLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
 
 import { useTonConnectUI, TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
 import axios from "axios";
+import { use } from "react";
 
 const Wallet = () => {
 
@@ -80,11 +81,14 @@ const Wallet = () => {
 	const [tonPrice, setTonPrice] = useState(null);
 
 	// Buy PTAP with stars
-	const handleStarSubmit = async (e) => {
+	const handleStarSubmit = async (e, starPrice) => {
 		try {
+
 			e.preventDefault();
 
-			const parsedStarValue = parseFloat(starValue);
+			const starAmount = starPrice ?? starValue;
+
+			const parsedStarValue = parseFloat(starAmount);
 			if (isNaN(parsedStarValue) || parsedStarValue <= 0) {
 				triggerToast('Star value must be a number greater than 0.', 'error');
 				return;
@@ -130,16 +134,21 @@ const Wallet = () => {
 			console.error('Internal Server Error:', error);
 			triggerToast('An error occurred while processing your transaction.', 'error');
 		} finally {
-			// setStarValue('');
+			setStarValue('');
 		}
 	};
 
 	// Buy PTAP with ton
-	const handleTonSubmit = async (e) => {
+	const handleTonSubmit = async (e, tonPrice) => {
 		try {
+
 			e.preventDefault();
 
-			const parsedTonValue = parseFloat(tonValue);
+			const tonAmount = tonPrice ?? tonValue;
+
+			const parsedTonValue = parseFloat(tonAmount);
+			console.log('tonVlaue 11', parsedTonValue);
+
 			if (isNaN(parsedTonValue) || parsedTonValue <= 0) {
 				triggerToast('Please enter a valid TON value greater than 0.', 'error');
 				return;
@@ -181,6 +190,7 @@ const Wallet = () => {
 				});
 
 				if (response.data.status === 'success') {
+					setTonValue('');
 					triggerToast('Transaction Succesfull!', 'success');
 					setBalance(response.data.newBalance);
 				}
@@ -276,7 +286,7 @@ const Wallet = () => {
 
 	return (
 		<>
-			<div className="w-full h-[86vh] flex flex-col justify-start items-center gap-2 relative p-2 py-5 overflow-hidden">
+			<div className="w-full h-[94vh] flex flex-col justify-start items-center gap-2 relative p-2 pt-5 overflow-hidden">
 				<img src={RightPopupEllipse} alt="ellispse" className="absolute -top-5 -right-5" />
 				<div
 					style={{ backgroundImage: `url(${RectangleBg})` }}
@@ -318,7 +328,6 @@ const Wallet = () => {
 					</div>
 				</div>
 
-				{/*
 				<div className="relative w-full h-[26vh] border border-gray-700 rounded-md text-white">
 					<div className="w-full h-full absolute z-20 p-2">
 						<h1 className="w-full h-[15%] text-[#6D6D6D] text-[12px]">Balance</h1>
@@ -358,24 +367,20 @@ const Wallet = () => {
 						</div>
 					</div>
 				</div>
-				*/}
 
 				<div
-					style={{
-						backgroundImage: `url(${RectangleBg2})`,
-						backgroundSize: 'contain',
-						backgroundRepeat: 'no-repeat',
-						backgroundPosition: 'center',
-					}}
-					className="relative w-full h-[38vh] overflow-hidden bg-center"
+					className="relative w-full h-[52vh]"
 				>
-					<div className="w-full h-full absolute z-10 px-5 flex flex-col items-center justify-start">
-						<div className="w-full h-[5.5vh] flex justify-center items-end text-white">
+					<div className="absolute z-10 w-full h-full">
+						<WalletCard />
+					</div>
+					<div className="absolute z-20 w-full h-full px-5 flex flex-col items-center justify-start gap-2">
+						<div className="w-full h-[5.5vh] flex justify-center items-end text-white" >
 							<button
 								onClick={() => {
 									setCard('star');
 								}}
-								className={`w-1/2 h-[5vh] ${card === 'star' && 'custom-orange-border'}`}
+								className={`w-1/2 h-[5vh] ${card === 'star' ? 'custom-orange-border' : 'custom-grayBottom-border'}`}
 							>
 								STAR
 							</button>
@@ -383,14 +388,14 @@ const Wallet = () => {
 								onClick={() => {
 									setCard('crypto')
 								}}
-								className={`w-1/2 h-[5vh] ${card === 'crypto' && 'custom-orange-border'}`}
+								className={`w-1/2 h-[5vh] ${card === 'crypto' ? 'custom-orange-border' : 'custom-grayBottom-border'}`}
 							>
 								CRYPTO
 							</button>
 						</div>
 						<div className="w-full h-[80%] text-white">
 							{card === 'star' ? (
-								<div className="w-full h-full flex flex-col justify-start items-center py-1 px-3">
+								<div className="w-full h-full flex flex-col justify-start items-center py-1 gap-1 px-3">
 									<form onSubmit={handleStarSubmit} className="w-full h-[12vh] flex flex-col justify-center items-center gap-2">
 										<div className="relative w-full h-[2.1rem] rounded-md border-gradient-gray">
 											<input
@@ -424,28 +429,27 @@ const Wallet = () => {
 											)}
 										</button>
 									</form>
-									<div className="w-full h-[2.5vh] flex justify-center items-center gap-1 text-center text-[#727272] text-[12px] mt-1">
+									<div className="w-full h-[2vh] flex justify-center items-center gap-1 text-center text-[#727272] text-[12px]">
 										200
 										<img src={StarCoin} alt="starcoin" />
 										= 2$
 									</div>
-									<div className="w-full h-[2.5vh] flex justify-center items-center text-center text-white text-[12px]">
+									<div className="w-full h-[2vh] flex justify-center items-center text-center text-white text-[12px]">
 										<img src={PoupHorizontalLine} alt="horizontal_ling" className="w-[40vw]" />
 										<h1>
 											or
 										</h1>
 										<img src={PoupHorizontalLine} alt="horizontal_ling" className="w-[40vw]" />
 									</div>
-									<div className="w-full h-full flex flex-col justify-center items-center gap-2">
+									<div className="w-full h-full flex flex-col justify-start items-center gap-2">
 										{starsPackages.map((pack, index) => {
 											return (
 												<div
 													onClick={(e) => {
-														setStarValue(pack.price);
-														handleStarSubmit(e);
+														handleStarSubmit(e, pack.price);
 													}}
 													key={index}
-													className="w-full h-[3vh] bg-[#32324D] rounded-sm flex justify-between items-center px-2 text-[12px] font-thin custom-button"
+													className="w-full h-[4vh] bg-[#32324D] rounded-sm flex justify-between items-center px-2 text-[12px] font-thin custom-button"
 												>
 													<div className="w-[25%] h-full flex justify-start items-center gap-1">
 														{pack.price * Ptap_Per_Star}
@@ -461,7 +465,7 @@ const Wallet = () => {
 									</div>
 								</div>
 							) : (
-								<div className="w-full h-full flex flex-col justify-start items-center py-1 px-3">
+								<div className="w-full h-full flex flex-col justify-start items-center py-1 gap-1 px-3">
 									<form onSubmit={handleTonSubmit} className="w-full h-[12vh] flex flex-col justify-center items-center gap-2">
 										<div className="relative w-full h-[2.1rem] rounded-md border-gradient-gray">
 											<input
@@ -495,28 +499,27 @@ const Wallet = () => {
 											)}
 										</button>
 									</form>
-									<div className="w-full h-[2.5vh] flex justify-center items-center gap-1 text-center text-[#727272] text-[12px] mt-1">
+									<div className="w-full h-[2vh] flex justify-center items-center gap-1 text-center text-[#727272] text-[12px]">
 										200
-										<img src={TonCoin} alt="tonCoin" />
-										= {tonPrice || 0}$
+										<img src={TonCoin} alt="starcoin" />
+										= 2$
 									</div>
-									<div className="w-full h-[2.5vh] flex justify-center items-center text-center text-white text-[12px]">
+									<div className="w-full h-[2vh] flex justify-center items-center text-center text-white text-[12px]">
 										<img src={PoupHorizontalLine} alt="horizontal_ling" className="w-[40vw]" />
 										<h1>
 											or
 										</h1>
 										<img src={PoupHorizontalLine} alt="horizontal_ling" className="w-[40vw]" />
 									</div>
-									<div className="w-full h-full flex flex-col justify-center items-center gap-2">
+									<div className="w-full h-full flex flex-col justify-start items-center gap-2">
 										{tonPackages.map((pack, index) => {
 											return (
 												<div
 													onClick={(e) => {
-														setTonValue(pack.price);
-														handleTonSubmit(e);
+														handleTonSubmit(e, pack.price);
 													}}
 													key={index}
-													className="relative w-full h-[3vh] bg-[#32324D] rounded-sm flex justify-between items-center px-2 text-[12px] font-thin custom-button"
+													className="w-full h-[4vh] bg-[#32324D] rounded-sm flex justify-between items-center px-2 text-[12px] font-thin custom-button"
 												>
 													<div className="w-[25%] h-full flex justify-start items-center gap-1">
 														{pack.price * Ptap_Per_Ton}

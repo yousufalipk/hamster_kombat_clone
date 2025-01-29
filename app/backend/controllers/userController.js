@@ -115,6 +115,8 @@ exports.initializeUser = async (req, res) => {
 
         const { telegramId, firstName, lastName, username, referrerId, isPremium } = req.body;
 
+        58101156565
+
         let isUser = await UserModel.findOne({ telegramId });
 
         const currentDate = new Date();
@@ -171,6 +173,8 @@ exports.initializeUser = async (req, res) => {
                 await refRes.save();
             }
         }
+
+
         if (!isUser) {
             isUser = new UserModel({
                 telegramId,
@@ -2025,53 +2029,6 @@ exports.claimInviteFriendsReward = async (req, res) => {
     }
 }
 
-/*
-exports.updateWalletAddress = async (req, res) => {
-    try {
-        const { userId, walletAddress } = req.body;
-
-        if (!userId) {
-            return res.status(400).json({
-                status: 'failed',
-                message: 'User ID and Wallet Address are required!'
-            });
-        }
-
-        const user = await UserModel.findById(userId);
-
-        if (!user) {
-            return res.status(404).json({
-                status: 'failed',
-                message: 'User not found!'
-            });
-        }
-
-        if (user.walletAddress) {
-            user.walletAddress = walletAddress ? walletAddress : null;
-            await user.save();
-            return res.status(200).json({
-                status: 'success',
-                message: 'Wallet Connected successfully!'
-            });
-        } else {
-            user.walletAddress = walletAddress;
-            await user.save();
-            return res.status(200).json({
-                status: 'success',
-                message: 'Wallet Connected successfully!',
-                walletAddress: user.walletAddress
-            });
-        }
-    } catch (error) {
-        console.error('Internal Server Error:', error);
-        return res.status(500).json({
-            status: 'failed',
-            message: 'Internal Server Error!'
-        });
-    }
-};
-*/
-
 exports.getServerTimeStamp = async (req, res) => {
     try {
         const timestamp = Date.now();
@@ -2395,6 +2352,43 @@ exports.getWalletBalance = async (req, res) => {
     }
 }
 
+exports.equipSkin = async (req, res) => {
+    try {
+        const { userId, requestedSkinLevel } = req.body;
+
+        const user = await UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'User not found!'
+            })
+        }
+
+        if (requestedSkinLevel > user.level) {
+            return res.status(200).json({
+                status: 'failed',
+                message: 'Level locked!'
+            })
+        }
+
+        user.equippedSkin = requestedSkinLevel;
+
+        await user.save();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Skin equipped succesfully!',
+            equippedSkin: user.equippedSkin
+        })
+
+    } catch (error) {
+        return res.status(200).json({
+            status: 'failed',
+            message: 'Internal Server Error'
+        })
+    }
+}
 
 /*
 const downloadImage = async (url, filePath) => {

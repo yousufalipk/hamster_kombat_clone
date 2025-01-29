@@ -133,7 +133,7 @@ html {
     left: 50%;
     transform: translateX(-50%);
     width: 80%;
-    height: 1.1px;
+    height: 0.8px;
     background: linear-gradient(to right, #3b4c5a, rgb(252, 252, 252), #3b4c5a);
   }
 
@@ -144,7 +144,7 @@ html {
     left: 50%;
     transform: translateX(-50%);
     width: 80%;
-    height: 1.1px;
+    height: 0.8px;
     background: linear-gradient(to right, #3b4c5a, rgb(251, 250, 250), #3b4c5a);
   }
 
@@ -261,6 +261,20 @@ html {
   width: 100%;
   height: 2px;
   background: linear-gradient(to right, transparent, #DB6704 45%, transparent);
+}
+
+.custom-grayBottom-border {
+  position: relative;
+}
+
+.custom-grayBottom-border::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #525252 45%, transparent);
 }
 
 .custom-gray-border {

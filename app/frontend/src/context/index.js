@@ -38,6 +38,7 @@ export const UserProvider = (props) => {
     const [remaningTime, setRemaningTime] = useState(null);
     const [walletAddress, setWalletAddress] = useState(null);
     const [projectBalance, setProjectsBalance] = useState(null);
+    const [equippedSkin, setEquippedSkin] = useState(null);
 
     // 4 Boosters 
     const [disableEnergy, setDisableEnergy] = useState(false);
@@ -450,6 +451,7 @@ export const UserProvider = (props) => {
             setEnergyLimit(user.energy.limit);
             setMultitapLevel(user.multitaps.level);
             setLevelPercentage(percentage);
+            setEquippedSkin(user.equippedSkin || null);
             setMainLoader(false);
             navigate('/');
         } catch (error) {
