@@ -241,7 +241,7 @@ const Partners = () => {
 								>
 									{/* Cards Container */}
 									<motion.div
-										className="relative flex justify-center items-center w-[90%] max-w-3xl  z-50"
+										className="relative flex justify-center items-center w-[90%] max-w-3xl  z-50 gap-2"
 										initial={{ opacity: 0 }}
 										animate={{ opacity: 1 }}
 										exit={{ opacity: 0 }}
@@ -258,55 +258,66 @@ const Partners = () => {
 												delay: 0.5,
 											}}
 										>
-											{/* Wiggle Animation */}
+											{/* Post Wiggle Animation */}
 											<motion.div
 												animate={{
-													rotate: [0, 10, -10, 0],
+													rotate: [0, 2, -2, 0],
 												}}
 												transition={{
 													duration: 2,
-													delay: 4,
+													delay: 8,
 													ease: "easeInOut",
 												}}
 											>
-												{/* Move Up and Exit */}
+												{/* Wiggle Animation */}
 												<motion.div
 													animate={{
-														y: [0, "-250%"],
-														opacity: [1, 0],
+														rotate: [0, 10, -10, 0],
 													}}
 													transition={{
-														duration: 1,
-														delay: 6.5,
-														ease: "easeIn",
+														duration: 2,
+														delay: 4,
+														ease: "easeInOut",
 													}}
-													style={{
-														background: `linear-gradient(to bottom, ${comboCards[0]?.fromColor}, ${comboCards[0]?.toColor})`
-													}}
-													className="w-24 h-32 rounded-md flex justify-center items-center"
 												>
-													<div className="w-full h-full absolute z-20 flex flex-col justify-center items-center gap-2">
-														<img
-															className="w-[50px] h-[50px] rounded-full"
-															src={comboCards[0].icon}
-															alt="BigCoin-Icon"
-														/>
-														<h1 className="text-center w-full">
-															{comboCards[0].name}
-														</h1>
-													</div>
-													<div className="relative w-full h-full overflow-hidden z-10 flex justify-center items-center">
-														<img
-															src={cardbg}
-															alt=""
-															className="opacity-10 w-[180px] h-[180px]"
-														/>
-														<div className=" flex items-center justify-center absolute">
-															<p className="font-italianno text-[3rem]   text-slate-100 opacity-10">
-																{comboCards[0].name.charAt(0)}
-															</p>
+													{/* Move Up and Exit */}
+													<motion.div
+														animate={{
+															y: [0, "-240%"]
+														}}
+														transition={{
+															duration: 1,
+															delay: 6.5,
+															ease: "easeIn",
+														}}
+														style={{
+															background: `linear-gradient(to bottom, ${comboCards[0]?.fromColor}, ${comboCards[0]?.toColor})`
+														}}
+														className="w-24 h-32 rounded-md flex justify-center items-center"
+													>
+														<div className="w-full h-full absolute z-20 flex flex-col justify-center items-center gap-2">
+															<img
+																className="w-[50px] h-[50px] rounded-full"
+																src={comboCards[0].icon}
+																alt="BigCoin-Icon"
+															/>
+															<h1 className="text-center w-full">
+																{comboCards[0].name}
+															</h1>
 														</div>
-													</div>
+														<div className="relative w-full h-full overflow-hidden z-10 flex justify-center items-center">
+															<img
+																src={cardbg}
+																alt=""
+																className="opacity-10 w-[180px] h-[180px]"
+															/>
+															<div className=" flex items-center justify-center absolute">
+																<p className="font-italianno text-[3rem]   text-slate-100 opacity-10">
+																	{comboCards[0].name.charAt(0)}
+																</p>
+															</div>
+														</div>
+													</motion.div>
 												</motion.div>
 											</motion.div>
 										</motion.div>
@@ -321,55 +332,67 @@ const Partners = () => {
 												delay: 0.5,
 											}}
 										>
-											{/* Wiggle Animation */}
+											{/* Post Wiggle Animation */}
 											<motion.div
 												animate={{
-													rotate: [0, -10, 10, 0],
+													rotate: [0, -2, 2, 0],
 												}}
 												transition={{
 													duration: 2,
-													delay: 4,
+													delay: 8,
 													ease: "easeInOut",
 												}}
 											>
-												{/* Move Up */}
+												{/* Wiggle Animation */}
 												<motion.div
 													animate={{
-														y: [0, "-250%"],
-														opacity: [1, 0],
+														rotate: [0, -10, 10, 0],
 													}}
 													transition={{
-														duration: 1,
-														delay: 6.5,
-														ease: "easeIn",
+														duration: 2,
+														delay: 4,
+														ease: "easeInOut",
 													}}
-													style={{
-														background: `linear-gradient(to bottom, ${comboCards[1]?.fromColor}, ${comboCards[1]?.toColor})`
-													}}
-													className="w-24 h-32 rounded-md flex justify-center items-center"
 												>
-													<div className="w-full h-full absolute z-20 flex flex-col justify-center items-center gap-2">
-														<img
-															className="w-[50px] h-[50px] rounded-full"
-															src={comboCards[1].icon}
-															alt="BigCoin-Icon"
-														/>
-														<h1 className="text-center w-full">
-															{comboCards[1].name}
-														</h1>
-													</div>
-													<div className="relative w-full h-full overflow-hidden z-10 flex justify-center items-center">
-														<img
-															src={cardbg}
-															alt=""
-															className="opacity-10 w-[180px] h-[180px]"
-														/>
-														<div className=" flex items-center justify-center absolute">
-															<p className="font-italianno text-[3rem]   text-slate-100 opacity-10">
-																{comboCards[1].name.charAt(0)}
-															</p>
+													{/* Move Up */}
+													<motion.div
+														animate={{
+															y: [0, "-240%"],
+															//opacity: [1, 0],
+														}}
+														transition={{
+															duration: 1,
+															delay: 6.5,
+															ease: "easeIn",
+														}}
+														style={{
+															background: `linear-gradient(to bottom, ${comboCards[1]?.fromColor}, ${comboCards[1]?.toColor})`
+														}}
+														className="w-24 h-32 rounded-md flex justify-center items-center"
+													>
+														<div className="w-full h-full absolute z-20 flex flex-col justify-center items-center gap-2">
+															<img
+																className="w-[50px] h-[50px] rounded-full"
+																src={comboCards[1].icon}
+																alt="BigCoin-Icon"
+															/>
+															<h1 className="text-center w-full">
+																{comboCards[1].name}
+															</h1>
 														</div>
-													</div>
+														<div className="relative w-full h-full overflow-hidden z-10 flex justify-center items-center">
+															<img
+																src={cardbg}
+																alt=""
+																className="opacity-10 w-[180px] h-[180px]"
+															/>
+															<div className=" flex items-center justify-center absolute">
+																<p className="font-italianno text-[3rem]   text-slate-100 opacity-10">
+																	{comboCards[1].name.charAt(0)}
+																</p>
+															</div>
+														</div>
+													</motion.div>
 												</motion.div>
 											</motion.div>
 										</motion.div>
@@ -450,7 +473,7 @@ const Partners = () => {
 												ease: "easeIn",
 											}}
 										>
-											<img src={SparkelAnimation} alt="Sparkles" width={300} />
+											<img src={SparkelAnimation} alt="Sparkles" width={800} />
 										</motion.div>
 									</motion.div>
 								</motion.div>

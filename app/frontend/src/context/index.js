@@ -640,12 +640,12 @@ export const UserProvider = (props) => {
                     setTimeout(() => {
                         setComboCardWinning(true);
                         setTimeout(() => setComboCardWinning(false), 8000);
-                    }, 5500)
+                    }, 6000)
                 }
 
                 setTimeout(() => {
                     setComboCardAnimation(false)
-                }, 5500);
+                }, 6000);
 
                 return ({ success: true, mess: res.data.message });
             } else {
@@ -716,7 +716,7 @@ export const UserProvider = (props) => {
                 if (res.data.playAnimation === 2) {
                     setTimeout(() => {
                         setComboCardWinning(true);
-                        setTimeout(() => setComboCardWinning(false), 8000);
+                        setTimeout(() => setComboCardWinning(false), 10000);
                     }, 1500)
                 }
                 return ({ success: true, mess: res.data.message });
@@ -769,7 +769,7 @@ export const UserProvider = (props) => {
                 if (res.data.playAnimation === 2) {
                     setTimeout(() => {
                         setComboCardWinning(true);
-                        setTimeout(() => setComboCardWinning(false), 8000);
+                        setTimeout(() => setComboCardWinning(false), 10000);
                     }, 1500)
                 }
                 return ({ success: true, mess: res.data.message });
@@ -824,7 +824,7 @@ export const UserProvider = (props) => {
                 if (res.data.playAnimation === 2) {
                     setTimeout(() => {
                         setComboCardWinning(true);
-                        setTimeout(() => setComboCardWinning(false), 8000);
+                        setTimeout(() => setComboCardWinning(false), 10000);
                     }, 1500)
                 }
                 return ({ success: true, mess: res.data.message });

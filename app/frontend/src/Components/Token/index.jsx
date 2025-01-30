@@ -142,7 +142,7 @@ const Token = () => {
 					setIsAnimating(true);
 					setTimeout(() => {
 						setIsAnimating(false);
-					}, 5500);
+					}, 6000);
 				} else {
 					triggerToast('Error Upgrading project!', 'error');
 				}
@@ -211,7 +211,7 @@ const Token = () => {
 		setTimeout(() => {
 			setIsAnimating(false);
 			setComboCardAnimation(null);
-		}, 5500);
+		}, 6000);
 	}
 
 	const PlayTwoComboAnimation = () => {
@@ -220,11 +220,11 @@ const Token = () => {
 		setTimeout(() => {
 			setIsAnimating(false);
 			setComboCardAnimation(null);
-		}, 5500);
+		}, 6000);
 		setTimeout(() => {
 			setComboCardWinning(true);
 			setTimeout(() => setComboCardWinning(false), 8000);
-		}, 5500)
+		}, 6000)
 	}
 
 	return (
@@ -298,13 +298,10 @@ const Token = () => {
 											>
 												<div className="w-full h-full absolute z-20 flex flex-col justify-center items-center gap-2">
 													<img
-														className="w-[50px] h-[50px] rounded-full"
+														className="w-[60px] h-[60px] rounded-full"
 														src={comboCards[0].icon}
 														alt="BigCoin-Icon"
 													/>
-													<h1 className="text-center w-full">
-														{comboCards[0].name}
-													</h1>
 												</div>
 												<div className="relative w-full h-full overflow-hidden z-10 flex justify-center items-center">
 													<img
@@ -362,13 +359,10 @@ const Token = () => {
 											>
 												<div className="w-full h-full absolute z-20 flex flex-col justify-center items-center gap-2">
 													<img
-														className="w-[50px] h-[50px] rounded-full"
+														className="w-[60px] h-[60px] rounded-full"
 														src={comboCards[1].icon}
 														alt="BigCoin-Icon"
 													/>
-													<h1 className="text-center w-full">
-														{comboCards[1].name}
-													</h1>
 												</div>
 												<div className="relative w-full h-full overflow-hidden z-10 flex justify-center items-center">
 													<img
@@ -520,13 +514,10 @@ const Token = () => {
 										>
 											<div className="w-full h-full absolute z-20 flex flex-col justify-center items-center gap-2">
 												<img
-													className="w-[50px] h-[50px] rounded-full"
+													className="w-[60px] h-[60px] rounded-full"
 													src={token.project.icon.data}
 													alt="BigCoin-Icon"
 												/>
-												<h1 className="text-center w-full">
-													{token.project.name}
-												</h1>
 											</div>
 											<div className="relative w-full h-full overflow-hidden z-10 flex justify-center items-center">
 												<img
@@ -562,8 +553,8 @@ const Token = () => {
 									>
 										<motion.div
 											initial={{ scale: 1.1, x: 0, y: 0 }}
-											animate={{ scale: 0, x: "-100%", y: "-260%" }}
-											transition={{ duration: 0.5, ease: "easeInOut", delay: 5 }}
+											animate={{ scale: 0, x: "-100%", y: "-260%", ease: "easeInOut" }}
+											transition={{ duration: 1.5, ease: "easeInOut", delay: 5 }}
 											className="w-full h-full flex justify-center items-end pb-[11%]"
 										>
 											<p
@@ -581,23 +572,28 @@ const Token = () => {
 								<div className="w-full h-[20vh] px-2">
 									{/* Child Animation 1 */}
 									<motion.div
-										initial={{ opacity: 0 }}
-										animate={{ opacity: 1 }}
-										exit={{ opacity: 0 }}
-										transition={{ duration: 2.5, delay: 1 }}
+										initial={{ opacity: 0, scale: 0 }}
+										animate={{ opacity: 1, scale: 1 }}
+										transition={{ duration: 1, delay: 2.5 }}
 									>
-										<p
-											className="text-white text-[22px] text-center"
-											style={{
-												textShadow: '0px 0px 20px #016EE9',
-											}}
+										<motion.div
+											initial={{ opacity: 1, scale: 1 }}
+											animate={{ opacity: 0, scale: 0 }}
+											transition={{ duration: 1, delay: 5 }}
 										>
-											{comboCardAnimation === 1 ? (
-												'Cool! You have achieved one combo card. Find other one to claim Combo Card'
-											) : (
-												'Cool! You have achieved second combo card'
-											)}
-										</p>
+											<p
+												className="text-white text-[22px] text-center"
+												style={{
+													textShadow: '0px 0px 20px #016EE9',
+												}}
+											>
+												{comboCardAnimation === 1 ? (
+													'Cool! You have achieved one combo card. Find other one to claim Combo Card'
+												) : (
+													'Cool! You have achieved second combo card'
+												)}
+											</p>
+										</motion.div>
 									</motion.div>
 								</div>
 							</motion.div>
