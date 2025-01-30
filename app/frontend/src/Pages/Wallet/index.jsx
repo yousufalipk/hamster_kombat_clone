@@ -7,9 +7,10 @@ import LittleCoin from "../../assets/LittleCoinIcon.svg";
 import WithdrawIcon from '../../assets/wallet/withdraw.svg';
 import CommingSoon from '../../assets/root/comingSoon.svg';
 import RectangleBg from '../../assets/wallet_Rectangle.svg';
-import WalletCard from '../../Components/WalletCard/WalletCard';
 import RightPopupEllipse from '../../assets/walletEllipse.svg';
 import PoupHorizontalLine from '../../assets/optimizedImages/popup/horizontalLine.webp';
+import WalletCard from '../../Components/WalletCard/WalletCard';
+import WalletCardRectangleBg from '../../assets/WalletCardRectangleBg.svg';
 
 import { useTonConnectUI, TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
 import axios from "axios";
@@ -368,11 +369,13 @@ const Wallet = () => {
 				</div>
 
 				<div
-					className="relative w-full h-[52vh]"
+					className="relative w-full h-[52vh] bg-center"
+					style={{
+						backgroundImage: `url(${WalletCardRectangleBg})`,
+						backgroundRepeat: "no-repeat",
+						backgroundSize: "contain",
+					}}
 				>
-					<div className="absolute z-10 w-full h-full">
-						<WalletCard />
-					</div>
 					<div className="absolute z-20 w-full h-full px-3 flex flex-col items-center justify-start gap-2">
 						<div className="w-full h-[5.5vh] flex justify-center items-end text-white" >
 							<button

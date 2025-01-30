@@ -32,7 +32,7 @@ import VerticalDividerSvg from "../VerticalDividerSvg/VerticalDividerSvg";
 
 const Token = () => {
 
-	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance, formatCpm, triggerToast, comboCards, comboCardWinning, comboCardAnimation } = useUser();
+	const { sendTokenData, upgradeProjectLevel, balance, fetchUserProjectDetails, claimProjectTask, formatNumberWithSuffix, formatBalance, formatCpm, triggerToast, comboCards, comboCardWinning, comboCardAnimation, setComboCardAnimation, setComboCardWinning } = useUser();
 
 	const [isModalOpen, setModalOpen] = useState(false);
 	const [processing, setProcessing] = useState(true);
@@ -49,11 +49,6 @@ const Token = () => {
 
 	// Animations
 	const [isAnimating, setIsAnimating] = useState(false);
-	const [showChild1, setShowChild1] = useState(false);
-	const [showCoinDrop, setShowCoinDrop] = useState(false);
-	const [flipCard, setFlipCard] = useState(false);
-	const [levelSlideOut, setLevelSlideOut] = useState(false);
-	const [levelChange, setLevelChange] = useState(false);
 
 	useEffect(() => {
 		if (selectedTask) {
@@ -138,7 +133,6 @@ const Token = () => {
 		try {
 			setButtonLoading(true);
 			const res = await upgradeProjectLevel(token.project._id);
-			console.log('Response 1', res);
 			if (res.success) {
 				triggerToast(res.mess, 'success');
 				const res2 = await fetchUserProjectDetails(token.project._id);
@@ -148,14 +142,6 @@ const Token = () => {
 					setIsAnimating(true);
 					setTimeout(() => {
 						setIsAnimating(false);
-						setShowChild1(false);
-						setShowCoinDrop(false);
-						setFlipCard(false);
-						setLevelSlideOut(false);
-						setLevelChange(false);
-						setTimeout(() => {
-							setLevelChange(false);
-						}, 1000);
 					}, 5500);
 				} else {
 					triggerToast('Error Upgrading project!', 'error');
@@ -219,14 +205,27 @@ const Token = () => {
 		return firstWord.toLowerCase();
 	}
 
-	useEffect(() => {
-		if (flipCard) {
-			const timeout = setTimeout(() => {
-				setLevelSlideOut(true);
-			}, 1000);
-			return () => clearTimeout(timeout);
-		}
-	}, [flipCard]);
+	const PlayOneComboAnimation = () => {
+		setComboCardAnimation(2);
+		setIsAnimating(true);
+		setTimeout(() => {
+			setIsAnimating(false);
+			setComboCardAnimation(null);
+		}, 5500);
+	}
+
+	const PlayTwoComboAnimation = () => {
+		setComboCardAnimation(2);
+		setIsAnimating(true);
+		setTimeout(() => {
+			setIsAnimating(false);
+			setComboCardAnimation(null);
+		}, 5500);
+		setTimeout(() => {
+			setComboCardWinning(true);
+			setTimeout(() => setComboCardWinning(false), 8000);
+		}, 5500)
+	}
 
 	return (
 		<>
@@ -245,7 +244,7 @@ const Token = () => {
 									zIndex: 50000000000
 								}}
 								className="fixed inset-0 flex justify-center items-center text-white"
-								initial={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
+								initial={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
 								animate={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
 								exit={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
 								transition={{ duration: 0.5 }}
@@ -463,7 +462,7 @@ const Token = () => {
 											ease: "easeIn",
 										}}
 									>
-										<img src={SparkelAnimation} alt="Sparkles" width={300} />
+										<img src={SparkelAnimation} alt="Sparkles" width={600} />
 									</motion.div>
 								</motion.div>
 							</motion.div>
@@ -472,126 +471,120 @@ const Token = () => {
 				)}
 
 				{isAnimating && comboCardAnimation && (
-					<motion.div
-						initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
-						animate={{ backgroundColor: "rgba(0, 0, 0, 0.9)" }}
-						exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
-						transition={{ duration: 1 }}
-						style={{
-							zIndex: 50
-						}}
-						className="w-full h-full bg-black absolute flex justify-center items-center"
-					>
-						{showCoinDrop && !flipCard && (
-							<div className="absolute bottom-0">
-								<img src={DropCoins} alt="dropcoins_animation" />
-							</div>
-						)}
-
-						{/* Content */}
+					<AnimatePresence>
 						<motion.div
-							initial={{ opacity: 0, scale: 0 }}
-							animate={{ opacity: 1, scale: 1 }}
-							exit={{ opacity: 0, scale: 0 }}
+							initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
+							animate={{ backgroundColor: "rgba(0, 0, 0, 0.9)" }}
+							exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
 							transition={{ duration: 1 }}
-							onAnimationComplete={() => {
-								setTimeout(() => setShowChild1(true), 500);
-							}}
 							style={{
-								zIndex: 60
+								zIndex: 50
 							}}
-							className="relative h-full w-full flex flex-col justify-center items-center gap-5"
+							className="w-full h-full bg-black absolute flex justify-center items-center"
 						>
+							<motion.div
+								initial={{ opacity: 0, scale: 0 }}
+								animate={{ opacity: 1, scale: 1 }}
+								exit={{ opacity: 0, scale: 0 }}
+								transition={{ duration: 1, delay: 1.5 }}
+								className="absolute bottom-0"
+							>
+								<img src={DropCoins} alt="dropcoins_animation" />
+							</motion.div>
+
 							{/* Content */}
-							<div className="w-full h-[30vh] relative flex justify-center items-center">
-								<motion.div
-									initial={{ opacity: 1, rotateY: 0 }}
-									animate={flipCard ? { opacity: 0, rotateY: 180 } : { opacity: 1, rotateY: 0 }}
-									transition={{ duration: 1, ease: "easeInOut" }}
-									className="w-full text-white flex flex-col justify-center items-center gap-1"
-								>
-									<div
-										style={{
-											background:
-												`linear-gradient(to top, ${token.project.toColor},${token.project.fromColor})`
-										}}
-										className="relative h-[15vh] w-[30vw] p-2 font-semibold text-xl rounded-2xl flex justify-center items-center"
+							<motion.div
+								initial={{ opacity: 0, scale: 0 }}
+								animate={{ opacity: 1, scale: 1 }}
+								exit={{ opacity: 0, scale: 0 }}
+								transition={{ duration: 1, delay: 1 }}
+								style={{
+									zIndex: 60
+								}}
+								className="relative h-full w-full flex flex-col justify-center items-center gap-5"
+							>
+								{/* Content */}
+								<div className="w-full h-[30vh] relative flex justify-center items-center">
+									<motion.div
+										initial={{ opacity: 1, rotateY: 0 }}
+										animate={{ opacity: 0, rotateY: 180 }}
+										transition={{ duration: 2.5, ease: "easeInOut", delay: 3 }}
+										className="w-full text-white flex flex-col justify-center items-center gap-1"
 									>
-										<div className="w-full h-full absolute z-20 flex flex-col justify-center items-center gap-2">
-											<img
-												className="w-[50px] h-[50px] rounded-full"
-												src={token.project.icon.data}
-												alt="BigCoin-Icon"
-											/>
-											<h1 className="text-center w-full">
-												{token.project.name}
-											</h1>
-										</div>
-										<div className="relative w-full h-full overflow-hidden z-10 flex justify-center items-center">
-											<img
-												src={cardbg}
-												alt=""
-												className="opacity-10 w-[180px] h-[180px]"
-											/>
-											<div className=" flex items-center justify-center absolute">
-												<p className="font-italianno text-[3rem]   text-slate-100 opacity-10">
-													{token.project.name.charAt(0)}
-												</p>
+										<div
+											style={{
+												background:
+													`linear-gradient(to top, ${token.project.toColor},${token.project.fromColor})`
+											}}
+											className="relative h-[17vh] w-[30vw] px-2 py-4 font-semibold text-xl rounded-2xl flex justify-center items-center"
+										>
+											<div className="w-full h-full absolute z-20 flex flex-col justify-center items-center gap-2">
+												<img
+													className="w-[50px] h-[50px] rounded-full"
+													src={token.project.icon.data}
+													alt="BigCoin-Icon"
+												/>
+												<h1 className="text-center w-full">
+													{token.project.name}
+												</h1>
+											</div>
+											<div className="relative w-full h-full overflow-hidden z-10 flex justify-center items-center">
+												<img
+													src={cardbg}
+													alt=""
+													className="opacity-10 w-[180px] h-[180px]"
+												/>
+												<div className=" flex items-center justify-center absolute">
+													<p className="font-italianno text-[3rem]   text-slate-100 opacity-10">
+														{token.project.name.charAt(0)}
+													</p>
+												</div>
 											</div>
 										</div>
-									</div>
 
-									<div className="w-full flex flex-col justify-center items-center gap-8">
-										<p className="text-[11px]">
-											UPGRADED
-										</p>
+										<div className="w-full flex flex-col justify-center items-center gap-8">
+											<p className="text-[11px]">
+												UPGRADED
+											</p>
 
-										<p className="text-[#42FF00] text-[11px]">
-											Rewards Redeemed!
-										</p>
-									</div>
-								</motion.div>
-								{/* Level */}
-								<motion.div
-									animate={
-										flipCard && !levelSlideOut
-											? { scale: 1.2, x: 0, y: 0 }
-											: levelSlideOut
-												? { scale: 0, x: "-60%", y: "-80%" }
-												: { scale: 1, x: 0, y: 0 }
-									}
-									transition={{ duration: 0.5, ease: "easeInOut" }}
-									onAnimationComplete={() => {
-										if (levelSlideOut && !levelChange) {
-											setLevelChange(true);
-										}
-									}}
-									className="w-full h-full flex justify-center items-end absolute pb-[12%]"
-								>
-									<p
-										style={{
-											textShadow: '0px 0px 20px #016EE9',
-										}}
-										className="text-white text-center text-3xl font-semibold -mt-8"
+											<p className="text-[#42FF00] text-[11px]">
+												Rewards Redeemed!
+											</p>
+										</div>
+									</motion.div>
+
+									{/* Level */}
+									<motion.div
+										initial={{ scale: 1, x: 0, y: 0 }}
+										animate={{ scale: 1.1 }}
+										transition={{ duration: 1, ease: "easeInOut", delay: 3.3 }}
+										className="w-full h-full absolute"
 									>
-										Level {(token.userData.userLevel || 0) + 1}
-									</p>
-								</motion.div>
-							</div>
+										<motion.div
+											initial={{ scale: 1.1, x: 0, y: 0 }}
+											animate={{ scale: 0, x: "-100%", y: "-260%" }}
+											transition={{ duration: 0.5, ease: "easeInOut", delay: 5 }}
+											className="w-full h-full flex justify-center items-end pb-[11%]"
+										>
+											<p
+												style={{
+													textShadow: '0px 0px 20px #016EE9',
+												}}
+												className="text-white text-center text-2xl font-semibold -mt-8"
+											>
+												Level {(token.userData.userLevel || 0) + 1}
+											</p>
+										</motion.div>
+									</motion.div>
+								</div>
 
-							<div className="w-full h-[20vh] px-2">
-								{/* Child Animation 1 */}
-								{showChild1 && !flipCard && (
+								<div className="w-full h-[20vh] px-2">
+									{/* Child Animation 1 */}
 									<motion.div
 										initial={{ opacity: 0 }}
 										animate={{ opacity: 1 }}
 										exit={{ opacity: 0 }}
-										transition={{ duration: 0.5 }}
-										onAnimationComplete={() => {
-											setTimeout(() => setShowCoinDrop(true), 500);
-											setTimeout(() => setFlipCard(true), 1500);
-											setTimeout(() => setShowChild1(false), 2500);
-										}}
+										transition={{ duration: 2.5, delay: 1 }}
 									>
 										<p
 											className="text-white text-[22px] text-center"
@@ -606,11 +599,10 @@ const Token = () => {
 											)}
 										</p>
 									</motion.div>
-								)}
-							</div>
-
-						</motion.div>
-					</motion.div >
+								</div>
+							</motion.div>
+						</motion.div >
+					</AnimatePresence>
 				)}
 
 				{sendTokenData && token && (
@@ -886,18 +878,25 @@ const Token = () => {
 						)}
 
 
-						{/* Maunal Execute Animation 
-						<div className="w-full h-12 absolute z-10 top-0 right-0">
+						{/* Maunal Execute Animation */}
+						<div className="w-full h-12 absolute z-10 top-0 right-0 flex justify-center items-center gap-2">
 							<button
 								onClick={() => {
-									StartAnimation()
+									PlayOneComboAnimation()
 								}}
-								className="bg-red-600 p-2 text-white px-10 py-2 text-2xl rounded-full"
+								className="bg-purple-600 p-2 text-white rounded-full"
 							>
-								Play Animation
+								Play One Combo Animation
+							</button>
+							<button
+								onClick={() => {
+									PlayTwoComboAnimation()
+								}}
+								className="bg-purple-600 p-2 text-white rounded-full"
+							>
+								Play Two Combo Animation
 							</button>
 						</div>
-						*/}
 
 						<div className='bg-[#060611] px-4 w-full h-[100vh] overflow-y-scroll overflow-x-hidden'>
 							<div className="text-white flex justify-end items-center gap-2 p-5">
@@ -962,11 +961,6 @@ const Token = () => {
 															}}
 															className="text-base py-1 text-center text-white rounded-r-md relative"
 														>
-															{levelChange && (
-																<div className="w-full h-full absolute flex justify-center items-center">
-
-																</div>
-															)}
 															<div
 																style={{
 																	position: 'absolute',

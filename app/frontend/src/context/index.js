@@ -640,12 +640,12 @@ export const UserProvider = (props) => {
                     setTimeout(() => {
                         setComboCardWinning(true);
                         setTimeout(() => setComboCardWinning(false), 8000);
-                    }, 5200)
+                    }, 5500)
                 }
 
                 setTimeout(() => {
                     setComboCardAnimation(false)
-                }, 5200);
+                }, 5500);
 
                 return ({ success: true, mess: res.data.message });
             } else {
@@ -1296,7 +1296,8 @@ export const UserProvider = (props) => {
             fetchProjectsBalance,
             projectBalance,
 
-
+            setComboCardAnimation,
+            setComboCardWinning
         }}>
             {toast && isVisible && (
                 <div

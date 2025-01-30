@@ -16,7 +16,7 @@ import SparkelAnimation from '../../assets/animation/sparkle.gif';
 import cardbg from "../../assets/token/tokencardbg.svg";
 
 const KOLS = () => {
-	const { fetchKols, upgradeKolsLevel, kols, kolsLoader, balance, triggerToast, formatCpm, comboCards, comboCardWinning } = useUser();
+	const { fetchKols, upgradeKolsLevel, kols, kolsLoader, balance, triggerToast, formatCpm, comboCards, comboCardWinning, setComboCardWinning } = useUser();
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedKol, setSelectedKol] = useState(null);
@@ -25,6 +25,10 @@ const KOLS = () => {
 
 	const [dots, setDots] = useState('');
 	const [buttonLoading, setButtonLoading] = useState(false);
+
+	const [index, setIndex] = useState(0);
+
+	const [tasks, setTasks] = useState(null);
 
 	useEffect(() => {
 		let interval;
@@ -45,6 +49,9 @@ const KOLS = () => {
 	}, []);
 
 	const handleUpgrade = (kol) => {
+		if (!kol.socialTasksCompleted && kol.tasks.length > 0) {
+			setTasks(kol.tasks);
+		}
 		setIsModalOpen(true);
 		setSelectedKol(kol);
 	};
@@ -64,6 +71,50 @@ const KOLS = () => {
 			setButtonLoading(false);
 			setIsModalOpen(false);
 		}
+	}
+
+	const visitLinks = (tasks) => {
+		if (!tasks) {
+			setSelectedKol(prevState => ({
+				...prevState,
+				socialTasksCompleted: true
+			}));
+			setIndex(0);
+			return;
+		}
+		if (index < tasks.length) {
+			const newTab = window.open(tasks[index].link, "_blank");
+
+			if (newTab) {
+				const checkTab = setInterval(() => {
+					if (newTab.closed) {
+						clearInterval(checkTab);
+						setIndex((prevIndex) => {
+							const nextIndex = prevIndex + 1;
+							if (nextIndex < tasks.length) {
+								visitLinks();
+							} else {
+								setSelectedKol(prevState => ({
+									...prevState,
+									socialTasksCompleted: true
+								}));
+								setIndex(0);
+							}
+							return nextIndex;
+						});
+					}
+				}, 1000);
+			} else {
+				console.log("Popup blocked! Please allow pop-ups for this site.");
+			}
+		}
+	}
+
+	const playCombocardwinning = () => {
+		setComboCardWinning(true);
+		setTimeout(() => {
+			setComboCardWinning(false)
+		}, 8000)
 	}
 
 	if (kolsLoader) {
@@ -197,11 +248,11 @@ const KOLS = () => {
 											{/* Buttons */}
 											<div className="w-full h-[5vh] mt-3">
 												<button
+													disabled={!selectedKol?.socialTasksCompleted || buttonLoading}
 													className={`w-full h-12 p-2 bg-gradient-to-t from-darkBlue to-lightBlue rounded-lg text-lg`}
 													onClick={() => {
 														handleKolsUpgrade();
 													}}
-													disabled={buttonLoading}
 												>
 													{balance >= (selectedKol?.userData?.nextLevelCost ?? selectedKol.levels[0].cost) ? (
 														<>
@@ -273,8 +324,8 @@ const KOLS = () => {
 												{/* Move Up and Exit */}
 												<motion.div
 													animate={{
-														y: [0, "-250%"],
-														opacity: [1, 0],
+														y: [0, "-240%"],
+														//opacity: [1, 0],
 													}}
 													transition={{
 														duration: 1,
@@ -336,8 +387,8 @@ const KOLS = () => {
 												{/* Move Up */}
 												<motion.div
 													animate={{
-														y: [0, "-250%"],
-														opacity: [1, 0],
+														y: [0, "-240%"],
+														//opacity: [1, 0],
 													}}
 													transition={{
 														duration: 1,
@@ -451,13 +502,24 @@ const KOLS = () => {
 												ease: "easeIn",
 											}}
 										>
-											<img src={SparkelAnimation} alt="Sparkles" width={300} />
+											<img src={SparkelAnimation} alt="Sparkles" width={600} />
 										</motion.div>
 									</motion.div>
 								</motion.div>
 							)}
 						</AnimatePresence>
 					)}
+
+					<div className="w-full h-12 absolute z-10 top-0 right-0 flex justify-center items-center gap-2">
+						<button
+							onClick={() => {
+								playCombocardwinning()
+							}}
+							className="bg-purple-600 p-2 text-white rounded-full w-1/2"
+						>
+							Play One Combo Animation
+						</button>
+					</div>
 
 					<div className='h-[45vh] overflow-scroll'>
 						{kols?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((kol, index) => {
