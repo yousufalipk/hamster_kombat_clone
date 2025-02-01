@@ -1323,7 +1323,8 @@ export const UserProvider = (props) => {
             setComboCardWinning,
 
             handleEquipSkin,
-            equippedSkin
+            equippedSkin,
+            setEquippedSkin
         }}>
             {toast && isVisible && (
                 <div

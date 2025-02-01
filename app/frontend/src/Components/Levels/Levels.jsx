@@ -61,7 +61,7 @@ import LevelRectangle from '../LevelsRectangle/LevelsRectangle';
 import { useTonConnectUI, TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
 
 const Levels = () => {
-    const { level, profilePic, firstName, levelName, levelPercentage, levelsData, triggerToast, buyLevelUpgrade, handleEquipSkin, equippedSkin, userId } = useUser();
+    const { level, profilePic, firstName, levelName, levelPercentage, levelsData, triggerToast, buyLevelUpgrade, handleEquipSkin, equippedSkin, userId, setEquippedSkin } = useUser();
 
     const apiUrl = process.env.REACT_APP_URL;
 
@@ -311,6 +311,7 @@ const Levels = () => {
                 if (response.data.status === 'success') {
                     const res = await buyLevelUpgrade(levelTopUpdate);
                     if (res.success) {
+                        setEquippedSkin(levelTopUpdate)
                         triggerToast('Level Upgraded Succesfully!', 'success');
                     } else {
                         triggerToast('Error upgrading Level!', 'error');
