@@ -40,6 +40,10 @@ export const UserProvider = (props) => {
     const [projectBalance, setProjectsBalance] = useState(null);
     const [equippedSkin, setEquippedSkin] = useState(null);
 
+    useEffect(() => {
+        console.log('Equipped Skin', equippedSkin);
+    }, [equippedSkin])
+
     // 4 Boosters 
     const [disableEnergy, setDisableEnergy] = useState(false);
 
@@ -451,7 +455,7 @@ export const UserProvider = (props) => {
             setEnergyLimit(user.energy.limit);
             setMultitapLevel(user.multitaps.level);
             setLevelPercentage(percentage);
-            setEquippedSkin(user.equippedSkin || null);
+            setEquippedSkin(user.equippedSkin);
             setMainLoader(false);
             navigate('/');
         } catch (error) {
@@ -1158,6 +1162,25 @@ export const UserProvider = (props) => {
         }
     }
 
+    const handleEquipSkin = async (requestedLevel) => {
+        try {
+
+            const response = await axios.post(`${apiUrl}/user/equip-skin`, {
+                userId: userId,
+                requestedSkinLevel: requestedLevel
+            });
+            if (response.data.status === 'success') {
+                setEquippedSkin(response.data.equippedSkin);
+                return ({ success: true, message: response.data.message })
+            } else {
+                return ({ success: false, message: response.data.message })
+            }
+        } catch (error) {
+            console.log('Interna Server Error', error);
+            return ({ success: false, message: 'Internal Server Error!' })
+        }
+    }
+
     return (
         <UserContext.Provider value={{
             initializeUser,
@@ -1297,7 +1320,10 @@ export const UserProvider = (props) => {
             projectBalance,
 
             setComboCardAnimation,
-            setComboCardWinning
+            setComboCardWinning,
+
+            handleEquipSkin,
+            equippedSkin
         }}>
             {toast && isVisible && (
                 <div

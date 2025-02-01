@@ -37,7 +37,8 @@ const {
     UpdateReferralsProfilePic,
     dailyComboReset,
     watchAdsReward,
-    getWalletBalance
+    getWalletBalance,
+    equipSkin
 } = require('../controllers/userController');
 
 const {
@@ -88,6 +89,7 @@ router.route('/add-content').post(addContent);
 router.route('/reset-daily-combo').get(dailyComboReset);
 
 router.route('/buy-level').post(BuyAndUpgradeLevel);
+router.route('/equip-skin').post(equipSkin);
 
 /*
 router.route('/move-images').get(MigrateImagesWithTelegramId);

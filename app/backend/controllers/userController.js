@@ -2371,6 +2371,16 @@ exports.equipSkin = async (req, res) => {
             })
         }
 
+        if (!requestedSkinLevel && requestedSkinLevel !== 0) {
+            user.equippedSkin = null;
+            await user.save();
+            return res.status(200).json({
+                status: 'success',
+                message: 'Skin Un Equipped succesfully!',
+                equippedSkin: user.equippedSkin
+            })
+        }
+
         if (requestedSkinLevel > user.level) {
             return res.status(200).json({
                 status: 'failed',
@@ -2387,7 +2397,6 @@ exports.equipSkin = async (req, res) => {
             message: 'Skin equipped succesfully!',
             equippedSkin: user.equippedSkin
         })
-
     } catch (error) {
         return res.status(200).json({
             status: 'failed',

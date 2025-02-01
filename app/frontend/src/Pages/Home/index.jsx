@@ -107,7 +107,8 @@ const Home = () => {
 		energyLimits,
 		multitapUpgradeCost,
 		multitapValues,
-		triggerToast
+		triggerToast,
+		equippedSkin
 	} = useUser();
 
 	const [isRefilling, setIsRefilling] = useState(false);
@@ -863,7 +864,7 @@ const Home = () => {
 												</div>
 												<div className="absolute z-40">
 													<img
-														src={pandaMapping[level - 1]}
+														src={pandaMapping[equippedSkin] ?? pandaMapping[level - 1]}
 														alt="Panda-Icon"
 														className={`rounded-full transition-transform ease-out duration-150 ${isTapped ? "scale-110" : ""
 															}`}

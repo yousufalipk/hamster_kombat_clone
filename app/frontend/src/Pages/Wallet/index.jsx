@@ -174,7 +174,7 @@ const Wallet = () => {
 				messages: [
 					{
 						address:
-							"UQAkrvQdD6S4rhwbvdUXQiQdBp5XA3nAwyEzQnF2lucRxpsn",
+							"0QCyOzE91WU2rEsNDgU-I2cI5aOzBHKond_PuWnJfZEdOgY_",
 						amount: nanoValue,
 					},
 				],
@@ -328,7 +328,7 @@ const Wallet = () => {
 					</div>
 				</div>
 
-				<div className="relative w-full h-[26vh] border border-gray-700 rounded-md text-white">
+				<div className="relative w-full h-[26vh] border border-gray-500 rounded-md text-white">
 					<div className="w-full h-full absolute z-20 p-2">
 						<h1 className="w-full h-[15%] text-[#6D6D6D] text-[12px]">Balance</h1>
 						<div className="w-full h-[85%]">
@@ -369,12 +369,7 @@ const Wallet = () => {
 				</div>
 
 				<div
-					className="relative w-full h-[52vh] bg-center"
-					style={{
-						backgroundImage: `url(${WalletCardRectangleBg})`,
-						backgroundRepeat: "no-repeat",
-						backgroundSize: "contain",
-					}}
+					className="relative w-full h-[52vh] bg-[#12121C] border border-gray-500 rounded-3xl"
 				>
 					<div className="absolute z-20 w-full h-full px-3 flex flex-col items-center justify-start gap-2">
 						<div className="w-full h-[5.5vh] flex justify-center items-end text-white" >
